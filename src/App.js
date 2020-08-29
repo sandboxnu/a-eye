@@ -8,7 +8,7 @@ function App() {
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
-          Sandbox A-Eye Project Landing Page
+          Welcome to the Sandbox A-Eye Project Landing Page
         </p>
       </header>
     </div>
