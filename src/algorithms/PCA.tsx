@@ -19,20 +19,21 @@ const PCADemo = ({ }) => {
 
     return (
         <div className="PCA-div">
-            <RawDataTable dataset={dataset} columns={columns}/>
-            <RawDataChart dataset={dataset} columns={columns} xIdx={2} yIdx={3}/>
-            <PCAChart points={pcPoints} />
+            <RawDataTable />
+            <RawDataChart xIdx={0} yIdx={1} />
+            <PCAChart />
         </div>
     );
 }
 
-const RawDataTable = ({ dataset, columns }: { dataset: number[][], columns: string[] }) =>
+const RawDataTable = ({ }) =>
     <table className="raw-data">
-        <tr>{columns.map(title => <th key={title}>{title}</th>)}</tr>
+        <tr>{columns.map(title => <th key={title}>{title}</th>)} <th>Class</th></tr>
         {dataset.map((row: number[], idx: number) => {
             return (
                 <tr key={idx} className="'datarow'">
                     {row.map((val: number, idx: number) => <td key={idx}>{val}</td>)}
+                    <td>{classes[idx]}</td>
                 </tr>);
         })}
     </table>
@@ -40,70 +41,65 @@ const RawDataTable = ({ dataset, columns }: { dataset: number[][], columns: stri
 
 // Plot all samples in dataset, choose what 2 features to use as the axes
 // --> natural conclusion: want to be able to see all features, without having to use an nth dimensional plot
-const RawDataChart =
-    ({ dataset, columns, xIdx, yIdx}: { dataset: number[][], columns: string[], xIdx: number, yIdx: number}) => {
-        const points: Array<{ x: number, y: number }> = dataset.map(row => ({ x: row[xIdx], y: row[yIdx] }));
+const RawDataChart = ({ xIdx, yIdx }: { xIdx: number, yIdx: number }) => {
+    const points: DataSeriesMap = {};
+    Object.entries(dataByClass).forEach(([dataClass, nums]) => {
+        points[dataClass] = nums.map(row => ({ x: row[xIdx], y: row[yIdx] }));
+    })
 
-        const data = {
-            labels: ['Scatter'],
-            datasets: [{
-                label: 'Flower Sample',
+    return (<BasicScatter points={points} xLabel={columns[xIdx]} yLabel={columns[yIdx]} />);
+};
+
+const PCAChart = () => (<BasicScatter points={pcPoints} xLabel='PC1' yLabel='PC2' />);
+
+const BasicScatter =
+    ({ points, xLabel, yLabel }: { points: DataSeriesMap, xLabel: string, yLabel: string }) => {
+        const data: { datasets: Object[] } = { datasets: [] };
+        Object.entries(points).forEach(([dataClass, classPoints]) => {
+            data.datasets.push({
+                label: dataClass,
                 fill: true,
                 pointRadius: 4,
-                backgroundColor: '#605196',
-                data: points
-            }]
-        };
+                backgroundColor: colorMap[dataClass],
+                data: classPoints
+            });
+        })
         const options = {
             showLines: false,
             tooltips: { enabled: false },
             scales: {
                 yAxes: [{
-                    scaleLabel: { display: true, labelString: columns[yIdx] }
+                    scaleLabel: { display: true, labelString: xLabel }
                 }],
                 xAxes: [{
-                    scaleLabel: { display: true, labelString: columns[xIdx] }
+                    scaleLabel: { display: true, labelString: yLabel }
                 }],
             }
         };
         return (<Scatter data={data} options={options} />);
     };
 
-const PCAChart = ({ points }: { points: Array<{ x: number, y: number }> }) => {
-    const data = {
-        labels: ['Scatter'],
-        datasets: [{
-            label: 'Flower Sample',
-            fill: true,
-            pointRadius: 4,
-            backgroundColor: '#605196',
-            data: points
-        }]
-    };
-    const options = {
-        showLines: false,
-        tooltips: { enabled: false },
-        scales: {
-            yAxes: [{
-                scaleLabel: { display: true, labelString: 'PC2' }
-            }],
-            xAxes: [{
-                scaleLabel: { display: true, labelString: 'PC1' }
-            }],
-        }
-    };
-    return (<Scatter data={data} options={options} />);
-}
+const COLORS = ['#003f5c', '#ef5675', '#FFC107', '#00B0FF', '#FF3D00', '#4DB6AC'];
 
 // Moving these outside so they are only calculated once (this will change if we dynamically get datasets)
 const dataset: number[][] = datasetIris.getNumbers(); // rows represent the samples and columns the features
+const classes: string[] = datasetIris.getClasses(); // the whole column of flower types
 const columns = ['Sepal Length', 'Sepal Width', 'Petal Length', 'Petal Width'];
 const pca = new PCA(dataset);
-const prediction = pca.predict(dataset); //plot columns 1, 2
-const pcPoints: Array<{ x: number, y: number }> = [];
+const prediction = pca.predict(dataset);
+
+const colorMap: { [dataClass: string]: string } = {};
+const dataByClass: { [dataClass: string]: number[][] } = {};
+const pcPoints: DataSeriesMap = {};
+datasetIris.getDistinctClasses().forEach((dataClass, i) => {
+    pcPoints[dataClass] = [];
+    colorMap[dataClass] = COLORS[i] || '#de425b';
+    dataByClass[dataClass] = dataset.filter((val, idx) => dataClass === classes[idx]);
+})
 for (let i = 0; i < prediction.rows; i++) {
-    pcPoints.push({ x: prediction.get(i, 0), y: prediction.get(i, 1) });
+    pcPoints[classes[i]].push({ x: prediction.get(i, 0), y: prediction.get(i, 1) });
 }
 
+type DataSeriesMap = { [dataClass: string]: Array<{ x: number, y: number }> };
 
 export default PCADemo;
