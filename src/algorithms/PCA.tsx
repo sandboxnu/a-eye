@@ -13,22 +13,22 @@ const PCADemo = ({ }) => {
     // pca shows the clusters of samples that are highly correlated
     // PC1 axis is more important than Pc2 differences
 
-    // yarn vs npm?
     // material ui?
     // deployment for ts? installs? package managment in general
     // we should have text explanations for each step
 
     return (
         <div className="PCA-div">
-            {/* <RawDataTable dataset={dataset} /> */}
+            <RawDataTable dataset={dataset} columns={columns}/>
+            <RawDataChart dataset={dataset} columns={columns} xIdx={2} yIdx={3}/>
             <PCAChart points={pcPoints} />
         </div>
     );
 }
 
-const RawDataTable = ({ dataset }: { dataset: number[][] }) =>
+const RawDataTable = ({ dataset, columns }: { dataset: number[][], columns: string[] }) =>
     <table className="raw-data">
-        <tr><th>Sepal Length</th><th>Sepal Width</th><th>Petal Length</th><th>Petal Width</th></tr>
+        <tr>{columns.map(title => <th key={title}>{title}</th>)}</tr>
         {dataset.map((row: number[], idx: number) => {
             return (
                 <tr key={idx} className="'datarow'">
@@ -40,7 +40,34 @@ const RawDataTable = ({ dataset }: { dataset: number[][] }) =>
 
 // Plot all samples in dataset, choose what 2 features to use as the axes
 // --> natural conclusion: want to be able to see all features, without having to use an nth dimensional plot
-const RawDataChart = ({ dataset, feature1, feature2 }: { dataset: number[][], feature1: number, feature2: number }) => { };
+const RawDataChart =
+    ({ dataset, columns, xIdx, yIdx}: { dataset: number[][], columns: string[], xIdx: number, yIdx: number}) => {
+        const points: Array<{ x: number, y: number }> = dataset.map(row => ({ x: row[xIdx], y: row[yIdx] }));
+
+        const data = {
+            labels: ['Scatter'],
+            datasets: [{
+                label: 'Flower Sample',
+                fill: true,
+                pointRadius: 4,
+                backgroundColor: '#605196',
+                data: points
+            }]
+        };
+        const options = {
+            showLines: false,
+            tooltips: { enabled: false },
+            scales: {
+                yAxes: [{
+                    scaleLabel: { display: true, labelString: columns[yIdx] }
+                }],
+                xAxes: [{
+                    scaleLabel: { display: true, labelString: columns[xIdx] }
+                }],
+            }
+        };
+        return (<Scatter data={data} options={options} />);
+    };
 
 const PCAChart = ({ points }: { points: Array<{ x: number, y: number }> }) => {
     const data = {
@@ -70,6 +97,7 @@ const PCAChart = ({ points }: { points: Array<{ x: number, y: number }> }) => {
 
 // Moving these outside so they are only calculated once (this will change if we dynamically get datasets)
 const dataset: number[][] = datasetIris.getNumbers(); // rows represent the samples and columns the features
+const columns = ['Sepal Length', 'Sepal Width', 'Petal Length', 'Petal Width'];
 const pca = new PCA(dataset);
 const prediction = pca.predict(dataset); //plot columns 1, 2
 const pcPoints: Array<{ x: number, y: number }> = [];
