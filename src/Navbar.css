@@ -6,12 +6,18 @@
 .navbar a {
     padding: 12px;
     margin: 0 20px;
+    border: 2px solid rgb(43, 75, 98);
 
     text-decoration: none;
     color: white;
     font-family: Arial, Helvetica, sans-serif;
     font-weight: bold;
     font-size: 12px;
+}
+
+.navbar a:hover {
+    background-color: rgb(75, 107, 130);
+    border: 2px solid rgb(75, 107, 130);
 }
 
 .navbar a.active {
