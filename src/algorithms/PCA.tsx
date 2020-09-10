@@ -1,61 +1,91 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { PCA } from 'ml-pca';
 import datasetIris from 'ml-dataset-iris';
 import { Scatter } from 'react-chartjs-2';
-// you can also directly use chartjs without the wrapper for more customization
+import './PCA.css';
 
 /**
  * Interactive demo of PCA.
  * 
  * @param props 
  */
-const PCADemo = ({ }) => {
-    // pca shows the clusters of samples that are highly correlated
-    // PC1 axis is more important than Pc2 differences
-
-    // material ui?
-    // deployment for ts? installs? package managment in general
-    // we should have text explanations for each step
+const PCADemo = () => {
 
     return (
         <div className="PCA-div">
             <RawDataTable />
-            <RawDataChart xIdx={0} yIdx={1} />
+            <RawDataChart />
             <PCAChart />
         </div>
     );
 }
 
-const RawDataTable = ({ }) =>
-    <table className="raw-data">
-        <tr>{columns.map(title => <th key={title}>{title}</th>)} <th>Class</th></tr>
-        {dataset.map((row: number[], idx: number) => {
-            return (
-                <tr key={idx} className="'datarow'">
-                    {row.map((val: number, idx: number) => <td key={idx}>{val}</td>)}
-                    <td>{classes[idx]}</td>
-                </tr>);
-        })}
+const RawDataTable = () =>
+    <table className="pca raw-data">
+        <thead>
+            <tr>{columns.map(title => <th key={title}>{title}</th>)}<th>Class</th></tr>
+        </thead>
+        <tbody>
+            {dataset.map((row: number[], idx: number) => {
+                return (
+                    <tr key={idx} className="'datarow'">
+                        {row.map((val: number, idx: number) => <td key={idx}>{val}</td>)}
+                        <td>{classes[idx]}</td>
+                    </tr>);
+            })}
+        </tbody>
     </table>
 
 
 // Plot all samples in dataset, choose what 2 features to use as the axes
 // --> natural conclusion: want to be able to see all features, without having to use an nth dimensional plot
-const RawDataChart = ({ xIdx, yIdx }: { xIdx: number, yIdx: number }) => {
+const RawDataChart = () => {
+    const [xIdx, setXIdx] = useState(0);
+    const [yIdx, setYIdx] = useState(1);
     const points: DataSeriesMap = {};
     Object.entries(dataByClass).forEach(([dataClass, nums]) => {
         points[dataClass] = nums.map(row => ({ x: row[xIdx], y: row[yIdx] }));
     })
 
-    return (<BasicScatter points={points} xLabel={columns[xIdx]} yLabel={columns[yIdx]} />);
+    return (
+        <div className="pca raw-data-chart">
+            <div className="chart-config">
+                <div className="select-axis-menu xIdx">
+                    Select X Axis
+                <AxisSelector selected={xIdx} onChange={setXIdx} />
+                </div>
+                <div className="select-axis-menu yIdx">
+                    Select Y Axis
+                <AxisSelector selected={yIdx} onChange={setYIdx} />
+                </div>
+            </div>
+            <div className="raw-data-scatter">
+                <BasicScatter points={points} xLabel={columns[xIdx]} yLabel={columns[yIdx]} />
+            </div>
+        </div>);
 };
 
-const PCAChart = () => (<BasicScatter points={pcPoints} xLabel='PC1' yLabel='PC2' />);
+const AxisSelector = (props: { selected: number, onChange: (arg: number) => void }) =>
+    (<div className="axis-selector">
+        {columns.map((col, idx) => (
+            <button
+                className={props.selected === idx ? "selected" : ""}
+                key={col}
+                onClick={() => props.onChange(idx)}>
+                {col}
+            </button>
+        ))}
+    </div>);
+
+const PCAChart = () => (
+    <div className="pca pca-chart">
+        <BasicScatter points={pcPoints} xLabel='PC1' yLabel='PC2' />
+    </div>);
 
 const BasicScatter =
-    ({ points, xLabel, yLabel }: { points: DataSeriesMap, xLabel: string, yLabel: string }) => {
+    (props: { points: DataSeriesMap, xLabel: string, yLabel: string}) => {
         const data: { datasets: Object[] } = { datasets: [] };
-        Object.entries(points).forEach(([dataClass, classPoints]) => {
+        Object.entries(props.points).forEach(([dataClass, classPoints]) => {
             data.datasets.push({
                 label: dataClass,
                 fill: true,
@@ -69,10 +99,10 @@ const BasicScatter =
             tooltips: { enabled: false },
             scales: {
                 yAxes: [{
-                    scaleLabel: { display: true, labelString: xLabel }
+                    scaleLabel: { display: true, labelString: props.xLabel }
                 }],
                 xAxes: [{
-                    scaleLabel: { display: true, labelString: yLabel }
+                    scaleLabel: { display: true, labelString: props.yLabel }
                 }],
             }
         };

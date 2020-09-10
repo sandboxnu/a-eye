@@ -1,0 +1,41 @@
+.pca.raw-data-chart {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.pca.raw-data-chart .chart-config {
+    display: flex;
+    justify-content: center;
+}
+
+.pca.raw-data-chart .axis-selector {
+    display: flex;
+    flex-direction: column;
+    margin: 0px 16px;
+}
+
+.pca.raw-data-chart .axis-selector button {
+    border: none;
+    outline: none;
+    padding: 10px;
+    margin: 1px;
+    background-color: #8D9DBA;
+    font-family: 'Roboto', monospace;
+    font-weight: bold;
+    color: #f2f2f2;
+}
+
+.pca.raw-data-chart .axis-selector button:hover {
+    background-color: #617394;
+}
+
+.pca.raw-data-chart .axis-selector button.selected {
+    background-color: #394D73;
+}
+
+.pca.raw-data-chart .raw-data-scatter {
+    position: relative;
+    width: 70%;
+    float: right;
+}
