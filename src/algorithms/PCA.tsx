@@ -21,20 +21,22 @@ const PCADemo = () => {
 }
 
 const RawDataTable = () =>
-    <table className="pca raw-data">
-        <thead>
-            <tr>{columns.map(title => <th key={title}>{title}</th>)}<th>Class</th></tr>
-        </thead>
-        <tbody>
-            {dataset.map((row: number[], idx: number) => {
-                return (
-                    <tr key={idx} className="'datarow'">
-                        {row.map((val: number, idx: number) => <td key={idx}>{val}</td>)}
-                        <td>{classes[idx]}</td>
-                    </tr>);
-            })}
-        </tbody>
-    </table>
+    <div className="pca raw-data-table">
+        <table>
+            <thead>
+                <tr className="bg-gray-100">{columns.map(title => <th key={title}>{title}</th>)}<th>Class</th></tr>
+            </thead>
+            <tbody>
+                {dataset.map((row: number[], idx: number) => {
+                    return (
+                        <tr key={idx} className="'datarow'">
+                            {row.map((val: number, idx: number) => <td key={idx}>{val}</td>)}
+                            <td>{classes[idx]}</td>
+                        </tr>);
+                })}
+            </tbody>
+        </table>
+    </div>
 
 
 // Plot all samples in dataset, choose what 2 features to use as the axes
