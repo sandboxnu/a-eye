@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { PCA } from 'ml-pca';
 import datasetIris from 'ml-dataset-iris';
-import { Scatter } from 'react-chartjs-2';
+import {BasicScatter, DataSeriesMap, ColorMap} from '../common/BasicScatter';
 import './PCA.css';
 
 /**
@@ -62,7 +62,7 @@ const RawDataChart = () => {
                 </div>
             </div>
             <div className="raw-data-scatter">
-                <BasicScatter points={points} xLabel={columns[xIdx]} yLabel={columns[yIdx]} />
+                <BasicScatter colorMap={colorMap} points={points} xLabel={columns[xIdx]} yLabel={columns[yIdx]} />
             </div>
         </div>);
 };
@@ -81,35 +81,8 @@ const AxisSelector = (props: { selected: number, onChange: (arg: number) => void
 
 const PCAChart = () => (
     <div className="pca pca-chart">
-        <BasicScatter points={pcPoints} xLabel='PC1' yLabel='PC2' />
+        <BasicScatter colorMap={colorMap} points={pcPoints} xLabel='PC1' yLabel='PC2' />
     </div>);
-
-const BasicScatter =
-    (props: { points: DataSeriesMap, xLabel: string, yLabel: string}) => {
-        const data: { datasets: Object[] } = { datasets: [] };
-        Object.entries(props.points).forEach(([dataClass, classPoints]) => {
-            data.datasets.push({
-                label: dataClass,
-                fill: true,
-                pointRadius: 4,
-                backgroundColor: colorMap[dataClass],
-                data: classPoints
-            });
-        })
-        const options = {
-            showLines: false,
-            tooltips: { enabled: false },
-            scales: {
-                yAxes: [{
-                    scaleLabel: { display: true, labelString: props.xLabel }
-                }],
-                xAxes: [{
-                    scaleLabel: { display: true, labelString: props.yLabel }
-                }],
-            }
-        };
-        return (<Scatter data={data} options={options} />);
-    };
 
 const COLORS = ['#003f5c', '#ef5675', '#FFC107', '#00B0FF', '#FF3D00', '#4DB6AC'];
 
@@ -120,7 +93,7 @@ const columns = ['Sepal Length', 'Sepal Width', 'Petal Length', 'Petal Width'];
 const pca = new PCA(dataset);
 const prediction = pca.predict(dataset);
 
-const colorMap: { [dataClass: string]: string } = {};
+const colorMap: ColorMap = {};
 const dataByClass: { [dataClass: string]: number[][] } = {};
 const pcPoints: DataSeriesMap = {};
 datasetIris.getDistinctClasses().forEach((dataClass, i) => {
@@ -132,6 +105,6 @@ for (let i = 0; i < prediction.rows; i++) {
     pcPoints[classes[i]].push({ x: prediction.get(i, 0), y: prediction.get(i, 1) });
 }
 
-type DataSeriesMap = { [dataClass: string]: Array<{ x: number, y: number }> };
+
 
 export default PCADemo;
