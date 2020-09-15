@@ -24,7 +24,7 @@ const RawDataTable = () =>
     <div className="pca raw-data-table">
         <table>
             <thead>
-                <tr className="bg-gray-100">{columns.map(title => <th key={title}>{title}</th>)}<th>Class</th></tr>
+                <tr>{columns.map(title => <th key={title}>{title}</th>)}<th>Class</th></tr>
             </thead>
             <tbody>
                 {dataset.map((row: number[], idx: number) => {
@@ -104,7 +104,5 @@ datasetIris.getDistinctClasses().forEach((dataClass, i) => {
 for (let i = 0; i < prediction.rows; i++) {
     pcPoints[classes[i]].push({ x: prediction.get(i, 0), y: prediction.get(i, 1) });
 }
-
-
 
 export default PCADemo;
