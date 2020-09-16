@@ -1,0 +1,45 @@
+.profile-card .image {
+    display: inline-block;
+}
+
+.profile-card .image > img, 
+.profile-card .image .image-overlay {
+    height: 200px;
+    width: 200px;
+    border-radius: 50%;
+}
+
+.profile-card .image .image-overlay {
+    background-color: #46B4A72C;
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.profile-card .image .icon {
+    border-radius: 50%;
+    background-color: #394D73;
+    height: 35px;
+    width: 35px;
+    margin: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.profile-card .image .icon img {
+    height: 15px;
+}
+
+.profile-card .caption .name {
+    font-weight: bold;
+    color: #010326;
+    margin-bottom: 0;
+}
+
+.profile-card .caption .title {
+    font-style: italic;
+    color: #0FD4C0;
+    margin-top: 4px;
+}
