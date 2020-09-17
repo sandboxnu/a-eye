@@ -11,9 +11,9 @@ function App() {
           <Navbar />
       </div>
 
-      <div className="page-content">
-        <AboutPage/>
-      </div>
+      <main> 
+        <AboutPage/> 
+      </main>
     {/* <img src={logo} className="App-logo" alt="logo" />
     <p>
       Sandbox A-Eye Project Landing Page

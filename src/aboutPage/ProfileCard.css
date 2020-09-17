@@ -1,3 +1,7 @@
+.profile-card {
+    margin: 30px 30px;
+}
+
 .profile-card .image {
     display: inline-block;
 }
@@ -28,14 +32,21 @@
     justify-content: space-around;
 }
 
-.profile-card .image .icon img {
+.profile-card .image .icon.linkedin img {
     height: 15px;
+}
+
+.profile-card .image .icon.email img {
+    position: relative;
+    top: -1px;
+    height: 27px;
 }
 
 .profile-card .caption .name {
     font-weight: bold;
-    color: #010326;
+    color: #bba5a5;
     margin-bottom: 0;
+    mix-blend-mode: difference;
 }
 
 .profile-card .caption .title {

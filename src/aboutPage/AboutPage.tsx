@@ -1,8 +1,13 @@
 import React from 'react';
 import ProfileCard from './ProfileCard';
-import "./AboutPage.css";
+import kevin from './profileAssets/kevin.jpg'
+import './AboutPage.css';
 
 const AboutPage = () => {
+    const KevinProfile = () =>
+        <ProfileCard image={kevin} name="Kevin" title="Lord Eternal"
+            linkedin="https://www.linkedin.com/in/iris-liu-curiously/"
+            email="liu.i@northeastern.edu" />
     return (
         <div className="about-page">
             <div className="page-title">
@@ -10,9 +15,7 @@ const AboutPage = () => {
                 <h2>Team Description</h2>
             </div>
             <div className="profile-cards-section">
-                <ProfileCard image="https://i.pinimg.com/originals/eb/7b/f6/eb7bf67ef70d555c77dff38e01daba8d.jpg" name="Kevin" title="Lord Eternal"
-                    linkedin="https://www.linkedin.com/in/iris-liu-curiously/" 
-                    email="liu.i@northeastern.edu" />
+                <KevinProfile/> <KevinProfile/> <KevinProfile/> <KevinProfile/> <KevinProfile/> <KevinProfile/> <KevinProfile/>
             </div>
         </div>
     );

@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import linkedinIcon from './profileAssets/iconmonstr-linkedin-1.svg';
+import emailIcon from './profileAssets/mail-24px.svg';
 import './ProfileCard.css';
 
 /**
@@ -18,13 +20,13 @@ const ProfileCard = (props:
     const Overlay = () => (
         <div className="image-overlay">
             <a href={props.linkedin} target="_blank">
-                <div className="icon">
-                    <img src="https://www.iconsdb.com/icons/preview/white/linkedin-xxl.png" />
+                <div className="icon linkedin">
+                    <img src={linkedinIcon} />
                 </div>
             </a>
             <a href={`mailto:${props.email}`}>
-                <div className="icon">
-                    <img src="https://www.iconsdb.com/icons/preview/white/envelope-closed-xxl.png" />
+                <div className="icon email">
+                    <img src={emailIcon} />
                 </div>
             </a>
         </div>
