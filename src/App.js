@@ -1,4 +1,5 @@
 import React from 'react';
+import Navbar from "./Navbar";
 import logo from './sandbox_square_salmon.png';
 import './App.css';
 import Navbar from "./Navbar";
