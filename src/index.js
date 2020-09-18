@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom';
 import './assets/main.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+import  "typeface-roboto";
+import  "typeface-open-sans";
 
 ReactDOM.render(
   <React.StrictMode>

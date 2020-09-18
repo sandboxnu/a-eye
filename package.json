@@ -19,6 +19,9 @@
     "react-scripts": "3.4.1",
     "serialize-javascript": "^4.0.0",
     "tailwindcss": "^1.8.4",
+    "typeface-open-sans": "^0.0.75",
+    "typeface-roboto": "^0.0.75",
+    "typefaces": "^0.0.1",
     "typescript": "^4.0.2"
   },
   "scripts": {
