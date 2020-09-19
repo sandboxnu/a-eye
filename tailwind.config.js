@@ -8,8 +8,12 @@ module.exports = {
         bgdiff: '#bba5a5',
         navy: '#394D73',
         transteal: '#46B4A72C',
-        navygreen: '#254053',
+        navbar: '#2B4B62',
         offwhite: '#f2f2f2'
+      },
+      fontFamily: {
+        opensans: ["open sans", "sans-serif"],
+        roboto: ["roboto", "sans-serif"]
       },
       backgroundImage: theme => ({
         'test': 'url("https://i.pinimg.com/originals/f4/db/17/f4db1762ff708a55014c55edf3b10fd0.png")'

@@ -1,6 +1,5 @@
 import React from 'react';
 import Navbar from "./Navbar";
-import logo from './sandbox_square_salmon.png';
 import './App.css';
 import AboutPage from "./aboutPage/AboutPage"
 
@@ -8,13 +7,19 @@ function App() {
   return (
     <div className="App">
       <div className="App-header">
-          <Navbar />
+        <Navbar />
       </div>
-
-      <main className="font-mono text-lg"> 
-        <AboutPage/> 
+      {/* <div className="App-body">
+        <p className="font-roboto italic">
+          Sandbox A-Eye Project Landing Page
+              </p>
+      </div> */}
+      <main className="font-mono text-lg">
+        <AboutPage />
       </main>
     </div>
+
+
   );
 }
 
