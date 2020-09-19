@@ -16,14 +16,14 @@ export default function Navbar() {
                             </p>
                         </a>
                     </li>
-                    <li id="nav-item" className="mx-8 border-b-2 border-transparent hover:border-teal-300 duration-300 ease-in-out">
+                    <li id="nav-item" className="mx-8 border-b-2 border-transparent hover:border-teal duration-300 ease-in-out">
                         <a className="" href="/modules">
                             <p className="text-xs text-white uppercase">
                                 Modules
                             </p>
                         </a>
                     </li>
-                    <li id="nav-item" className="mx-8 border-b-2 border-transparent hover:border-teal-300 duration-300 ease-in-out">
+                    <li id="nav-item" className="mx-8 border-b-2 border-transparent hover:border-teal duration-300 ease-in-out">
                         <a className="" href="/about">
                             <p className="text-xs text-white uppercase">
                                 About
