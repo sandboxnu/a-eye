@@ -5,7 +5,7 @@ module.exports = {
       colors: {
         teal: '#0FD4C0',
         charcoal: '#254053',
-        bgdiff: '#bba5a5',
+        bgdiff: '#cacaca',
         navy: '#394D73',
         transteal: '#46B4A72C',
         navbar: '#2B4B62',
@@ -16,8 +16,11 @@ module.exports = {
         roboto: ["roboto", "sans-serif"]
       },
       backgroundImage: theme => ({
-        'test': 'url("https://i.pinimg.com/originals/f4/db/17/f4db1762ff708a55014c55edf3b10fd0.png")'
-      })
+        'about': 'url("./curve.svg")'
+      }),
+      backgroundSize: {
+        stretchBottom: '103% 50%'
+      }
     },
     top: {
       '-1': '-1px'

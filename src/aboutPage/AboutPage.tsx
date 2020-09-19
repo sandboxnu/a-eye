@@ -8,7 +8,7 @@ const AboutPage = () => {
             linkedin="https://www.linkedin.com/in/iris-liu-curiously/"
             email="liu.i@northeastern.edu" />
     return (
-        <div className="absolute w-full min-h-full bg-offwhite bg-test bg-no-repeat bg-scroll bg-bottom">
+        <div className="absolute w-full min-h-full bg-offwhite bg-about bg-no-repeat bg-scroll bg-bottom bg-stretchBottom">
             <div>
                 <h1 className="mt-24 text-6xl font-sans text-teal font-bold italic">
                     ABOUT US
