@@ -3,7 +3,7 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        teal: '#0FD4C0',
+        'teal-a-eye': '#0FD4C0',
         charcoal: '#254053',
         bgdiff: '#cacaca',
         navy: '#394D73',

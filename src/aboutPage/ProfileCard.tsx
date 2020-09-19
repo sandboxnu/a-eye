@@ -44,7 +44,7 @@ const ProfileCard = (props:
                 <p id="name" className="font-bold text-bgdiff mb-0 blend-difference">
                     {props.name}
                 </p>
-                <p id="title" className="italic text-teal">
+                <p id="title" className="italic text-teal-a-eye">
                     {props.title}
                 </p>
             </div>
