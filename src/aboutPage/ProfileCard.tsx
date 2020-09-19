@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import linkedinIcon from './profileAssets/iconmonstr-linkedin-1.svg';
 import emailIcon from './profileAssets/mail-24px.svg';
-import './ProfileCard.css';
 
 /**
  * 
@@ -18,29 +17,36 @@ const ProfileCard = (props:
 
     //TODO all these images need to be hosted somewhere?
     const Overlay = () => (
-        <div className="image-overlay">
+        <div id="image-overlay" className="bg-transteal absolute flex justify-center items-center h-48 w-48 rounded-full">
             <a href={props.linkedin} target="_blank">
-                <div className="icon linkedin">
-                    <img src={linkedinIcon} />
+                <div id="icon linkedin" className="rounded-full bg-navy h-10 w-10 flex items-center justify-around m-3">
+                    <img className="h-4"
+                        src={linkedinIcon} />
                 </div>
             </a>
             <a href={`mailto:${props.email}`}>
-                <div className="icon email">
-                    <img src={emailIcon} />
+                <div id="icon linkedin" className="rounded-full bg-navy h-10 w-10 flex items-center justify-around m-3">
+                    <img className="relative -top-1 h-6"
+                        src={emailIcon} />
                 </div>
             </a>
         </div>
     )
     return (
-        <div className="profile-card">
-            <div className="image"
+        <div id="profile-card" className="m-8">
+            <div id="image" className="inline-block"
                 onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
                 {hovered && <Overlay />}
-                <img src={props.image} />
+                <img className="h-48 w-48 rounded-full"
+                    src={props.image} />
             </div>
             <div className="caption">
-                <p className="name">{props.name}</p>
-                <p className="title">{props.title}</p>
+                <p id="name" className="font-bold text-bgdiff mb-0 blend-difference">
+                    {props.name}
+                </p>
+                <p id="title" className="italic text-teal">
+                    {props.title}
+                </p>
             </div>
         </div>
     );

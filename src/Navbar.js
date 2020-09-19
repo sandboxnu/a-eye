@@ -2,7 +2,7 @@ import React from 'react';
 
 export default function Navbar() {
     return (
-        <nav id="navbar-container" className="flex justify-between bg-teal-900 py-3 px-2">
+        <nav id="navbar-container" className="flex justify-between bg-navygreen py-3 px-2">
             <div id="logo-container" className="flex px-40">
                 <p className="text-lg font-bold text-white uppercase">
                     Logo
@@ -10,7 +10,7 @@ export default function Navbar() {
             </div>
             <div id="links-container" className="justify-between list-none">
                 <ul id="nav-list" className="flex px-40">
-                    <li id="nav-item" className="mx-8 border-b-2 border-transparent hover:border-teal-300 duration-300 ease-in-out">
+                    <li id="nav-item" className="mx-8 border-b-2 border-transparent hover:border-teal duration-300 ease-in-out">
                         <a className="" href="/home">
                             <p className="text-xs font-bold text-white uppercase">
                                 Home

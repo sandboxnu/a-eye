@@ -2,7 +2,6 @@ import React from 'react';
 import Navbar from "./Navbar";
 import logo from './sandbox_square_salmon.png';
 import './App.css';
-import Navbar from "./Navbar";
 import AboutPage from "./aboutPage/AboutPage"
 
 function App() {
@@ -12,13 +11,9 @@ function App() {
           <Navbar />
       </div>
 
-      <main> 
+      <main className="font-mono text-lg"> 
         <AboutPage/> 
       </main>
-    {/* <img src={logo} className="App-logo" alt="logo" />
-    <p>
-      Sandbox A-Eye Project Landing Page
-    </p> */}
     </div>
   );
 }
