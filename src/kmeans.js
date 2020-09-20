@@ -8,7 +8,6 @@ import trainData from './train.json'; // Training data is already preprocessed
 import dragData from 'chartjs-plugin-dragdata';
 
 import kmeans from 'ml-kmeans';
-// import { connect } from 'http2';
 
 
 // Data processing
