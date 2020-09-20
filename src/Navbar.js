@@ -1,5 +1,4 @@
 import React from 'react';
-//import logo from './sandbox_logo.png';
 import logo from './media/logo.svg';
 
 export default function Navbar() {
