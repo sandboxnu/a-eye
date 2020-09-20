@@ -3,12 +3,12 @@ import React, { Component, useState } from 'react';
 // import Chart from 'chart.js';
 import { Scatter } from 'react-chartjs-2';
 import randomColour from 'randomcolor';
-import { KMeans } from 'machinelearn/cluster';
 import './kmeans.css';
 import trainData from './train.json'; // Training data is already preprocessed
 import dragData from 'chartjs-plugin-dragdata';
 
 import kmeans from 'ml-kmeans';
+// import { connect } from 'http2';
 
 
 // Data processing
@@ -33,10 +33,12 @@ let k = 2
 let ans0 = kmeans(organiseData(trainData), k, { initialization: centers, maxIterations: 1 }, );
 let ans100 = kmeans(organiseData(trainData), k, { initialization: centers, maxIterations: 100 }, );
 let ans1 = kmeans(organiseData(trainData), k, { initialization: centers, maxIterations: 2 }, );
-console.log(ans0);
+console.log(ans100['clusters']);
 
-
-
+// cluster colors
+let cl_colors = ['#99FF99', '#99CCFF']
+// center 
+let c_colors = ['#3cb450', "#5360fc"]
 
 const MyScatter =
     (graphdata) => {
@@ -45,17 +47,14 @@ const MyScatter =
           data: []
         }] };
         
-        console.log(data)
         Object.entries(bubbleData).forEach((cluster) => {
           Object.entries(cluster[1].data).forEach((point) => {
-            // console.log(point[1])
             data.datasets[0].data.push({
               x: point[1].x,
               y: point[1].y,
               // fill: false,
               pointRadius: 1,
               backgroundColor: '#ef5675',
-              // data: {x: point[1].x, y: point[1].y}
           });
           
           });
@@ -95,34 +94,37 @@ class ScatterChart extends Component {
 }
 
 const MyScatter2 =
-(datasetsx) => {
-  console.log(datasetsx)
-  const [x1Idx, setX1Idx] = useState(centers[0][0]);
-  // console.log(x1Idx)
-  let x = 1
+(props) => {
   
-  const [y1Idx, setY1Idx] = useState(centers[0][1]);
-  const [x2Idx, setX2Idx] = useState(centers[1][0]);
-  const [y2Idx, setY2Idx] = useState(centers[1][1]);
-  // let curr_centers = [[x1Idx, y1Idx], [x2Idx, y2Idx]]
-  // console.log(x2Idx)
-  // console.log(y2Idx)
-  // const data = datasets
+
+  // in order to make the chart updateable after moving a center
+  const [x1Idx, setX1Idx] = useState(props.cntrds[0].centroid[0]);
+  const [y1Idx, setY1Idx] = useState(props.cntrds[0].centroid[1]);
+  const [x2Idx, setX2Idx] = useState(props.cntrds[1].centroid[0]);
+  const [y2Idx, setY2Idx] = useState(props.cntrds[1].centroid[1]);
+
+  // format needed for kmeans
+  let c2 = [[x1Idx, y1Idx], [x2Idx, y2Idx]];
+
+  // where our data is going to be, 'bubble data'
+  let bubData = []
+
+  let ans_x = kmeans(organiseData(trainData), k, { initialization: c2, maxIterations: 1 }, );
+  // process data mutates the first argument
+  processdata(bubData, ans_x.clusters, c2, props.hidden)
+
+  
+  // data that will be put into the chart
   const data = { datasets : [] };
-  // console.log()
-  console.log(datasetsx['datasetsx'])
-  Object.entries(datasetsx['datasetsx']).forEach((cluster) => {
-    console.log(cluster[1])
-    // console.log(x)
+
+  Object.entries(bubData).forEach((cluster) => {
     data.datasets.push(
-      cluster[1]
-      
+      cluster[1]      
     )
   })
 
   
 
-  // console.log(data)
   const options = {
       showLines: false,
       dragData: true,
@@ -139,12 +141,15 @@ const MyScatter2 =
       // },
       onDragEnd: function (e, datasetIndex, index, value) {
         console.log(value)
-        console.log(datasetIndex)
-        setX1Idx(value['x'])
-        // x = 
-        // console.log(x)
-        console.log(x1Idx)
-        // restore default cursor style upon drag release
+        console.log(datasetIndex, index)
+        if (datasetIndex == 0) {
+          setX1Idx(value.x)
+          setY1Idx(value.y)
+        }
+        if (datasetIndex == 1) {
+          setX2Idx(value.x)
+          setY2Idx(value.y)
+        }
         e.target.style.cursor = 'default'
         // where e = event
         
@@ -157,19 +162,20 @@ const MyScatter2 =
           xAxes: [{
               scaleLabel: { display: true }
           }],
-      }
+      },
+      animation: {
+        duration: 0
+    }
   };
-  // console.log(options)
   return (<Scatter data={data} options={options}  />);
 };
-// let centers = [[1, 2], [10, 10]];
-
 
 
 
 const bubbleData = [];
 
 // processing for first chart
+// (convert from json to more agreeable format)
 for(let ci = 0; ci < 1; ci++) {
   const newCluster = [];
   for (let ri = 0; ri < trainData.length; ri++) {
@@ -182,8 +188,8 @@ for(let ci = 0; ci < 1; ci++) {
     })
 
   }
-  const colour = randomColour();
-  // console.log(colour)
+  let colour = cl_colors[ci];
+  console.log(colour)
   bubbleData.push({
     label: [`Cluster #${ci}`],
     backgroundColor: colour,
@@ -195,32 +201,29 @@ for(let ci = 0; ci < 1; ci++) {
 
 
 
+// processing for second and third chart
+function processdata(bdata, clsters, cntroids, hidden) {
 
-
-// console.log(bubbleData1)
-
-const bubbleData2 = [];
-const bubbleData3 = [];
-
-function processdata(bdata, clsters, cntroids) {
-  console.log(cntroids)
+  // add centers
   for (let c = 0; c < cntroids.length; c++ ){
     const newCluster = [];
     newCluster.push({
-      x: cntroids[c]['centroid'][0],
-      y: cntroids[c]['centroid'][1],
+      x: cntroids[c][0],
+      y: cntroids[c][1],
       r: 3
     })
-    console.log(cntroids[c]['centroid'])
-    const colour = '#FF0000';
+
+    let colour = c_colors[c];
     bdata.push({
       label: [`Center #${c  }`],
       backgroundColor: colour,
       borderColor: colour,
-      data: newCluster
+      data: newCluster,
+      hidden: hidden
     });
   }
 
+  // add clusters
   for (let ci = 0; ci < k; ci++) {
     const newCluster= [];
     for (let ri = 0; ri < clsters.length; ri++){
@@ -233,7 +236,7 @@ function processdata(bdata, clsters, cntroids) {
       }
     }
 
-    const colour = randomColour();
+    const colour = cl_colors[ci];
     bdata.push({
       label: [`Cluster #${ci}`],
       backgroundColor: colour,
@@ -243,59 +246,9 @@ function processdata(bdata, clsters, cntroids) {
     });
   }
 
-  
-
-  // // add centers
-  // Object.entries(centers).forEach((c) => {
-  //   console.log(c)
-  //   data.datasets.data.push({
-  //     x: c[1][0],
-  //     y: c[1][1],
-  //     backgroundColor: '#FF0000'
-  //   })
-  // })
 }
-processdata(bubbleData3, ans100['clusters'], ans100['centroids'])
-processdata(bubbleData2, ans1['clusters'], ans0['centroids'])
-// for(let ci = 0; ci < clusters2.length; ci++) {
-//   const cluster: any[] = clusters2[ci];
-//   const newCluster = [];
-//   for (let ri = 0; ri < cluster.length; ri++) {
-//     const row = cluster[ri];
-//     newCluster.push({
-//       x: row[0],
-//       y: row[1],
-//       r: 3,
-//     })
-//   }
-//   const colour = randomColour();
-//   bubbleData2.push({
-//     label: [`Cluster #${ci}`],
-//     backgroundColor: colour,
-//     borderColor: colour,
-//     data: newCluster
-//   });
-// }
-// console.log(bubbleData2)
 
-/////////////////////////////////////
-const data2 = { datasets : [{ 
-  data: []
-}] };
-Object.entries(bubbleData).forEach((cluster) => {
-  Object.entries(cluster[1].data).forEach((point) => {
-    // console.log(point[1])
-    data2.datasets[0].data.push({
-      x: point[1].x,
-      y: point[1].y,
-      fill: false,
-      pointRadius: 1,
-      backgroundColor: '#ef5675',
-      // data: {x: point[1].x, y: point[1].y}
-  });
-  
-  });
-})
+
 
 function App() {
   return (
@@ -304,14 +257,12 @@ function App() {
         <MyScatter graphdata={bubbleData} />
       </div>
       <div  className="kmeansgraph">
-        <MyScatter2 datasetsx={bubbleData2} centers={centers}/>
+        <MyScatter2 clstrs ={ans1['clusters']} cntrds = {ans0['centroids']} hidden = {false} />
       </div>
       <div  className="kmeansgraph">
-        <MyScatter2 datasetsx={bubbleData3} centers={centers} />
+        <MyScatter2 clstrs ={ans100['clusters']} cntrds = {ans100['centroids']} hidden = {true} />
       </div> 
-      <div>
-        <ScatterChart props={bubbleData2} />
-      </div>
+
     </div>
   );
 }

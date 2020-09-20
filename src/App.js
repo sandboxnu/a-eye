@@ -1,17 +1,21 @@
 import React from 'react';
 import logo from './sandbox_square_salmon.png';
 import './App.css';
+import Kmeans from './kmeans';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Sandbox A-Eye Project Landing Page
-        </p>
-      </header>
-    </div>
+
+    <BrowserRouter>
+      <div>
+          <Switch>
+            <Route path="/kmeans" component={Kmeans}/>
+          <Route component={Error}/>
+          </Switch>
+      </div> 
+    </BrowserRouter>
+
   );
 }
 
