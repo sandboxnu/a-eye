@@ -8,12 +8,16 @@ function App() {
   return (
 
     <BrowserRouter>
-      <div>
+      <div className="App">
+        <div className="App-header">
+          <Navbar />
+        </div>
+        <main className="font-mono text-lg">
           <Switch>
-            <Route path="/kmeans" component={Kmeans}/>
-          <Route component={Error}/>
+            <Route path="/kmeans" component={Kmeans} />
           </Switch>
-      </div> 
+        </main>
+      </div>
     </BrowserRouter>
 
   );
