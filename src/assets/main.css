@@ -3680,7 +3680,7 @@ video {
 }
 
 .bg-about {
-  background-image: url("./curve.svg");
+  background-image: url("./aboutCurve.svg");
 }
 
 .from-transparent {
@@ -22824,7 +22824,7 @@ video {
   }
 
   .sm\:bg-about {
-    background-image: url("./curve.svg");
+    background-image: url("./aboutCurve.svg");
   }
 
   .sm\:from-transparent {
@@ -41938,7 +41938,7 @@ video {
   }
 
   .md\:bg-about {
-    background-image: url("./curve.svg");
+    background-image: url("./aboutCurve.svg");
   }
 
   .md\:from-transparent {
@@ -61052,7 +61052,7 @@ video {
   }
 
   .lg\:bg-about {
-    background-image: url("./curve.svg");
+    background-image: url("./aboutCurve.svg");
   }
 
   .lg\:from-transparent {
@@ -80166,7 +80166,7 @@ video {
   }
 
   .xl\:bg-about {
-    background-image: url("./curve.svg");
+    background-image: url("./aboutCurve.svg");
   }
 
   .xl\:from-transparent {
