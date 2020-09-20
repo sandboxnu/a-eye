@@ -5,7 +5,7 @@ export default function Navbar() {
     return (
         <nav className="flex justify-between px-2 bg-navbar" id="navbar-container">
             <div className="flex my-1 ml-6 sm:ml-12 lg:ml-40" id="logo-container">
-                <object className="w-24 h-10" type="image/svg+xml" data={logo}>Logo</object>
+                <object className="py-2 w-24 h-10" type="image/svg+xml" data={logo}>Logo</object>
             </div>
             <div className="my-3 justify-between" id="links-container">
                 <ul className="flex sm:mr-6 lg:mr-40" id="nav-list">
