@@ -1,5 +1,6 @@
 import React from 'react';
 import Navbar from "./Navbar";
+import Footer from './footer';
 import './App.css';
 
 function App() {
@@ -12,6 +13,9 @@ function App() {
               <p className="font-roboto italic">
                   Sandbox A-Eye Project Landing Page
               </p>
+          </div>
+          <div>
+              <Footer />
           </div>
       </div>
   );
