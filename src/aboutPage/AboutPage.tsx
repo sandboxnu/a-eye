@@ -18,7 +18,7 @@ const AboutPage = () => {
                     Team Description
                 </h2>
             </div>
-            <div id="profile-cards-section" className="m-auto mt-32 w-3/4 flex flex-wrap justify-center">
+            <div id="profile-cards-section" className="m-auto mt-32 mb-48 w-3/4 flex flex-wrap justify-center">
                 <ProfileCard image={krishPic} name="Krish Sharma" title="Project Lead"
                     linkedin="https://www.linkedin.com/in/krish-sharma/"
                     email="sharma.kri@northeastern.edu" />

@@ -17,7 +17,7 @@ module.exports = {
         roboto: ["roboto", "sans-serif"]
       },
       backgroundImage: theme => ({
-        'about': 'url("./aboutCurve.svg")'
+        'about': 'url("../media/aboutCurve.svg")'
       }),
       backgroundSize: {
         stretchBottom: '103% 50%'
