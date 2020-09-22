@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 612 613">
+    <defs>
+        <style>.cls-1,.cls-2{fill:none;}.cls-1{stroke:#48c0b5;stroke-width:27px;}.cls-3{fill:#48c0b5;}</style>
+    </defs>
+    <g id="Layer_4" data-name="Layer 4">
+        <path id="Union_3" data-name="Union 3" class="cls-1" d="M94.77,295.58l-2.63,2.62,2.63-2.62-1.34-1.23,1.34,1.22,75.83-75.82L94.77,295.58l75.83,69.51Z"/>
+        <g id="Path_221" data-name="Path 221">
+            <path class="cls-2" d="M322.37,183.73A108.69,108.69,0,1,1,213.68,292.42,108.69,108.69,0,0,1,322.37,183.73Z"/>
+            <path class="cls-3" d="M322.37,209.46a83,83,0,1,0,83,83,83,83,0,0,0-83-83m0-25.73A108.69,108.69,0,1,1,213.68,292.42,108.69,108.69,0,0,1,322.37,183.73Z"/>
+        </g>
+            <path id="Union_2" data-name="Union 2" class="cls-1" d="M544.7,295.58l2.63,2.62-2.63-2.62,1.35-1.23-1.35,1.22-75.83-75.82,75.83,75.83-75.83,69.51Z"/>
+            <circle id="Ellipse_11" data-name="Ellipse 11" class="cls-3" cx="322.37" cy="289.06" r="29.6"/>
+    </g>
+</svg>

@@ -9,7 +9,8 @@ module.exports = {
         navy: '#394D73',
         transteal: '#46B4A72C',
         navbar: '#2B4B62',
-        offwhite: '#f2f2f2'
+        offwhite: '#f2f2f2',
+        scrollBox: '#8D9DBA'
       },
       fontFamily: {
         opensans: ["open sans", "sans-serif"],
