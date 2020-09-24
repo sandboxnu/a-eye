@@ -6,7 +6,7 @@ export default function Navbar() {
         <nav className="flex justify-between px-2 bg-navbar" id="navbar-container">
             <div className="flex my-1 ml-6 sm:ml-12 lg:ml-40" id="logo-container">
                 <a href="/home">
-                    <object className="py-2 w-24 h-10" type="image/svg+xml" data={logo}>Logo</object>
+                    <object className="pointer-events-none py-2 w-24 h-10" type="image/svg+xml" data={logo}>Logo</object>
                 </a>
             </div>
             <div className="my-3 justify-between" id="links-container">
