@@ -1,5 +1,5 @@
 import React from 'react';
-import logo from './media/logo.svg';
+import logo from './media/logo_blink.svg';
 
 export default function Navbar() {
     return (
