@@ -9,7 +9,7 @@ import dragData from 'chartjs-plugin-dragdata';
 
 import kmeans from 'ml-kmeans';
 
-
+console.log(trainData)
 // Data processing
 const organiseData = (data) => {
   const organisedData = [];
@@ -26,6 +26,7 @@ const organiseData = (data) => {
 
 // console.log(clusters)
 let data = organiseData(trainData)
+console.log(data)
 // let data = [[1, 1, 1], [1, 2, 1], [-1, -1, -1], [-1, -1, -1.5]];
 let centers = [[0, 0], [50, 50]];
 let k = 2
@@ -102,6 +103,9 @@ const MyScatter2 =
   const [x2Idx, setX2Idx] = useState(props.cntrds[1].centroid[0]);
   const [y2Idx, setY2Idx] = useState(props.cntrds[1].centroid[1]);
 
+  // points which have been added
+  const [addedPoints, setAP]  = useState([]);
+
   // format needed for kmeans
   let c2 = [[x1Idx, y1Idx], [x2Idx, y2Idx]];
 
@@ -138,6 +142,12 @@ const MyScatter2 =
 
       //   }
       // },
+      onClick : function (evt, item) {
+        console.log(evt);
+        // console.log(item);
+        // console.log(evt.x - 737, 140 - evt.y)
+        
+      },
       onDragEnd: function (e, datasetIndex, index, value) {
         console.log(value)
         console.log(datasetIndex, index)
@@ -247,7 +257,21 @@ function processdata(bdata, clsters, cntroids, hidden) {
 
 }
 
+function activateLasers() {
 
+  var userAdjective = prompt("Please provide coordinates");
+  alert (userAdjective);
+  trainData.push({
+    "Driver_ID": 0, // dont care what this is
+    "Distance_Feature": userAdjective.split(' ')[0],
+    "Speeding_Feature": userAdjective.split(' ')[1]
+  })
+  const newRow = [];
+  newRow.push(userAdjective.split(' ')[0]);
+  newRow.push(userAdjective.split(' ')[1]);
+  data.push(newRow);
+
+}
 
 function App() {
   return (
@@ -257,7 +281,18 @@ function App() {
       </div>
       <div  className="kmeansgraph">
         <MyScatter2 clstrs ={ans1['clusters']} cntrds = {ans0['centroids']} hidden = {false} />
+        <button onClick={activateLasers}>
+          Activate Lasers
+        </button>
+        <form>
+          <h1>Hello</h1>
+          <p>Enter your name:</p>
+          <input
+            type="text"
+          />
+        </form>
       </div>
+      
       <div  className="kmeansgraph">
         <MyScatter2 clstrs ={ans100['clusters']} cntrds = {ans100['centroids']} hidden = {true} />
       </div> 
