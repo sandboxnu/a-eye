@@ -10,14 +10,17 @@ module.exports = {
         transteal: '#46B4A72C',
         navbar: '#2B4B62',
         offwhite: '#f2f2f2',
-        scrollBox: '#8D9DBA'
+        scrollBox: '#8D9DBA',
+        lightblue: '#CBD9F2',
+        darkblue: '#394D73'
       },
       fontFamily: {
         opensans: ["open sans", "sans-serif"],
         roboto: ["roboto", "sans-serif"]
       },
       backgroundImage: theme => ({
-        'about': 'url("../media/aboutCurve.svg")'
+        'about': 'url("../media/aboutCurve.svg")',
+        'landing-page': 'url("../media/background_landing_page.svg")'
       }),
       backgroundSize: {
         stretchBottom: '103% 50%'
