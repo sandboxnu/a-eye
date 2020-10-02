@@ -605,6 +605,51 @@ video {
   }
 }
 
+.basic-button {
+  --bg-opacity: 1;
+  background-color: #394D73;
+  background-color: rgba(57, 77, 115, var(--bg-opacity));
+  --text-opacity: 1;
+  color: #fff;
+  color: rgba(255, 255, 255, var(--text-opacity));
+  margin: 0.75rem;
+  padding: 0.75rem;
+  outline: 0;
+  border-width: 0;
+  border-radius: 0.375rem;
+  font-weight: 700;
+}
+
+.basic-button:hover {
+  --bg-opacity: 1;
+  background-color: #2B4B62;
+  background-color: rgba(43, 75, 98, var(--bg-opacity))
+}
+
+.basic-button:focus {
+  outline: 0
+}
+
+.number-input {
+  width: 4rem;
+  border-width: 2px;
+  border-style: solid;
+  --border-opacity: 1;
+  border-color: #a0aec0;
+  border-color: rgba(160, 174, 192, var(--border-opacity));
+  padding-left: 0.5rem;
+  border-radius: 0.375rem;
+}
+
+.number-input:focus {
+  border-style: solid;
+  --border-opacity: 1;
+  border-color: #394D73;
+  border-color: rgba(57, 77, 115, var(--border-opacity));
+  padding-left: 0.5rem;
+  outline: 0;
+}
+
 .space-y-0 > :not(template) ~ :not(template) {
   --space-y-reverse: 0;
   margin-top: calc(0px * calc(1 - var(--space-y-reverse)));
