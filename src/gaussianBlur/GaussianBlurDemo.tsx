@@ -48,10 +48,11 @@ const KernelConfig = (props: { onConfig: (kernelSize: number, sigma: number) => 
     const [kernelSize, setKernelSize] = useState<number>(5);
     const [sigma, setSigma] = useState<number>(1);
 
-    const changeSigma = (e: any) => setSigma(parseInt(e.target.value));
+    const changeSigma = (e: any) => setSigma(parseFloat(e.target.value));
     const changeKernelSize = (e: any) => setKernelSize(parseInt(e.target.value));
 
-    const invalidSize = (kernelSize % 2 !== 1 || kernelSize < 3 || kernelSize > 101);
+    const invalidSize = (kernelSize % 2 !== 1 || kernelSize < 3 || kernelSize > 101)
+    const invalidConfig = !sigma || invalidSize;
     return (
         <div>
             <div className="font-bold m-3">
@@ -75,7 +76,7 @@ const KernelConfig = (props: { onConfig: (kernelSize: number, sigma: number) => 
                     { invalidSize ? 'Enter an odd kernel size, between 3 and 101' : ''}
                 </div>
             </div>
-            <button className="basic-button" disabled={invalidSize} onClick={e => props.onConfig(kernelSize, sigma)}>
+            <button className="basic-button" disabled={invalidConfig} onClick={e => props.onConfig(kernelSize, sigma)}>
                 Generate Kernel
             </button>
         </div>
