@@ -4,7 +4,7 @@ import { convolute } from './filter';
 // http://dev.theomader.com/gaussian-kernel-calculator/
 // https://blog.cloudboost.io/using-html5-canvas-with-react-ff7d93f5dc76
 
-const InteractiveFilter = (props : {kernel : number[], imgUrl : string}) => {
+const InteractiveFilter = (props : {kernel? : number[], imgUrl : string}) => {
     const [isFiltered, setIsFiltered] = useState(false);
     const [imgWidth, setImgWidth] = useState<number | undefined>(undefined);
     const [imgHeight, setImgHeight] = useState<number | undefined>(undefined);
@@ -30,7 +30,7 @@ const InteractiveFilter = (props : {kernel : number[], imgUrl : string}) => {
         const inputElem = inputCanvas.current; // get the DOM element for the canvas
         const outputElem = outputCanvas.current;
         if (!(inputElem && outputElem)) return;
-        convolute(inputElem, outputElem, true, props.kernel);
+        props.kernel && convolute(inputElem, outputElem, true, props.kernel);
         setIsFiltered(true);
     }
 
@@ -50,7 +50,7 @@ const InteractiveFilter = (props : {kernel : number[], imgUrl : string}) => {
             <img ref={imgRef} src={props.imgUrl} alt="input" className='hidden' />
             <canvas className="m-auto"
                 ref={outputCanvas} width={imgRef.current?.width} height={imgRef.current?.height} />
-            <button className="basic-button"
+            <button className="basic-button" disabled={!props.kernel}
                 onClick={() => isFiltered ? resetImage() : applyFilter()}> 
                 {isFiltered ? "Reset Image" : "Apply Filter"} 
             </button>
