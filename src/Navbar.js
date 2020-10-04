@@ -1,11 +1,13 @@
 import React from 'react';
-import logo from './media/logo.svg';
+import logo from './media/logo_blink.svg';
 
 export default function Navbar() {
     return (
         <nav className="flex justify-between px-2 bg-navbar" id="navbar-container">
             <div className="flex my-1 ml-6 sm:ml-12 lg:ml-40" id="logo-container">
-                <object className="py-2 w-24 h-10" type="image/svg+xml" data={logo}>Logo</object>
+                <a href="/home">
+                    <object className="pointer-events-none py-2 w-24 h-10" type="image/svg+xml" data={logo}>Logo</object>
+                </a>
             </div>
             <div className="my-3 justify-between" id="links-container">
                 <ul className="flex sm:mr-6 lg:mr-40" id="nav-list">
