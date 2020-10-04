@@ -4,6 +4,7 @@ import Navbar from "./Navbar";
 import Footer from './footer';
 import './App.css';
 import AboutPage from "./aboutPage/AboutPage"
+import Gabor from "./gaussianBlur/gaborFilter"
 
 function App() {
   return (
@@ -15,6 +16,9 @@ function App() {
         <main className="font-mono text-lg">
           <Switch>
             <Route path="/about" component={AboutPage} />
+          </Switch>
+          <Switch>
+            <Route path="/gabor" component={Gabor} />
           </Switch>
         </main>
         <div>
