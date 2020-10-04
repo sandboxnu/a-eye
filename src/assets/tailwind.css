@@ -3,3 +3,27 @@
 @tailwind components;
 
 @tailwind utilities;
+
+@layer components {
+    .basic-button {
+        @apply bg-navy  text-white m-3 p-3 outline-none border-0 rounded-md font-bold;
+    }
+    .basic-button:hover {
+        @apply bg-navbar;
+    }
+    .basic-button:focus {
+        @apply outline-none;
+    }
+    .basic-button:disabled {
+        @apply bg-navy-disabled;
+    }
+
+    .number-input {
+        @apply w-16 border-2 border-solid border-gray-500 pl-2 rounded-md;
+    }
+    .number-input:focus {
+        @apply border-solid border-navy pl-2 outline-none;
+    }
+    
+
+}
