@@ -12,19 +12,20 @@ export default function LandingPage() {
       <div className="container w-screen">
         <div className="flex justify-center items-center bg-fixed bg-cover w-screen h-screen" style={top_style}>
             <div className="mb-16">
-                <p className="text-center text-white text-5xl italic font-roboto my-4">Your Eye and AI</p>
-                <p className="text-center text-white text-xl font-roboto my-4">Professor Mingolla</p>
+                <p className="text-center text-white text-7xl italic font-semibold font-mono my-4">Your Eye and AI</p>
+                <p className="text-center text-white text-3.5xl font-medium font-mono my-4">Professor Mingolla</p>
             </div>
             <div className="absolute bottom-0 mb-20">
-                <p className="text-white text-md font-roboto">Developed by Sandbox</p>
+                <p className="text-white text-2xl italic font-mono font-micro">Developed by Sandbox</p>
             </div>
         </div>
         <div className="flex items-center bg-cover w-screen h-auto" style={bot_style}>
             <ul className="list-none">
                 {
                     descriptions.modules.map((module) =>
-                        <li className="flex justify-center my-10">
-                            <ModuleIntro title={module.title} body={module.body} bgColor={module.bgColor} textColor={module.textColor} />
+                        <li className="flex justify-center my-48">
+                            <ModuleIntro title={module.title} body={module.body} bgColor={module.bgColor}
+                                         textColor={module.textColor} margin={module.margin} imgSrc={module.imgSrc}/>
                         </li>
                     )
                 }

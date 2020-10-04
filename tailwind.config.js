@@ -16,7 +16,15 @@ module.exports = {
       },
       fontFamily: {
         opensans: ["open sans", "sans-serif"],
-        roboto: ["roboto", "sans-serif"]
+        roboto: ["roboto", "sans-serif"],
+        robotoMono: ["roboto-mono", "sans-serif"]
+      },
+      fontSize: {
+        "3.5xl": ['32px'],
+        "7xl": ['72px']
+      },
+      fontWeight: {
+        'micro': 25
       },
       backgroundImage: theme => ({
         'about': 'url("../media/aboutCurve.svg")',
@@ -24,8 +32,15 @@ module.exports = {
       }),
       backgroundSize: {
         stretchBottom: '103% 50%'
+      },
+      borderRadius: {
+        module: '64px'
+      },
+      boxShadow: {
+        module: '12px 10px 19px rgba(0, 0, 0, 0.30)'
       }
-    },
+      }
+    ,
     top: {
       '-1': '-1px'
     }
