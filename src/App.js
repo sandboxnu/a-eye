@@ -4,6 +4,7 @@ import Navbar from "./Navbar";
 import Footer from './footer';
 import './App.css';
 import AboutPage from "./aboutPage/AboutPage"
+import LandingPage from "./landingPage/LandingPage";
 
 function App() {
   return (
@@ -14,6 +15,8 @@ function App() {
         </div>
         <main className="font-mono text-lg">
           <Switch>
+            <Route path="/" component={LandingPage} />
+            <Route path="/home" component={LandingPage} />
             <Route path="/about" component={AboutPage} />
           </Switch>
         </main>

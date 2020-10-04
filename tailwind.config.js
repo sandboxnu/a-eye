@@ -10,19 +10,37 @@ module.exports = {
         transteal: '#46B4A72C',
         navbar: '#2B4B62',
         offwhite: '#f2f2f2',
-        scrollBox: '#8D9DBA'
+        scrollBox: '#8D9DBA',
+        lightblue: '#CBD9F2',
+        darkblue: '#394D73'
       },
       fontFamily: {
         opensans: ["open sans", "sans-serif"],
-        roboto: ["roboto", "sans-serif"]
+        roboto: ["roboto", "sans-serif"],
+        robotoMono: ["roboto-mono", "sans-serif"]
+      },
+      fontSize: {
+        "3.5xl": ['32px'],
+        "7xl": ['72px']
+      },
+      fontWeight: {
+        'micro': 25
       },
       backgroundImage: theme => ({
-        'about': 'url("../media/aboutCurve.svg")'
+        'about': 'url("../media/aboutCurve.svg")',
+        'landing-page': 'url("../media/background_landing_page.svg")'
       }),
       backgroundSize: {
         stretchBottom: '103% 50%'
+      },
+      borderRadius: {
+        module: '64px'
+      },
+      boxShadow: {
+        module: '12px 10px 19px rgba(0, 0, 0, 0.30)'
       }
-    },
+      }
+    ,
     top: {
       '-1': '-1px'
     }
