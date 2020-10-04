@@ -58,7 +58,7 @@ const KernelConfig = (props: { onConfig: (kernelSize: number, sigma: number) => 
             <div className="font-bold m-3">
                 Sigma
                 <input className="mx-2 w-64"
-                    type="range" min=".1" max="10"
+                    type="range" min=".1" max="10" step="any"
                     value={sigma} onChange={(e) => changeSigma(e)} />
                 <input className="number-input"
                     type="number" min=".1" max="10"
