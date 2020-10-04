@@ -16,6 +16,7 @@ const GaussianBlurDemo = () => {
             rslt[rslt.length - 1].push(val);
             return rslt;
         }, []);
+        console.log(newKernel, newKernelGrid)
         setKernel(newKernel);
         setKernelGrid(newKernelGrid);
     }
