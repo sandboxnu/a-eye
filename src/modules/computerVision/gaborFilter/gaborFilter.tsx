@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import jellyfish from './jellyfish.png';
-import InteractiveFilter from './InteractiveFilter';
+import jellyfish from '../gaussianBlur/jellyfish.png';
+import InteractiveFilter from '../gaussianBlur/InteractiveFilter';
 
 
 // np.meshgrid
@@ -121,17 +121,17 @@ const KernelConfig = (props: { onConfig: (kernelSize: number, omega: number, the
     const changeTheta = (e: any) => setTheta(parseFloat(e.target.value));
     const changeK = (e: any) => setK(parseFloat(e.target.value));
 
-    const invalidSize = (kernelSize % 2 !== 1 || kernelSize < 3 || kernelSize > 101)
-    const invalidConfig = !omega || invalidSize;
+    const invalidSize = (kernelSize < 3 || kernelSize > 101)
+    const invalidConfig = invalidSize;
     return (
         <div>
             <div className="font-bold m-3">
                 Omega
                 <input className="mx-2 w-64"
-                    type="range" min=".1" max="10"
+                    type="range" min="0" max="10"
                     value={omega} onChange={(e) => changeOmega(e)} />
                 <input className="number-input"
-                    type="number" min=".1" max="10"
+                    type="number" min="0" max="10"
                     value={omega} onChange={(e) => changeOmega(e)} />
             </div>
             <div className="font-bold m-3 h-10">

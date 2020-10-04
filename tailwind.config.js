@@ -26,6 +26,12 @@ module.exports = {
     },
     top: {
       '-1': '-1px'
+    },
+    maxHeight: {
+      xs: '20rem',
+      sm: '24rem',
+      md: '28rem',
+      lg: '32rem'
     }
   },
   variants: {

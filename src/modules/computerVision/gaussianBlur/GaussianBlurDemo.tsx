@@ -24,15 +24,14 @@ const GaussianBlurDemo = () => {
     return (
         <div className="m-4">
             <KernelConfig onConfig={configureKernel}/>
-            <div className="m-4">
-                Gaussian Kernel
+            <div className="mx-auto my-4 max-w-5xl max-h-lg overflow-auto">
                 <table className="m-auto"><tbody>
                     {kernelGrid?.map((row, i) => (
                         <tr key={i}>
                             {row.map((val, j) => (
                                 <td key={j}
                                     style={getBg(val, kernel)}
-                                    className="border-2 border-charcoal p-2"
+                                    className="border border-charcoal p-2"
                                     title={`${val}`}>
                                     {val.toFixed(5)}
                                 </td>))}
@@ -59,7 +58,7 @@ const KernelConfig = (props: { onConfig: (kernelSize: number, sigma: number) => 
             <div className="font-bold m-3">
                 Sigma
                 <input className="mx-2 w-64"
-                    type="range" min=".1" max="10"
+                    type="range" min=".1" max="10" step="any"
                     value={sigma} onChange={(e) => changeSigma(e)} />
                 <input className="number-input"
                     type="number" min=".1" max="10"

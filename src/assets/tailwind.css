@@ -15,7 +15,7 @@
         @apply outline-none;
     }
     .basic-button:disabled {
-        @apply bg-navy-disabled;
+        @apply bg-navy-disabled cursor-auto;
     }
 
     .number-input {
