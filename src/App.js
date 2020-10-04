@@ -4,7 +4,7 @@ import Navbar from "./Navbar";
 import Footer from './footer';
 import './App.css';
 import AboutPage from "./aboutPage/AboutPage";
-import GaussianBlurDemo from './gaussianBlur/GaussianBlurDemo';
+import GaussianBlurDemo from './modules/computerVision/gaussianBlur/GaussianBlurDemo';
 
 function App() {
   return (
