@@ -35,31 +35,39 @@ function makeMeshgrid(sz) {
 }
 
 //http://vision.psych.umn.edu/users/kersten/kersten-lab/courses/Psy5036W2017/Lectures/17_PythonForVision/Demos/html/2b.Gabor.html
-const gaborFilter = () => {
+function gaborFilter(sz,
+                     omega,
+                     theta,
+                     func = Math.cos,
+                     K = Math.PI) {
 
-   //parameters (TODO)
-   let sz = [4,7]
-   let omega = 0.3
-   let theta = Math.PI/4
-   let func = Math.cos
-   let K = Math.PI
+   // EXAMPLE INPUTS 
+
+   // let sz = [4,4]
+   // let omega = 0.3
+   // let theta = Math.PI/4
+   // let func = Math.cos
+   // let K = Math.PI
 
    let xy = makeMeshgrid(sz)
    let x = xy[0]
    let y = xy[1]
 
-   
    let x1 = x.map((inner, i) => inner.map((v, j) => (v * Math.cos(theta)) + (y[i][j] * Math.sin(theta))));
    let y1 = x.map((inner, i) => inner.map((v, j) => (-v * Math.sin(theta)) + (y[i][j] * Math.cos(theta))));
    
    let p = Math.pow(omega, 2) / (4* Math.PI * Math.pow(K, 2))
    let gaussian = x1.map((inner, i) => inner.map((v, j) => p * Math.exp(-Math.pow(omega, 2) / (8*Math.pow(K, 2)) * ( 4 * Math.pow(v, 2) + Math.pow(y1[i][j], 2)) )));
-   // console.log(gaussian)
-
-   // let sinusoid = func(omega * x1) * np.exp(K**2 / 2)
    let sinusoid = x1.map((inner, i) => inner.map((v, j) => (func(omega * v) * Math.exp(Math.pow(K, 2) / 2))));
    let gabor = sinusoid.map((inner, i) => inner.map((v, j) => (v * gaussian[i][j])));
+
    console.log(gabor);
+   console.log(gabor.flat());
+   return gabor.flat();
+}
+gaborFilter([4,4], 0.3, Math.PI/4)
+
+const somediv = () => {
    return(
       <div>
 
@@ -67,5 +75,4 @@ const gaborFilter = () => {
    )
 }
 
-
-export default gaborFilter;
+export default somediv;
