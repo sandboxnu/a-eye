@@ -15,7 +15,7 @@ function App() {
         </div>
         <main className="font-mono text-lg">
           <Switch>
-            <Route path="/" component={LandingPage} />
+            <Route exact path="/" component={LandingPage} />
             <Route path="/home" component={LandingPage} />
             <Route path="/about" component={AboutPage} />
           </Switch>
