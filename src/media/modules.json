@@ -1,0 +1,100 @@
+{
+  "modules": [
+    {
+      "title": "Module 8: Visual Features for Computer Vision",
+      "sections": [
+        {
+          "heading": "Title",
+          "body": "Lorem ipsum"
+        },
+        {
+          "heading": "Title",
+          "body": "Lorem ipsum"
+        },
+        {
+          "heading": "Title",
+          "body": "Lorem ipsum"
+        }
+      ],
+      "colorScheme": {
+        "bgColor": "bg-moduleDarkBlue",
+        "titleColor": "text-modulePaleBlue",
+        "headingColor": "text-moduleTeal",
+        "bodyColor": "text-moduleOffwhite"
+      },
+      "imgSrc": "mod8.png"
+    },
+    {
+      "title": "Module 9: Recognition as a Classification Problem",
+      "sections": [
+        {
+          "heading": "Title",
+          "body": "Lorem ipsum"
+        },
+        {
+          "heading": "Title",
+          "body": "Lorem ipsum"
+        },
+        {
+          "heading": "Title",
+          "body": "Lorem ipsum"
+        }
+      ],
+      "colorScheme": {
+        "bgColor": "bg-modulePaleBlue",
+        "titleColor": "text-moduleNavy",
+        "headingColor": "text-moduleDarkBlue",
+        "bodyColor": "text-moduleNavy"
+      },
+      "imgSrc": "mod9.png"
+    },
+    {
+      "title": "Module 10: Introduction to Machine Learning: Perceptrons",
+      "sections": [
+        {
+          "heading": "Title",
+          "body": "Lorem ipsum"
+        },
+        {
+          "heading": "Title",
+          "body": "Lorem ipsum"
+        },
+        {
+          "heading": "Title",
+          "body": "Lorem ipsum"
+        }
+      ],
+      "colorScheme": {
+        "bgColor": "bg-moduleDarkBlue",
+        "titleColor": "text-modulePaleBlue",
+        "headingColor": "text-moduleTeal",
+        "bodyColor": "text-moduleOffwhite"
+      },
+      "imgSrc": "mod10.png"
+    },
+    {
+      "title": "Module 11: Multi-layer Perceptrons & Backpropagation",
+      "sections": [
+        {
+          "heading": "Title",
+          "body": "Lorem ipsum"
+        },
+        {
+          "heading": "Title",
+          "body": "Lorem ipsum"
+        },
+        {
+          "heading": "Title",
+          "body": "Lorem ipsum"
+        }
+      ],
+      "colorScheme": {
+        "bgColor": "bg-modulePaleBlue",
+        "titleColor": "text-moduleNavy",
+        "headingColor": "text-moduleDarkBlue",
+        "bodyColor": "text-moduleNavy"
+      },
+      "imgSrc": "mod11.png"
+    }
+  ]
+}
