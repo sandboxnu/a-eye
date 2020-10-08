@@ -15,9 +15,9 @@ function App() {
         </div>
         <main className="font-mono text-lg">
           <Switch>
-            <Route path="/" component={LandingPage} />
             <Route path="/home" component={LandingPage} />
             <Route path="/about" component={AboutPage} />
+            <Route path="/" component={LandingPage} />
           </Switch>
         </main>
         <div>
