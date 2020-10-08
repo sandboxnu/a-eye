@@ -12,7 +12,7 @@ function Footer() {
            
             <div className='flex flex-row justify-between w-full p-4 ' id="content-container">
                 <div className='flex flex-col justify-between text-left'id="left-content">
-                    <a className="px-4 flex justify-left" href="/home" id="logo-container">
+                    <a className="px-4 flex justify-left" href="/" id="logo-container">
                         <img  src={logo} className="w-24 h-20 " alt="logo" />
                     </a>
                     <div className='px-8'>
