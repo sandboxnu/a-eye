@@ -12,7 +12,7 @@ import './App.css';
 function App() {
   return (
     <BrowserRouter>
-      <div className="App">
+      <div className="App" id="app">
         <ThemeProvider theme={THEME}>
         <div className="App-header">
           <Navbar />
