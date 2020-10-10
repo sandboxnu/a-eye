@@ -4,6 +4,7 @@ import Navbar from "./Navbar";
 import Footer from './footer';
 import './App.css';
 import AboutPage from "./aboutPage/AboutPage";
+import Gabor from "./modules/computerVision/gaborFilter/gaborFilter"
 import GaussianBlurDemo from './modules/computerVision/gaussianBlur/GaussianBlurDemo';
 
 function App() {
@@ -16,7 +17,12 @@ function App() {
         <main className="font-mono text-lg font-charcoal">
           <Switch>
             <Route path="/about" component={AboutPage} />
+          </Switch>
+          <Switch>
             <Route path="/home" component={GaussianBlurDemo} />
+          </Switch>
+          <Switch>
+            <Route path="/gabor" component={Gabor} />
           </Switch>
         </main>
         <div>
