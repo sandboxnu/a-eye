@@ -3,12 +3,11 @@ import jellyfish from '../gaussianBlur/jellyfish.png';
 import InteractiveFilter from '../gaussianBlur/InteractiveFilter';
 
 
-// np.meshgrid
+// mimics np.meshgrid in python
 function makeMeshgrid(sz: number[]) {
    
    var radius = [Math.floor(sz[0]/2.0), Math.floor(sz[1]/2.0)]
-   // console.log(radius)
-   // return a 2d array 
+
    var result_x = [];
    var result_y = [];
 
@@ -75,9 +74,7 @@ const GaborDemo = () => {
                              theta: number,
                              K: number) => {
 
-      //   const theta = Math.PI/4;
         const func = Math.cos;
-      //   const K = Math.PI;
         
         const gabor = gaborFilter(kernelSize, omega, theta, func, K)
         const newKernel = gabor.flat();
@@ -90,7 +87,7 @@ const GaborDemo = () => {
         <div className="m-4">
             <KernelConfig onConfig={configureKernel}/>
             <div className="m-4">
-                Gaussian Kernel
+                Gabor Kernel
                 <table className="m-auto"><tbody>
                     {kernelGrid?.map((row, i) => (
                         <tr key={i}>
@@ -121,8 +118,7 @@ const KernelConfig = (props: { onConfig: (kernelSize: number, omega: number, the
     const changeTheta = (e: any) => setTheta(parseFloat(e.target.value));
     const changeK = (e: any) => setK(parseFloat(e.target.value));
 
-    const invalidSize = (kernelSize < 3 || kernelSize > 101)
-    const invalidConfig = invalidSize;
+    const invalidConfig = (kernelSize < 1 || kernelSize > 7)
     return (
         <div>
             <div className="font-bold m-3">
@@ -137,14 +133,12 @@ const KernelConfig = (props: { onConfig: (kernelSize: number, omega: number, the
             <div className="font-bold m-3 h-10">
                 Kernel Size
                 <input className="mx-2 w-64"
-                    type="range" min="3" max="101" step={2}
+                    type="range" min="1" max="7" step={1}
                     value={kernelSize} onChange={(e) => changeKernelSize(e)} />
                 <input className="number-input"
-                    type="number" min="3" max="101" step={2}
+                    type="number" min="1" max="7" step={1}
                     value={kernelSize} onChange={(e) => changeKernelSize(e)} />
-                <div className="font-light italic text-sm">
-                    { invalidSize ? 'Enter an odd kernel size, between 3 and 101' : ''}
-                </div>
+
             </div>
             <div className="font-bold m-3 h-10">
                Theta
