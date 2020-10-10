@@ -6,6 +6,7 @@ import './App.css';
 import AboutPage from "./aboutPage/AboutPage";
 import Gabor from "./modules/computerVision/gaborFilter/gaborFilter"
 import GaussianBlurDemo from './modules/computerVision/gaussianBlur/GaussianBlurDemo';
+import DoG from './modules/computerVision/diffofgaussian/DiffOfGaussian.tsx';
 
 function App() {
   return (
@@ -23,6 +24,9 @@ function App() {
           </Switch>
           <Switch>
             <Route path="/gabor" component={Gabor} />
+          </Switch>
+          <Switch>
+            <Route path="/dog" component={DoG} />
           </Switch>
         </main>
         <div>
