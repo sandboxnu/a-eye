@@ -5,8 +5,9 @@ import { ThemeProvider } from '@material-ui/styles';
 import Navbar from "./Navbar";
 import Footer from './footer';
 import AboutPage from "./aboutPage/AboutPage";
-import './App.css';
+import Gabor from "./modules/computerVision/gaborFilter/gaborFilter"
 import GaussianBlurDemo from './modules/computerVision/gaussianBlur/GaussianBlurDemo';
+import './App.css';
 
 function App() {
   return (
@@ -19,7 +20,12 @@ function App() {
         <main className="font-mono text-lg font-charcoal">
           <Switch>
             <Route path="/about" component={AboutPage} />
+          </Switch>
+          <Switch>
             <Route path="/home" component={GaussianBlurDemo} />
+          </Switch>
+          <Switch>
+            <Route path="/gabor" component={Gabor} />
           </Switch>
         </main>
         <div>
