@@ -8,8 +8,15 @@ const KernelDisplay = (props: { kernelGrid?: number[][] }) => {
 
     if (!props.kernelGrid) return <></>;
 
+    let max = 0;
+    let min = Infinity;
+    props.kernelGrid.forEach(row => row.forEach(ele => {
+        if (ele > max) max = ele;
+        if (ele < min) min = ele; 
+    }))
+
     const getCell = (val: number, j: number) => {
-        const color = getCellColor(val, props.kernelGrid);
+        const color = getCellColor(val, max, min);
         return (
             <td className="h-1 w-1 border border-charcoal p-2"
                 key={j}
@@ -18,7 +25,7 @@ const KernelDisplay = (props: { kernelGrid?: number[][] }) => {
                     color: !showNums ? color : undefined
                 }}
                 title={`${val}`}>
-                {val.toFixed(2)}
+                {val.toFixed(3)}
             </td>
         );
     }
@@ -48,16 +55,13 @@ const KernelDisplay = (props: { kernelGrid?: number[][] }) => {
     );
 }
 
-function getCellColor(val: number, kernelGrid?: number[][]) {
-    if (!kernelGrid) return;
-    let max = 0;
-    let min = Infinity;
-    kernelGrid?.forEach(row => row.forEach(ele => {
-        if (ele > max) max = ele;
-        if (ele < min) min = ele;
-    }))
-    const red = 200 - ((val - min) / (max - min) * 200);
-    return `rgb(${red}, 212, 192)`;
+function getCellColor(val: number, max: number, min: number) {
+    if (max === min) {
+        return `rgb(0, 212, 192)`
+    } else {
+        const red = 255 - ((val - min) / (max - min) * 255);
+        return `rgb(${red}, 212, 192)`;
+    }
 }
 
 export default KernelDisplay;

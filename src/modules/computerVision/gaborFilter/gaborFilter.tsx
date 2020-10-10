@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import jellyfish from '../gaussianBlur/jellyfish.png';
 import InteractiveFilter from '../gaussianBlur/InteractiveFilter';
+import KernelDisplay from '../gaussianBlur/KernelDisplay';
 
 
 // mimics np.meshgrid in python
@@ -56,27 +57,16 @@ function gaborFilter(sz: number,
    let gaussian = x1.map((inner, i) => inner.map((v, j) => p * Math.exp(-Math.pow(omega, 2) / (8*Math.pow(K, 2)) * ( 4 * Math.pow(v, 2) + Math.pow(y1[i][j], 2)) )));
    let sinusoid = x1.map((inner, i) => inner.map((v, j) => (func(omega * v) * Math.exp(Math.pow(K, 2) / 2))));
    let gabor = sinusoid.map((inner, i) => inner.map((v, j) => (v * gaussian[i][j])));
-
-   // console.log(gabor);
-   // console.log(gabor.flat());
    return gabor;
 }
-// gaborFilter(4, 0.3, Math.PI/4)
-
-
 
 const GaborDemo = () => {
     const [kernel, setKernel] = useState<number[] | undefined>(undefined);
     const [kernelGrid, setKernelGrid] = useState<number[][] | undefined>(undefined);
 
-    const configureKernel = (kernelSize: number, 
-                             omega: number,
-                             theta: number,
-                             K: number) => {
-
+    const configureKernel = (kernelSize: number, theta: number) => {
         const func = Math.cos;
-        
-        const gabor = gaborFilter(kernelSize, omega, theta, func, K)
+        const gabor = gaborFilter(kernelSize, 1, theta, func, 3.14)
         const newKernel = gabor.flat();
         const newKernelGrid = gabor;
         setKernel(newKernel);
@@ -86,50 +76,22 @@ const GaborDemo = () => {
     return (
         <div className="m-4">
             <KernelConfig onConfig={configureKernel}/>
-            <div className="m-4">
-                Gabor Kernel
-                <table className="m-auto"><tbody>
-                    {kernelGrid?.map((row, i) => (
-                        <tr key={i}>
-                            {row.map((val, j) => (
-                                <td key={j}
-                                    style={getBg(val, kernel)}
-                                    className="border-2 border-charcoal p-2"
-                                    title={`${val}`}>
-                                    {val.toFixed(5)}
-                                </td>))}
-                        </tr>
-                    ))}
-                </tbody></table>
-            </div>
+            <KernelDisplay kernelGrid={kernelGrid} />
             <InteractiveFilter kernel={kernel} imgUrl={jellyfish} />
         </div>
     )
 }
 
-const KernelConfig = (props: { onConfig: (kernelSize: number, omega: number, theta: number, K: number) => void }) => {
+const KernelConfig = (props: { onConfig: (kernelSize: number, theta: number) => void }) => {
     const [kernelSize, setKernelSize] = useState<number>(5);
-    const [omega, setOmega] = useState<number>(1);
     const [theta, setTheta] = useState<number>(0);
-    const [K, setK] = useState<number>(3.14);
 
-    const changeOmega = (e: any) => setOmega(parseFloat(e.target.value));
     const changeKernelSize = (e: any) => setKernelSize(parseInt(e.target.value));
     const changeTheta = (e: any) => setTheta(parseFloat(e.target.value));
-    const changeK = (e: any) => setK(parseFloat(e.target.value));
 
     const invalidConfig = (kernelSize < 1 || kernelSize > 7)
     return (
         <div>
-            <div className="font-bold m-3">
-                Omega
-                <input className="mx-2 w-64"
-                    type="range" min="0" max="10"
-                    value={omega} onChange={(e) => changeOmega(e)} />
-                <input className="number-input"
-                    type="number" min="0" max="10"
-                    value={omega} onChange={(e) => changeOmega(e)} />
-            </div>
             <div className="font-bold m-3 h-10">
                 Kernel Size
                 <input className="mx-2 w-64"
@@ -143,24 +105,14 @@ const KernelConfig = (props: { onConfig: (kernelSize: number, omega: number, the
             <div className="font-bold m-3 h-10">
                Theta
                <input className="mx-2 w-64"
-                     // Math.PI/4 ~= 0.79
-                    type="range" min="0" max="6.28" step={0.785}
+                     // Math.PI/8 ~= 0.39
+                    type="range" min="0" max="6.28" step={0.39}
                     value={theta} onChange={(e) => changeTheta(e)} />
                <input className="number-input"
-                    type="number" min="0" max="6.28" step={0.785}
+                    type="number" min="0" max="6.28" step={0.39}
                     value={theta} onChange={(e) => changeTheta(e)} />
             </div>
-            <div className="font-bold m-3 h-10">
-               K
-               <input className="mx-2 w-64"
-                     // Math.PI/4 ~= 0.79
-                    type="range" min="0" max="12.56" step={0.785}
-                    value={K} onChange={(e) => changeK(e)} />
-               <input className="number-input"
-                    type="number" min="0" max="12.56" step={0.785}
-                    value={K} onChange={(e) => changeK(e)} />
-            </div>
-            <button className="basic-button" disabled={invalidConfig} onClick={e => props.onConfig(kernelSize, omega, theta, K)}>
+            <button className="basic-button" disabled={invalidConfig} onClick={e => props.onConfig(kernelSize, theta)}>
                 Generate Kernel
             </button>
         </div>
