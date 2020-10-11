@@ -1,100 +1,278 @@
 {
-  "modules": [
-    {
+  "computer-vision": {
+      "number": 8,
       "title": "Module 8: Visual Features for Computer Vision",
       "sections": [
         {
-          "heading": "Title",
-          "body": "Lorem ipsum"
+          "title": "Section 1",
+          "colorScheme": "dark",
+          "subsections": [
+            {
+              "title": "Subsection 1",
+              "body": "lorem ipsum",
+              "imgSrc": "mod8.png"
+            },
+            {
+              "title": "Subsection 2",
+              "body": "lorem ipsum",
+              "imgSrc": "mod8.png"
+            },
+            {
+              "title": "Subsection 3",
+              "body": "lorem ipsum",
+              "imgSrc": "mod8.png"
+            }
+          ]
         },
         {
-          "heading": "Title",
-          "body": "Lorem ipsum"
+          "title": "Section 2",
+          "colorScheme": "light",
+          "subsections": [
+            {
+              "title": "Subsection 1",
+              "body": "lorem ipsum",
+              "imgSrc": "mod8.png"
+            },
+            {
+              "title": "Subsection 2",
+              "body": "lorem ipsum",
+              "imgSrc": "mod8.png"
+            },
+            {
+              "title": "Subsection 3",
+              "body": "lorem ipsum",
+              "imgSrc": "mod8.png"
+            }
+          ]
         },
         {
-          "heading": "Title",
-          "body": "Lorem ipsum"
+          "title": "Section 3",
+          "colorScheme": "dark",
+          "subsections": [
+            {
+              "title": "Subsection 1",
+              "body": "lorem ipsum",
+              "imgSrc": "mod8.png"
+            },
+            {
+              "title": "Subsection 2",
+              "body": "lorem ipsum",
+              "imgSrc": "mod8.png"
+            },
+            {
+              "title": "Subsection 3",
+              "body": "lorem ipsum",
+              "imgSrc": "mod8.png"
+            }
+          ]
         }
-      ],
-      "colorScheme": {
-        "bgColor": "bg-moduleDarkBlue",
-        "titleColor": "text-modulePaleBlue",
-        "headingColor": "text-moduleTeal",
-        "bodyColor": "text-moduleOffwhite"
-      },
-      "imgSrc": "mod8.png"
+      ]
     },
-    {
+  "classification": {
+      "number": 9,
       "title": "Module 9: Recognition as a Classification Problem",
       "sections": [
         {
-          "heading": "Title",
-          "body": "Lorem ipsum"
+          "title": "Section 1",
+          "colorScheme": "dark",
+          "subsections": [
+            {
+              "title": "Subsection 1",
+              "body": "lorem ipsum",
+              "imgSrc": "mod9.png"
+            },
+            {
+              "title": "Subsection 2",
+              "body": "lorem ipsum",
+              "imgSrc": "mod9.png"
+            },
+            {
+              "title": "Subsection 3",
+              "body": "lorem ipsum",
+              "imgSrc": "mod9.png"
+            }
+          ]
         },
         {
-          "heading": "Title",
-          "body": "Lorem ipsum"
+          "title": "Section 2",
+          "colorScheme": "light",
+          "subsections": [
+            {
+              "title": "Subsection 1",
+              "body": "lorem ipsum",
+              "imgSrc": "mod9.png"
+            },
+            {
+              "title": "Subsection 2",
+              "body": "lorem ipsum",
+              "imgSrc": "mod9.png"
+            },
+            {
+              "title": "Subsection 3",
+              "body": "lorem ipsum",
+              "imgSrc": "mod9.png"
+            }
+          ]
         },
         {
-          "heading": "Title",
-          "body": "Lorem ipsum"
+          "title": "Section 3",
+          "colorScheme": "dark",
+          "subsections": [
+            {
+              "title": "Subsection 1",
+              "body": "lorem ipsum",
+              "imgSrc": "mod9.png"
+            },
+            {
+              "title": "Subsection 2",
+              "body": "lorem ipsum",
+              "imgSrc": "mod9.png"
+            },
+            {
+              "title": "Subsection 3",
+              "body": "lorem ipsum",
+              "imgSrc": "mod9.png"
+            }
+          ]
         }
-      ],
-      "colorScheme": {
-        "bgColor": "bg-modulePaleBlue",
-        "titleColor": "text-moduleNavy",
-        "headingColor": "text-moduleDarkBlue",
-        "bodyColor": "text-moduleNavy"
-      },
-      "imgSrc": "mod9.png"
+      ]
     },
-    {
+    "perceptrons": {
+      "number": 10,
       "title": "Module 10: Introduction to Machine Learning: Perceptrons",
       "sections": [
         {
-          "heading": "Title",
-          "body": "Lorem ipsum"
+          "title": "Section 1",
+          "colorScheme": "dark",
+          "subsections": [
+            {
+              "title": "Subsection 1",
+              "body": "lorem ipsum",
+              "imgSrc": "mod10.png"
+            },
+            {
+              "title": "Subsection 2",
+              "body": "lorem ipsum",
+              "imgSrc": "mod10.png"
+            },
+            {
+              "title": "Subsection 3",
+              "body": "lorem ipsum",
+              "imgSrc": "mod10.png"
+            }
+          ]
         },
         {
-          "heading": "Title",
-          "body": "Lorem ipsum"
+          "title": "Section 2",
+          "colorScheme": "light",
+          "subsections": [
+            {
+              "title": "Subsection 1",
+              "body": "lorem ipsum",
+              "imgSrc": "mod10.png"
+            },
+            {
+              "title": "Subsection 2",
+              "body": "lorem ipsum",
+              "imgSrc": "mod10.png"
+            },
+            {
+              "title": "Subsection 3",
+              "body": "lorem ipsum",
+              "imgSrc": "mod10.png"
+            }
+          ]
         },
         {
-          "heading": "Title",
-          "body": "Lorem ipsum"
+          "title": "Section 3",
+          "colorScheme": "dark",
+          "subsections": [
+            {
+              "title": "Subsection 1",
+              "body": "lorem ipsum",
+              "imgSrc": "mod10.png"
+            },
+            {
+              "title": "Subsection 2",
+              "body": "lorem ipsum",
+              "imgSrc": "mod10.png"
+            },
+            {
+              "title": "Subsection 3",
+              "body": "lorem ipsum",
+              "imgSrc": "mod10.png"
+            }
+          ]
         }
-      ],
-      "colorScheme": {
-        "bgColor": "bg-moduleDarkBlue",
-        "titleColor": "text-modulePaleBlue",
-        "headingColor": "text-moduleTeal",
-        "bodyColor": "text-moduleOffwhite"
-      },
-      "imgSrc": "mod10.png"
+      ]
     },
-    {
+    "neural-nets": {
+      "number": 11,
       "title": "Module 11: Multi-layer Perceptrons & Backpropagation",
       "sections": [
         {
-          "heading": "Title",
-          "body": "Lorem ipsum"
+          "title": "Section 1",
+          "colorScheme": "dark",
+          "subsections": [
+            {
+              "title": "Subsection 1",
+              "body": "lorem ipsum",
+              "imgSrc": "mod11.png"
+            },
+            {
+              "title": "Subsection 2",
+              "body": "lorem ipsum",
+              "imgSrc": "mod11.png"
+            },
+            {
+              "title": "Subsection 3",
+              "body": "lorem ipsum",
+              "imgSrc": "mod11.png"
+            }
+          ]
         },
         {
-          "heading": "Title",
-          "body": "Lorem ipsum"
+          "title": "Section 2",
+          "colorScheme": "light",
+          "subsections": [
+            {
+              "title": "Subsection 1",
+              "body": "lorem ipsum",
+              "imgSrc": "mod11.png"
+            },
+            {
+              "title": "Subsection 2",
+              "body": "lorem ipsum",
+              "imgSrc": "mod11.png"
+            },
+            {
+              "title": "Subsection 3",
+              "body": "lorem ipsum",
+              "imgSrc": "mod11.png"
+            }
+          ]
         },
         {
-          "heading": "Title",
-          "body": "Lorem ipsum"
+          "title": "Section 3",
+          "colorScheme": "dark",
+          "subsections": [
+            {
+              "title": "Subsection 1",
+              "body": "lorem ipsum",
+              "imgSrc": "mod11.png"
+            },
+            {
+              "title": "Subsection 2",
+              "body": "lorem ipsum",
+              "imgSrc": "mod11.png"
+            },
+            {
+              "title": "Subsection 3",
+              "body": "lorem ipsum",
+              "imgSrc": "mod11.png"
+            }
+          ]
         }
-      ],
-      "colorScheme": {
-        "bgColor": "bg-modulePaleBlue",
-        "titleColor": "text-moduleNavy",
-        "headingColor": "text-moduleDarkBlue",
-        "bodyColor": "text-moduleNavy"
-      },
-      "imgSrc": "mod11.png"
+      ]
     }
-  ]
 }
