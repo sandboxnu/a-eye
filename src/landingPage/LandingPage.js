@@ -25,7 +25,7 @@ export default function LandingPage() {
                     descriptions.modules.map((module) =>
                         <a href={`/modules/${module.path}`}>
                             <li className="flex justify-center my-48">
-                                <ModuleIntro title={module.title} body={module.body} bgColor={module.bgColor}
+                                <ModuleIntro title={module.title} body={module.body} bgColor={module.bgColor} key={module.number.toString()}
                                              textColor={module.textColor} margin={module.margin} imgSrc={module.imgSrc}/>
                             </li>
                         </a>

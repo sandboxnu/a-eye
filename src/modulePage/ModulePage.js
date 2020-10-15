@@ -20,7 +20,8 @@ export default function ModulePage(props) {
                     module.sections.map((section) =>
                         <ModuleSection title={section.title}
                                        sections={section.subsections}
-                                       colorScheme={section.colorScheme}/>
+                                       colorScheme={section.colorScheme}
+                                       key={section.title}/>
                     )
                 }
             </ul>

@@ -27,7 +27,7 @@ export default function ModuleSection(props) {
                             const imgR = <img src={process.env.PUBLIC_URL + section.imgSrc}
                                               className={`w-1/4 ml-16 object-contain`} alt="img"/>;
                             return (
-                                <div className="flex flex-row mx-4 my-16">
+                                <div className="flex flex-row mx-4 my-16" key={index}>
                                     {index % 2 !== 0 && imgL}
                                     <div className="w-2/3 flex-col">
                                         <p className={`my-4 text-left text-4xl font-extrabold font-opensans uppercase ${scheme.headingColor}`}>{section.heading}</p>
