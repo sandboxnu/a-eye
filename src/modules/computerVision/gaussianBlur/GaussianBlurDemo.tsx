@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import jellyfish from './jellyfish.png';
-import InteractiveFilter from './InteractiveFilter';
+import FilterByKernel from '../common/FilterByKernel';
 import KernelDisplay from './KernelDisplay';
 // have to use require for this bc it doesn't have a module declaration file or something
 const generateGaussianKernel = require('gaussian-convolution-kernel');
@@ -29,7 +29,7 @@ const GaussianBlurDemo = () => {
         <div className="m-4">
             <KernelConfig onConfig={configureKernel}/>
             <KernelDisplay kernelGrid={kernelGrid} />
-            <InteractiveFilter kernel={kernel} imgUrl={jellyfish} />
+            <FilterByKernel kernel={kernel} imgUrl={jellyfish} />
         </div>
     )
 }

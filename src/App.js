@@ -7,6 +7,7 @@ import Footer from './footer';
 import AboutPage from "./aboutPage/AboutPage";
 import Gabor from "./modules/computerVision/gaborFilter/gaborFilter"
 import GaussianBlurDemo from './modules/computerVision/gaussianBlur/GaussianBlurDemo';
+import HaarWaveletDemo from './modules/computerVision/haarWavelet/HaarWaveletDemo';
 import './App.css';
 
 function App() {
@@ -22,10 +23,13 @@ function App() {
             <Route path="/about" component={AboutPage} />
           </Switch>
           <Switch>
-            <Route path="/home" component={GaussianBlurDemo} />
+            <Route path="/gaussian" component={GaussianBlurDemo} />
           </Switch>
           <Switch>
             <Route path="/gabor" component={Gabor} />
+          </Switch>
+          <Switch>
+            <Route path="/haar" component={HaarWaveletDemo} />
           </Switch>
         </main>
         <div>
