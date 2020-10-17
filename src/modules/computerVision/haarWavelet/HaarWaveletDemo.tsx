@@ -5,7 +5,7 @@ import Lenna from './Lenna.png';
 
 /*
 how does haar relate to normal kernel convolutions?
-
+What other configs/things to add to demo? currently not very intuitive
 */
 const HaarWaveletDemo = () => {
     const [recursions, setRecursions] = useState(3);

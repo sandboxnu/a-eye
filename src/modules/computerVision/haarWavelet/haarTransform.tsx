@@ -1,5 +1,7 @@
 export { haarFilter};
 
+// https://stevenbas.art/examples/ImageProcessing/ex4/
+
 function haarFilter(inCanvas: HTMLCanvasElement, outCanvas: HTMLCanvasElement, iterations: number) {
     const inData = inCanvas.getContext("2d")?.getImageData(0,0, inCanvas.width, inCanvas.height);
     const outData = outCanvas.getContext("2d")?.getImageData(0,0, outCanvas.width, outCanvas.height);
