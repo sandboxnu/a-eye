@@ -4,7 +4,7 @@ import { convolute } from './filter';
 // http://dev.theomader.com/gaussian-kernel-calculator/
 // https://blog.cloudboost.io/using-html5-canvas-with-react-ff7d93f5dc76
 
-const InteractiveFilter = (props : {kernel? : number[], imgUrl : string}) => {
+const DifferenceFilter = (props : {kernel? : number[], imgUrl : string}) => {
     const [isFiltered, setIsFiltered] = useState(false);
     const [imgWidth, setImgWidth] = useState<number | undefined>(undefined);
     const [imgHeight, setImgHeight] = useState<number | undefined>(undefined);
@@ -58,4 +58,4 @@ const InteractiveFilter = (props : {kernel? : number[], imgUrl : string}) => {
     )
 }
 
-export default InteractiveFilter;
+export default DifferenceFilter;

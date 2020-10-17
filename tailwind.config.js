@@ -1,4 +1,5 @@
 module.exports = {
+  important: '#app',
   purge: [],
   theme: {
     extend: {
@@ -22,6 +23,9 @@ module.exports = {
       }),
       backgroundSize: {
         stretchBottom: '103% 50%'
+      },
+      spacing: {
+        '500px': '500px'
       }
     },
     top: {

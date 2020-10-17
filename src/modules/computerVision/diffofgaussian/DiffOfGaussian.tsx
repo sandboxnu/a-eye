@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import jellyfish from '../gaussianBlur/jellyfish.png';
 import InteractiveFilter from '../gaussianBlur/InteractiveFilter';
-import DifferenceFilter from '../gaussianBlur/DifferenceFilter';
+import DifferenceFilter from '../gaussianBlur/InteractiveFilter';
 // have to use require for this bc it doesn't have a module declaration file or something
 const generateGaussianKernel = require('gaussian-convolution-kernel');
 
