@@ -1,12 +1,16 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import jellyfish from '../gaussianBlur/jellyfish.png';
 import InteractiveFilter from '../gaussianBlur/InteractiveFilter';
+import DifferenceFilter from '../gaussianBlur/DifferenceFilter';
 // have to use require for this bc it doesn't have a module declaration file or something
 const generateGaussianKernel = require('gaussian-convolution-kernel');
 
 const DoG = () => {
     const [kernel, setKernel] = useState<number[] | undefined>(undefined);
+    const [kernel2, setKernel2] = useState<number[] | undefined>(undefined);
     const [kernelGrid, setKernelGrid] = useState<number[][] | undefined>(undefined);
+    const [kernelGrid2, setKernelGrid2] = useState<number[][] | undefined>(undefined);
+
 
     const configureKernel = (kernelSize: number, sigma: number, sigma2: number) => {
         
@@ -26,32 +30,55 @@ const DoG = () => {
 
         // take difference of the two filters
         // dog = difference of gaussians
-        let dog = newKernel.map((inner, i) => (inner - newKernel2[i]));
-        let dogGrid = newKernelGrid.map((inner, i) => inner.map((v, j) => (v - newKernelGrid2[i][j])));
+        // let dog = newKernel.map((inner, i) => (inner - newKernel2[i]));
+        
+        // let dogGrid = newKernelGrid.map((inner, i) => inner.map((v, j) => (v - newKernelGrid2[i][j])));
 
-        setKernel(dog);
-        setKernelGrid(dogGrid);
+        setKernel(newKernel);
+        setKernel2(newKernel2);
+        setKernelGrid(newKernelGrid);
+        setKernelGrid2(newKernelGrid2);
     }
 
     return (
-        <div className="m-4">
-            <KernelConfig onConfig={configureKernel}/>
-            <div className="mx-auto my-4 max-w-5xl max-h-lg overflow-auto">
-                <table className="m-auto"><tbody>
-                    {kernelGrid?.map((row, i) => (
-                        <tr key={i}>
-                            {row.map((val, j) => (
-                                <td key={j}
-                                    style={getBg(val, kernel)}
-                                    className="border border-charcoal p-2"
-                                    title={`${val}`}>
-                                    {val.toFixed(5)}
-                                </td>))}
-                        </tr>
-                    ))}
-                </tbody></table>
+        <div>
+            <div className="m-4">
+                <KernelConfig onConfig={configureKernel}/>
+                <div className="mx-auto my-4 max-w-5xl max-h-lg overflow-auto">
+                    <table className="m-auto"><tbody>
+                        {kernelGrid?.map((row, i) => (
+                            <tr key={i}>
+                                {row.map((val, j) => (
+                                    <td key={j}
+                                        style={getBg(val, kernel)}
+                                        className="border border-charcoal p-2"
+                                        title={`${val}`}>
+                                        {val.toFixed(5)}
+                                    </td>))}
+                            </tr>
+                        ))}
+                    </tbody></table>
+                </div>
+                <div className="mx-auto my-4 max-w-5xl max-h-lg overflow-auto">
+                    <table className="m-auto"><tbody>
+                        {kernelGrid2?.map((row, i) => (
+                            <tr key={i}>
+                                {row.map((val, j) => (
+                                    <td key={j}
+                                        style={getBg(val, kernel2)}
+                                        className="border border-charcoal p-2"
+                                        title={`${val}`}>
+                                        {val.toFixed(5)}
+                                    </td>))}
+                            </tr>
+                        ))}
+                    </tbody></table>
+                </div>
+                <InteractiveFilter kernel={kernel} imgUrl={jellyfish} />
+                <InteractiveFilter kernel={kernel2} imgUrl={jellyfish} />
+                <DifferenceFilter kernel={kernel} imgUrl={jellyfish} />
             </div>
-            <InteractiveFilter kernel={kernel} imgUrl={jellyfish} />
+            
         </div>
     )
 }

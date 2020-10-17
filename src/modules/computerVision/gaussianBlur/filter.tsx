@@ -56,6 +56,7 @@ function convolute(inCanvas: HTMLCanvasElement, outCanvas: HTMLCanvasElement, an
           }
         }
       }
+      
       dst[dstOff] = r;
       dst[dstOff + 1] = g;
       dst[dstOff + 2] = b;
