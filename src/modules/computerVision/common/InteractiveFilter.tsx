@@ -3,6 +3,14 @@ import React, { useLayoutEffect, useRef, useState } from 'react';
 // http://dev.theomader.com/gaussian-kernel-calculator/
 // https://blog.cloudboost.io/using-html5-canvas-with-react-ff7d93f5dc76
 
+/**
+ * 
+ * @param props 
+ * @param props.filter  function that writes a filtered image to `outCanvas`, 
+ *                      given the original image on `inCanvas`
+ * @param props.imgUrl  url to the image to display
+ * @param props.disabled  whether or not the "apply filter" button should be disabled    
+ */
 const InteractiveFilter = (props: {
     filter: (inCanvas: HTMLCanvasElement, outCanvas: HTMLCanvasElement) => any,
     imgUrl: string,

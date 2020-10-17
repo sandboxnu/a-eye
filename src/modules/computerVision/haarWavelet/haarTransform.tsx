@@ -2,6 +2,14 @@ export { haarFilter};
 
 // https://stevenbas.art/examples/ImageProcessing/ex4/
 
+/**
+ * Applies the haar transformation to the image in `inCanvas`, and draws the output
+ * on `outCanvas`
+ * 
+ * @param inCanvas 
+ * @param outCanvas 
+ * @param iterations how many recursions to do
+ */
 function haarFilter(inCanvas: HTMLCanvasElement, outCanvas: HTMLCanvasElement, iterations: number) {
     const inData = inCanvas.getContext("2d")?.getImageData(0,0, inCanvas.width, inCanvas.height);
     const outData = outCanvas.getContext("2d")?.getImageData(0,0, outCanvas.width, outCanvas.height);
