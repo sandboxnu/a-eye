@@ -7,6 +7,7 @@ module.exports = {
         charcoal: '#254053',
         bgdiff: '#cacaca',
         navy: '#394D73',
+        'navy-disabled': '#526790',
         transteal: '#46B4A72C',
         navbar: '#2B4B62',
         offwhite: '#f2f2f2',
@@ -48,6 +49,12 @@ module.exports = {
     ,
     top: {
       '-1': '-1px'
+    },
+    maxHeight: {
+      xs: '20rem',
+      sm: '24rem',
+      md: '28rem',
+      lg: '32rem'
     }
   },
   variants: {

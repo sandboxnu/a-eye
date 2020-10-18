@@ -14,7 +14,7 @@ function App() {
         <div className="App-header">
           <Navbar />
         </div>
-        <main className="font-mono text-lg">
+        <main className="font-mono text-lg font-charcoal">
           <Switch>
             <Route exact path="/" component={LandingPage} />
             <Route path="/home" component={LandingPage} />
