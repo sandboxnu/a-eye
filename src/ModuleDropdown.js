@@ -14,7 +14,7 @@ export default class ModuleDropdown extends React.Component {
                         onMouseOut={() => this.setState((prevState) => ({buttonHover: false, dropdownHover: prevState.dropdownHover}))}>
                     <p className="text-xs text-white uppercase font-opensans font-bold">Modules</p>
                 </button>
-                <div className={`absolute ${!(this.state.buttonHover || this.state.dropdownHover) && "hidden"} -mt-1 -ml-1 justify-start rounded-b divide-y divide-moduleDarkBlue bg-navbar`}
+                <div className={`absolute ${!(this.state.buttonHover || this.state.dropdownHover) && "hidden"} -mt-1 -ml-10 justify-start rounded-b divide-y divide-moduleDarkBlue bg-navbar`}
                      onMouseOver={() => this.setState((prevState) => ({buttonHover: prevState.buttonHover, dropdownHover: true}))}
                      onMouseOut={() => this.setState((prevState) => ({buttonHover: prevState.buttonHover, dropdownHover: false}))}>
                     <br/>
