@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import jellyfish from '../gaussianBlur/jellyfish.png';
-import InteractiveFilter from '../gaussianBlur/InteractiveFilter';
-import DifferenceFilter from '../gaussianBlur/InteractiveFilter';
+import KernelDisplay from '../gaussianBlur/KernelDisplay';
+import FilterByKernel from '../common/FilterByKernel';
 // have to use require for this bc it doesn't have a module declaration file or something
 const generateGaussianKernel = require('gaussian-convolution-kernel');
 
@@ -44,39 +44,10 @@ const DoG = () => {
         <div>
             <div className="m-4">
                 <KernelConfig onConfig={configureKernel}/>
-                <div className="mx-auto my-4 max-w-5xl max-h-lg overflow-auto">
-                    <table className="m-auto"><tbody>
-                        {kernelGrid?.map((row, i) => (
-                            <tr key={i}>
-                                {row.map((val, j) => (
-                                    <td key={j}
-                                        style={getBg(val, kernel)}
-                                        className="border border-charcoal p-2"
-                                        title={`${val}`}>
-                                        {val.toFixed(5)}
-                                    </td>))}
-                            </tr>
-                        ))}
-                    </tbody></table>
-                </div>
-                <div className="mx-auto my-4 max-w-5xl max-h-lg overflow-auto">
-                    <table className="m-auto"><tbody>
-                        {kernelGrid2?.map((row, i) => (
-                            <tr key={i}>
-                                {row.map((val, j) => (
-                                    <td key={j}
-                                        style={getBg(val, kernel2)}
-                                        className="border border-charcoal p-2"
-                                        title={`${val}`}>
-                                        {val.toFixed(5)}
-                                    </td>))}
-                            </tr>
-                        ))}
-                    </tbody></table>
-                </div>
-                <InteractiveFilter kernel={kernel} imgUrl={jellyfish} />
-                <InteractiveFilter kernel={kernel2} imgUrl={jellyfish} />
-                <DifferenceFilter kernel={kernel} imgUrl={jellyfish} />
+                <KernelDisplay kernelGrid={kernelGrid} />
+                <KernelDisplay kernelGrid={kernelGrid2} />
+
+                <FilterByKernel kernel={kernel} imgUrl={jellyfish} />
             </div>
             
         </div>
