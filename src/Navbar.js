@@ -1,4 +1,5 @@
 import React from 'react';
+import ModuleDropdown from "./ModuleDropdown";
 import logo from './media/logo_blink.svg';
 
 export default function Navbar() {
@@ -14,8 +15,9 @@ export default function Navbar() {
                     <li className="mr-8 border-b-2 border-transparent hover:border-teal-a-eye duration-300 ease-in-out">
                         <a className="" href="/"><p className="text-xs text-white uppercase font-opensans font-bold">Home</p></a>
                     </li>
-                    <li className="mx-8 border-b-2 border-transparent hover:border-teal-a-eye duration-300 ease-in-out">
-                        <a className="" href="/modules"><p className="text-xs text-white uppercase font-opensans font-bold">Modules</p></a>
+                    <li className="mx-8 -mt-1 border-b-2 border-transparent hover:border-teal-a-eye duration-300 ease-in-out">
+                        {/*<a className="" href="/modules"><p className="text-xs text-white uppercase font-opensans font-bold">Modules</p></a>*/}
+                        <ModuleDropdown />
                     </li>
                     <li className="mx-8 border-b-2 border-transparent hover:border-teal-a-eye duration-300 ease-in-out">
                         <a className="" href="/about"><p className="text-xs text-white uppercase font-opensans font-bold">About</p></a>

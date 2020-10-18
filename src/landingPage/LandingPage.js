@@ -23,10 +23,12 @@ export default function LandingPage() {
             <ul className="list-none">
                 {
                     descriptions.modules.map((module) =>
-                        <li className="flex justify-center my-48">
-                            <ModuleIntro title={module.title} body={module.body} bgColor={module.bgColor}
-                                         textColor={module.textColor} margin={module.margin} imgSrc={module.imgSrc}/>
-                        </li>
+                        <a href={`/modules/${module.path}`}>
+                            <li className="flex justify-center my-48">
+                                <ModuleIntro title={module.title} body={module.body} bgColor={module.bgColor} key={module.number.toString()}
+                                             textColor={module.textColor} margin={module.margin} imgSrc={module.imgSrc}/>
+                            </li>
+                        </a>
                     )
                 }
             </ul>

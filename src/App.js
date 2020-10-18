@@ -5,6 +5,7 @@ import Footer from './footer';
 import './App.css';
 import AboutPage from "./aboutPage/AboutPage"
 import LandingPage from "./landingPage/LandingPage";
+import ModulePage from "./modulePage/ModulePage";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           <Switch>
             <Route exact path="/" component={LandingPage} />
             <Route path="/home" component={LandingPage} />
+            <Route path="/modules/:module" component={ModulePage} />
             <Route path="/about" component={AboutPage} />
           </Switch>
         </main>

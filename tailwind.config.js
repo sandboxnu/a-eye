@@ -12,7 +12,12 @@ module.exports = {
         offwhite: '#f2f2f2',
         scrollBox: '#8D9DBA',
         lightblue: '#CBD9F2',
-        darkblue: '#394D73'
+        darkblue: '#394D73',
+        moduleDarkBlue: '#010326',
+        modulePaleBlue: '#CBD9F2',
+        moduleTeal: '#0FD4C0',
+        moduleOffwhite: '#F2F2F2',
+        moduleNavy: '#394D73'
       },
       fontFamily: {
         opensans: ["open sans", "sans-serif"],
