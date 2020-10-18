@@ -2,7 +2,6 @@ import React from 'react';
 import InteractiveFilter from './InteractiveFilter';
 import { convolute } from './filter';
 import { getPixels, createImageData } from './filter';
-import { isWidthDown } from '@material-ui/core';
 
 const pixelmatch = require('pixelmatch');
 
@@ -24,9 +23,6 @@ const FilterByKernel = (props: { kernel?: number[], kernel2?:number[], imgUrl: s
                     return ;
                 }
                 let result1 = Uint8ClampedArray.from(check.data)
-                // let r1 = result1.slice(0)
-                console.log(result1)
-                
                 
                 
                 props.kernel2 && convolute(inCanvas, outCanvas, false, props.kernel2)
@@ -36,33 +32,17 @@ const FilterByKernel = (props: { kernel?: number[], kernel2?:number[], imgUrl: s
                     return ;
                 }
                 let result2 = Uint8ClampedArray.from(check2.data)
-                // let r2 = result2.slice(0)
-                
-                // if(JSON.stringify(a)==JSON.stringify(b)) {
-                //     console.log
-                // }
-                console.log(result2)
 
                 let width = check.width
                 let height = check.height
-                console.log(width, height)
                 
-                // let diff_im = createImageData(outCanvas)
-                // let diff = diff_im?.data
-
-                let diff = result1.map((pix, i)=> ((i+1)%4== 0 ? pix : Math.abs(pix - result2[i])));
-                console.log(diff)
+                let diff = result1.map((pix, i)=> ((i+1)%4== 0 ? 255 : 255 - Math.abs(pix - result2[i])));
+                
 
                 let output = new ImageData(diff, width, height)
-                console.log(output.data)
-
-
-                let pix_diff = pixelmatch(result1, result2, diff, width, height, {threshold: 0.0001, aaColor:[33,33,33],diffColor:[0,0,0]});
-                console.log(diff)
-
-                // if (diff_im) {
+                
                 outCanvas.getContext('2d')?.putImageData(output, 0, 0);
-                // } 
+
 
             }}
         />
