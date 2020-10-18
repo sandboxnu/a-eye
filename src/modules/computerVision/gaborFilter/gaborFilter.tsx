@@ -6,6 +6,7 @@ import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import AngleSelector from './AngleSelector';
 
 
 // mimics np.meshgrid in python
@@ -99,7 +100,7 @@ const KernelConfig = (props: { onConfig: (kernelSize: number, omega: number, the
 
     const changeOmega = (e: any) => setOmega(parseFloat(e.target.value));
     const changeKernelSize = (e: any) => setKernelSize(parseInt(e.target.value));
-    const changeTheta = (e: any) => setTheta(parseFloat(e.target.value));
+    const changeTheta = (t :number) => setTheta(t);
     const changeK = (e: any) => setK(parseFloat(e.target.value));
 
     const invalidConfig = (kernelSize < 1 || kernelSize > 7)
@@ -115,15 +116,9 @@ const KernelConfig = (props: { onConfig: (kernelSize: number, omega: number, the
                     value={kernelSize} onChange={(e) => changeKernelSize(e)} />
 
             </div>
-            <div className="font-bold m-3 h-10">
+            <div className="font-bold m-3">
                 Theta
-               <input className="mx-2 w-64"
-                    // Math.PI/8 ~= 0.39
-                    type="range" min="0" max="6.28" step={0.39}
-                    value={theta} onChange={(e) => changeTheta(e)} />
-                <input className="number-input"
-                    type="number" min="0" max="6.28" step={0.39}
-                    value={theta} onChange={(e) => changeTheta(e)} />
+                <AngleSelector diameter='150px' initAngle={theta} onAngleChange={changeTheta}/>
             </div>
             <Accordion className="gabor-extras-accordion w-500px mx-auto my-2">
                 <AccordionSummary className="font-bold h-1" expandIcon={<ExpandMoreIcon />}>
