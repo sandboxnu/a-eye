@@ -1,4 +1,5 @@
 module.exports = {
+  important: '#app',
   purge: [],
   theme: {
     extend: {
@@ -43,26 +44,29 @@ module.exports = {
         module: '64px'
       },
       boxShadow: {
-        module: '12px 10px 19px rgba(0, 0, 0, 0.30)'
+        module: '12px 10px 19px rgba(0, 0, 0, 0.30)',
+        spacing: {
+          '500px': '500px'
+        }
       }
+      ,
+      top: {
+        '-1': '-1px'
+      },
+      maxHeight: {
+        xs: '20rem',
+        sm: '24rem',
+        md: '28rem',
+        lg: '32rem'
       }
-    ,
-    top: {
-      '-1': '-1px'
     },
-    maxHeight: {
-      xs: '20rem',
-      sm: '24rem',
-      md: '28rem',
-      lg: '32rem'
-    }
-  },
-  variants: {
-    mixBlendMode: ['responsive'],
-    backgroundBlendMode: ['responsive'],
-    isolation: ['responsive'],
-  },
-  plugins: [
-    require('tailwindcss-blend-mode')()
-  ],
+    variants: {
+      mixBlendMode: ['responsive'],
+      backgroundBlendMode: ['responsive'],
+      isolation: ['responsive'],
+    },
+    plugins: [
+      require('tailwindcss-blend-mode')()
+    ],
+  }
 }
