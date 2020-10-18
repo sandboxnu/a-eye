@@ -8,7 +8,7 @@ const pixelmatch = require('pixelmatch');
 // http://dev.theomader.com/gaussian-kernel-calculator/
 // https://blog.cloudboost.io/using-html5-canvas-with-react-ff7d93f5dc76
 
-const FilterByKernel = (props: { kernel?: number[], kernel2?:number[], imgUrl: string }) => {
+const FilterByDiffKernel = (props: { kernel?: number[], kernel2?:number[], imgUrl: string }) => {
 
     return (
         <InteractiveFilter
@@ -49,4 +49,4 @@ const FilterByKernel = (props: { kernel?: number[], kernel2?:number[], imgUrl: s
     )
 }
 
-export default FilterByKernel;
+export default FilterByDiffKernel;
