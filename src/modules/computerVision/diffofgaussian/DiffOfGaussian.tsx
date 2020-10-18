@@ -2,6 +2,8 @@ import React, { useRef, useState } from 'react';
 import jellyfish from '../gaussianBlur/jellyfish.png';
 import KernelDisplay from '../gaussianBlur/KernelDisplay';
 import FilterByKernel from '../common/FilterByKernel';
+import DiffofFiltered from '../common/DiffofFiltered';
+
 // have to use require for this bc it doesn't have a module declaration file or something
 const generateGaussianKernel = require('gaussian-convolution-kernel');
 
@@ -48,6 +50,8 @@ const DoG = () => {
                 <KernelDisplay kernelGrid={kernelGrid2} />
 
                 <FilterByKernel kernel={kernel} imgUrl={jellyfish} />
+                <FilterByKernel kernel={kernel2} imgUrl={jellyfish} />
+                <DiffofFiltered kernel={kernel} kernel2={kernel2} imgUrl={jellyfish}/>
             </div>
             
         </div>
@@ -111,5 +115,7 @@ function getBg(val: number, kernel?: number[]) {
     const red = 200 - ((val - min) / (max - min) * 200);
     return { background: `rgb(${red}, 212, 192)` };
 }
+
+
 
 export default DoG;

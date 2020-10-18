@@ -1,6 +1,6 @@
 
 export {
-  convolute
+  convolute, getPixels, createImageData
 };
 
 /// utility functions for filtering / manipulating a DOM canvas
