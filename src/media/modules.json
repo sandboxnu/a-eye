@@ -61,7 +61,7 @@
             },
             {
               "title": "Subsection 3",
-              "body": "We can control the change in the magnitude of the values from the center to the outsides of the kernel (spread of the bell curve) by modifying the standard deviation of the distribution using the $$\\sigma$$. The last thing we want to make sure about the kernel is that the values sum up to approximately 1. The motivation for this is to avoid adding or subtracting \"energy\" to the image. We can do this by summing up all of the values and dividing every entry by the sum.",
+              "body": "We can control the change in the magnitude of the values from the center to the outsides of the kernel (spread of the bell curve) by modifying the standard deviation of the distribution using the σ. The last thing we want to make sure about the kernel is that the values sum up to approximately 1. The motivation for this is to avoid adding or subtracting \"energy\" to the image. We can do this by summing up all of the values and dividing every entry by the sum.",
               "imgSrc": "mod8.png"
             },
             {
@@ -83,7 +83,7 @@
             },
             {
               "title": "Subsection 2",
-              "body": "The mathematics behind the calculation of the Gabor Function that generates the Gabor Filter are far beyond the scope of our discussion. The gist is that we can detect certain orientations by modifying our angle $$\\theta$$ and specify the size of the window we slide across the image by modifying $$\\sigma$$. We can also specify a frequency or magnitude for the directionality that assesses how strong the directionality is as a filter.",
+              "body": "The mathematics behind the calculation of the Gabor Function that generates the Gabor Filter are far beyond the scope of our discussion. The gist is that we can detect certain orientations by modifying our angle θ and specify the size of the window we slide across the image by modifying σ. We can also specify a frequency or magnitude for the directionality that assesses how strong the directionality is as a filter.",
               "imgSrc": "mod8.png"
             },
             {
@@ -122,17 +122,17 @@
           "subsections": [
             {
               "title": "Subsection 1",
-              "body": "",
+              "body": " ",
               "imgSrc": "mod8.png"
             },
             {
               "title": "Subsection 2",
-              "body": "",
+              "body": " ",
               "imgSrc": "mod8.png"
             },
             {
               "title": "Subsection 3",
-              "body": "",
+              "body": " ",
               "imgSrc": "mod8.png"
             }
           ],
