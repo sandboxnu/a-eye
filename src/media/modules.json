@@ -91,7 +91,8 @@
               "body": "The resulting image contains only the windows of the image that contain features that follow the directionality specified in the generation of the kernel. This can be highly effective when scanning images of text documents that also contain images where we only want to retain the text in the image. The reason for this is that images generally have lower frequency directional components as they are smoother relative to text.",
               "imgSrc": "mod8.png"
             }
-          ]
+          ],
+          "demoComp": "GaborDemo"
         },
         {
           "title": "Difference of Gaussians",
@@ -112,7 +113,8 @@
               "body": "More intuitively, the reason that this computation works is because we extract the structurally important parts of the image using two Gaussian Blur filters initially. Naturally, the most structurally significant parts of objects in an image are the edges so when we subtract the two processed images, the resulting image is the information that lies between those two images which is the difference in the precision of the edges extracted.",
               "imgSrc": "mod8.png"
             }
-          ]
+          ],
+          "demoComp": "DiffOfGaussian"
         },
         {
           "title": "Haar Transform",
