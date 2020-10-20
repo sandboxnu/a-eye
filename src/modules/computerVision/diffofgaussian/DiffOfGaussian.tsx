@@ -44,13 +44,16 @@ const DoG = (props: {labelColor: string}) => {
 
     return (
         <div>
-            <div className="m-4">
+            <div className={`font-bold m-4 ${props.labelColor}`}>
                 <KernelConfig onConfig={configureKernel} labelColor={props.labelColor}/>
                 <KernelDisplay kernelGrid={kernelGrid} labelColor={props.labelColor}/>
                 <KernelDisplay kernelGrid={kernelGrid2} labelColor={props.labelColor}/>
-
+                
+                <p>Filter by the First Kernel</p>
                 <FilterByKernel kernel={kernel} imgUrl={jellyfish} />
+                <p>Filter by the Second Kernel</p>
                 <FilterByKernel kernel={kernel2} imgUrl={jellyfish} />
+                <p>Take the Difference of the Filtered Images</p>
                 <DiffofFiltered kernel={kernel} kernel2={kernel2} imgUrl={jellyfish}/>
             </div>
             
