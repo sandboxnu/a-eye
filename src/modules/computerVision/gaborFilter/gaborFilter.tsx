@@ -64,14 +64,14 @@ function gaborFilter(sz: number,
     return gabor;
 }
 
-const GaborDemo = (props : {imgUrl: string}) => {
+const GaborDemo = (props: { imgUrl: string }) => {
     const [kernel, setKernel] = useState<number[] | undefined>(undefined);
     const [kernelGrid, setKernelGrid] = useState<number[][] | undefined>(undefined);
 
     const configureKernel = (kernelSize: number,
-                             omega: number,
-                             theta: number,
-                             K: number) => {
+        omega: number,
+        theta: number,
+        K: number) => {
 
         const func = Math.cos;
 
@@ -84,8 +84,10 @@ const GaborDemo = (props : {imgUrl: string}) => {
 
     return (
         <div className="m-4">
-            <KernelConfig onConfig={configureKernel} />
-            <KernelDisplay kernelGrid={kernelGrid} />
+            <div className="grid grid-cols-2 mx-auto items-center mb-5" style={{width: '1100px'}}>
+                <KernelConfig onConfig={configureKernel} />
+                <KernelDisplay kernelGrid={kernelGrid} />
+            </div>
             <FilterByKernel kernel={kernel} imgUrl={props.imgUrl} />
         </div>
     )
@@ -99,7 +101,7 @@ const KernelConfig = (props: { onConfig: (kernelSize: number, omega: number, the
 
     const changeOmega = (e: any) => setOmega(parseFloat(e.target.value));
     const changeKernelSize = (e: any) => setKernelSize(parseInt(e.target.value));
-    const changeTheta = (t :number) => setTheta(t);
+    const changeTheta = (t: number) => setTheta(t);
     const changeK = (e: any) => setK(parseFloat(e.target.value));
 
     const invalidConfig = (kernelSize < 1 || kernelSize > 7)
@@ -117,7 +119,7 @@ const KernelConfig = (props: { onConfig: (kernelSize: number, omega: number, the
             </div>
             <div className="font-bold m-3">
                 Theta
-                <AngleSelector diameter='150px' initAngle={theta} onAngleChange={changeTheta}/>
+                <AngleSelector diameter='150px' initAngle={theta} onAngleChange={changeTheta} />
             </div>
             <Accordion className="gabor-extras-accordion w-500px mx-auto my-2">
                 <AccordionSummary className="font-bold h-1" expandIcon={<ExpandMoreIcon />}>

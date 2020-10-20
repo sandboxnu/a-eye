@@ -6,7 +6,7 @@ import DiffofFiltered from '../common/DiffofFiltered';
 // have to use require for this bc it doesn't have a module declaration file or something
 const generateGaussianKernel = require('gaussian-convolution-kernel');
 
-const DoG = (props : {imgUrl: string}) => {
+const DoG = (props: { imgUrl: string }) => {
     const [kernel, setKernel] = useState<number[] | undefined>(undefined);
     const [kernel2, setKernel2] = useState<number[] | undefined>(undefined);
     const [kernelGrid, setKernelGrid] = useState<number[][] | undefined>(undefined);
@@ -14,7 +14,7 @@ const DoG = (props : {imgUrl: string}) => {
 
 
     const configureKernel = (kernelSize: number, sigma: number, sigma2: number) => {
-        
+
         const newKernel: number[] = generateGaussianKernel(kernelSize, sigma);
         const newKernel2: number[] = generateGaussianKernel(kernelSize, sigma2);
         const newKernelGrid = newKernel.reduce((rslt: number[][], val, idx) => {
@@ -27,12 +27,12 @@ const DoG = (props : {imgUrl: string}) => {
             rslt[rslt.length - 1].push(val);
             return rslt;
         }, []);
-        
+
 
         // take difference of the two filters
         // dog = difference of gaussians
         // let dog = newKernel.map((inner, i) => (inner - newKernel2[i]));
-        
+
         // let dogGrid = newKernelGrid.map((inner, i) => inner.map((v, j) => (v - newKernelGrid2[i][j])));
 
         setKernel(newKernel);
@@ -44,15 +44,18 @@ const DoG = (props : {imgUrl: string}) => {
     return (
         <div>
             <div className="m-4">
-                <KernelConfig onConfig={configureKernel}/>
-                <KernelDisplay kernelGrid={kernelGrid} />
-                <KernelDisplay kernelGrid={kernelGrid2} />
+                <KernelConfig onConfig={configureKernel} />
+                <div className="grid grid-cols-2 mx-auto items-center mb-5" style={{width: '1100px'}}>
+                    <KernelDisplay kernelGrid={kernelGrid} />
+                    <KernelDisplay kernelGrid={kernelGrid2} />
+                </div>
+
 
                 <FilterByKernel kernel={kernel} imgUrl={props.imgUrl} />
                 <FilterByKernel kernel={kernel2} imgUrl={props.imgUrl} />
-                <DiffofFiltered kernel={kernel} kernel2={kernel2} imgUrl={props.imgUrl}/>
+                <DiffofFiltered kernel={kernel} kernel2={kernel2} imgUrl={props.imgUrl} />
             </div>
-            
+
         </div>
     )
 }
@@ -97,7 +100,7 @@ const KernelConfig = (props: { onConfig: (kernelSize: number, sigma: number, sig
                     type="number" min="3" max="7" step={2}
                     value={kernelSize} onChange={(e) => changeKernelSize(e)} />
                 <div className="font-light italic text-sm">
-                    { invalidSize ? 'Enter an odd kernel size, between 3 and 7' : ''}
+                    {invalidSize ? 'Enter an odd kernel size, between 3 and 7' : ''}
                 </div>
             </div>
             <button className="basic-button" disabled={invalidConfig} onClick={e => props.onConfig(kernelSize, sigma, sigma2)}>
