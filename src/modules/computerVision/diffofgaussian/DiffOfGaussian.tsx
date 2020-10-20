@@ -7,7 +7,7 @@ import DiffofFiltered from '../common/DiffofFiltered';
 // have to use require for this bc it doesn't have a module declaration file or something
 const generateGaussianKernel = require('gaussian-convolution-kernel');
 
-const DoG = () => {
+const DoG = (props: {labelColor: string}) => {
     const [kernel, setKernel] = useState<number[] | undefined>(undefined);
     const [kernel2, setKernel2] = useState<number[] | undefined>(undefined);
     const [kernelGrid, setKernelGrid] = useState<number[][] | undefined>(undefined);
@@ -45,7 +45,7 @@ const DoG = () => {
     return (
         <div>
             <div className="m-4">
-                <KernelConfig onConfig={configureKernel}/>
+                <KernelConfig onConfig={configureKernel} labelColor={props.labelColor}/>
                 <KernelDisplay kernelGrid={kernelGrid} />
                 <KernelDisplay kernelGrid={kernelGrid2} />
 
@@ -58,7 +58,7 @@ const DoG = () => {
     )
 }
 
-const KernelConfig = (props: { onConfig: (kernelSize: number, sigma: number, sigma2: number) => void }) => {
+const KernelConfig = (props: { onConfig: (kernelSize: number, sigma: number, sigma2: number) => void, labelColor: string}) => {
     const [kernelSize, setKernelSize] = useState<number>(5);
     const [sigma, setSigma] = useState<number>(1);
     const [sigma2, setSigma2] = useState<number>(3);
@@ -71,30 +71,30 @@ const KernelConfig = (props: { onConfig: (kernelSize: number, sigma: number, sig
     const invalidConfig = !sigma || invalidSize;
     return (
         <div>
-            <div className="font-bold m-3">
+            <div className={`font-bold m-3 ${props.labelColor}`}>
                 Sigma
                 <input className="mx-2 w-64"
                     type="range" min=".1" max="10" step="any"
                     value={sigma} onChange={(e) => changeSigma(e)} />
-                <input className="number-input"
+                <input className="number-input text-black"
                     type="number" min=".1" max="10"
                     value={sigma} onChange={(e) => changeSigma(e)} />
             </div>
-            <div className="font-bold m-3">
+            <div className={`font-bold m-3 ${props.labelColor}`}>
                 Sigma 2
                 <input className="mx-2 w-64"
                     type="range" min=".1" max="10" step="any"
                     value={sigma2} onChange={(e) => changeSigma2(e)} />
-                <input className="number-input"
+                <input className="number-input text-black"
                     type="number" min=".1" max="10"
                     value={sigma2} onChange={(e) => changeSigma2(e)} />
             </div>
-            <div className="font-bold m-3 h-10">
+            <div className={`font-bold m-3 h-10 ${props.labelColor}`}>
                 Kernel Size
                 <input className="mx-2 w-64"
                     type="range" min="3" max="7" step={2}
                     value={kernelSize} onChange={(e) => changeKernelSize(e)} />
-                <input className="number-input"
+                <input className="number-input text-black"
                     type="number" min="3" max="7" step={2}
                     value={kernelSize} onChange={(e) => changeKernelSize(e)} />
                 <div className="font-light italic text-sm">

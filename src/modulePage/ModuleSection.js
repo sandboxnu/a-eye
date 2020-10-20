@@ -55,9 +55,9 @@ export default function ModuleSection(props) {
 function getDemo(comp, scheme) {
     switch (comp) {
         case "GaussianBlurDemo": return <GaussianBlurDemo labelColor={scheme.titleColor}/>
-        case "GaborDemo": return <GaborDemo/>
-        case "DiffOfGaussian": return <DiffOfGaussian/>
-        case "HaarWaveletDemo": return <HaarWaveletDemo/>
+        case "GaborDemo": return <GaborDemo labelColor={scheme.titleColor}/>
+        case "DiffOfGaussian": return <DiffOfGaussian labelColor={scheme.titleColor}/>
+        case "HaarWaveletDemo": return <HaarWaveletDemo labelColor={scheme.titleColor}/>
         default: return <div></div>
     }
 }
