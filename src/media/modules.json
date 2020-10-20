@@ -122,20 +122,21 @@
           "subsections": [
             {
               "title": "Subsection 1",
-              "body": "The motivation behind the Difference of Gaussians technique is to detect edges in an image. This is particularly useful for segmenting objects from one another or creating a coloring book from pictures on your phone!",
+              "body": "",
               "imgSrc": "mod8.png"
             },
             {
               "title": "Subsection 2",
-              "body": "A difference of Gaussians Kernel builds directly upon what we have already covered in Gaussian Blurring. We take two images processed using Gaussian Blur filters with different standard deviations and subtract them from each other. We want the image that we are subtracting from to have been processed with a Gaussian Blur filter that has a smaller standard deviation (less spread) than the image that we are subtracting.",
+              "body": "",
               "imgSrc": "mod8.png"
             },
             {
               "title": "Subsection 3",
-              "body": "More intuitively, the reason that this computation works is because we extract the structurally important parts of the image using two Gaussian Blur filters initially. Naturally, the most structurally significant parts of objects in an image are the edges so when we subtract the two processed images, the resulting image is the information that lies between those two images which is the difference in the precision of the edges extracted.",
+              "body": "",
               "imgSrc": "mod8.png"
             }
-          ]
+          ],
+          "demoComp": "HaarWaveletDemo"
         }
       ]
     },
