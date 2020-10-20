@@ -21,7 +21,8 @@ export default function ModulePage(props) {
                         <ModuleSection title={section.title}
                                        sections={section.subsections}
                                        colorScheme={section.colorScheme}
-                                       key={section.title}/>
+                                       key={section.title}
+                                       demoComp={section.demoComp}/>
                     )
                 }
             </ul>

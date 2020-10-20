@@ -1,4 +1,5 @@
 module.exports = {
+  important: '#app',
   purge: [],
   theme: {
     extend: {
@@ -7,6 +8,7 @@ module.exports = {
         charcoal: '#254053',
         bgdiff: '#cacaca',
         navy: '#394D73',
+        'navy-disabled': '#526790',
         transteal: '#46B4A72C',
         navbar: '#2B4B62',
         offwhite: '#f2f2f2',
@@ -42,20 +44,29 @@ module.exports = {
         module: '64px'
       },
       boxShadow: {
-        module: '12px 10px 19px rgba(0, 0, 0, 0.30)'
+        module: '12px 10px 19px rgba(0, 0, 0, 0.30)',
+        spacing: {
+          '500px': '500px'
+        }
       }
+      ,
+      top: {
+        '-1': '-1px'
+      },
+      maxHeight: {
+        xs: '20rem',
+        sm: '24rem',
+        md: '28rem',
+        lg: '32rem'
       }
-    ,
-    top: {
-      '-1': '-1px'
-    }
-  },
-  variants: {
-    mixBlendMode: ['responsive'],
-    backgroundBlendMode: ['responsive'],
-    isolation: ['responsive'],
-  },
-  plugins: [
-    require('tailwindcss-blend-mode')()
-  ],
+    },
+    variants: {
+      mixBlendMode: ['responsive'],
+      backgroundBlendMode: ['responsive'],
+      isolation: ['responsive'],
+    },
+    plugins: [
+      require('tailwindcss-blend-mode')()
+    ],
+  }
 }
