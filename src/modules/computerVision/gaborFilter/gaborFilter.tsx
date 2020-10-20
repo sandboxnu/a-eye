@@ -64,7 +64,8 @@ function gaborFilter(sz: number,
     return gabor;
 }
 
-const GaborDemo = (props: { imgUrl: string }) => {
+
+const GaborDemo = (props: {labelColor: string, imgUrl: string}) => {
     const [kernel, setKernel] = useState<number[] | undefined>(undefined);
     const [kernelGrid, setKernelGrid] = useState<number[][] | undefined>(undefined);
 
@@ -85,15 +86,15 @@ const GaborDemo = (props: { imgUrl: string }) => {
     return (
         <div className="m-4">
             <div className="grid grid-cols-2 mx-auto items-center mb-5" style={{width: '1100px'}}>
-                <KernelConfig onConfig={configureKernel} />
-                <KernelDisplay kernelGrid={kernelGrid} />
+                <KernelConfig onConfig={configureKernel} labelColor={props.labelColor} />
+                <KernelDisplay kernelGrid={kernelGrid} labelColor={props.labelColor} />
             </div>
             <FilterByKernel kernel={kernel} imgUrl={props.imgUrl} />
         </div>
     )
 }
 
-const KernelConfig = (props: { onConfig: (kernelSize: number, omega: number, theta: number, K: number) => void }) => {
+const KernelConfig = (props: { onConfig: (kernelSize: number, omega: number, theta: number, K: number) => void, labelColor: string}) => {
     const [kernelSize, setKernelSize] = useState<number>(5);
     const [omega, setOmega] = useState<number>(1);
     const [theta, setTheta] = useState<number>(0);
@@ -107,21 +108,21 @@ const KernelConfig = (props: { onConfig: (kernelSize: number, omega: number, the
     const invalidConfig = (kernelSize < 1 || kernelSize > 7)
     return (
         <div>
-            <div className="font-bold m-3 h-10">
+            <div className={`font-bold m-3 h-10 ${props.labelColor}`}>
                 Kernel Size
                 <input className="mx-2 w-64"
                     type="range" min="1" max="7" step={1}
                     value={kernelSize} onChange={(e) => changeKernelSize(e)} />
-                <input className="number-input"
+                <input className="number-input text-black"
                     type="number" min="1" max="7" step={1}
                     value={kernelSize} onChange={(e) => changeKernelSize(e)} />
 
             </div>
-            <div className="font-bold m-3">
+            <div className={`font-bold m-3 ${props.labelColor}`}>
                 Theta
                 <AngleSelector diameter='150px' initAngle={theta} onAngleChange={changeTheta} />
             </div>
-            <Accordion className="gabor-extras-accordion w-500px mx-auto my-2">
+            <Accordion className={`gabor-extras-accordion w-500px mx-auto my-2 ${props.labelColor}`}>
                 <AccordionSummary className="font-bold h-1" expandIcon={<ExpandMoreIcon />}>
                     Extra Parameters
                 </AccordionSummary>
@@ -131,7 +132,7 @@ const KernelConfig = (props: { onConfig: (kernelSize: number, omega: number, the
                         <input className="mx-2 w-64"
                             type="range" min="0" max="10"
                             value={omega} onChange={(e) => changeOmega(e)} />
-                        <input className="number-input"
+                        <input className="number-input text-black"
                             type="number" min="0" max="10"
                             value={omega} onChange={(e) => changeOmega(e)} />
                     </div>
@@ -141,7 +142,7 @@ const KernelConfig = (props: { onConfig: (kernelSize: number, omega: number, the
                             // Math.PI/4 ~= 0.79
                             type="range" min="0" max="12.56" step={0.785}
                             value={K} onChange={(e) => changeK(e)} />
-                        <input className="number-input"
+                        <input className="number-input text-black"
                             type="number" min="0" max="12.56" step={0.785}
                             value={K} onChange={(e) => changeK(e)} />
                     </div>

@@ -3,7 +3,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 
 
-const KernelDisplay = (props: { kernelGrid?: number[][] }) => {
+const KernelDisplay = (props: { kernelGrid?: number[][] , labelColor: string}) => {
     const [showNums, setShowNums] = useState(true);
 
     if (!props.kernelGrid) return <></>;
@@ -48,7 +48,7 @@ const KernelDisplay = (props: { kernelGrid?: number[][] }) => {
                         onChange={(e) => setShowNums(e.target.checked)}
                         color="primary"
                     />
-                }
+                } className={props.labelColor}
                 label="Show kernel numbers"
             />
         </div>
