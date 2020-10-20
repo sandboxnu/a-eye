@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import jellyfish from '../gaussianBlur/jellyfish.png';
 import FilterByKernel from '../common/FilterByKernel';
 import KernelDisplay from '../gaussianBlur/KernelDisplay';
 import Accordion from '@material-ui/core/Accordion';
@@ -65,7 +64,7 @@ function gaborFilter(sz: number,
     return gabor;
 }
 
-const GaborDemo = () => {
+const GaborDemo = (props : {imgUrl: string}) => {
     const [kernel, setKernel] = useState<number[] | undefined>(undefined);
     const [kernelGrid, setKernelGrid] = useState<number[][] | undefined>(undefined);
 
@@ -87,7 +86,7 @@ const GaborDemo = () => {
         <div className="m-4">
             <KernelConfig onConfig={configureKernel} />
             <KernelDisplay kernelGrid={kernelGrid} />
-            <FilterByKernel kernel={kernel} imgUrl={jellyfish} />
+            <FilterByKernel kernel={kernel} imgUrl={props.imgUrl} />
         </div>
     )
 }

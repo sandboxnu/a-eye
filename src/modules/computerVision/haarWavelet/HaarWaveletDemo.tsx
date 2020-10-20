@@ -1,13 +1,12 @@
 import React, {useState} from 'react';
 import InteractiveFilter from '../common/InteractiveFilter';
 import { haarFilter } from './haarTransform';
-import Lenna from './Lenna.png';
 
 /*
 how does haar relate to normal kernel convolutions?
 What other configs/things to add to demo? currently not very intuitive
 */
-const HaarWaveletDemo = () => {
+const HaarWaveletDemo = (props : {imgUrl: string}) => {
     const [recursions, setRecursions] = useState(3);
 
     const invalidConfig = recursions < 1 || recursions > 10;
@@ -28,7 +27,7 @@ const HaarWaveletDemo = () => {
             </div>
             <InteractiveFilter
                 disabled={invalidConfig}
-                imgUrl={Lenna}
+                imgUrl={props.imgUrl}
                 filter={(inCanvas, outCanvas) => {
                     haarFilter(inCanvas, outCanvas, recursions);
                 }}

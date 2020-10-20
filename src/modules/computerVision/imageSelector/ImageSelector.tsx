@@ -1,0 +1,42 @@
+import React, { useEffect } from 'react';
+import './ImageSelector.css';
+
+const ImageSelector = (props: { currImg: string, onSelect: (img: string, imgUrl: string) => any }) => {
+    useEffect(() => props.onSelect(props.currImg, ALL_IMGS[props.currImg]),
+        []);
+
+    const makeImg = (key: string) => (
+        <img key={key}
+            className={key === props.currImg ? 'selected' : ''}
+            src={ALL_IMGS[key]}
+            onClick={() => props.onSelect(key, ALL_IMGS[key])}
+        />
+    );
+
+    return (
+        <div className='image-selector'>
+            Select Image
+            <div className='selection-window'>
+                {Object.keys(ALL_IMGS).map(key => {
+                    return ALL_IMGS[key] && makeImg(key);
+                }
+                )}
+            </div>
+        </div>
+    );
+}
+
+
+
+const ALL_IMGS: { [name: string]: any } = {
+    'circles.jpg': require('./imageLibrary/circles.jpg'),
+    'dogSilhouette.jpg': require('./imageLibrary/dogSilhouette.jpg'),
+    'purpleFlowers.jpeg': require('./imageLibrary/purpleFlowers.jpeg'),
+    'steps.jpg': require('./imageLibrary/steps.jpg'),
+    'tabbyCat.jpg': require('./imageLibrary/tabbyCat.jpg'),
+    'teddyBear.jpg': require('./imageLibrary/teddyBear.jpg'),
+    'zebra.jpg': require('./imageLibrary/zebra.jpg'),
+    'Lenna.png': require('./imageLibrary/Lenna.png')
+}
+
+export default ImageSelector;

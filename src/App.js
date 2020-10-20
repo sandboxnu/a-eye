@@ -5,11 +5,13 @@ import { ThemeProvider } from '@material-ui/styles';
 import Navbar from "./Navbar";
 import Footer from './footer';
 import AboutPage from "./aboutPage/AboutPage";
-import Gabor from "./modules/computerVision/gaborFilter/gaborFilter"
+
+import { ImageSelectableDemo } from './modules/computerVision/imageSelector/ImageSelectableDemo';
 import GaussianBlurDemo from './modules/computerVision/gaussianBlur/GaussianBlurDemo';
 import DoG from './modules/computerVision/diffofgaussian/DiffOfGaussian.tsx';
 import HaarWaveletDemo from './modules/computerVision/haarWavelet/HaarWaveletDemo';
 import './App.css';
+import GaborDemo from './modules/computerVision/gaborFilter/gaborFilter';
 
 function App() {
   return (
@@ -24,16 +26,24 @@ function App() {
             <Route path="/about" component={AboutPage} />
           </Switch>
           <Switch>
-            <Route path="/gaussian" component={GaussianBlurDemo} />
+            <Route path="/gaussian" 
+              render={() => <ImageSelectableDemo Demo={GaussianBlurDemo} initImg='purpleFlowers.jpeg'/>}
+            />
           </Switch>
           <Switch>
-            <Route path="/gabor" component={Gabor} />
+            <Route path="/gabor" 
+              render={() => <ImageSelectableDemo Demo={GaborDemo} initImg='zebra.jpg'/>}
+            />
           </Switch>
           <Switch>
-            <Route path="/dog" component={DoG} />
+            <Route path="/dog" 
+              render={() => <ImageSelectableDemo Demo={DoG} initImg='teddyBear.jpg'/>}
+            />
           </Switch>
           <Switch>
-            <Route path="/haar" component={HaarWaveletDemo} />
+            <Route path="/haar" 
+              render={() => <ImageSelectableDemo Demo={HaarWaveletDemo} initImg='Lenna.png'/>}
+            />
           </Switch>
         </main>
         <div>

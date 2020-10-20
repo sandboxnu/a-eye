@@ -1,5 +1,4 @@
 import React, { useRef, useState } from 'react';
-import jellyfish from '../gaussianBlur/jellyfish.png';
 import KernelDisplay from '../gaussianBlur/KernelDisplay';
 import FilterByKernel from '../common/FilterByKernel';
 import DiffofFiltered from '../common/DiffofFiltered';
@@ -7,7 +6,7 @@ import DiffofFiltered from '../common/DiffofFiltered';
 // have to use require for this bc it doesn't have a module declaration file or something
 const generateGaussianKernel = require('gaussian-convolution-kernel');
 
-const DoG = () => {
+const DoG = (props : {imgUrl: string}) => {
     const [kernel, setKernel] = useState<number[] | undefined>(undefined);
     const [kernel2, setKernel2] = useState<number[] | undefined>(undefined);
     const [kernelGrid, setKernelGrid] = useState<number[][] | undefined>(undefined);
@@ -49,9 +48,9 @@ const DoG = () => {
                 <KernelDisplay kernelGrid={kernelGrid} />
                 <KernelDisplay kernelGrid={kernelGrid2} />
 
-                <FilterByKernel kernel={kernel} imgUrl={jellyfish} />
-                <FilterByKernel kernel={kernel2} imgUrl={jellyfish} />
-                <DiffofFiltered kernel={kernel} kernel2={kernel2} imgUrl={jellyfish}/>
+                <FilterByKernel kernel={kernel} imgUrl={props.imgUrl} />
+                <FilterByKernel kernel={kernel2} imgUrl={props.imgUrl} />
+                <DiffofFiltered kernel={kernel} kernel2={kernel2} imgUrl={props.imgUrl}/>
             </div>
             
         </div>
