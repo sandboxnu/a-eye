@@ -46,8 +46,8 @@ const DoG = (props: {labelColor: string}) => {
         <div>
             <div className="m-4">
                 <KernelConfig onConfig={configureKernel} labelColor={props.labelColor}/>
-                <KernelDisplay kernelGrid={kernelGrid} />
-                <KernelDisplay kernelGrid={kernelGrid2} />
+                <KernelDisplay kernelGrid={kernelGrid} labelColor={props.labelColor}/>
+                <KernelDisplay kernelGrid={kernelGrid2} labelColor={props.labelColor}/>
 
                 <FilterByKernel kernel={kernel} imgUrl={jellyfish} />
                 <FilterByKernel kernel={kernel2} imgUrl={jellyfish} />

@@ -86,7 +86,7 @@ const GaborDemo = (props: {labelColor: string}) => {
     return (
         <div className="m-4">
             <KernelConfig onConfig={configureKernel} labelColor={props.labelColor}/>
-            <KernelDisplay kernelGrid={kernelGrid} />
+            <KernelDisplay kernelGrid={kernelGrid} labelColor={props.labelColor}/>
             <FilterByKernel kernel={kernel} imgUrl={jellyfish} />
         </div>
     )
