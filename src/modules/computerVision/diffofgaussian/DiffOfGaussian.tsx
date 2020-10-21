@@ -43,9 +43,9 @@ const DoG = (props: { labelColor: string, imgUrl: string }) => {
     }
 
     return (
-        <div className={`font-bold m-4 ${props.labelColor}`}>
+        <div className={`flex flex-col items-center font-bold m-4 ${props.labelColor}`}>
             <KernelConfig onConfig={configureKernel} labelColor={props.labelColor} />
-            <div className="grid grid-cols-2 mx-auto items-center mb-5" style={{ width: '1100px' }}>
+            <div className="grid grid-cols-2 items-center mb-5" style={{ width: '1100px' }}>
                 <KernelDisplay kernelGrid={kernelGrid} labelColor={props.labelColor} />
                 <KernelDisplay kernelGrid={kernelGrid2} labelColor={props.labelColor} />
             </div>

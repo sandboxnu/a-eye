@@ -5,8 +5,9 @@
     font-weight: bold;
     font-size: 11pt;
     padding: 10px;
-    box-shadow: 0 0 5px lightgray;
-    display: inline-block;    
+    box-shadow: 0 0 5px rgb(163, 162, 162);
+    display: inline-block;  
+    background-color: white;  
 }
 
 .image-selector img {
