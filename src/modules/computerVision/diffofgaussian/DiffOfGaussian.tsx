@@ -1,5 +1,4 @@
 import React, { useRef, useState } from 'react';
-import jellyfish from '../gaussianBlur/jellyfish.png';
 import KernelDisplay from '../gaussianBlur/KernelDisplay';
 import FilterByKernel from '../common/FilterByKernel';
 import DiffofFiltered from '../common/DiffofFiltered';
@@ -7,7 +6,8 @@ import DiffofFiltered from '../common/DiffofFiltered';
 // have to use require for this bc it doesn't have a module declaration file or something
 const generateGaussianKernel = require('gaussian-convolution-kernel');
 
-const DoG = (props: {labelColor: string}) => {
+
+const DoG = (props: { labelColor: string, imgUrl: string }) => {
     const [kernel, setKernel] = useState<number[] | undefined>(undefined);
     const [kernel2, setKernel2] = useState<number[] | undefined>(undefined);
     const [kernelGrid, setKernelGrid] = useState<number[][] | undefined>(undefined);
@@ -15,7 +15,7 @@ const DoG = (props: {labelColor: string}) => {
 
 
     const configureKernel = (kernelSize: number, sigma: number, sigma2: number) => {
-        
+
         const newKernel: number[] = generateGaussianKernel(kernelSize, sigma);
         const newKernel2: number[] = generateGaussianKernel(kernelSize, sigma2);
         const newKernelGrid = newKernel.reduce((rslt: number[][], val, idx) => {
@@ -28,12 +28,12 @@ const DoG = (props: {labelColor: string}) => {
             rslt[rslt.length - 1].push(val);
             return rslt;
         }, []);
-        
+
 
         // take difference of the two filters
         // dog = difference of gaussians
         // let dog = newKernel.map((inner, i) => (inner - newKernel2[i]));
-        
+
         // let dogGrid = newKernelGrid.map((inner, i) => inner.map((v, j) => (v - newKernelGrid2[i][j])));
 
         setKernel(newKernel);
@@ -43,25 +43,25 @@ const DoG = (props: {labelColor: string}) => {
     }
 
     return (
-        <div>
-            <div className={`font-bold m-4 ${props.labelColor}`}>
-                <KernelConfig onConfig={configureKernel} labelColor={props.labelColor}/>
-                <KernelDisplay kernelGrid={kernelGrid} labelColor={props.labelColor}/>
-                <KernelDisplay kernelGrid={kernelGrid2} labelColor={props.labelColor}/>
-                
-                <p>Filter by the First Kernel</p>
-                <FilterByKernel kernel={kernel} imgUrl={jellyfish} />
-                <p>Filter by the Second Kernel</p>
-                <FilterByKernel kernel={kernel2} imgUrl={jellyfish} />
-                <p>Take the Difference of the Filtered Images</p>
-                <DiffofFiltered kernel={kernel} kernel2={kernel2} imgUrl={jellyfish}/>
+        <div className={`flex flex-col items-center font-bold m-4 ${props.labelColor}`}>
+            <KernelConfig onConfig={configureKernel} labelColor={props.labelColor} />
+            <div className="grid grid-cols-2 items-center mb-5" style={{ width: '1100px' }}>
+                <KernelDisplay kernelGrid={kernelGrid} labelColor={props.labelColor} />
+                <KernelDisplay kernelGrid={kernelGrid2} labelColor={props.labelColor} />
             </div>
-            
+
+            <p>Filter by the First Kernel</p>
+            <FilterByKernel kernel={kernel} imgUrl={props.imgUrl} />
+            <p>Filter by the Second Kernel</p>
+            <FilterByKernel kernel={kernel2} imgUrl={props.imgUrl} />
+            <p>Take the Difference of the Filtered Images</p>
+            <DiffofFiltered kernel={kernel} kernel2={kernel2} imgUrl={props.imgUrl} />
+
         </div>
     )
 }
 
-const KernelConfig = (props: { onConfig: (kernelSize: number, sigma: number, sigma2: number) => void, labelColor: string}) => {
+const KernelConfig = (props: { onConfig: (kernelSize: number, sigma: number, sigma2: number) => void, labelColor: string }) => {
     const [kernelSize, setKernelSize] = useState<number>(5);
     const [sigma, setSigma] = useState<number>(1);
     const [sigma2, setSigma2] = useState<number>(3);
@@ -101,7 +101,7 @@ const KernelConfig = (props: { onConfig: (kernelSize: number, sigma: number, sig
                     type="number" min="3" max="7" step={2}
                     value={kernelSize} onChange={(e) => changeKernelSize(e)} />
                 <div className="font-light italic text-sm">
-                    { invalidSize ? 'Enter an odd kernel size, between 3 and 7' : ''}
+                    {invalidSize ? 'Enter an odd kernel size, between 3 and 7' : ''}
                 </div>
             </div>
             <button className="basic-button" disabled={invalidConfig} onClick={e => props.onConfig(kernelSize, sigma, sigma2)}>

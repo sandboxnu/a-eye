@@ -3,6 +3,7 @@ import GaussianBlurDemo from "../modules/computerVision/gaussianBlur/GaussianBlu
 import GaborDemo from "../modules/computerVision/gaborFilter/gaborFilter";
 import DiffOfGaussian from "../modules/computerVision/diffofgaussian/DiffOfGaussian";
 import HaarWaveletDemo from "../modules/computerVision/haarWavelet/HaarWaveletDemo";
+import { ImageSelectableDemo } from "../modules/computerVision/imageSelector/ImageSelectableDemo";
 
 const lorem = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.';
 
@@ -53,11 +54,16 @@ export default function ModuleSection(props) {
 }
 
 function getDemo(comp, scheme) {
+    const demoArgs = {labelColor: scheme.titleColor}
     switch (comp) {
-        case "GaussianBlurDemo": return <GaussianBlurDemo labelColor={scheme.titleColor}/>
-        case "GaborDemo": return <GaborDemo labelColor={scheme.titleColor}/>
-        case "DiffOfGaussian": return <DiffOfGaussian labelColor={scheme.titleColor}/>
-        case "HaarWaveletDemo": return <HaarWaveletDemo labelColor={scheme.titleColor}/>
+        case "GaussianBlurDemo": 
+            return <ImageSelectableDemo Demo={GaussianBlurDemo} initImg='purpleFlowers.jpeg' demoProps={demoArgs}/>
+        case "GaborDemo": 
+            return <ImageSelectableDemo Demo={GaborDemo} initImg='zebra.jpg' demoProps={demoArgs}/>
+        case "DiffOfGaussian": 
+            return <ImageSelectableDemo Demo={DiffOfGaussian} initImg='teddyBear.jpg' demoProps={demoArgs}/>
+        case "HaarWaveletDemo": 
+            return <ImageSelectableDemo Demo={HaarWaveletDemo} initImg='Lenna.png' demoProps={demoArgs}/>
         default: return <div></div>
     }
 }
