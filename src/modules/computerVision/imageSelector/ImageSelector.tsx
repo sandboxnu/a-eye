@@ -36,7 +36,8 @@ const ALL_IMGS: { [name: string]: any } = {
     'tabbyCat.jpg': require('./imageLibrary/tabbyCat.jpg'),
     'teddyBear.jpg': require('./imageLibrary/teddyBear.jpg'),
     'zebra.jpg': require('./imageLibrary/zebra.jpg'),
-    'Lenna.png': require('./imageLibrary/Lenna.png')
+    'bwWoman.jpg': require('./imageLibrary/bwWoman.jpg'),
+    'bwMan.jpg': require('./imageLibrary/bwMan.jpg')
 }
 
 export default ImageSelector;

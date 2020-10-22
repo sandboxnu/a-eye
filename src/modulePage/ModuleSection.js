@@ -63,7 +63,7 @@ function getDemo(comp, scheme) {
         case "DiffOfGaussian": 
             return <ImageSelectableDemo Demo={DiffOfGaussian} initImg='teddyBear.jpg' demoProps={demoArgs}/>
         case "HaarWaveletDemo": 
-            return <ImageSelectableDemo Demo={HaarWaveletDemo} initImg='Lenna.png' demoProps={demoArgs}/>
+            return <ImageSelectableDemo Demo={HaarWaveletDemo} initImg='bwWoman.jpg' demoProps={demoArgs}/>
         default: return <div></div>
     }
 }
