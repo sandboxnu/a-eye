@@ -34,12 +34,12 @@ export default function ModuleSection(props) {
                                               className={section.imgSrc === '/blank.png' ? 'object-none' : 'object-contain w-1/4 mr-16 -mt-4'} alt=""/>;
                             return (
                                 <div className="flex flex-row mx-2" key={index}>
-                                    {index % 2 !== 0 && imgL}
+                                    {section.imgSrc !== "" && index % 2 !== 0 && imgL}
                                     <div className="w-2/3 flex-col">
                                         {/*<p className={`my-4 text-left text-5xl font-extrabold font-opensans uppercase ${scheme.headingColor}`}>{section.heading}</p>*/}
                                         <p className={`my-2 text-left text-lg font-medium font-mono ${scheme.bodyColor}`}>{section.body || lorem}</p>
                                     </div>
-                                    {index % 2 === 0 && imgR}
+                                    {section.imgSrc !== "" && index % 2 === 0 && imgR}
                                 </div>
                             );
                         })
