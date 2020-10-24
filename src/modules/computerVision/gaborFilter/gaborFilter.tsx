@@ -64,10 +64,13 @@ function gaborFilter(sz: number,
     let gabor = sinusoid.map((inner, i) => inner.map((v, j) => (v * gaussian[i][j])));
     return gabor;
 }
+var preset_kernel = 0;
 
 const GaborDemo = (props: {labelColor: string}) => {
     const [kernel, setKernel] = useState<number[] | undefined>(undefined);
     const [kernelGrid, setKernelGrid] = useState<number[][] | undefined>(undefined);
+    const [kernel_num, setKernelNum] = useState<number>(0);
+    
 
     const configureKernel = (kernelSize: number,
                              omega: number,
@@ -83,9 +86,46 @@ const GaborDemo = (props: {labelColor: string}) => {
         setKernelGrid(newKernelGrid);
     }
 
+    const buttonPressed = () => {
+        let casezero = [[1,2,1], [0,0,0], [-1,-2,-1]];
+        let caseone = [[0,1,2], [-1,0,1], [-2,-1,0]];
+        let casetwo = [[-1,0,1], [-2,0,2], [-1,0,1]];
+        let casethree = [[-2,-1,0], [-1,0,1], [0,1,2]];
+        switch (preset_kernel) {
+            case 0:
+                setKernel(casezero.flat());
+                setKernelGrid(casezero);
+                break;
+            case 1:
+                setKernel(caseone.flat());
+                setKernelGrid(caseone);
+                break;
+            case 2:
+                setKernel(casetwo.flat());
+                setKernelGrid(casetwo);
+                break;
+            default:
+                setKernel(casethree.flat());
+                setKernelGrid(casethree);
+                break;
+            
+        }
+        console.log(preset_kernel)
+
+        preset_kernel += 1
+        preset_kernel = preset_kernel % 4
+        setKernelNum(preset_kernel)
+        console.log(kernel_num)
+        console.log(preset_kernel)
+    }
+
     return (
         <div className="m-4">
+            
             <KernelConfig onConfig={configureKernel} labelColor={props.labelColor}/>
+            <button className="basic-button" onClick={buttonPressed}> 
+                Generate Preset Kernel
+            </button>
             <KernelDisplay kernelGrid={kernelGrid} labelColor={props.labelColor}/>
             <FilterByKernel kernel={kernel} imgUrl={jellyfish} />
         </div>
