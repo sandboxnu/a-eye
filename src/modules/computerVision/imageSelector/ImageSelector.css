@@ -12,6 +12,7 @@
 
 .image-selector img {
     width: 100px;
+    min-width: 100px;
     margin: 5px;
     border-radius: 20%;
     cursor: pointer;
