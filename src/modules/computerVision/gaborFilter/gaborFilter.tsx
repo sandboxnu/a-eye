@@ -77,11 +77,11 @@ const GaborDemo = (props: {labelColor: string}) => {
                              K: number,
                              math: string) => {
         let func;
-        if (math == "Even Symmetric") {
-            func = Math.cos;
-        } else {
-            // math == "Odd Symmetric"
+        if (math == "Make Even Symmetric") {
             func = Math.sin;
+        } else {
+            // math == "Make Odd Symmetric"
+            func = Math.cos;
         }
         
 
@@ -146,7 +146,7 @@ const KernelConfig = (props: { onConfig: (kernelSize: number, omega: number, the
     const [omega, setOmega] = useState<number>(1);
     const [theta, setTheta] = useState<number>(0);
     const [K, setK] = useState<number>(3.14);
-    const [math, setMath] = useState<string>("Even Symmetric");
+    const [math, setMath] = useState<string>("Make Even Symmetric");
     
 
     const changeOmega = (e: any) => setOmega(parseFloat(e.target.value));
@@ -154,10 +154,10 @@ const KernelConfig = (props: { onConfig: (kernelSize: number, omega: number, the
     const changeTheta = (t :number) => setTheta(t);
     const changeK = (e: any) => setK(parseFloat(e.target.value));
     const changeMath = (e: any) => {
-        if (e.target.value== "Even Symmetric") {
-            var next = "Odd Symmetric"
+        if (e.target.value== "Make Even Symmetric") {
+            var next = "Make Odd Symmetric"
         } else {
-            var next = "Even Symmetric"
+            var next = "Make Even Symmetric"
         }
         setMath(next)
     }
@@ -178,6 +178,13 @@ const KernelConfig = (props: { onConfig: (kernelSize: number, omega: number, the
             <div className={`font-bold m-3 ${props.labelColor}`}>
                 Theta
                 <AngleSelector diameter='150px' initAngle={theta} onAngleChange={changeTheta}/>
+            </div>
+            <div>
+                <button 
+                    className="basic-button" type="button" id="b1"
+                    value={math} onClick={(e) => changeMath(e)}>
+                        {math} 
+                </button>
             </div>
             <Accordion className={`gabor-extras-accordion w-500px mx-auto my-2 ${props.labelColor}`}>
                 <AccordionSummary className="font-bold h-1" expandIcon={<ExpandMoreIcon />}>
@@ -202,13 +209,6 @@ const KernelConfig = (props: { onConfig: (kernelSize: number, omega: number, the
                         <input className="number-input text-black"
                             type="number" min="0" max="12.56" step={0.785}
                             value={K} onChange={(e) => changeK(e)} />
-                    </div>
-                    <div>
-                        <button 
-                            className="basic-button" type="button" id="b1"
-                            value={math} onClick={(e) => changeMath(e)}>
-                                {math} 
-                        </button>
                     </div>
                 </AccordionDetails>
             </Accordion>
