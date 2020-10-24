@@ -64,7 +64,6 @@ function gaborFilter(sz: number,
     let gabor = sinusoid.map((inner, i) => inner.map((v, j) => (v * gaussian[i][j])));
     return gabor;
 }
-var preset_kernel = 0;
 
 const GaborDemo = (props: {labelColor: string}) => {
     const [kernel, setKernel] = useState<number[] | undefined>(undefined);
@@ -78,9 +77,10 @@ const GaborDemo = (props: {labelColor: string}) => {
                              K: number,
                              math: string) => {
         let func;
-        if (math == "cos") {
+        if (math == "Even Symmetric") {
             func = Math.cos;
         } else {
+            // math == "Odd Symmetric"
             func = Math.sin;
         }
         
@@ -92,12 +92,12 @@ const GaborDemo = (props: {labelColor: string}) => {
         setKernelGrid(newKernelGrid);
     }
 
-    const buttonPressed = () => {
+    const buttonPressed = (num: number) => {
         let casezero = [[1,2,1], [0,0,0], [-1,-2,-1]];
         let caseone = [[0,1,2], [-1,0,1], [-2,-1,0]];
         let casetwo = [[-1,0,1], [-2,0,2], [-1,0,1]];
         let casethree = [[-2,-1,0], [-1,0,1], [0,1,2]];
-        switch (preset_kernel) {
+        switch (num) {
             case 0:
                 setKernel(casezero.flat());
                 setKernelGrid(casezero);
@@ -116,22 +116,25 @@ const GaborDemo = (props: {labelColor: string}) => {
                 break;
             
         }
-        console.log(preset_kernel)
+    }
 
-        preset_kernel += 1
-        preset_kernel = preset_kernel % 4
-        setKernelNum(preset_kernel)
-        console.log(kernel_num)
-        console.log(preset_kernel)
+    const PresetButton = (props: {num: number, label: string}) => {
+
+        return (
+            <button className="basic-button" onClick = {() => buttonPressed(props.num)}> 
+                {props.label}
+            </button>
+        )
     }
 
     return (
         <div className="m-4">
             
             <KernelConfig onConfig={configureKernel} labelColor={props.labelColor}/>
-            <button className="basic-button" onClick={buttonPressed}> 
-                Generate Preset Kernel
-            </button>
+            <PresetButton num={0} label={"0 °"}/>
+            <PresetButton num={1} label={"45 °"}/>
+            <PresetButton num={2} label={"90 °"}/>
+            <PresetButton num={3} label={"135 °"}/>
             <KernelDisplay kernelGrid={kernelGrid} labelColor={props.labelColor}/>
             <FilterByKernel kernel={kernel} imgUrl={jellyfish} />
         </div>
@@ -143,7 +146,7 @@ const KernelConfig = (props: { onConfig: (kernelSize: number, omega: number, the
     const [omega, setOmega] = useState<number>(1);
     const [theta, setTheta] = useState<number>(0);
     const [K, setK] = useState<number>(3.14);
-    const [math, setMath] = useState<string>("cos");
+    const [math, setMath] = useState<string>("Even Symmetric");
     
 
     const changeOmega = (e: any) => setOmega(parseFloat(e.target.value));
@@ -151,21 +154,14 @@ const KernelConfig = (props: { onConfig: (kernelSize: number, omega: number, the
     const changeTheta = (t :number) => setTheta(t);
     const changeK = (e: any) => setK(parseFloat(e.target.value));
     const changeMath = (e: any) => {
-        if (e.target.value== "cos") {
-            var next = "sin"
+        if (e.target.value== "Even Symmetric") {
+            var next = "Odd Symmetric"
         } else {
-            var next = "cos"
+            var next = "Even Symmetric"
         }
-        console.log(next);
-        // document.getElementById('b1').value = next
-        console.log(this)
         setMath(next)
     }
     const invalidConfig = (kernelSize < 1 || kernelSize > 7)
-
-    // const changeText = () => {
-    //     console.log(this)
-    // }
 
     return (
         <div>
@@ -211,7 +207,7 @@ const KernelConfig = (props: { onConfig: (kernelSize: number, omega: number, the
                         <button 
                             className="basic-button" type="button" id="b1"
                             value={math} onClick={(e) => changeMath(e)}>
-                                {math}
+                                {math} 
                         </button>
                     </div>
                 </AccordionDetails>
