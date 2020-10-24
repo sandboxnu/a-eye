@@ -34,7 +34,7 @@ const ALL_IMGS: { [name: string]: any } = {
     'circles.jpg': require('./imageLibrary/circles.jpg'),
     'dogSilhouette.jpg': require('./imageLibrary/dogSilhouette.jpg'),
     'purpleFlowers.jpeg': require('./imageLibrary/purpleFlowers.jpeg'),
-    'steps.jpg': require('./imageLibrary/steps.jpg'),
+    'steps.png': require('./imageLibrary/steps.png'),
     'tabbyCat.jpg': require('./imageLibrary/tabbyCat.jpg'),
     'teddyBear.jpg': require('./imageLibrary/teddyBear.jpg'),
     'zebra.jpg': require('./imageLibrary/zebra.jpg'),

@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import KernelDisplay from '../gaussianBlur/KernelDisplay';
 import FilterByKernel from '../common/FilterByKernel';
 import DiffofFiltered from '../common/DiffofFiltered';

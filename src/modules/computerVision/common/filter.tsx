@@ -83,7 +83,6 @@ function convolute(inCanvas: HTMLCanvasElement, outCanvas: HTMLCanvasElement, an
   }
 }
 
-
 function getPixels(canvas: HTMLCanvasElement) {
   var ctx = canvas.getContext('2d');
   return ctx && ctx.getImageData(0, 0, canvas.width, canvas.height);
