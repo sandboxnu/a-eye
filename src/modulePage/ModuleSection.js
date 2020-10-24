@@ -29,13 +29,13 @@ export default function ModuleSection(props) {
                     {
                         props.sections.map((section, index) => {
                             const imgL = <img src={process.env.PUBLIC_URL + section.imgSrc}
-                                             className={section.imgSrc === '/blank.png' ? 'object-none' : 'object-contain w-1/4 mr-16 -mt-4'} alt=""/>;
+                                             className={section.imgSrc === '/blank.png' ? 'object-none w-1/3' : 'object-contain w-1/4 mr-16 -mt-4'} alt=""/>;
                             const imgR = <img src={process.env.PUBLIC_URL + section.imgSrc}
-                                              className={section.imgSrc === '/blank.png' ? 'object-none' : 'object-contain w-1/4 mr-16 -mt-4'} alt=""/>;
+                                              className={section.imgSrc === '/blank.png' ? 'object-none w-1/3' : 'object-contain w-1/4 mr-16 -mt-4'} alt=""/>;
                             return (
                                 <div className="flex flex-row mx-2" key={index}>
                                     {section.imgSrc !== "" && index % 2 !== 0 && imgL}
-                                    <div className="w-2/3 flex-col">
+                                    <div className="w-2/3 flex-col mb-4">
                                         {/*<p className={`my-4 text-left text-5xl font-extrabold font-opensans uppercase ${scheme.headingColor}`}>{section.heading}</p>*/}
                                         <p className={`my-2 text-left text-lg font-medium font-mono ${scheme.bodyColor}`}>{section.body || lorem}</p>
                                     </div>
