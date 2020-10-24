@@ -138,7 +138,7 @@ const GaborDemo = (props: {labelColor: string, imgUrl: string}) => {
             <PresetButton num={2} label={"90 °"}/>
             <PresetButton num={3} label={"135 °"}/>
             <KernelDisplay kernelGrid={kernelGrid} labelColor={props.labelColor}/>
-            <FilterByKernel kernel={kernel} imgUrl={jellyfish} />
+            <FilterByKernel kernel={kernel} imgUrl={props.imgUrl} />
 
         </div>
     )
