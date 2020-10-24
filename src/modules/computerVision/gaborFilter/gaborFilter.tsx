@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import jellyfish from '../gaussianBlur/jellyfish.png';
 import FilterByKernel from '../common/FilterByKernel';
 import KernelDisplay from '../gaussianBlur/KernelDisplay';
 import Accordion from '@material-ui/core/Accordion';
@@ -65,13 +64,15 @@ function gaborFilter(sz: number,
     return gabor;
 }
 
-const GaborDemo = (props: {labelColor: string}) => {
+
+const GaborDemo = (props: {labelColor: string, imgUrl: string}) => {
     const [kernel, setKernel] = useState<number[] | undefined>(undefined);
     const [kernelGrid, setKernelGrid] = useState<number[][] | undefined>(undefined);
     const [kernel_num, setKernelNum] = useState<number>(0);
     
 
     const configureKernel = (kernelSize: number,
+
                              omega: number,
                              theta: number,
                              K: number,
@@ -83,7 +84,7 @@ const GaborDemo = (props: {labelColor: string}) => {
             // math == "Make Odd Symmetric"
             func = Math.cos;
         }
-        
+
 
         const gabor = gaborFilter(kernelSize, omega, theta, func, K)
         const newKernel = gabor.flat();
@@ -129,6 +130,7 @@ const GaborDemo = (props: {labelColor: string}) => {
 
     return (
         <div className="m-4">
+
             
             <KernelConfig onConfig={configureKernel} labelColor={props.labelColor}/>
             <PresetButton num={0} label={"0 °"}/>
@@ -137,6 +139,7 @@ const GaborDemo = (props: {labelColor: string}) => {
             <PresetButton num={3} label={"135 °"}/>
             <KernelDisplay kernelGrid={kernelGrid} labelColor={props.labelColor}/>
             <FilterByKernel kernel={kernel} imgUrl={jellyfish} />
+
         </div>
     )
 }
@@ -151,7 +154,7 @@ const KernelConfig = (props: { onConfig: (kernelSize: number, omega: number, the
 
     const changeOmega = (e: any) => setOmega(parseFloat(e.target.value));
     const changeKernelSize = (e: any) => setKernelSize(parseInt(e.target.value));
-    const changeTheta = (t :number) => setTheta(t);
+    const changeTheta = (t: number) => setTheta(t);
     const changeK = (e: any) => setK(parseFloat(e.target.value));
     const changeMath = (e: any) => {
         if (e.target.value== "Make Even Symmetric") {
@@ -177,7 +180,7 @@ const KernelConfig = (props: { onConfig: (kernelSize: number, omega: number, the
             </div>
             <div className={`font-bold m-3 ${props.labelColor}`}>
                 Theta
-                <AngleSelector diameter='150px' initAngle={theta} onAngleChange={changeTheta}/>
+                <AngleSelector diameter='150px' initAngle={theta} onAngleChange={changeTheta} />
             </div>
             <div>
                 <button 

@@ -24,6 +24,12 @@
     .number-input:focus {
         @apply border-solid border-navy pl-2 outline-none;
     }
+    .crisp-pixels {
+        image-rendering: -moz-crisp-edges;
+        image-rendering: -webkit-crisp-edges;
+        image-rendering: pixelated;
+        image-rendering: crisp-edges;
+    }
     
 
 }

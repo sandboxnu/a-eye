@@ -31,7 +31,7 @@ const KernelDisplay = (props: { kernelGrid?: number[][] , labelColor: string}) =
     }
 
     return (
-        <div>
+        <div className="text-black font-normal font-xs">
             <div className="mx-auto my-4 max-w-5xl max-h-lg overflow-auto">
                 <table className="m-auto"><tbody>
                     {props.kernelGrid.map((row, i) => (

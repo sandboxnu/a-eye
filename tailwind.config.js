@@ -58,6 +58,9 @@ module.exports = {
         sm: '24rem',
         md: '28rem',
         lg: '32rem'
+      },
+      width: {
+        '35vw': '35vw'
       }
     },
     variants: {

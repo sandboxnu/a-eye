@@ -60,9 +60,9 @@ const InteractiveFilter = (props: {
         <div>
             <div>
                 <img ref={imgRef} src={props.imgUrl} alt="input" className='hidden' />
-                <canvas className="inline mx-2"
+                <canvas className="inline m-2 crisp-pixels w-35vw"
                     ref={inputCanvas} width={imgWidth} height={imgHeight} />
-                <canvas className="inline mx-2"
+                <canvas className="inline m-2 crisp-pixels w-35vw"
                     ref={outputCanvas} width={imgRef.current?.width} height={imgRef.current?.height} />
             </div>
             <button className="basic-button" disabled={props.disabled}
