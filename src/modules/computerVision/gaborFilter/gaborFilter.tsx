@@ -75,9 +75,15 @@ const GaborDemo = (props: {labelColor: string}) => {
     const configureKernel = (kernelSize: number,
                              omega: number,
                              theta: number,
-                             K: number) => {
-
-        const func = Math.cos;
+                             K: number,
+                             math: string) => {
+        let func;
+        if (math == "cos") {
+            func = Math.cos;
+        } else {
+            func = Math.sin;
+        }
+        
 
         const gabor = gaborFilter(kernelSize, omega, theta, func, K)
         const newKernel = gabor.flat();
@@ -132,18 +138,35 @@ const GaborDemo = (props: {labelColor: string}) => {
     )
 }
 
-const KernelConfig = (props: { onConfig: (kernelSize: number, omega: number, theta: number, K: number) => void, labelColor: string}) => {
+const KernelConfig = (props: { onConfig: (kernelSize: number, omega: number, theta: number, K: number, Math: string) => void, labelColor: string}) => {
     const [kernelSize, setKernelSize] = useState<number>(5);
     const [omega, setOmega] = useState<number>(1);
     const [theta, setTheta] = useState<number>(0);
     const [K, setK] = useState<number>(3.14);
+    const [math, setMath] = useState<string>("cos");
+    
 
     const changeOmega = (e: any) => setOmega(parseFloat(e.target.value));
     const changeKernelSize = (e: any) => setKernelSize(parseInt(e.target.value));
     const changeTheta = (t :number) => setTheta(t);
     const changeK = (e: any) => setK(parseFloat(e.target.value));
-
+    const changeMath = (e: any) => {
+        if (e.target.value== "cos") {
+            var next = "sin"
+        } else {
+            var next = "cos"
+        }
+        console.log(next);
+        // document.getElementById('b1').value = next
+        console.log(this)
+        setMath(next)
+    }
     const invalidConfig = (kernelSize < 1 || kernelSize > 7)
+
+    // const changeText = () => {
+    //     console.log(this)
+    // }
+
     return (
         <div>
             <div className={`font-bold m-3 h-10 ${props.labelColor}`}>
@@ -184,9 +207,16 @@ const KernelConfig = (props: { onConfig: (kernelSize: number, omega: number, the
                             type="number" min="0" max="12.56" step={0.785}
                             value={K} onChange={(e) => changeK(e)} />
                     </div>
+                    <div>
+                        <button 
+                            className="basic-button" type="button" id="b1"
+                            value={math} onClick={(e) => changeMath(e)}>
+                                {math}
+                        </button>
+                    </div>
                 </AccordionDetails>
             </Accordion>
-            <button className="basic-button" disabled={invalidConfig} onClick={e => props.onConfig(kernelSize, omega, theta, K)}>
+            <button className="basic-button" disabled={invalidConfig} onClick={e => props.onConfig(kernelSize, omega, theta, K, math)}>
                 Generate Kernel
             </button>
         </div>
