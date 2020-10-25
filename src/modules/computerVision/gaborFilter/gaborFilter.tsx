@@ -43,6 +43,7 @@ function gaborFilter(sz: number,
     K = Math.PI) {
 
     // EXAMPLE INPUTS 
+
     // let sz = [4,4]
     // let omega = 0.3
     // let theta = Math.PI/4
@@ -67,35 +68,26 @@ function gaborFilter(sz: number,
 const GaborDemo = (props: {labelColor: string, imgUrl: string}) => {
     const [kernel, setKernel] = useState<number[] | undefined>(undefined);
     const [kernelGrid, setKernelGrid] = useState<number[][] | undefined>(undefined);
-    // const [kernel_num, setKernelNum] = useState<number>(0);
-    
 
     const configureKernel = (kernelSize: number,
+        omega: number,
+        theta: number,
+        K: number,
+        math: string) => {
 
-                             omega: number,
-                             theta: number,
-                             K: number,
-                             math: string) => {
-        console.log(kernelSize, omega, theta, K, math)
-        let func;
-        if (math == "Make Even Symmetric") {
-            func = Math.sin;
-        } else {
-            // math == "Make Odd Symmetric"
-            func = Math.cos;
+        let funct = Math.cos;
+        if (math == "Even Symmetric") {
+            funct = Math.sin;
         }
 
-
-        const gabor = gaborFilter(kernelSize, omega, theta, func, K)
+        const gabor = gaborFilter(kernelSize, omega, theta, funct, K)
         const newKernel = gabor.flat();
-        console.log(newKernel)
         const newKernelGrid = gabor;
         setKernel(newKernel);
         setKernelGrid(newKernelGrid);
     }
-
     const buttonPressed = (num: number) => {
-        let casezero = [[1,2,1], [0,0,0], [-1,-2,-1]];
+        let casezero = [[1,2,1], [0,0.1,0], [-1,-2,-1]];
         let caseone = [[0,1,2], [-1,0,1], [-2,-1,0]];
         let casetwo = [[-1,0,1], [-2,0,2], [-1,0,1]];
         let casethree = [[-2,-1,0], [-1,0,1], [0,1,2]];
@@ -116,57 +108,57 @@ const GaborDemo = (props: {labelColor: string, imgUrl: string}) => {
                 setKernel(casethree.flat());
                 setKernelGrid(casethree);
                 break;
-            
+
         }
     }
 
     const PresetButton = (props: {num: number, label: string}) => {
-
         return (
-            <button className="basic-button" onClick = {() => buttonPressed(props.num)}> 
-                {props.label}
-            </button>
+                <button className="basic-button" onClick = {() => buttonPressed(props.num)}> 
+                    {props.label}
+                </button>
         )
     }
 
     return (
         <div className="m-4">
-
-            
-            <KernelConfig onConfig={configureKernel} labelColor={props.labelColor}/>
-            <PresetButton num={0} label={"0 °"}/>
-            <PresetButton num={1} label={"45 °"}/>
-            <PresetButton num={2} label={"90 °"}/>
-            <PresetButton num={3} label={"135 °"}/>
-            <KernelDisplay kernelGrid={kernelGrid} labelColor={props.labelColor}/>
-            <FilterByKernel kernel={kernel} imgUrl={props.imgUrl} />
-
+            <div className="grid grid-cols-2 mx-auto items-center mb-5" style={{width: '1100px'}}>
+                <KernelConfig onConfig={configureKernel} labelColor={props.labelColor} />
+                <PresetButton num={0} label={"0 °"}/>
+                <PresetButton num={1} label={"45 °"}/>
+                <PresetButton num={2} label={"90 °"}/>
+                <PresetButton num={3} label={"135 °"}/>
+                <KernelDisplay kernelGrid={kernelGrid} labelColor={props.labelColor} />
+            </div>
+            <div className="bg-black"> 
+                <FilterByKernel kernel={kernel} imgUrl={props.imgUrl} />
+            </div>
         </div>
     )
 }
 
-const KernelConfig = (props: { onConfig: (kernelSize: number, omega: number, theta: number, K: number, Math: string) => void, labelColor: string}) => {
+const KernelConfig = (props: { onConfig: (kernelSize: number, omega: number, theta: number, K: number, math: string) => void, labelColor: string}) => {
     const [kernelSize, setKernelSize] = useState<number>(5);
     const [omega, setOmega] = useState<number>(1);
     const [theta, setTheta] = useState<number>(0);
     const [K, setK] = useState<number>(3.14);
-    const [math, setMath] = useState<string>("Make Even Symmetric");
-    
+    const [math, setMath] = useState<string>("cos");    
 
     const changeOmega = (e: any) => setOmega(parseFloat(e.target.value));
     const changeKernelSize = (e: any) => setKernelSize(parseInt(e.target.value));
     const changeTheta = (t: number) => setTheta(t);
     const changeK = (e: any) => setK(parseFloat(e.target.value));
     const changeMath = (e: any) => {
-        if (e.target.value== "Make Even Symmetric") {
-            var next = "Make Odd Symmetric"
+        if (e.target.value== "Even Symmetric") {
+            var next = "Odd Symmetric"
         } else {
-            var next = "Make Even Symmetric"
+            var next = "Even Symmetric"
         }
         setMath(next)
     }
-    const invalidConfig = (kernelSize < 1 || kernelSize > 7)
 
+    const invalidConfig = (kernelSize < 1 || kernelSize > 7)
+    
     return (
         <div>
             <div className={`font-bold m-3 h-10 ${props.labelColor}`}>
@@ -216,6 +208,7 @@ const KernelConfig = (props: { onConfig: (kernelSize: number, omega: number, the
                     </div>
                 </AccordionDetails>
             </Accordion>
+            
             <button className="basic-button" disabled={invalidConfig} onClick={e => props.onConfig(kernelSize, omega, theta, K, math)}>
                 Generate Kernel
             </button>
