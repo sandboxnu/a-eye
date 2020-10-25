@@ -1,7 +1,7 @@
 import React from "react";
 import GaussianBlurDemo from "../modules/computerVision/gaussianBlur/GaussianBlurDemo";
 import GaborDemo from "../modules/computerVision/gaborFilter/gaborFilter";
-import DiffOfGaussian from "../modules/computerVision/diffofgaussian/DiffOfGaussian";
+import DiffOfGaussianDemo from "../modules/computerVision/diffofgaussian/DiffOfGaussian";
 import HaarWaveletDemo from "../modules/computerVision/haarWavelet/HaarWaveletDemo";
 import { ImageSelectableDemo } from "../modules/computerVision/imageSelector/ImageSelectableDemo";
 
@@ -19,7 +19,6 @@ export default function ModuleSection(props) {
         "headingColor": "text-moduleDarkBlue",
         "bodyColor": "text-moduleNavy"
     };
-    const DemoComp = props.demoComp;
 
     return (
         <div className={`flex flex-col w-screen ${scheme.bgColor}`}>
@@ -43,7 +42,7 @@ export default function ModuleSection(props) {
                     }
                 </ul>
                 {
-                    getDemo(DemoComp, scheme)
+                    getDemo(props.demoComp, scheme)
                 }
             </div>
         </div>
@@ -58,7 +57,7 @@ function getDemo(comp, scheme) {
         case "GaborDemo": 
             return <ImageSelectableDemo Demo={GaborDemo} initImg='zebra.jpg' demoProps={demoArgs}/>
         case "DiffOfGaussian": 
-            return <ImageSelectableDemo Demo={DiffOfGaussian} initImg='tabbyCat.jpg' demoProps={demoArgs}/>
+            return <ImageSelectableDemo Demo={DiffOfGaussianDemo} initImg='tabbyCat.jpg' demoProps={demoArgs}/>
         case "HaarWaveletDemo": 
             return <ImageSelectableDemo Demo={HaarWaveletDemo} initImg='bwWoman.jpg' demoProps={demoArgs}/>
         default: return <div></div>
