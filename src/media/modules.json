@@ -145,7 +145,7 @@
       "title": "Module 9: Recognition as a Classification Problem",
       "sections": [
         {
-          "title": "Section 1",
+          "title": "State Spaces",
           "colorScheme": "dark",
           "subsections": [
             {
@@ -163,10 +163,11 @@
               "body": "lorem ipsum",
               "imgSrc": "mod9.png"
             }
-          ]
+          ],
+          "demoComp": "plotting"
         },
         {
-          "title": "Section 2",
+          "title": "Clustering",
           "colorScheme": "light",
           "subsections": [
             {
@@ -184,10 +185,11 @@
               "body": "lorem ipsum",
               "imgSrc": "mod9.png"
             }
-          ]
+          ],
+          "demoComp": "kmeans"
         },
         {
-          "title": "Section 3",
+          "title": "State Space Separation",
           "colorScheme": "dark",
           "subsections": [
             {
@@ -205,7 +207,8 @@
               "body": "lorem ipsum",
               "imgSrc": "mod9.png"
             }
-          ]
+          ],
+          "demoComp": "pca"
         }
       ]
     },
