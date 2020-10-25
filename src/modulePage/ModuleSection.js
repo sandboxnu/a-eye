@@ -1,7 +1,7 @@
 import React from "react";
 import GaussianBlurDemo from "../modules/computerVision/gaussianBlur/GaussianBlurDemo";
 import GaborDemo from "../modules/computerVision/gaborFilter/gaborFilter";
-import DiffOfGaussian from "../modules/computerVision/diffofgaussian/DiffOfGaussian";
+import DiffOfGaussianDemo from "../modules/computerVision/diffofgaussian/DiffOfGaussian";
 import HaarWaveletDemo from "../modules/computerVision/haarWavelet/HaarWaveletDemo";
 import { ImageSelectableDemo } from "../modules/computerVision/imageSelector/ImageSelectableDemo";
 
@@ -19,34 +19,30 @@ export default function ModuleSection(props) {
         "headingColor": "text-moduleDarkBlue",
         "bodyColor": "text-moduleNavy"
     };
-    const DemoComp = props.demoComp;
 
     return (
         <div className={`flex flex-col w-screen ${scheme.bgColor}`}>
-            <div className="mx-40">
-                <p className={`my-12 text-6xl italic font-bold font-opensans ${scheme.titleColor}`}>{props.title}</p>
+            <div className="mx-12 md:mx-40">
+                <p className={`my-12 text-3xl md:text-6xl italic font-bold font-opensans ${scheme.titleColor}`}>{props.title}</p>
                 <ul className="">
                     {
                         props.sections.map((section, index) => {
-                            const imgL = <img src={process.env.PUBLIC_URL + section.imgSrc}
-                                             className={section.imgSrc === '/blank.png' ? 'object-none' : 'object-contain w-1/4 mr-16 -mt-4'} alt=""/>;
-                            const imgR = <img src={process.env.PUBLIC_URL + section.imgSrc}
-                                              className={section.imgSrc === '/blank.png' ? 'object-none' : 'object-contain w-1/4 mr-16 -mt-4'} alt=""/>;
                             return (
-                                <div className="flex flex-row mx-2" key={index}>
-                                    {section.imgSrc !== "" && index % 2 !== 0 && imgL}
-                                    <div className="w-2/3 flex-col">
-                                        {/*<p className={`my-4 text-left text-5xl font-extrabold font-opensans uppercase ${scheme.headingColor}`}>{section.heading}</p>*/}
+                                <div className={`flex flex-col md:flex-row mx-2 md:my-5 ${section.imgSrc === '/blank.png' && "my-10"} ${section.body ? "" : "hidden"}`} key={index}>
+                                    <img src={process.env.PUBLIC_URL + section.imgSrc} alt=""
+                                         className={`hidden ${index % 2 !== 0 && "md:flex"} ${section.imgSrc === '/blank.png' ? "hidden md:object-none" : "object-contain"} md:w-1/4 md:mr-16 md:-mt-12`}/>
+                                    <div className="md:w-2/3 flex-col">
                                         <p className={`my-2 text-left text-lg font-medium font-mono ${scheme.bodyColor}`}>{section.body || lorem}</p>
                                     </div>
-                                    {section.imgSrc !== "" && index % 2 === 0 && imgR}
+                                    <img src={process.env.PUBLIC_URL + section.imgSrc} alt=""
+                                         className={`${index % 2 !== 0 && "md:hidden"} ${section.imgSrc === '/blank.png' ? "hidden md:object-none" : "object-contain"} md:w-1/4 md:mr-16 md:-mt-12`}/>
                                 </div>
                             );
                         })
                     }
                 </ul>
                 {
-                    getDemo(DemoComp, scheme)
+                    getDemo(props.demoComp, scheme)
                 }
             </div>
         </div>
@@ -61,7 +57,7 @@ function getDemo(comp, scheme) {
         case "GaborDemo": 
             return <ImageSelectableDemo Demo={GaborDemo} initImg='zebra.jpg' demoProps={demoArgs}/>
         case "DiffOfGaussian": 
-            return <ImageSelectableDemo Demo={DiffOfGaussian} initImg='tabbyCat.jpg' demoProps={demoArgs}/>
+            return <ImageSelectableDemo Demo={DiffOfGaussianDemo} initImg='tabbyCat.jpg' demoProps={demoArgs}/>
         case "HaarWaveletDemo": 
             return <ImageSelectableDemo Demo={HaarWaveletDemo} initImg='bwWoman.jpg' demoProps={demoArgs}/>
         default: return <div></div>
