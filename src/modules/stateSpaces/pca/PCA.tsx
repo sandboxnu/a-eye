@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { PCA } from 'ml-pca';
 import datasetIris from 'ml-dataset-iris';
-import {BasicScatter, DataSeriesMap, ColorMap} from '../common/BasicScatter';
+import { BasicScatter, DataSeriesMap, ColorMap } from '../common/BasicScatter';
 import './PCA.css';
 
 /**
@@ -9,10 +9,10 @@ import './PCA.css';
  * 
  * @param props 
  */
-const PCADemo = () => {
+const PCADemo = (props: { labelColor: string }) => {
 
     return (
-        <div className="PCA-div">
+        <div className={`PCA-div ${props.labelColor}`}>
             <RawDataTable />
             <SelectableAxisChart columnSet={columns} />
             <SelectableAxisChart columnSet={pcaColumns} />
@@ -41,7 +41,7 @@ const RawDataTable = () =>
 
 // Plot all samples in dataset, choose what 2 features to use as the axes
 // --> natural conclusion: want to be able to see all features, without having to use an nth dimensional plot
-const SelectableAxisChart = (props: {columnSet: string[]}) => {
+const SelectableAxisChart = (props: { columnSet: string[] }) => {
     const [xIdx, setXIdx] = useState(0);
     const [yIdx, setYIdx] = useState(1);
     const points: DataSeriesMap = {};
@@ -53,12 +53,12 @@ const SelectableAxisChart = (props: {columnSet: string[]}) => {
         <div className="pca raw-data-chart">
             <div className="chart-config">
                 <div className="select-axis-menu xIdx">
-                    Select X Axis
-                <AxisSelector selected={xIdx} onChange={setXIdx} columnSet={props.columnSet} />
+                    <p className="font-opensans font-bold italic"> Select X Axis</p>
+                    <AxisSelector selected={xIdx} onChange={setXIdx} columnSet={props.columnSet} />
                 </div>
                 <div className="select-axis-menu yIdx">
-                    Select Y Axis
-                <AxisSelector selected={yIdx} onChange={setYIdx} columnSet={props.columnSet}/>
+                    <p className="font-opensans font-bold italic"> Select Y Axis </p>
+                    <AxisSelector selected={yIdx} onChange={setYIdx} columnSet={props.columnSet} />
                 </div>
             </div>
             <div className="raw-data-scatter">
@@ -100,6 +100,4 @@ datasetIris.getDistinctClasses().forEach((dataClass: string, i: number) => {
     });
 })
 
-
 export default PCADemo;
-export {RawDataChart};

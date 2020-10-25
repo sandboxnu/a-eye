@@ -164,7 +164,7 @@
               "imgSrc": "mod9.png"
             }
           ],
-          "demoComp": "RawDataChart"
+          "demoComp": "PCADemo"
         },
         {
           "title": "Clustering",
@@ -186,7 +186,7 @@
               "imgSrc": "mod9.png"
             }
           ],
-          "demoComp": "RawDataChart"
+          "demoComp": "PCADemo"
         },
         {
           "title": "State Space Separation",

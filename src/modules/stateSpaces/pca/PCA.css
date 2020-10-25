@@ -23,7 +23,8 @@
 .pca.raw-data-table th {
     position: sticky; 
     top: 0;
-    background: white;
+    background-color: #394D73;
+    color: #cbd9f2;
     box-shadow: inset 0 -1px 0 #9fb0ce, inset 0 1px 0 #9fb0ce;
 }
 
@@ -57,7 +58,6 @@
     padding: 10px;
     margin: 1px;
     background-color: #8D9DBA;
-    font-family: 'Roboto', monospace;
     font-weight: bold;
     color: #f2f2f2;
 }
