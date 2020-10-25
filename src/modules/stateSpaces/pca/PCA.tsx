@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { PCA } from 'ml-pca';
 import datasetIris from 'ml-dataset-iris';
-import {BasicScatter, DataSeriesMap, ColorMap} from '../common/BasicScatter';
+import { BasicScatter, DataSeriesMap, ColorMap } from '../common/BasicScatter';
 import './PCA.css';
 
 /**
@@ -9,13 +9,13 @@ import './PCA.css';
  * 
  * @param props 
  */
-const PCADemo = () => {
+const PCADemo = (props: { labelColor: string }) => {
 
     return (
-        <div className="PCA-div">
+        <div className={`PCA-div ${props.labelColor}`}>
             <RawDataTable />
-            <RawDataChart />
-            <PCAChart />
+            <SelectableAxisChart columnSet={columns} />
+            <SelectableAxisChart columnSet={pcaColumns} />
         </div>
     );
 }
@@ -41,7 +41,7 @@ const RawDataTable = () =>
 
 // Plot all samples in dataset, choose what 2 features to use as the axes
 // --> natural conclusion: want to be able to see all features, without having to use an nth dimensional plot
-const RawDataChart = () => {
+const SelectableAxisChart = (props: { columnSet: string[] }) => {
     const [xIdx, setXIdx] = useState(0);
     const [yIdx, setYIdx] = useState(1);
     const points: DataSeriesMap = {};
@@ -53,23 +53,23 @@ const RawDataChart = () => {
         <div className="pca raw-data-chart">
             <div className="chart-config">
                 <div className="select-axis-menu xIdx">
-                    Select X Axis
-                <AxisSelector selected={xIdx} onChange={setXIdx} />
+                    <p className="font-opensans font-bold italic"> Select X Axis</p>
+                    <AxisSelector selected={xIdx} onChange={setXIdx} columnSet={props.columnSet} />
                 </div>
                 <div className="select-axis-menu yIdx">
-                    Select Y Axis
-                <AxisSelector selected={yIdx} onChange={setYIdx} />
+                    <p className="font-opensans font-bold italic"> Select Y Axis </p>
+                    <AxisSelector selected={yIdx} onChange={setYIdx} columnSet={props.columnSet} />
                 </div>
             </div>
             <div className="raw-data-scatter">
-                <BasicScatter colorMap={colorMap} points={points} xLabel={columns[xIdx]} yLabel={columns[yIdx]} />
+                <BasicScatter colorMap={colorMap} points={points} xLabel={props.columnSet[xIdx]} yLabel={props.columnSet[yIdx]} />
             </div>
         </div>);
 };
 
-const AxisSelector = (props: { selected: number, onChange: (arg: number) => void }) =>
+const AxisSelector = (props: { columnSet: string[], selected: number, onChange: (arg: number) => void }) =>
     (<div className="axis-selector">
-        {columns.map((col, idx) => (
+        {props.columnSet.map((col, idx) => (
             <button
                 className={props.selected === idx ? "selected" : ""}
                 key={col}
@@ -79,31 +79,25 @@ const AxisSelector = (props: { selected: number, onChange: (arg: number) => void
         ))}
     </div>);
 
-const PCAChart = () => (
-    <div className="pca pca-chart">
-        <BasicScatter colorMap={colorMap} points={pcPoints} xLabel='PC1' yLabel='PC2' />
-    </div>);
-
 const COLORS = ['#003f5c', '#ef5675', '#FFC107', '#00B0FF', '#FF3D00', '#4DB6AC'];
 
 // Moving these outside so they are only calculated once (this will change if we dynamically get datasets)
 const dataset: number[][] = datasetIris.getNumbers(); // rows represent the samples and columns the features
 const classes: string[] = datasetIris.getClasses(); // the whole column of flower types
 const columns = ['Sepal Length', 'Sepal Width', 'Petal Length', 'Petal Width'];
-const pca = new PCA(dataset);
-const prediction = pca.predict(dataset);
+const pcaColumns = ['Sepal Length', 'Sepal Width', 'Petal Length', 'Petal Width', 'PC1', 'PC2'];
+const prediction = new PCA(dataset).predict(dataset);
 
 const colorMap: ColorMap = {};
 const dataByClass: { [dataClass: string]: number[][] } = {};
-const pcPoints: DataSeriesMap = {};
-datasetIris.getDistinctClasses().forEach((dataClass, i) => {
-    pcPoints[dataClass] = [];
+datasetIris.getDistinctClasses().forEach((dataClass: string, i: number) => {
     colorMap[dataClass] = COLORS[i] || '#de425b';
-    dataByClass[dataClass] = dataset.filter((val, idx) => dataClass === classes[idx]);
+    dataByClass[dataClass] = [];
+    dataset.forEach((row, idx) => {
+        if (dataClass === classes[idx]) {
+            dataByClass[dataClass].push(row.concat([prediction.get(idx, 0), prediction.get(idx, 1)]));
+        }
+    });
 })
-for (let i = 0; i < prediction.rows; i++) {
-    pcPoints[classes[i]].push({ x: prediction.get(i, 0), y: prediction.get(i, 1) });
-}
 
 export default PCADemo;
-export {RawDataChart};
