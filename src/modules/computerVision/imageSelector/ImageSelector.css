@@ -1,0 +1,47 @@
+/* using plain css bc im styling pseudoelements */
+
+.image-selector {
+    margin: 20px;
+    font-weight: bold;
+    font-size: 11pt;
+    padding: 10px;
+    box-shadow: 0 0 5px rgb(163, 162, 162);
+    display: inline-block;  
+    background-color: white;  
+}
+
+.image-selector img {
+    width: 100px;
+    min-width: 100px;
+    margin: 5px;
+    border-radius: 20%;
+    cursor: pointer;
+}
+
+.image-selector img.selected {
+    border: 5px solid #48c0b5;
+}
+
+.image-selector img:hover {
+    filter: brightness(85%);
+}
+
+
+.image-selector .selection-window {
+    display: flex;
+    overflow: auto;
+    width: 600px;
+    margin: auto;
+}
+
+.selection-window::-webkit-scrollbar {
+    height: 4px;
+}
+  
+.selection-window::-webkit-scrollbar-track {
+    background: #f1f1f1; 
+}
+   
+.selection-window::-webkit-scrollbar-thumb {
+    background: #2b4b62;
+}

@@ -1,5 +1,7 @@
 .App {
   text-align: center;
+  display: flex;
+  flex-direction: column;
 }
 
 .App-logo {
@@ -7,21 +9,14 @@
   pointer-events: none;
 }
 
+.App-header {
+  font-family: 'cursive'
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
   }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
 }
 
 .App-link {
@@ -35,4 +30,26 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+/* Don't know how to do these pseudoelements in tailwind */
+input[type="range"]::-webkit-slider-thumb {
+  width: 15px;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 15px;
+  background: #FFF;
+  box-shadow: -405px 0 0 400px #2B4B62;
+  border-radius: 50%;
+}
+
+input[type="range"] {
+  background-color: rgb(190, 200, 207);
+  overflow: hidden;
+  appearance: none;
+  border-radius: .5rem;
+}
+
+input[type="range"]:focus {
+  outline: none;
 }

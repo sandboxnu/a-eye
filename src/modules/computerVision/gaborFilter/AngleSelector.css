@@ -1,0 +1,42 @@
+.angle-selector {
+  display: flex;
+  flex-direction: column;
+}
+
+.angle-selector .main-circle {
+  background-size: 100%;
+  margin: 10px auto;
+}
+
+.angle-selector .main-circle .handle-hitbox {
+  width: 50%;
+  height: 18px;
+  position: absolute;
+  top: 49%;
+  left: 50%;
+  cursor: pointer;
+}
+
+.angle-selector .main-circle .handle {
+  border-radius: 30%;
+  width: 100%;
+  height: 6px;
+  background-color: #394D73;
+}
+
+.angle-selector .main-circle .knob {
+  height: 18px;
+  width: 18px;
+  border-radius: 50%;
+  background-color: #394D73;
+  float: right;
+  position: relative;
+  right: -15px;
+  top: -6px;
+}
+
+.angle-selector .angle-textbox-input {
+  margin: 10px 3px;
+  text-align: right;
+  width: 50px;
+}
