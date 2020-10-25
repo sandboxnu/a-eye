@@ -43,6 +43,11 @@ const InteractiveFilter = (props: {
         const outputElem = outputCanvas.current;
         if (!(inputElem && outputElem)) return;
         props.filter(inputElem, outputElem);
+        var ctx = outputElem.getContext('2d')?.getImageData(0, 0, outputElem.width, outputElem.height)
+        console.log(ctx)
+        var ctx = inputElem.getContext('2d')?.getImageData(0, 0, inputElem.width, inputElem.height)
+        console.log(ctx)
+        console.log(outputElem)
         setIsFiltered(true);
     }
 

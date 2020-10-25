@@ -43,7 +43,6 @@ function gaborFilter(sz: number,
     K = Math.PI) {
 
     // EXAMPLE INPUTS 
-
     // let sz = [4,4]
     // let omega = 0.3
     // let theta = Math.PI/4
@@ -68,7 +67,7 @@ function gaborFilter(sz: number,
 const GaborDemo = (props: {labelColor: string, imgUrl: string}) => {
     const [kernel, setKernel] = useState<number[] | undefined>(undefined);
     const [kernelGrid, setKernelGrid] = useState<number[][] | undefined>(undefined);
-    const [kernel_num, setKernelNum] = useState<number>(0);
+    // const [kernel_num, setKernelNum] = useState<number>(0);
     
 
     const configureKernel = (kernelSize: number,
@@ -77,6 +76,7 @@ const GaborDemo = (props: {labelColor: string, imgUrl: string}) => {
                              theta: number,
                              K: number,
                              math: string) => {
+        console.log(kernelSize, omega, theta, K, math)
         let func;
         if (math == "Make Even Symmetric") {
             func = Math.sin;
@@ -88,6 +88,7 @@ const GaborDemo = (props: {labelColor: string, imgUrl: string}) => {
 
         const gabor = gaborFilter(kernelSize, omega, theta, func, K)
         const newKernel = gabor.flat();
+        console.log(newKernel)
         const newKernelGrid = gabor;
         setKernel(newKernel);
         setKernelGrid(newKernelGrid);
