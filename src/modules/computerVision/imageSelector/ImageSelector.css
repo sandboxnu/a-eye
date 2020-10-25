@@ -30,7 +30,7 @@
 .image-selector .selection-window {
     display: flex;
     overflow: auto;
-    width: 600px;
+    width: 80vw;
     margin: auto;
 }
 
