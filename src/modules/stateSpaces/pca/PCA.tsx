@@ -106,3 +106,4 @@ for (let i = 0; i < prediction.rows; i++) {
 }
 
 export default PCADemo;
+export {RawDataChart};

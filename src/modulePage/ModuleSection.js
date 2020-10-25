@@ -4,6 +4,7 @@ import GaborDemo from "../modules/computerVision/gaborFilter/gaborFilter";
 import DiffOfGaussian from "../modules/computerVision/diffofgaussian/DiffOfGaussian";
 import HaarWaveletDemo from "../modules/computerVision/haarWavelet/HaarWaveletDemo";
 import { ImageSelectableDemo } from "../modules/computerVision/imageSelector/ImageSelectableDemo";
+import {RawDataChart} from "../modules/stateSpaces/pca/PCA";
 
 const lorem = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.';
 
@@ -64,6 +65,8 @@ function getDemo(comp, scheme) {
             return <ImageSelectableDemo Demo={DiffOfGaussian} initImg='tabbyCat.jpg' demoProps={demoArgs}/>
         case "HaarWaveletDemo": 
             return <ImageSelectableDemo Demo={HaarWaveletDemo} initImg='bwWoman.jpg' demoProps={demoArgs}/>
+        case "RawDataChart":
+            return <RawDataChart />
         default: return <div></div>
     }
 }
