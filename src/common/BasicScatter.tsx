@@ -24,10 +24,10 @@ const BasicScatter =
             tooltips: { enabled: false },
             scales: {
                 yAxes: [{
-                    scaleLabel: { display: true, labelString: props.xLabel, fontSize: 16, fontFamily: 'monospace' }
+                    scaleLabel: { display: true, labelString: props.yLabel, fontSize: 16, fontFamily: 'monospace' }
                 }],
                 xAxes: [{
-                    scaleLabel: { display: true, labelString: props.yLabel, fontSize: 16, fontFamily: 'monospace' }
+                    scaleLabel: { display: true, labelString: props.xLabel, fontSize: 16, fontFamily: 'monospace' }
                 }],
             },
             legend: {
