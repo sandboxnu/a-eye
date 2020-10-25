@@ -28,7 +28,7 @@ export default function ModuleSection(props) {
                     {
                         props.sections.map((section, index) => {
                             return (
-                                <div className={`flex flex-col md:flex-row mx-2 md:my-5 ${section.imgSrc === '/blank.png' && "my-10"}`} key={index}>
+                                <div className={`flex flex-col md:flex-row mx-2 md:my-5 ${section.imgSrc === '/blank.png' && "my-10"} ${section.body ? "" : "hidden"}`} key={index}>
                                     <img src={process.env.PUBLIC_URL + section.imgSrc} alt=""
                                          className={`hidden ${index % 2 !== 0 && "md:flex"} ${section.imgSrc === '/blank.png' ? "hidden md:object-none" : "object-contain"} md:w-1/4 md:mr-16 md:-mt-12`}/>
                                     <div className="md:w-2/3 flex-col">
