@@ -1,4 +1,4 @@
-import React, { Component, useState } from 'react';
+import React, { Component, useState, useEffect } from 'react';
 // import './App.css';
 // import Chart from 'chart.js';
 import { Scatter } from 'react-chartjs-2';
@@ -12,7 +12,7 @@ import kmeans from 'ml-kmeans';
 
 // Data processing
 const organiseData = (data) => {
-    console.log(data)
+    // console.log(data)
   const organisedData = [];
   for (let i = 0; i < data.length; i++) {
     const newRow = [];
@@ -21,7 +21,7 @@ const organiseData = (data) => {
     newRow.push(curRow.Speeding_Feature);
     organisedData.push(newRow);
   }
-  console.log(organisedData)
+  // console.log(organisedData)
   return organisedData;
 }
 
@@ -34,7 +34,7 @@ let k = 2
 let ans0 = kmeans(organiseData(trainData), k, { initialization: centers, maxIterations: 1 }, );
 let ans100 = kmeans(organiseData(trainData), k, { initialization: centers, maxIterations: 100 }, );
 let ans1 = kmeans(organiseData(trainData), k, { initialization: centers, maxIterations: 2 }, );
-console.log(ans100['clusters']);
+// console.log(ans100['clusters']);
 
 // cluster colors
 let cl_colors = ['#99FF99', '#99CCFF']
@@ -97,10 +97,11 @@ class ScatterChart extends Component {
 const MyScatter2 =
 (props) => {
   
-  let state = 3
-  function changeState(x) {
-    state = x
-  }
+  // let state = 3
+  // function changeState(x) {
+  //   state = x
+  // }
+  
   
   // in order to make the chart updateable after moving a center
   const [x1Idx, setX1Idx] = useState(props.cntrds[0].centroid[0]);
@@ -108,13 +109,15 @@ const MyScatter2 =
   const [x2Idx, setX2Idx] = useState(props.cntrds[1].centroid[0]);
   const [y2Idx, setY2Idx] = useState(props.cntrds[1].centroid[1]);
   const [addedPoints, setAP]  = useState([]);
+  const [removethese, setRT] = useState([]);
+  
 
 
   // format needed for kmeans()
   let c2 = [[x1Idx, y1Idx], [x2Idx, y2Idx]];
-  console.log(trainData, addedPoints)
+  // console.log(trainData, addedPoints)
   let trainData2 = trainData.concat(addedPoints)
-  console.log(trainData2)
+  // console.log(trainData2)
 
   // where our data is going to be, 'bubble data'
   let bubData = []
@@ -134,8 +137,33 @@ const MyScatter2 =
     )
   })
 
-  
+  console.log(removethese)
+  for (let i = 0; i < removethese.length; i++) {
+    // console.log(removethese[i])
+    // console.log(data)
+    console.log(data.datasets[removethese[i].ds_index].data)
+    data.datasets[removethese[i].ds_index].data.splice(removethese[i].ind, 1)
+    console.log(data.datasets[removethese[i].ds_index].data)
+    // data.datasets[removethese[i]].pop
+  }
 
+  const onDragEnd = (e, datasetIndex, index, value) => {
+    if (!e) return;
+    // console.log(value)
+    // console.log(datasetIndex, index)
+    if (datasetIndex == 0) {
+      setX1Idx(value.x)
+      setY1Idx(value.y)
+    }
+    if (datasetIndex == 1) {
+      setX2Idx(value.x)
+      setY2Idx(value.y)
+    }
+    // e.target.style.cursor = 'default'
+    
+  }
+  
+  
   const options = {
       showLines: false,
       dragData: true,
@@ -151,58 +179,71 @@ const MyScatter2 =
       //   }
       // },
       onClick : function (evt, item) {
-        // console.log(evt);
-        // // const myChartRef = chartRef.current.getContext("2d");
-        // console.log(this);
-        // console.log(evt.x - 737, 140 - evt.y)
-        var yTop = this.chartArea.top;
-        var yBottom = this.chartArea.bottom;
 
-        var yMin = this.scales['y-axis-1'].min;
-        var yMax = this.scales['y-axis-1'].max;
-        var newY = 0;
+        const asdgwg = this.chart.getElementAtEvent(evt)[0]
+        if (asdgwg) {
+          console.log(asdgwg)
+          let ds_index = asdgwg._datasetIndex
+          let ind = asdgwg._index
+          // console.log(ds_index)
+          // console.log(ind) 
+          // let rthese = removethese
+          // rthese.push({})
+          let a = removethese
+          a.push({ds_index, ind})
+          setRT(a)
 
-        if (evt.offsetY <= yBottom && evt.offsetY >= yTop) {
-            newY = Math.abs((evt.offsetY - yTop) / (yBottom - yTop));
-            newY = (newY - 1) * -1;
-            newY = newY * (Math.abs(yMax - yMin)) + yMin;
-        };
-
-        var xTop = this.chartArea.left;
-        var xBottom = this.chartArea.right;
-        var xMin = this.scales['x-axis-1'].min;
-        var xMax = this.scales['x-axis-1'].max;
-        var newX = 0;
-
-        if (evt.offsetX <= xBottom && evt.offsetX >= xTop) {
-            newX = Math.abs((evt.offsetX - xTop) / (xBottom - xTop));
-            newX = newX * (Math.abs(xMax - xMin)) + xMin;
-        };
-        newX = Math.round(newX)
-        newY = Math.round(newY)
-
-        console.log(newX, newY);
-        let a = addedPoints
-        console.log(a)
-        a.push({Driver_ID: 0, Distance_Feature: newX, Speeding_Feature: newY})
-        console.log(a)
-        setAP(a)
-      },
-      onDragEnd: function (e, datasetIndex, index, value) {
-        console.log(value)
-        console.log(datasetIndex, index)
-        if (datasetIndex == 0) {
-          setX1Idx(value.x)
-          setY1Idx(value.y)
+          setX1Idx(this.chart.data.datasets[0].data[0].x  + 0.1)
+          setX1Idx(this.chart.data.datasets[0].data[0].x  - 0.1)
+          return;
         }
-        if (datasetIndex == 1) {
-          setX2Idx(value.x)
-          setY2Idx(value.y)
+        else {
+          // console.log(evt);
+          // // const myChartRef = chartRef.current.getContext("2d");
+          // console.log(this);
+          // console.log(evt.x - 737, 140 - evt.y)
+          var yTop = this.chartArea.top;
+          var yBottom = this.chartArea.bottom;
+
+          var yMin = this.scales['y-axis-1'].min;
+          var yMax = this.scales['y-axis-1'].max;
+          var newY = 0;
+
+          if (evt.offsetY <= yBottom && evt.offsetY >= yTop) {
+              newY = Math.abs((evt.offsetY - yTop) / (yBottom - yTop));
+              newY = (newY - 1) * -1;
+              newY = newY * (Math.abs(yMax - yMin)) + yMin;
+          };
+
+          var xTop = this.chartArea.left;
+          var xBottom = this.chartArea.right;
+          var xMin = this.scales['x-axis-1'].min;
+          var xMax = this.scales['x-axis-1'].max;
+          var newX = 0;
+
+          if (evt.offsetX <= xBottom && evt.offsetX >= xTop) {
+              newX = Math.abs((evt.offsetX - xTop) / (xBottom - xTop));
+              newX = newX * (Math.abs(xMax - xMin)) + xMin;
+          };
+          newX = Math.round(newX)
+          newY = Math.round(newY)
+
+          console.log(newX, newY);
+          let a = addedPoints
+          // console.log(a)
+          a.push({Driver_ID: 0, Distance_Feature: newX, Speeding_Feature: newY})
+          // console.log(a)
+          setAP(a)
+          
+          // turn a blind eye here
+          setX1Idx(this.chart.data.datasets[0].data[0].x  + 0.1)
+          setX1Idx(this.chart.data.datasets[0].data[0].x  - 0.1)
+          
+          
         }
-        e.target.style.cursor = 'default'
-        // where e = event
-        
+        // this.chart
       },
+      onDragEnd,
       tooltips: { enabled: false },
       scales: {
           yAxes: [{
