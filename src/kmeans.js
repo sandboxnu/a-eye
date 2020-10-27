@@ -6,11 +6,13 @@ import randomColour from 'randomcolor';
 import './kmeans.css';
 import trainData from './train.json'; // Training data is already preprocessed
 import dragData from 'chartjs-plugin-dragdata';
+
 import kmeans from 'ml-kmeans';
 
-// console.log(trainData)
+
 // Data processing
 const organiseData = (data) => {
+    console.log(data)
   const organisedData = [];
   for (let i = 0; i < data.length; i++) {
     const newRow = [];
@@ -19,13 +21,13 @@ const organiseData = (data) => {
     newRow.push(curRow.Speeding_Feature);
     organisedData.push(newRow);
   }
+  console.log(organisedData)
   return organisedData;
 }
 
 
 // console.log(clusters)
-let data4524523 = organiseData(trainData)
-console.log(data4524523)
+let dataa = organiseData(trainData)
 // let data = [[1, 1, 1], [1, 2, 1], [-1, -1, -1], [-1, -1, -1.5]];
 let centers = [[0, 0], [50, 50]];
 let k = 2
@@ -75,52 +77,52 @@ const MyScatter =
         };
         return (<Scatter data={data} options={options} />);
     };
-// class ScatterChart extends Component {
-//   constructor(props) {
-//     super(props);
-//     // console.log(props)
-//     this.data = props['props']
-//     this.chartReference = React.createRef();
+class ScatterChart extends Component {
+  constructor(props) {
+    super(props);
+    // console.log(props)
+    this.data = props['props']
+    this.chartReference = React.createRef();
 
-//   }
-//   setState() {
-//     console.log("hi")
-//   }
+  }
+  setState() {
+    console.log("hi")
+  }
 
-//   render() {
-//     return (<MyScatter2 datasetsx={this.data} />)
-//   }
-// }
-const MyScatter2 = (props: {clstrs : , imgUrl: string}) => {
-  
+  render() {
+    return (<MyScatter2 datasetsx={this.data} />)
+  }
+}
+
 const MyScatter2 =
 (props) => {
-  let chartRef = React.createRef();
-
+  
+  let state = 3
+  function changeState(x) {
+    state = x
+  }
+  
   // in order to make the chart updateable after moving a center
   const [x1Idx, setX1Idx] = useState(props.cntrds[0].centroid[0]);
   const [y1Idx, setY1Idx] = useState(props.cntrds[0].centroid[1]);
   const [x2Idx, setX2Idx] = useState(props.cntrds[1].centroid[0]);
   const [y2Idx, setY2Idx] = useState(props.cntrds[1].centroid[1]);
-  let c2 = [[x1Idx, y1Idx], [x2Idx, y2Idx]];
-  // points which have been added
   const [addedPoints, setAP]  = useState([]);
-  // console.log(addedPoints)
+
+
+  // format needed for kmeans()
+  let c2 = [[x1Idx, y1Idx], [x2Idx, y2Idx]];
+  console.log(trainData, addedPoints)
   let trainData2 = trainData.concat(addedPoints)
-  // trainData2.push(addedPoints);
-  
-  // console.log(trainData2)
-  // format needed for kmeans
-  
+  console.log(trainData2)
 
   // where our data is going to be, 'bubble data'
   let bubData = []
-  // console.log(trainData)
 
   let ans_x = kmeans(organiseData(trainData2), k, { initialization: c2, maxIterations: 1 }, );
   // process data mutates the first argument
-  console.log(props.data13)
-  processdata(bubData, ans_x.clusters, c2, props.hidden, props.data13)
+  let data3 = organiseData(trainData2)
+  processdata(bubData, ans_x.clusters, c2, props.hidden, data3)
 
   
   // data that will be put into the chart
@@ -179,18 +181,16 @@ const MyScatter2 =
         newX = Math.round(newX)
         newY = Math.round(newY)
 
-        // console.log(newX, newY);
-        console.log(addedPoints)
+        console.log(newX, newY);
         let a = addedPoints
         console.log(a)
-        addedPoints.push({Driver_ID: 0, Distance_Feature: newX, Speeding_Feature: newY})
-        console.log(addedPoints)
+        a.push({Driver_ID: 0, Distance_Feature: newX, Speeding_Feature: newY})
+        console.log(a)
         setAP(a)
-        
       },
       onDragEnd: function (e, datasetIndex, index, value) {
-        // console.log(value)
-        // console.log(datasetIndex, index)
+        console.log(value)
+        console.log(datasetIndex, index)
         if (datasetIndex == 0) {
           setX1Idx(value.x)
           setY1Idx(value.y)
@@ -226,7 +226,6 @@ const bubbleData = [];
 // processing for first chart
 // (convert from json to more agreeable format)
 for(let ci = 0; ci < 1; ci++) {
-  // console.log(ci)
   const newCluster = [];
   for (let ri = 0; ri < trainData.length; ri++) {
     // console.log(trainData[ri].Driver_ID)
@@ -239,6 +238,7 @@ for(let ci = 0; ci < 1; ci++) {
 
   }
   let colour = cl_colors[ci];
+  console.log(colour)
   bubbleData.push({
     label: [`Cluster #${ci}`],
     backgroundColor: colour,
@@ -251,8 +251,7 @@ for(let ci = 0; ci < 1; ci++) {
 
 
 // processing for second and third chart
-function processdata(bdata, clsters, cntroids, hidden, data) {
-  console.log('process data called  ', data)
+function processdata(bdata, clsters, cntroids, hidden, data3) {
 
   // add centers
   for (let c = 0; c < cntroids.length; c++ ){
@@ -279,8 +278,8 @@ function processdata(bdata, clsters, cntroids, hidden, data) {
     for (let ri = 0; ri < clsters.length; ri++){
       if (clsters[ri] == ci) {
         newCluster.push({
-          x: data[ri][0],
-          y: data[ri][1],
+          x: data3[ri][0],
+          y: data3[ri][1],
           r: 3
         })
       }
@@ -298,21 +297,8 @@ function processdata(bdata, clsters, cntroids, hidden, data) {
 
 }
 
-// function activateLasers() {
 
-//   var userAdjective = prompt("Please provide coordinates");
-//   alert (userAdjective);
-//   trainData.push({
-//     "Driver_ID": 0, // dont care what this is
-//     "Distance_Feature": userAdjective.split(' ')[0],
-//     "Speeding_Feature": userAdjective.split(' ')[1]
-//   })
-//   const newRow = [];
-//   newRow.push(userAdjective.split(' ')[0]);
-//   newRow.push(userAdjective.split(' ')[1]);
-//   data.push(newRow);
 
-// }
 function App() {
   return (
     <div>
@@ -321,11 +307,9 @@ function App() {
       </div>
       <div  className="kmeansgraph">
         <MyScatter2 clstrs ={ans1['clusters']} cntrds = {ans0['centroids']} hidden = {false} />
-        
       </div>
-      
       <div  className="kmeansgraph">
-        <MyScatter2 clstrs ={ans100['clusters']} cntrds = {ans100['centroids']} hidden = {true} data13 = { data4524523}/>
+        <MyScatter2 clstrs ={ans100['clusters']} cntrds = {ans100['centroids']} hidden = {true} />
       </div> 
 
     </div>
