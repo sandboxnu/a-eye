@@ -70,7 +70,7 @@
     background-color: #394D73;
 }
 
-.pca.raw-data-chart .pca-chart {
+.pca.raw-data-chart .raw-data-scatter {
     position: relative;
     width: 70%;
     float: right;

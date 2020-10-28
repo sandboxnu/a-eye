@@ -14,7 +14,7 @@ const PCADemo = (props: { labelColor: string }) => {
     return (
         <div className={`PCA-div ${props.labelColor}`}>
             <RawDataTable />
-            <StaticAxisChart xIdx={2} yIdx={3} columnSet={columns} />
+            <StaticAxisChart xIdx={2} yIdx={3} columnSet={columns} classes={["versicolor", "setosa"]}/>
             <SelectableAxisChart columnSet={columns} />
             <SelectableAxisChart columnSet={pcaColumns} />
         </div>
@@ -61,14 +61,18 @@ const SelectableAxisChart = (props: { columnSet: string[] }) => {
                     <AxisSelector selected={yIdx} onChange={setYIdx} columnSet={props.columnSet} />
                 </div>
             </div>
-            <StaticAxisChart xIdx={xIdx} yIdx={yIdx} columnSet={props.columnSet} />
+            <div className="raw-data-scatter">
+                <BasicScatter colorMap={colorMap} points={points} xLabel={props.columnSet[xIdx]} yLabel={props.columnSet[yIdx]} />
+            </div>
         </div>);
 };
 
-const StaticAxisChart = (props: { xIdx: number, yIdx: number, columnSet: string[] }) => {
+const StaticAxisChart = (props: { xIdx: number, yIdx: number, columnSet: string[], classes: string[] }) => {
+
     const points: DataSeriesMap = {};
-    Object.entries(dataByClass).forEach(([dataClass, nums]) => {
-        points[dataClass] = nums.map(row => ({ x: row[props.xIdx], y: row[props.yIdx] }));
+    props.classes.forEach((dataClass) => {
+        console.log(dataClass);
+        points[dataClass] = dataByClass[dataClass].map(row => ({ x: row[props.xIdx], y: row[props.yIdx] }));
     });
 
     return (
