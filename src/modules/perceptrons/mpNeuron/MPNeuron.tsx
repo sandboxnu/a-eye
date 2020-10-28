@@ -1,11 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 const { Flowpoint, Flowspace } = require('flowpoints');
 
 const MPNeuron = () => {
-
-    const inputs = [0, 1, 0];
+    const [inputs, setInputs] = useState([0, 1, 0]);
     const top = 50;
     const left = 50;
+
+    const flipInput = (idx: number) => {
+        console.log("clicked");
+        const newVal = inputs[idx] === 1 ? 0 : 1;
+        const newInputs = [...inputs];
+        newInputs[idx] = newVal;
+        setInputs(newInputs);
+    }
+    const findSum = () => inputs.reduce((prev, acc) => prev + acc);
 
     const makeInput = (val: number, idx: number) => {
         return (
@@ -17,6 +25,7 @@ const MPNeuron = () => {
             minY={50}
             width={50}
             height={50}
+            onClick={() => flipInput(idx)}
         >
             {val}
         </Flowpoint>);
