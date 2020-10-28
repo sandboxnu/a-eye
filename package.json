@@ -14,6 +14,7 @@
     "@types/react-dom": "^16.9.8",
     "autoprefixer": "^10.0.0",
     "filter": "^0.1.1",
+    "flowpoints": "^1.0.18",
     "gaussian-convolution-kernel": "^1.0.0",
     "node-forge": "^0.10.0",
     "pixelmatch": "^5.2.1",
