@@ -14,6 +14,7 @@ const PCADemo = (props: { labelColor: string }) => {
     return (
         <div className={`PCA-div ${props.labelColor}`}>
             <RawDataTable />
+            <StaticAxisChart xIdx={2} yIdx={3} columnSet={columns} />
             <SelectableAxisChart columnSet={columns} />
             <SelectableAxisChart columnSet={pcaColumns} />
         </div>
@@ -40,7 +41,6 @@ const RawDataTable = () =>
 
 
 // Plot all samples in dataset, choose what 2 features to use as the axes
-// --> natural conclusion: want to be able to see all features, without having to use an nth dimensional plot
 const SelectableAxisChart = (props: { columnSet: string[] }) => {
     const [xIdx, setXIdx] = useState(0);
     const [yIdx, setYIdx] = useState(1);
@@ -61,11 +61,24 @@ const SelectableAxisChart = (props: { columnSet: string[] }) => {
                     <AxisSelector selected={yIdx} onChange={setYIdx} columnSet={props.columnSet} />
                 </div>
             </div>
-            <div className="raw-data-scatter">
-                <BasicScatter colorMap={colorMap} points={points} xLabel={props.columnSet[xIdx]} yLabel={props.columnSet[yIdx]} />
-            </div>
+            <StaticAxisChart xIdx={xIdx} yIdx={yIdx} columnSet={props.columnSet} />
         </div>);
 };
+
+const StaticAxisChart = (props: { xIdx: number, yIdx: number, columnSet: string[] }) => {
+    const points: DataSeriesMap = {};
+    Object.entries(dataByClass).forEach(([dataClass, nums]) => {
+        points[dataClass] = nums.map(row => ({ x: row[props.xIdx], y: row[props.yIdx] }));
+    });
+
+    return (
+        <div className="pca pca-chart">
+            <div className="raw-data-scatter">
+                <BasicScatter colorMap={colorMap} points={points} xLabel={props.columnSet[props.xIdx]} yLabel={props.columnSet[props.yIdx]} />
+            </div>
+        </div>);
+
+}
 
 const AxisSelector = (props: { columnSet: string[], selected: number, onChange: (arg: number) => void }) =>
     (<div className="axis-selector">
