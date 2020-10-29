@@ -82,14 +82,21 @@ const MyScatter2 =
   const [y2Idx, setY2Idx] = useState(props.cntrds[1].centroid[1]);
   const [addedPoints, setAP]  = useState([]);
   const [removethese, setRT] = useState([]);
+  const [percentRemove, setPR] = useState(4001);
   
-
 
   // format needed for kmeans()
   let c2 = [[x1Idx, y1Idx], [x2Idx, y2Idx]];
   // console.log(trainData, addedPoints)
   let trainData2 = trainData.concat(addedPoints)
-  // console.log(trainData2)
+  console.log(trainData2)
+
+  for (let i = 0; i < trainData2.length; i ++) {
+    if (i % percentRemove == 0) {
+      trainData2.splice(i, 2)
+    }
+  }
+  
 
   // where our data is going to be, 'bubble data'
   let bubData = []
@@ -129,6 +136,12 @@ const MyScatter2 =
   
   const options = {
       showLines: false,
+      scales : {
+        y : {
+            min: -1,
+            max: 100,
+        }
+      },
       dragData: true,
       dragX: true,
       dragDataRound: 0, 
@@ -197,9 +210,20 @@ const MyScatter2 =
       },
       animation: {
         duration: 0
-    }
+    },
+
   };
-  return (<Scatter data={data} options={options}  />);
+  return (
+    <div>
+      <div>
+        <Scatter data={data} options={options}  />
+      </div>
+      <div class=" space-x-10 ">
+        <button onClick={e => setPR(3)}>Third of the Points</button>
+        <button onClick={e => setPR(4)}>Half of the Points</button>
+        <button onClick={e => setPR(4001)}>All of the Points</button>
+      </div>
+    </div>);
 };
 
 
