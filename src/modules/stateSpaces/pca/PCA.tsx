@@ -21,8 +21,8 @@ const PCADemo = (props: { labelColor: string }) => {
 }
 
 const RawDataTable = () =>
-    <div className="pca raw-data-table">
-        <table>
+    <div>
+        <table className="table-auto">
             <thead>
                 <tr>{columns.map(title => <th key={title}>{title}</th>)}<th>Class</th></tr>
             </thead>
