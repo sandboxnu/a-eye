@@ -21,21 +21,23 @@ const PCADemo = (props: { labelColor: string }) => {
 }
 
 const RawDataTable = () =>
-    <div>
-        <table className="table-auto">
-            <thead>
-                <tr>{columns.map(title => <th key={title}>{title}</th>)}<th>Class</th></tr>
-            </thead>
-            <tbody>
-                {dataset.map((row: number[], idx: number) => {
-                    return (
-                        <tr key={idx} className="'datarow'">
-                            {row.map((val: number, idx: number) => <td key={idx}>{val}</td>)}
-                            <td>{classes[idx]}</td>
-                        </tr>);
-                })}
-            </tbody>
-        </table>
+    <div className="container flex">
+        <div className="pca raw-data-table">
+            <table className="table-auto">
+                <thead>
+                    <tr>{columns.map(title => <th key={title}>{title}</th>)}<th>Class</th></tr>
+                </thead>
+                <tbody>
+                    {dataset.map((row: number[], idx: number) => {
+                        return (
+                            <tr key={idx} className="'datarow'">
+                                {row.map((val: number, idx: number) => <td key={idx}>{val}</td>)}
+                                <td>{classes[idx]}</td>
+                            </tr>);
+                    })}
+                </tbody>
+            </table>
+        </div>
     </div>
 
 
