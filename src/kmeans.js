@@ -12,7 +12,6 @@ import kmeans from 'ml-kmeans';
 
 // Data processing
 const organiseData = (data) => {
-    // console.log(data)
   const organisedData = [];
   for (let i = 0; i < data.length; i++) {
     const newRow = [];
@@ -21,20 +20,15 @@ const organiseData = (data) => {
     newRow.push(curRow.Speeding_Feature);
     organisedData.push(newRow);
   }
-  // console.log(organisedData)
   return organisedData;
 }
 
-
-// console.log(clusters)
 let dataa = organiseData(trainData)
-// let data = [[1, 1, 1], [1, 2, 1], [-1, -1, -1], [-1, -1, -1.5]];
 let centers = [[0, 0], [50, 50]];
 let k = 2
 let ans0 = kmeans(organiseData(trainData), k, { initialization: centers, maxIterations: 1 }, );
 let ans100 = kmeans(organiseData(trainData), k, { initialization: centers, maxIterations: 100 }, );
 let ans1 = kmeans(organiseData(trainData), k, { initialization: centers, maxIterations: 2 }, );
-// console.log(ans100['clusters']);
 
 // cluster colors
 let cl_colors = ['#99FF99', '#99CCFF']
@@ -77,30 +71,8 @@ const MyScatter =
         };
         return (<Scatter data={data} options={options} />);
     };
-class ScatterChart extends Component {
-  constructor(props) {
-    super(props);
-    // console.log(props)
-    this.data = props['props']
-    this.chartReference = React.createRef();
-
-  }
-  setState() {
-    console.log("hi")
-  }
-
-  render() {
-    return (<MyScatter2 datasetsx={this.data} />)
-  }
-}
-
 const MyScatter2 =
 (props) => {
-  
-  // let state = 3
-  // function changeState(x) {
-  //   state = x
-  // }
   
   
   // in order to make the chart updateable after moving a center
@@ -137,20 +109,12 @@ const MyScatter2 =
     )
   })
 
-  console.log(removethese)
   for (let i = 0; i < removethese.length; i++) {
-    // console.log(removethese[i])
-    // console.log(data)
-    console.log(data.datasets[removethese[i].ds_index].data)
     data.datasets[removethese[i].ds_index].data.splice(removethese[i].ind, 1)
-    console.log(data.datasets[removethese[i].ds_index].data)
-    // data.datasets[removethese[i]].pop
   }
 
   const onDragEnd = (e, datasetIndex, index, value) => {
     if (!e) return;
-    // console.log(value)
-    // console.log(datasetIndex, index)
     if (datasetIndex == 0) {
       setX1Idx(value.x)
       setY1Idx(value.y)
@@ -159,7 +123,6 @@ const MyScatter2 =
       setX2Idx(value.x)
       setY2Idx(value.y)
     }
-    // e.target.style.cursor = 'default'
     
   }
   
@@ -169,26 +132,12 @@ const MyScatter2 =
       dragData: true,
       dragX: true,
       dragDataRound: 0, 
-      // hover: {
-      //   onHover: function(e) {
-      //     // indicate that a datapoint is draggable by showing the 'grab' cursor when hovered
-      //     const point = this.getElementAtEvent(e)
-      //     if (point.length) e.target.style.cursor = 'grab'
-      //     else e.target.style.cursor = 'default'
-
-      //   }
-      // },
       onClick : function (evt, item) {
 
         const asdgwg = this.chart.getElementAtEvent(evt)[0]
         if (asdgwg) {
-          console.log(asdgwg)
           let ds_index = asdgwg._datasetIndex
           let ind = asdgwg._index
-          // console.log(ds_index)
-          // console.log(ind) 
-          // let rthese = removethese
-          // rthese.push({})
           let a = removethese
           a.push({ds_index, ind})
           setRT(a)
@@ -198,10 +147,6 @@ const MyScatter2 =
           return;
         }
         else {
-          // console.log(evt);
-          // // const myChartRef = chartRef.current.getContext("2d");
-          // console.log(this);
-          // console.log(evt.x - 737, 140 - evt.y)
           var yTop = this.chartArea.top;
           var yBottom = this.chartArea.bottom;
 
@@ -230,9 +175,7 @@ const MyScatter2 =
 
           console.log(newX, newY);
           let a = addedPoints
-          // console.log(a)
           a.push({Driver_ID: 0, Distance_Feature: newX, Speeding_Feature: newY})
-          // console.log(a)
           setAP(a)
           
           // turn a blind eye here
@@ -241,7 +184,6 @@ const MyScatter2 =
           
           
         }
-        // this.chart
       },
       onDragEnd,
       tooltips: { enabled: false },
@@ -269,7 +211,6 @@ const bubbleData = [];
 for(let ci = 0; ci < 1; ci++) {
   const newCluster = [];
   for (let ri = 0; ri < trainData.length; ri++) {
-    // console.log(trainData[ri].Driver_ID)
     
     newCluster.push({
       x: trainData[ri].Distance_Feature,
@@ -305,7 +246,7 @@ function processdata(bdata, clsters, cntroids, hidden, data3) {
 
     let colour = c_colors[c];
     bdata.push({
-      label: [`Center #${c  }`],
+      label: [`Center #${c }`],
       backgroundColor: colour,
       borderColor: colour,
       data: newCluster,
@@ -339,7 +280,6 @@ function processdata(bdata, clsters, cntroids, hidden, data3) {
 }
 
 
-
 function App() {
   return (
     <div>
@@ -350,9 +290,9 @@ function App() {
         <MyScatter2 clstrs ={ans1['clusters']} cntrds = {ans0['centroids']} hidden = {false} />
       </div>
       <div  className="kmeansgraph">
-        <MyScatter2 clstrs ={ans100['clusters']} cntrds = {ans100['centroids']} hidden = {true} />
+        <MyScatter2 clstrs ={ans100['clusters']} cntrds = {ans100['centroids']} hidden = {false} />
       </div> 
-
+      
     </div>
   );
 }
