@@ -2,32 +2,37 @@ import React, { useState } from 'react';
 const { Flowpoint, Flowspace } = require('flowpoints');
 
 const MPNeuron = () => {
-    const [inputs, setInputs] = useState([0, 1, 0]);
+    // for some reason putting each input in an object makes the ui update correctly??
+    // doing MP neuron, but with weights? are weights part of the og mp neuron stuff
+    // react draggable?
+    const [inputs, setInputs] = useState(
+        [{val: 0, weight: .5}, 
+        {val: 1, weight: 1}, 
+        {val: 0, weight: .2}]
+    );
     const top = 50;
     const left = 50;
 
     const flipInput = (idx: number) => {
-        console.log("clicked");
-        const newVal = inputs[idx] === 1 ? 0 : 1;
+        const newVal = inputs[idx].val === 1 ? 0 : 1;
         const newInputs = [...inputs];
-        newInputs[idx] = newVal;
+        newInputs[idx].val = newVal;
         setInputs(newInputs);
     }
-    const findSum = () => inputs.reduce((prev, acc) => prev + acc);
+    const findSum = () => inputs.reduce((prev, acc) => prev + acc.val, 0);
 
-    const makeInput = (val: number, idx: number) => {
+    const makeInput = (inpt: {val: number}, idx: number) => {
         return (
         <Flowpoint
-            key={`input-${idx}`}
+            key={idx}
             outputs={["dendrite"]}
             startPosition={{ x: left, y: top + idx * 60 }}
-            minX={50}
-            minY={50}
-            width={50}
-            height={50}
+            minX={40} minY={40}
+            width={40} height={40}
             onClick={() => flipInput(idx)}
+            dragX={false} dragY={false}
         >
-            {val}
+            <div className="flex flex-col justify-center h-full">{inpt.val}</div>
         </Flowpoint>);
     }
 
@@ -52,7 +57,7 @@ const MPNeuron = () => {
                     dragY={false}
                 >
                     dendrite <br/> 
-                    3
+                    {findSum()}
                 </Flowpoint>
                 <Flowpoint
                     key="non-linearity"
@@ -65,7 +70,9 @@ const MPNeuron = () => {
                     dragX={false}
                     dragY={false}
                 >
-                    {"> 2"} 
+                    <div className="inline"> 
+                    {'>'} <input className="z-10 relative w-24" type="number"/>
+                    </div>
                 </Flowpoint>
                 <Flowpoint
                     key="output"
