@@ -67,9 +67,9 @@ function getDemo(comp, scheme) {
         case "RawDataTable":
             return <RawDataTable />
         case "StaticAxisChart":
-            return <StaticAxisChart xIdx={2} yIdx={3} columnSet={config.columns} classes={["versicolor", "setosa"]} />
+            return <StaticAxisChart xIdx={4} yIdx={5} columnSet={config.columns} classes={["versicolor", "setosa"]} />
         case "SelectableAxisChart":
-            return <SelectableAxisChart columnSet={config.columns} initXIdx={2} initYIdx={3} />
+            return <SelectableAxisChart columnSet={config.columns} initXIdx={4} initYIdx={5} />
         case "PCASelectableAxisChart":
             return <SelectableAxisChart columnSet={config.pcaColumns} initXIdx={0} initYIdx={1} />
         default: return <div></div>
