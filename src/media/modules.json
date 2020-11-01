@@ -129,20 +129,86 @@
             {
               "title": "Subsection 1",
               "body": "lorem ipsum",
-              "imgSrc": "mod9.png"
+              "imgSrc": "/blank.png"
             },
             {
               "title": "Subsection 2",
               "body": "lorem ipsum",
-              "imgSrc": "mod9.png"
+              "imgSrc": "/blank.png"
             },
             {
               "title": "Subsection 3",
               "body": "lorem ipsum",
-              "imgSrc": "mod9.png"
+              "imgSrc": "/blank.png"
             }
           ],
           "demoComp": "RawDataTable"
+        },
+        {
+          "title": "State Spaces",
+          "colorScheme": "light",
+          "subsections": [
+            {
+              "title": "Subsection 1",
+              "body": "lorem ipsum",
+              "imgSrc": "/blank.png"
+            },
+            {
+              "title": "Subsection 2",
+              "body": "lorem ipsum",
+              "imgSrc": "/blank.png"
+            },
+            {
+              "title": "Subsection 3",
+              "body": "lorem ipsum",
+              "imgSrc": "/blank.png"
+            }
+          ],
+          "demoComp": "StaticAxisChart"
+        },
+        {
+          "title": "State Spaces",
+          "colorScheme": "dark",
+          "subsections": [
+            {
+              "title": "Subsection 1",
+              "body": "lorem ipsum",
+              "imgSrc": "/blank.png"
+            },
+            {
+              "title": "Subsection 2",
+              "body": "lorem ipsum",
+              "imgSrc": "/blank.png"
+            },
+            {
+              "title": "Subsection 3",
+              "body": "lorem ipsum",
+              "imgSrc": "/blank.png"
+            }
+          ],
+          "demoComp": "SelectableAxisChart"
+        },
+        {
+          "title": "State Spaces",
+          "colorScheme": "light",
+          "subsections": [
+            {
+              "title": "Subsection 1",
+              "body": "lorem ipsum",
+              "imgSrc": "/blank.png"
+            },
+            {
+              "title": "Subsection 2",
+              "body": "lorem ipsum",
+              "imgSrc": "/blank.png"
+            },
+            {
+              "title": "Subsection 3",
+              "body": "lorem ipsum",
+              "imgSrc": "/blank.png"
+            }
+          ],
+          "demoComp": "PCASelectableAxisChart"
         },
         {
           "title": "Clustering",
@@ -151,17 +217,17 @@
             {
               "title": "Subsection 1",
               "body": "lorem ipsum",
-              "imgSrc": "mod9.png"
+              "imgSrc": "/blank.png"
             },
             {
               "title": "Subsection 2",
               "body": "lorem ipsum",
-              "imgSrc": "mod9.png"
+              "imgSrc": "/blank.png"
             },
             {
               "title": "Subsection 3",
               "body": "lorem ipsum",
-              "imgSrc": "mod9.png"
+              "imgSrc": "/blank.png"
             }
           ],
           "demoComp": "PCADemo"
@@ -173,17 +239,17 @@
             {
               "title": "Subsection 1",
               "body": "lorem ipsum",
-              "imgSrc": "mod9.png"
+              "imgSrc": "/blank.png"
             },
             {
               "title": "Subsection 2",
               "body": "lorem ipsum",
-              "imgSrc": "mod9.png"
+              "imgSrc": "/blank.png"
             },
             {
               "title": "Subsection 3",
               "body": "lorem ipsum",
-              "imgSrc": "mod9.png"
+              "imgSrc": "/blank.png"
             }
           ],
           "demoComp": "pca"

@@ -5,7 +5,7 @@ import DiffOfGaussianDemo from "../modules/computerVision/diffofgaussian/DiffOfG
 import HaarWaveletDemo from "../modules/computerVision/haarWavelet/HaarWaveletDemo";
 import { ImageSelectableDemo } from "../modules/computerVision/imageSelector/ImageSelectableDemo";
 import PCADemo from "../modules/stateSpaces/pca/PCA";
-import {RawDataTable, SelectableAxisChart, StaticAxisChart, AxisSelector} from "../modules/stateSpaces/pca/PCA";
+import {RawDataTable, SelectableAxisChart, StaticAxisChart, AxisSelector, config} from "../modules/stateSpaces/pca/PCA";
 
 const lorem = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.';
 
@@ -23,7 +23,7 @@ export default function ModuleSection(props) {
     };
 
     return (
-        <div className={`flex flex-col w-screen ${scheme.bgColor}`}>
+        <div className={`flex flex-col w-screen  ${scheme.bgColor}`}>
             <div className="mx-12 md:mx-40">
                 <p className={`my-12 text-3xl md:text-6xl italic font-bold font-opensans ${scheme.titleColor}`}>{props.title}</p>
                 <ul className="">
@@ -66,6 +66,12 @@ function getDemo(comp, scheme) {
             return <PCADemo {...demoArgs}/>
         case "RawDataTable":
             return <RawDataTable />
+        case "StaticAxisChart":
+            return <StaticAxisChart xIdx={2} yIdx={3} columnSet={config.columns} classes={["versicolor", "setosa"]} />
+        case "SelectableAxisChart":
+            return <SelectableAxisChart columnSet={config.columns} initXIdx={2} initYIdx={3} />
+        case "PCASelectableAxisChart":
+            return <SelectableAxisChart columnSet={config.pcaColumns} initXIdx={0} initYIdx={1} />
         default: return <div></div>
     }
 }

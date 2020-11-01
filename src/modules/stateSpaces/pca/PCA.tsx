@@ -14,7 +14,7 @@ export const PCADemo = (props: { labelColor: string }) => {
     return (
         <div className={`PCA-div ${props.labelColor}`}>
             <RawDataTable />
-            <StaticAxisChart xIdx={4} yIdx={5} columnSet={columns} classes={["versicolor", "setosa"]} />
+            <StaticAxisChart xIdx={2} yIdx={3} columnSet={columns} classes={["versicolor", "setosa"]} />
             <SelectableAxisChart columnSet={columns} initXIdx={2} initYIdx={3} />
             <SelectableAxisChart columnSet={pcaColumns} initXIdx={0} initYIdx={1} />
         </div>
@@ -23,7 +23,7 @@ export const PCADemo = (props: { labelColor: string }) => {
 
 export const RawDataTable = () =>
     <div className="container flex">
-        <div className="pca raw-data-table">
+        <div className="pca raw-data-table mx-auto">
             <table className="table-auto">
                 <thead>
                     <tr>{columns.map(title => <th key={title}>{title}</th>)}<th>Class</th></tr>
@@ -100,9 +100,11 @@ const COLORS = ['#003f5c', '#ef5675', '#FFC107', '#00B0FF', '#FF3D00', '#4DB6AC'
 // Moving these outside so they are only calculated once (this will change if we dynamically get datasets)
 const dataset: number[][] = datasetIris.getNumbers(); // rows represent the samples and columns the features
 const classes: string[] = datasetIris.getClasses(); // the whole column of flower types
-const columns = ['', '', 'Sepal Length', 'Sepal Width', 'Petal Length', 'Petal Width'];
+const columns = ['Sepal Length', 'Sepal Width', 'Petal Length', 'Petal Width'];
 const pcaColumns = ['PC1', 'PC2', 'Sepal Length', 'Sepal Width', 'Petal Length', 'Petal Width'];
 const prediction = new PCA(dataset).predict(dataset);
+
+export const config = {dataset, classes, columns, pcaColumns, prediction};
 
 const colorMap: ColorMap = {};
 const dataByClass: { [dataClass: string]: number[][] } = {};
