@@ -85,7 +85,7 @@ const GaborDemo = (props: {labelColor: string, imgUrl: string}) => {
 
     return (
         <div className="m-4">
-            <div className="grid grid-cols-2 mx-auto items-center mb-5" style={{width: '1100px'}}>
+            <div className="grid grid-cols-1 md:grid-cols-2 mx-auto items-center mb-5">
                 <KernelConfig onConfig={configureKernel} labelColor={props.labelColor} />
                 <KernelDisplay kernelGrid={kernelGrid} labelColor={props.labelColor} />
             </div>
@@ -110,7 +110,7 @@ const KernelConfig = (props: { onConfig: (kernelSize: number, omega: number, the
         <div>
             <div className={`font-bold m-3 h-10 ${props.labelColor}`}>
                 Kernel Size
-                <input className="mx-2 w-64"
+                <input className="mx-2 w-1/4"
                     type="range" min="1" max="7" step={1}
                     value={kernelSize} onChange={(e) => changeKernelSize(e)} />
                 <input className="number-input text-black"
@@ -122,7 +122,7 @@ const KernelConfig = (props: { onConfig: (kernelSize: number, omega: number, the
                 Theta
                 <AngleSelector diameter='150px' initAngle={theta} onAngleChange={changeTheta} />
             </div>
-            <Accordion className={`gabor-extras-accordion w-500px mx-auto my-2 ${props.labelColor}`}>
+            <Accordion className={`gabor-extras-accordion w-3/4 mx-auto my-2 ${props.labelColor}`}>
                 <AccordionSummary className="font-bold h-1" expandIcon={<ExpandMoreIcon />}>
                     Extra Parameters
                 </AccordionSummary>

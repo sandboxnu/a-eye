@@ -29,8 +29,9 @@ const ImageSelector = (props: { currImg: string, onSelect: (img: string, imgUrl:
 
 
 const ALL_IMGS: { [name: string]: any } = {
-    'two.png': require('./imageLibrary/two.png'),
     'three.png': require('./imageLibrary/three.png'),
+    'diamond.png': require('./imageLibrary/diamond.png'),
+    'square.png': require('./imageLibrary/square.png'),
     'circles.jpg': require('./imageLibrary/circles.jpg'),
     'dogSilhouette.jpg': require('./imageLibrary/dogSilhouette.jpg'),
     'purpleFlowers.jpeg': require('./imageLibrary/purpleFlowers.jpeg'),

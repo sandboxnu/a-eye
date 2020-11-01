@@ -115,30 +115,8 @@
             }
           ],
           "demoComp": "DiffOfGaussian"
-        },
-        {
-          "title": "Haar Transform",
-          "colorScheme": "light",
-          "subsections": [
-            {
-              "title": "Subsection 1",
-              "body": " ",
-              "imgSrc": ""
-            },
-            {
-              "title": "Subsection 2",
-              "body": " ",
-              "imgSrc": ""
-            },
-            {
-              "title": "Subsection 3",
-              "body": " ",
-              "imgSrc": ""
-            }
-          ],
-          "demoComp": "HaarWaveletDemo"
         }
-      ]
+     ]
     },
   "classification": {
       "number": 9,

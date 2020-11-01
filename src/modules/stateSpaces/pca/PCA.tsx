@@ -22,23 +22,24 @@ export const PCADemo = (props: { labelColor: string }) => {
 }
 
 export const RawDataTable = () =>
-    <div className="pca raw-data-table">
-        <table>
-            <thead>
-                <tr>{columns.map(title => title && <th key={title}>{title}</th>)}<th>Class</th></tr>
-            </thead>
-            <tbody>
-                {dataset.map((row: number[], idx: number) => {
-                    return (
-                        <tr key={idx} className="'datarow' text-white">
-                            {row.map((val: number, idx: number) => <td key={idx}>{val}</td>)}
-                            <td>{classes[idx]}</td>
-                        </tr>);
-                })}
-            </tbody>
-        </table>
+    <div className="container flex">
+        <div className="pca raw-data-table">
+            <table className="table-auto">
+                <thead>
+                    <tr>{columns.map(title => <th key={title}>{title}</th>)}<th>Class</th></tr>
+                </thead>
+                <tbody>
+                    {dataset.map((row: number[], idx: number) => {
+                        return (
+                            <tr key={idx} className="'datarow' text-white">
+                                {row.map((val: number, idx: number) => <td key={idx}>{val}</td>)}
+                                <td>{classes[idx]}</td>
+                            </tr>);
+                    })}
+                </tbody>
+            </table>
+        </div>
     </div>
-
 
 // Plot all samples in dataset, choose what 2 features to use as the axes
 export const SelectableAxisChart = (props: { columnSet: string[], initXIdx: number, initYIdx: number }) => {
