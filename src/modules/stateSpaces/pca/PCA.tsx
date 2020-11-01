@@ -9,7 +9,7 @@ import './PCA.css';
  * 
  * @param props 
  */
-const PCADemo = (props: { labelColor: string }) => {
+export const PCADemo = (props: { labelColor: string }) => {
 
     return (
         <div className={`PCA-div ${props.labelColor}`}>
@@ -21,7 +21,7 @@ const PCADemo = (props: { labelColor: string }) => {
     );
 }
 
-const RawDataTable = () =>
+export const RawDataTable = () =>
     <div className="pca raw-data-table">
         <table>
             <thead>
@@ -30,7 +30,7 @@ const RawDataTable = () =>
             <tbody>
                 {dataset.map((row: number[], idx: number) => {
                     return (
-                        <tr key={idx} className="'datarow'">
+                        <tr key={idx} className="'datarow' text-white">
                             {row.map((val: number, idx: number) => <td key={idx}>{val}</td>)}
                             <td>{classes[idx]}</td>
                         </tr>);
@@ -41,7 +41,7 @@ const RawDataTable = () =>
 
 
 // Plot all samples in dataset, choose what 2 features to use as the axes
-const SelectableAxisChart = (props: { columnSet: string[], initXIdx: number, initYIdx: number }) => {
+export const SelectableAxisChart = (props: { columnSet: string[], initXIdx: number, initYIdx: number }) => {
     const [xIdx, setXIdx] = useState(props.initXIdx);
     const [yIdx, setYIdx] = useState(props.initYIdx);
     const points: DataSeriesMap = {};
@@ -65,7 +65,7 @@ const SelectableAxisChart = (props: { columnSet: string[], initXIdx: number, ini
         </div>);
 };
 
-const StaticAxisChart = (props: { xIdx: number, yIdx: number, columnSet: string[], classes: string[] }) => {
+export const StaticAxisChart = (props: { xIdx: number, yIdx: number, columnSet: string[], classes: string[] }) => {
 
     const points: DataSeriesMap = {};
     props.classes.forEach((dataClass) => {
@@ -82,7 +82,7 @@ const StaticAxisChart = (props: { xIdx: number, yIdx: number, columnSet: string[
 
 }
 
-const AxisSelector = (props: { columnSet: string[], selected: number, onChange: (arg: number) => void }) =>
+export const AxisSelector = (props: { columnSet: string[], selected: number, onChange: (arg: number) => void }) =>
     (<div className="axis-selector">
         {props.columnSet.map((col, idx) => (
             col && <button

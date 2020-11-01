@@ -164,7 +164,7 @@
               "imgSrc": "mod9.png"
             }
           ],
-          "demoComp": "PCADemo"
+          "demoComp": "RawDataTable"
         },
         {
           "title": "Clustering",
