@@ -3134,6 +3134,29 @@ chardet@^0.7.0:
   resolved "https://registry.yarnpkg.com/chardet/-/chardet-0.7.0.tgz#90094849f0937f2eedc2425d0d28a9e5f0cbad9e"
   integrity sha512-mT8iDcrh03qDGRRmoA2hmBJnxpllMR+0/0qlzjqZES6NdiWDcZkCNAk4rPFZ9Q85r27unkiNNg8ZOiwZXBHwcA==
 
+chart.js@^2.9.3:
+  version "2.9.3"
+  resolved "https://registry.yarnpkg.com/chart.js/-/chart.js-2.9.3.tgz#ae3884114dafd381bc600f5b35a189138aac1ef7"
+  integrity sha512-+2jlOobSk52c1VU6fzkh3UwqHMdSlgH1xFv9FKMqHiNCpXsGPQa/+81AFa+i3jZ253Mq9aAycPwDjnn1XbRNNw==
+  dependencies:
+    chartjs-color "^2.1.0"
+    moment "^2.10.2"
+
+chartjs-color-string@^0.6.0:
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/chartjs-color-string/-/chartjs-color-string-0.6.0.tgz#1df096621c0e70720a64f4135ea171d051402f71"
+  integrity sha512-TIB5OKn1hPJvO7JcteW4WY/63v6KwEdt6udfnDE9iCAZgy+V4SrbSxoIbTw/xkUIapjEI4ExGtD0+6D3KyFd7A==
+  dependencies:
+    color-name "^1.0.0"
+
+chartjs-color@^2.1.0:
+  version "2.4.1"
+  resolved "https://registry.yarnpkg.com/chartjs-color/-/chartjs-color-2.4.1.tgz#6118bba202fe1ea79dd7f7c0f9da93467296c3b0"
+  integrity sha512-haqOg1+Yebys/Ts/9bLo/BqUcONQOdr/hoEr2LLTRl6C5LXctUdHxsCYfvQVg5JIxITrfCNUDr4ntqmQk9+/0w==
+  dependencies:
+    chartjs-color-string "^0.6.0"
+    color-convert "^1.9.3"
+
 chokidar@^2.0.2, chokidar@^2.1.8:
   version "2.1.8"
   resolved "https://registry.yarnpkg.com/chokidar/-/chokidar-2.1.8.tgz#804b3a7b6a99358c3c5c61e71d8728f041cff917"
@@ -3306,7 +3329,7 @@ collection-visit@^1.0.0:
     map-visit "^1.0.0"
     object-visit "^1.0.0"
 
-color-convert@^1.9.0, color-convert@^1.9.1:
+color-convert@^1.9.0, color-convert@^1.9.1, color-convert@^1.9.3:
   version "1.9.3"
   resolved "https://registry.yarnpkg.com/color-convert/-/color-convert-1.9.3.tgz#bb71850690e1f136567de629d2d5471deda4c1e8"
   integrity sha512-QfAUtd+vFdAtFQcC8CCyYt1fYWxSqAiK2cSD6zDB8N3cpsEBAvRxp9zOGg6G/SHHJYAT88/az/IuDGALsNVbGg==
@@ -6107,6 +6130,11 @@ is-accessor-descriptor@^1.0.0:
   dependencies:
     kind-of "^6.0.0"
 
+is-any-array@^0.0.3:
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/is-any-array/-/is-any-array-0.0.3.tgz#cbdd8c7189d47b53b050969245f4ef7e55550b9b"
+  integrity sha512-Lr5SRykZv6uuYMZURz7+YpigT1ziTBHOTgFJ1zK7gL+9Wbet5Ha1ws6S84Jo/lH4zep02b95sk6o4+MTk97mPQ==
+
 is-arguments@^1.0.4:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/is-arguments/-/is-arguments-1.0.4.tgz#3faf966c7cba0ff437fb31f6250082fcf0448cf3"
@@ -7451,7 +7479,7 @@ lodash@4.17.5:
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.15.tgz#b447f6670a0455bbfeedd11392eff330ea097548"
   integrity sha512-8xOcRHvCjnocdS5cpwXQXVzmmh5e5+saE2QGoeQmbKmRS6J3VQppPOIt0MnmE+4xlZoumy0GPG0D0MVIQbNA1A==
 
-lodash@^4.17.20:
+lodash@^4.17.19, lodash@^4.17.20:
   version "4.17.20"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.20.tgz#b44a9b6297bcb698f1c51a3545a2b3b368d59c52"
   integrity sha512-PlhdFcillOINfeV7Ni6oF1TAEayyZBoZ8bcshTHqOYJYlrqzRK5hagpagky5o4HfCzzd1TRkXPMFq6cKk9rGmA==
@@ -7823,10 +7851,57 @@ mkdirp@^0.5.5:
   dependencies:
     minimist "^1.2.5"
 
+ml-array-max@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/ml-array-max/-/ml-array-max-1.1.2.tgz#ac14a4954ebdb9f401774cc1572fce439e12f94d"
+  integrity sha512-it2hYUSuYEwIRO6hjTWfe6gbGutF4Tuct7jxt3LiLE4wKFs6ku5FLNIRKtOL2jyH+Jdwt1ddbqKMX8inBM8RxA==
+  dependencies:
+    is-any-array "^0.0.3"
+
+ml-array-min@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/ml-array-min/-/ml-array-min-1.1.2.tgz#a084370fe78998a4131d566d066ee01bccce253a"
+  integrity sha512-92QzvsyK7TxGz618pno6bu0LXYcRKssbimP85qRllk2xX5Z4gnVxlOmrMjSerUut9zzbt1eQB4byXNCwT0vgwA==
+  dependencies:
+    is-any-array "^0.0.3"
+
+ml-array-rescale@^1.3.1:
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/ml-array-rescale/-/ml-array-rescale-1.3.1.tgz#7e55871af8741d212e2b47b8acd55571936c822b"
+  integrity sha512-PMj/f3MXBf5j2is8E4ugfNx6txi5y6qO4iVizfGjUVcpBl9RpXhznsoOz5iLtVtW1uDiWl+ToHaW4IGwoG+rmg==
+  dependencies:
+    is-any-array "^0.0.3"
+    ml-array-max "^1.1.2"
+    ml-array-min "^1.1.2"
+
+ml-dataset-iris@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/ml-dataset-iris/-/ml-dataset-iris-1.1.1.tgz#eb93a85cac6b9a27b44219db53b3e3543a62c4ff"
+  integrity sha512-EqzTQIOgzFqnNAvdsMDCfg5fbi3rXdJuCd+abjkB1TGh33iIiVgeqO5TWBYLATSnSmBsXdixjVDMh7R4sEqsAA==
+
+ml-matrix@^6.2.0:
+  version "6.5.1"
+  resolved "https://registry.yarnpkg.com/ml-matrix/-/ml-matrix-6.5.1.tgz#b61305024f548ce198faa001974fd961cd162a98"
+  integrity sha512-KJ5DVN5cH7+HmFhjVhYh4FI1m1v4Xmw1Xi+huTlP0tDAKKuC5ZY4IlElCaT0LalsERE9nDQQ3YwT/o9Gss/B5w==
+  dependencies:
+    ml-array-rescale "^1.3.1"
+
+ml-pca@^4.0.1:
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/ml-pca/-/ml-pca-4.0.1.tgz#427d401097dccc28de0ed2f1cb96510ab7cebcbd"
+  integrity sha512-Pf+XrVtXehEbCmSw2QLa3BvZOICBrke7szizlcF6gh7up5b6+Muu/bEEy3NXvzMHMun8QFokHeV9KLctc5++dQ==
+  dependencies:
+    ml-matrix "^6.2.0"
+
 moment@2.22.2:
   version "2.22.2"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.22.2.tgz#3c257f9839fc0e93ff53149632239eb90783ff66"
   integrity sha1-PCV/mDn8DpP/UxSWMiOeuQeD/2Y=
+
+moment@^2.10.2:
+  version "2.29.1"
+  resolved "https://registry.yarnpkg.com/moment/-/moment-2.29.1.tgz#b2be769fa31940be9eeea6469c075e35006fa3d3"
+  integrity sha512-kHmoybcPV8Sqy59DwNDY3Jefr64lK/by/da0ViFcuA4DH0vQg5Q6Ze5VimxkfQNSC+Mls/Kx53s7TjP1RhFEDQ==
 
 morgan@1.9.1:
   version "1.9.1"
@@ -9781,6 +9856,14 @@ react-app-polyfill@^1.0.6:
     raf "^3.4.1"
     regenerator-runtime "^0.13.3"
     whatwg-fetch "^3.0.0"
+
+react-chartjs-2@^2.10.0:
+  version "2.10.0"
+  resolved "https://registry.yarnpkg.com/react-chartjs-2/-/react-chartjs-2-2.10.0.tgz#857e7f4788cae27e872624ba7826d53cf82f1ee6"
+  integrity sha512-1MjWEkUn8LLFf6GVyYUOrruJTW3yVU5hlEJOwGj3MiokuC+jH/BahjWVGAMonbe9UYbEIUbd2Rn36iVlC0Hb7w==
+  dependencies:
+    lodash "^4.17.19"
+    prop-types "^15.7.2"
 
 react-dev-utils@^10.2.1:
   version "10.2.1"
