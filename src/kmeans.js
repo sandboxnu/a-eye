@@ -81,19 +81,25 @@ const MyScatter2 =
   const [x2Idx, setX2Idx] = useState(props.cntrds[1].centroid[0]);
   const [y2Idx, setY2Idx] = useState(props.cntrds[1].centroid[1]);
   const [addedPoints, setAP]  = useState([]);
+  const fakepoints = [{ Driver_ID: 0, Distance_Feature: 0, Speeding_Feature: 0 },
+           { Driver_ID: 0, Distance_Feature: 1, Speeding_Feature: 1 }];
   const [removethese, setRT] = useState([]);
-  const [percentRemove, setPR] = useState(4001);
+  const [percentRemove, setPR] = useState(0);
+  const [editable, setEdit] = useState(true);
+  const [base, setBase] = useState(true);
+  // const []
   
 
   // format needed for kmeans()
   let c2 = [[x1Idx, y1Idx], [x2Idx, y2Idx]];
   // console.log(trainData, addedPoints)
-  let trainData2 = trainData.concat(addedPoints)
-  console.log(trainData2)
+  
+  let trainData2 = base ? trainData.concat(addedPoints) : addedPoints
+  console.log(addedPoints)
 
-  for (let i = 0; i < trainData2.length; i ++) {
-    if (i % percentRemove == 0) {
-      trainData2.splice(i, 2)
+  for (let i = trainData2.length; i > 0; i--) {
+    if (i % 6 == 0) {
+      trainData2.splice(i, percentRemove)
     }
   }
   
@@ -101,10 +107,23 @@ const MyScatter2 =
   // where our data is going to be, 'bubble data'
   let bubData = []
 
-  let ans_x = kmeans(organiseData(trainData2), k, { initialization: c2, maxIterations: 1 }, );
-  // process data mutates the first argument
-  let data3 = organiseData(trainData2)
-  processdata(bubData, ans_x.clusters, c2, props.hidden, data3)
+  if (trainData2.length >= 2) {
+    let ans_x = kmeans(organiseData(trainData2), k, { initialization: c2, maxIterations: 1 }, );
+    let data3 = organiseData(trainData2)
+    processdata(bubData, ans_x.clusters, c2, props.hidden, data3)
+  }
+  else {
+    let ans_x = kmeans(organiseData(trainData2.concat(fakepoints)), k, { initialization: c2, maxIterations: 1 }, );
+    let data3 = organiseData(trainData2)
+    let clustersss = trainData2.length == 1 ? [ans_x.clusters[0]] : []
+    processdata(bubData, clustersss, c2, props.hidden, data3)
+  }
+ 
+                                        
+  
+
+
+  
 
   
   // data that will be put into the chart
@@ -135,67 +154,81 @@ const MyScatter2 =
   
   
   const options = {
-      showLines: false,
+      
       scales : {
-        y : {
-            min: -1,
-            max: 100,
-        }
+        
+        yAxes : [{
+
+            ticks: {beginAtZero:true,
+                    min: 0,
+                    max: 400
+            }
+        }],
+
+        xAxes : [{
+
+          ticks: {beginAtZero:true,
+                  min: 0,
+                  max: 400
+          }
+        }]
       },
       dragData: true,
       dragX: true,
       dragDataRound: 0, 
       onClick : function (evt, item) {
+        if (editable) {
 
-        const asdgwg = this.chart.getElementAtEvent(evt)[0]
-        if (asdgwg) {
-          let ds_index = asdgwg._datasetIndex
-          let ind = asdgwg._index
-          let a = removethese
-          a.push({ds_index, ind})
-          setRT(a)
+          const asdgwg = this.chart.getElementAtEvent(evt)[0]
+          if (asdgwg) {
+            let ds_index = asdgwg._datasetIndex
+            let ind = asdgwg._index
+            let a = removethese
+            a.push({ds_index, ind})
+            setRT(a)
 
-          setX1Idx(this.chart.data.datasets[0].data[0].x  + 0.1)
-          setX1Idx(this.chart.data.datasets[0].data[0].x  - 0.1)
-          return;
-        }
-        else {
-          var yTop = this.chartArea.top;
-          var yBottom = this.chartArea.bottom;
+            setX1Idx(this.chart.data.datasets[0].data[0].x  + 0.1)
+            setX1Idx(this.chart.data.datasets[0].data[0].x  - 0.1)
+            return;
+          }
+          else {
+            var yTop = this.chartArea.top;
+            var yBottom = this.chartArea.bottom;
 
-          var yMin = this.scales['y-axis-1'].min;
-          var yMax = this.scales['y-axis-1'].max;
-          var newY = 0;
+            var yMin = this.scales['y-axis-1'].min;
+            var yMax = this.scales['y-axis-1'].max;
+            var newY = 0;
 
-          if (evt.offsetY <= yBottom && evt.offsetY >= yTop) {
-              newY = Math.abs((evt.offsetY - yTop) / (yBottom - yTop));
-              newY = (newY - 1) * -1;
-              newY = newY * (Math.abs(yMax - yMin)) + yMin;
-          };
+            if (evt.offsetY <= yBottom && evt.offsetY >= yTop) {
+                newY = Math.abs((evt.offsetY - yTop) / (yBottom - yTop));
+                newY = (newY - 1) * -1;
+                newY = newY * (Math.abs(yMax - yMin)) + yMin;
+            };
 
-          var xTop = this.chartArea.left;
-          var xBottom = this.chartArea.right;
-          var xMin = this.scales['x-axis-1'].min;
-          var xMax = this.scales['x-axis-1'].max;
-          var newX = 0;
+            var xTop = this.chartArea.left;
+            var xBottom = this.chartArea.right;
+            var xMin = this.scales['x-axis-1'].min;
+            var xMax = this.scales['x-axis-1'].max;
+            var newX = 0;
 
-          if (evt.offsetX <= xBottom && evt.offsetX >= xTop) {
-              newX = Math.abs((evt.offsetX - xTop) / (xBottom - xTop));
-              newX = newX * (Math.abs(xMax - xMin)) + xMin;
-          };
-          newX = Math.round(newX)
-          newY = Math.round(newY)
+            if (evt.offsetX <= xBottom && evt.offsetX >= xTop) {
+                newX = Math.abs((evt.offsetX - xTop) / (xBottom - xTop));
+                newX = newX * (Math.abs(xMax - xMin)) + xMin;
+            };
+            newX = Math.round(newX)
+            newY = Math.round(newY)
 
-          console.log(newX, newY);
-          let a = addedPoints
-          a.push({Driver_ID: 0, Distance_Feature: newX, Speeding_Feature: newY})
-          setAP(a)
-          
-          // turn a blind eye here
-          setX1Idx(this.chart.data.datasets[0].data[0].x  + 0.1)
-          setX1Idx(this.chart.data.datasets[0].data[0].x  - 0.1)
-          
-          
+            console.log(newX, newY);
+            let a = addedPoints
+            a.push({Driver_ID: 0, Distance_Feature: newX, Speeding_Feature: newY})
+            setAP(a)
+            
+            // turn a blind eye here
+            setX1Idx(this.chart.data.datasets[0].data[0].x  + 0.1)
+            setX1Idx(this.chart.data.datasets[0].data[0].x  - 0.1)
+            
+            
+          }
         }
       },
       onDragEnd,
@@ -219,9 +252,11 @@ const MyScatter2 =
         <Scatter data={data} options={options}  />
       </div>
       <div class=" space-x-10 ">
-        <button onClick={e => setPR(3)}>Third of the Points</button>
-        <button onClick={e => setPR(4)}>Half of the Points</button>
-        <button onClick={e => setPR(4001)}>All of the Points</button>
+        <button onClick={e => setPR(4)}>Third of the Points</button>
+        <button onClick={e => setPR(3)}>Half of the Points</button>
+        <button onClick={e => setPR(0)}>All of the Points</button>
+        <button onClick={e => setBase(!base)}> {base ? "Show Only Custom" : "Show All Points"}</button>
+        <button onClick={e => setEdit(!editable)} > {editable ? "Disable Editing" : "Enable Editing"} </button>
       </div>
     </div>);
 };
@@ -316,6 +351,17 @@ function App() {
       <div  className="kmeansgraph">
         <MyScatter2 clstrs ={ans100['clusters']} cntrds = {ans100['centroids']} hidden = {false} />
       </div> 
+      <p>
+        In the first plot, we can see all the points laid out on the scatterplot diagram. This represents the initial state of the kmeans 
+        algorithm, where we haven't split the points into separate groups yet. In the second diagram, we have the kmeans algorithm 
+        in its first step, where there are 2 centers (since k=2) in a random spot on the chart - these are the darker colored points.
+        All the data points are colored according to which center they are closest to. Feel free to add/remove points by clicking in different
+        place on the graph. For each iteration of kmeans, the centers are repositioned to the center of all the data points that belong to it. 
+        You can do this yourself! As you drag the centers around, notice the
+        data points may be recolored, they change color based on where the centers are repositioned to. Each loop of kmeans involves repositioning
+        each center once, and then repeating until they converge (stop moving). In the last plot, you can see where the centers converge to - see if
+        you can do it yourself and get the same result! 
+      </p>
       
     </div>
   );
