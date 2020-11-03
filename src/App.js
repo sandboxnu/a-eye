@@ -1,7 +1,7 @@
 import React from 'react';
 import Navbar from "./Navbar";
 import './App.css';
-import Kmeans from './kmeans';
+import Kmeans from './modules/stateSpaces/kmeans/kmeans'
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
 function App() {
