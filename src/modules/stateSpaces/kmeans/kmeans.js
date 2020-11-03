@@ -51,149 +51,30 @@ for (const element of ans2) {
     gen_out.push(element);
 }
 
+export const MyDemo = (props) => {
+    const [r, setR] = useState(2);
 
-export class MyDemo extends React.Component {
+    if (gen_out.length === 0) return <div></div>;
 
-    // const [x, setX] = useState(0);
-
-    state = {r: 2};
-
-    updateR = (e) => {
-        let val = e.target.value;
-        console.log('r: ' + val);
-        this.setState({r: val});
-    }
-
-    render () {
-        if (gen_out.length === 0) return <div></div>;
-
-        // const changeKernelSize = (e) => setKernelSize(parseInt(e.target.value));
-        // console.log(kmeans_gen )
-
-        /////////////////////
-        // while(true) {
-        //   let nxt = props.kmeans_gen.next()
-        //   console.log(nxt)
-        //   gen_out.push(nxt)
-        //   if(nxt.value.converged == true) [
-        //     console.log("x")
-        //   ]
-        //   if(nxt.value.converged) {
-        //     console.log('xx')
-        //     break
-        //   }
-        // }
-        let bubData = []
-        let data3 = organiseData(trainData)
-        console.log('GEN OUT: ' + gen_out);
-        console.log(gen_out[this.state.r].centroids)
-        console.log(data3)
-        let cntrdss = gen_out[this.state.r].centroids
-        let c2 = [cntrdss[0].centroid, cntrdss[1].centroid];
-
-        let labels = getClasses(data3, c2)
-        console.log(labels)
-
-        processdata(bubData, labels, c2, this.props.hidden, data3)
-        console.log(bubData)
-
-        // data that will be put into the chart
-        const data = {datasets: []};
-
-        Object.entries(bubData).forEach((cluster) => {
-            console.log(cluster[1])
-            data.datasets.push(
-                cluster[1]
-            )
-        })
-
-        const options = {
-            showLines: false,
-            tooltips: {enabled: false},
-            scales: {
-                yAxes: [{
-                    scaleLabel: {display: true}
-                }],
-                xAxes: [{
-                    scaleLabel: {display: true}
-                }],
-            },
-            animation: {
-                duration: 0
-            }
-        };
-
-        return (
-            <div>
-                <Scatter data={data} options={options}/>
-                <div className="font-bold m-3 h-10">
-                    Step
-                    <input className="number-input"
-                           type="range" min="0" max="4" step={1}
-                           value={this.state.r} onChange={this.updateR}/>
-                    {/* <input className="number-input"
-              type="number" min="1" max="7" step={1}
-              value={variabler} onChange={(e) => changeR(e)} /> */}
-
-                </div>
-            </div>
-        )
-    }
-}
-
-/*
-const MyDemo = (props) => {
-
-    // const [x, setX] = useState(0);
-
-    const [rState, setR] = useState({r: 2});
-
-    function changeR(r) {
-        // console.log(r)
-        variabler = Number(r);
-        console.log(variabler);
-    }
-    // const changeKernelSize = (e) => setKernelSize(parseInt(e.target.value));
-    // console.log(kmeans_gen )
-    let gen_out= []
-
-    for (const element of props.kmeans_gen) {
-        gen_out.push(element);
-    }
-    console.log(gen_out)
-
-    if (gen_out.length == 0) return null;
-    /////////////////////
-    // while(true) {
-    //   let nxt = props.kmeans_gen.next()
-    //   console.log(nxt)
-    //   gen_out.push(nxt)
-    //   if(nxt.value.converged == true) [
-    //     console.log("x")
-    //   ]
-    //   if(nxt.value.converged) {
-    //     console.log('xx')
-    //     break
-    //   }
-    // }
     let bubData = []
     let data3 = organiseData(trainData)
-    console.log(gen_out[0].centroids)
-    console.log(data3)
-    let cntrdss = gen_out[0].centroids
+    //console.log('GEN OUT: ' + gen_out);
+    //console.log(gen_out[r].centroids)
+    //console.log(data3)
+    let cntrdss = gen_out[r].centroids
     let c2 = [cntrdss[0].centroid, cntrdss[1].centroid];
 
     let labels = getClasses(data3, c2)
-    console.log(labels)
+    //console.log(labels)
 
     processdata(bubData, labels, c2, props.hidden, data3)
-    console.log(bubData)
+    //console.log(bubData)
 
     // data that will be put into the chart
-    const data = { datasets : [] };
+    const data = {datasets: []};
 
     Object.entries(bubData).forEach((cluster) => {
-        console.log(cluster[1])
+        //console.log(cluster[1])
         data.datasets.push(
             cluster[1]
         )
@@ -201,35 +82,36 @@ const MyDemo = (props) => {
 
     const options = {
         showLines: false,
-        tooltips: { enabled: false },
+        tooltips: {enabled: false},
         scales: {
             yAxes: [{
-                scaleLabel: { display: true }
+                scaleLabel: {display: true}
             }],
             xAxes: [{
-                scaleLabel: { display: true }
+                scaleLabel: {display: true}
             }],
+        },
+        animation: {
+            duration: 0
         }
     };
 
-    return(
+    return (
         <div>
-            <Scatter data={data} options={options} />
+            <Scatter data={data} options={options}/>
             <div className="font-bold m-3 h-10">
-                Step
-                <input className="number-input"
-                       type="range" //min="1" max="7" step={1}
-                       value={rState.r} onChange={(e) => setR({r: Number(e.target.value)})} />
-
-
+                <p className="inline">Step {r}</p>
+                <input className="number-input mx-2"
+                       type="range" min="0" max="4" step={1}
+                       value={r} onChange={(e) => setR(Number(e.target.value))}/>
             </div>
         </div>
     )
-}*/
+}
 
 // cluster colors
 let cl_colors = ['#99FF99', '#99CCFF']
-// center 
+// center
 let c_colors = ['#3cb450', "#5360fc"]
 
 const MyScatter =

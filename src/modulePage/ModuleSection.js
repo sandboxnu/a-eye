@@ -54,13 +54,7 @@ export default function ModuleSection(props) {
 
 function getDemo(comp, scheme) {
     const demoArgs = {labelColor: scheme.titleColor}
-    // pretend this isn't here
-    const kMeansStyle = {
-        position: "relative",
-        width: "60%",
-        height: "50%",
-        float: "right"
-    }
+
     switch (comp) {
         case "GaussianBlurDemo": 
             return <ImageSelectableDemo Demo={GaussianBlurDemo} initImg='purpleFlowers.jpeg' demoProps={demoArgs}/>
@@ -81,9 +75,9 @@ function getDemo(comp, scheme) {
         case "PCASelectableAxisChart":
             return <SelectableAxisChart columnSet={pcaConfig.pcaColumns} initXIdx={0} initYIdx={1} />
         case "InteractiveKMeans":
-            return <div style={kMeansStyle}><MyScatter2 clstrs ={kmeansConfig.ans1['clusters']} cntrds = {kmeansConfig.ans0['centroids']} hidden = {false} /></div>
+            return <div><MyScatter2 clstrs ={kmeansConfig.ans1['clusters']} cntrds = {kmeansConfig.ans0['centroids']} hidden = {false} /></div>
         case "StepKMeans":
-            return <div style={kMeansStyle}><MyDemo kmeans_gen={kmeansConfig.ans2} hidden = {false}/></div>
+            return <div><MyDemo kmeans_gen={kmeansConfig.ans2} hidden = {false}/></div>
         case "KMeans":
             return <KMeans />
         default: return <div></div>
