@@ -5,8 +5,8 @@ import DiffOfGaussianDemo from "../modules/computerVision/diffofgaussian/DiffOfG
 import HaarWaveletDemo from "../modules/computerVision/haarWavelet/HaarWaveletDemo";
 import { ImageSelectableDemo } from "../modules/computerVision/imageSelector/ImageSelectableDemo";
 import PCADemo from "../modules/stateSpaces/pca/PCA";
-import {RawDataTable, SelectableAxisChart, StaticAxisChart, AxisSelector, config} from "../modules/stateSpaces/pca/PCA";
-import KMeans from '../modules/stateSpaces/kmeans/kmeans';
+import {RawDataTable, SelectableAxisChart, StaticAxisChart, AxisSelector, config as pcaConfig} from "../modules/stateSpaces/pca/PCA";
+import KMeans, {MyDemo, MyScatter2, config as kmeansConfig} from '../modules/stateSpaces/kmeans/kmeans';
 
 const lorem = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.';
 
@@ -54,6 +54,13 @@ export default function ModuleSection(props) {
 
 function getDemo(comp, scheme) {
     const demoArgs = {labelColor: scheme.titleColor}
+    // pretend this isn't here
+    const kMeansStyle = {
+        position: "relative",
+        width: "60%",
+        height: "50%",
+        float: "right"
+    }
     switch (comp) {
         case "GaussianBlurDemo": 
             return <ImageSelectableDemo Demo={GaussianBlurDemo} initImg='purpleFlowers.jpeg' demoProps={demoArgs}/>
@@ -68,11 +75,15 @@ function getDemo(comp, scheme) {
         case "RawDataTable":
             return <RawDataTable />
         case "StaticAxisChart":
-            return <StaticAxisChart xIdx={4} yIdx={5} columnSet={config.columns} classes={["versicolor", "setosa"]} />
+            return <StaticAxisChart xIdx={4} yIdx={5} columnSet={pcaConfig.columns} classes={["versicolor", "setosa"]} />
         case "SelectableAxisChart":
-            return <SelectableAxisChart columnSet={config.columns} initXIdx={4} initYIdx={5} />
+            return <SelectableAxisChart columnSet={pcaConfig.columns} initXIdx={4} initYIdx={5} />
         case "PCASelectableAxisChart":
-            return <SelectableAxisChart columnSet={config.pcaColumns} initXIdx={0} initYIdx={1} />
+            return <SelectableAxisChart columnSet={pcaConfig.pcaColumns} initXIdx={0} initYIdx={1} />
+        case "InteractiveKMeans":
+            return <div style={kMeansStyle}><MyScatter2 clstrs ={kmeansConfig.ans1['clusters']} cntrds = {kmeansConfig.ans0['centroids']} hidden = {false} /></div>
+        case "StepKMeans":
+            return <div style={kMeansStyle}><MyDemo kmeans_gen={kmeansConfig.ans2} hidden = {false}/></div>
         case "KMeans":
             return <KMeans />
         default: return <div></div>

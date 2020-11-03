@@ -52,7 +52,7 @@ for (const element of ans2) {
 }
 
 
-class MyDemo extends React.Component {
+export class MyDemo extends React.Component {
 
     // const [x, setX] = useState(0);
 
@@ -271,8 +271,7 @@ const MyScatter =
 
 
 
-const MyScatter2 =
-    (props) => {
+export const MyScatter2 = (props) => {
 
 
         // in order to make the chart updateable after moving a center
@@ -570,5 +569,7 @@ function App() {
         </div>
     );
 }
+
+export const config = {ans0, ans1, ans2};
 
 export default App;

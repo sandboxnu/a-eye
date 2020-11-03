@@ -212,7 +212,7 @@
         "demoComp": "PCASelectableAxisChart"
       },
       {
-        "title": "Clustering",
+        "title": "interactive kmeans",
         "colorScheme": "light",
         "subsections": [
           {
@@ -231,11 +231,11 @@
             "imgSrc": "/blank.png"
           }
         ],
-        "demoComp": "PCADemo"
+        "demoComp": "InteractiveKMeans"
       },
       {
-        "title": "State Space Separation",
-        "colorScheme": "dark",
+        "title": "step kmeans",
+        "colorScheme": "light",
         "subsections": [
           {
             "title": "Subsection 1",
@@ -253,7 +253,7 @@
             "imgSrc": "/blank.png"
           }
         ],
-        "demoComp": "pca"
+        "demoComp": "StepKMeans"
       }
     ]
   },
