@@ -4,11 +4,23 @@ import React, { Component, useState, useEffect } from 'react';
 import { Scatter } from 'react-chartjs-2';
 import randomColour from 'randomcolor';
 import './kmeans.css';
-import trainData from './train.json'; // Training data is already preprocessed
+import trainData from './train.json'; 
 import dragData from 'chartjs-plugin-dragdata';
 
 import kmeans from 'ml-kmeans';
+import { squaredEuclidean } from 'ml-distance-euclidean';
 
+function getClasses(data, centers) {
+    // data is a array of points
+    // centers are two centers
+    // return array of labels (which its closer to), 0 for first center, 1 for second center
+
+    const map1 = data.map(x => squaredEuclidean(x, centers[0]) > squaredEuclidean(x, centers[1]) ? 1 : 0);
+    return map1
+
+
+
+}
 
 // Data processing
 const organiseData = (data) => {
@@ -29,6 +41,99 @@ let k = 2
 let ans0 = kmeans(organiseData(trainData), k, { initialization: centers, maxIterations: 1 }, );
 let ans100 = kmeans(organiseData(trainData), k, { initialization: centers, maxIterations: 100 }, );
 let ans1 = kmeans(organiseData(trainData), k, { initialization: centers, maxIterations: 2 }, );
+let centers2 = [[50, 70], [50, 80]];
+let ans2 = kmeans(organiseData(trainData), k, { initialization: centers2, withIterations: true }, );
+console.log(ans2)
+// console.log(ans2.next())
+
+
+let variabler = Number(2);
+
+const MyDemo = (props) => {
+  
+  // const [x, setX] = useState(0);
+
+
+  function changeR(r) {
+    // console.log(r)
+    variabler = Number(r);
+    console.log(variabler);
+  }
+  // const changeKernelSize = (e) => setKernelSize(parseInt(e.target.value));
+  // console.log(kmeans_gen )
+  let gen_out= []
+
+  for (const element of props.kmeans_gen) {
+    gen_out.push(element);
+  }
+  console.log(gen_out)
+
+  if (gen_out.length == 0) return null;
+ /////////////////////
+  // while(true) {
+  //   let nxt = props.kmeans_gen.next()
+  //   console.log(nxt)
+  //   gen_out.push(nxt)
+  //   if(nxt.value.converged == true) [
+  //     console.log("x")
+  //   ]
+  //   if(nxt.value.converged) {
+  //     console.log('xx')
+  //     break
+  //   }
+  // }
+  let bubData = []
+  let data3 = organiseData(trainData)
+  console.log(gen_out[0].centroids)
+  console.log(data3)
+  let cntrdss = gen_out[0].centroids
+  let c2 = [cntrdss[0].centroid, cntrdss[1].centroid];
+
+  let labels = getClasses(data3, c2)
+  console.log(labels)
+
+  processdata(bubData, labels, c2, props.hidden, data3)
+  console.log(bubData)
+
+  // data that will be put into the chart
+  const data = { datasets : [] };
+
+  Object.entries(bubData).forEach((cluster) => {
+    console.log(cluster[1])
+    data.datasets.push(
+      cluster[1]      
+    )
+  })
+  
+  const options = {
+      showLines: false,
+      tooltips: { enabled: false },
+      scales: {
+          yAxes: [{
+              scaleLabel: { display: true }
+          }],
+          xAxes: [{
+              scaleLabel: { display: true }
+          }],
+      }
+  };
+  
+  return(
+    <div>
+      <Scatter data={data} options={options} />
+      <div className="font-bold m-3 h-10">
+          Step
+          <input className="number-input"
+              type="range" //min="1" max="7" step={1}
+              value={variabler} onChange={(e) => changeR(e.target.value)} />
+          {/* <input className="number-input"
+              type="number" min="1" max="7" step={1}
+              value={variabler} onChange={(e) => changeR(e)} /> */}
+
+      </div>
+    </div>
+  )
+}
 
 // cluster colors
 let cl_colors = ['#99FF99', '#99CCFF']
@@ -71,6 +176,9 @@ const MyScatter =
         };
         return (<Scatter data={data} options={options} />);
     };
+
+
+
 const MyScatter2 =
 (props) => {
   
@@ -159,7 +267,6 @@ const MyScatter2 =
   const options = {
       
       scales : {
-        
         yAxes : [{
 
             ticks: {beginAtZero:true,
@@ -365,7 +472,9 @@ function App() {
         each center once, and then repeating until they converge (stop moving). In the last plot, you can see where the centers converge to - see if
         you can do it yourself and get the same result! 
       </p>
-      
+      {/* <div  className="kmeansgraph">
+        <MyDemo kmeans_gen={ans2} hidden = {false}/>
+      </div> */}
     </div>
   );
 }
