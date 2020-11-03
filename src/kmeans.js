@@ -88,21 +88,24 @@ const MyScatter2 =
   const [editable, setEdit] = useState(true);
   const [base, setBase] = useState(true);
   // const []
-  
+
 
   // format needed for kmeans()
   let c2 = [[x1Idx, y1Idx], [x2Idx, y2Idx]];
   // console.log(trainData, addedPoints)
   
-  let trainData2 = base ? trainData.concat(addedPoints) : addedPoints
+  
   console.log(addedPoints)
+  
+  let trainData2 = trainData.slice()
 
   for (let i = trainData2.length; i > 0; i--) {
-    if (i % 6 == 0) {
+    if (i % 10 == 0) {
       trainData2.splice(i, percentRemove)
     }
   }
-  
+
+  trainData2 = base ? trainData2.concat(addedPoints) : addedPoints
 
   // where our data is going to be, 'bubble data'
   let bubData = []
@@ -252,10 +255,10 @@ const MyScatter2 =
         <Scatter data={data} options={options}  />
       </div>
       <div class=" space-x-10 ">
-        <button onClick={e => setPR(4)}>Third of the Points</button>
-        <button onClick={e => setPR(3)}>Half of the Points</button>
-        <button onClick={e => setPR(0)}>All of the Points</button>
-        <button onClick={e => setBase(!base)}> {base ? "Show Only Custom" : "Show All Points"}</button>
+        <button style={ percentRemove==8 ? { color:'red'} : {color:'black'}} onClick={e => setPR(8)}>A Fifth of the Points</button>
+        <button style={ percentRemove==5 ? { color:'red'} : {color:'black'}} onClick={e => setPR(5)}>Half of the Points</button>
+        <button style={ percentRemove==0 ? { color:'red'} : {color:'black'}}  onClick={e => setPR(0)}>All of the Points</button>
+        <button onClick={e => setBase(!base)}> {base ? "Show Only Custom" : "Show Full Dataset"}</button>
         <button onClick={e => setEdit(!editable)} > {editable ? "Disable Editing" : "Enable Editing"} </button>
       </div>
     </div>);
