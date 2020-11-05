@@ -19,7 +19,8 @@ module.exports = {
         modulePaleBlue: '#CBD9F2',
         moduleTeal: '#0FD4C0',
         moduleOffwhite: '#F2F2F2',
-        moduleNavy: '#394D73'
+        moduleNavy: '#394D73',
+        brightOrange: '#f15e2c'
       },
       fontFamily: {
         opensans: ["open sans", "sans-serif"],
