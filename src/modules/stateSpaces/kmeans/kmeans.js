@@ -14,12 +14,7 @@ function getClasses(data, centers) {
     // data is a array of points
     // centers are two centers
     // return array of labels (which its closer to), 0 for first center, 1 for second center
-
-    const map1 = data.map(x => squaredEuclidean(x, centers[0]) > squaredEuclidean(x, centers[1]) ? 1 : 0);
-    return map1
-
-
-
+    return data.map(x => squaredEuclidean(x, centers[0]) > squaredEuclidean(x, centers[1]) ? 1 : 0);
 }
 
 // Data processing
@@ -85,11 +80,33 @@ export const MyDemo = (props) => {
         tooltips: {enabled: false},
         scales: {
             yAxes: [{
-                scaleLabel: {display: true}
+                scaleLabel: { display: true, labelString: props.yLabel || "", fontSize: 16, fontFamily: 'open sans', fontStyle: 'italic bold', fontColor: "#394D73" },
+                gridLines: {lineWidth: 3, color: '#8D9DBA'},
+                ticks: {
+                    fontColor: '#394D73',
+                    beginAtZero: true,
+                    min: 0,
+                    max: 120
+                }
             }],
             xAxes: [{
-                scaleLabel: {display: true}
+                scaleLabel: { display: true, labelString: props.xLabel || "", fontSize: 16, fontFamily: 'open sans', fontStyle: 'italic bold', fontColor: "#394D73" },
+                gridLines: {lineWidth: 3, color: '#8D9DBA'},
+                ticks: {
+                    fontColor: '#394D73',
+                    beginAtZero: true,
+                    min: 0,
+                    max: 250
+                }
             }],
+        },
+        legend: {
+            labels: {
+                fontSize: 14,
+                fontFamily: 'arial',
+                fontStyle: 'bold',
+                fontColor: "#394D73"
+            }
         },
         animation: {
             duration: 0
@@ -154,8 +171,6 @@ const MyScatter =
 
 
 export const MyScatter2 = (props) => {
-
-
         // in order to make the chart updateable after moving a center
         const [x1Idx, setX1Idx] = useState(props.cntrds[0].centroid[0]);
         const [y1Idx, setY1Idx] = useState(props.cntrds[0].centroid[1]);
@@ -168,13 +183,10 @@ export const MyScatter2 = (props) => {
         const [percentRemove, setPR] = useState(0);
         const [editable, setEdit] = useState(true);
         const [base, setBase] = useState(true);
-        // const []
-
 
         // format needed for kmeans()
         let c2 = [[x1Idx, y1Idx], [x2Idx, y2Idx]];
         // console.log(trainData, addedPoints)
-
 
         console.log(addedPoints)
 
@@ -203,13 +215,6 @@ export const MyScatter2 = (props) => {
             processdata(bubData, clustersss, c2, props.hidden, data3)
         }
 
-
-
-
-
-
-
-
         // data that will be put into the chart
         const data = { datasets : [] };
 
@@ -236,25 +241,38 @@ export const MyScatter2 = (props) => {
 
         }
 
-
         const options = {
-
-            scales : {
-                yAxes : [{
-
-                    ticks: {beginAtZero:true,
+            showLines: false,
+            tooltips: { enabled: false },
+            scales: {
+                yAxes: [{
+                    scaleLabel: { display: true, labelString: props.yLabel || "", fontSize: 16, fontFamily: 'open sans', fontStyle: 'italic bold', fontColor: "#CBD9F2" },
+                    gridLines: {lineWidth: 3, color: '#8D9DBA'},
+                    ticks: {
+                        fontColor: '#CBD9F2',
+                        beginAtZero: true,
                         min: 0,
-                        max: 400
+                        max: 120
                     }
                 }],
-
-                xAxes : [{
-
-                    ticks: {beginAtZero:true,
+                xAxes: [{
+                    scaleLabel: { display: true, labelString: props.xLabel || "", fontSize: 16, fontFamily: 'open sans', fontStyle: 'italic bold', fontColor: "#CBD9F2" },
+                    gridLines: {lineWidth: 3, color: '#8D9DBA'},
+                    ticks: {
+                        fontColor: '#CBD9F2',
+                        beginAtZero: true,
                         min: 0,
-                        max: 400
+                        max: 250
                     }
-                }]
+                }],
+            },
+            legend: {
+                labels: {
+                    fontSize: 14,
+                    fontFamily: 'arial',
+                    fontStyle: 'bold',
+                    fontColor: "#CBD9F2"
+                }
             },
             dragData: true,
             dragX: true,
@@ -315,15 +333,6 @@ export const MyScatter2 = (props) => {
                 }
             },
             onDragEnd,
-            tooltips: { enabled: false },
-            scales: {
-                yAxes: [{
-                    scaleLabel: { display: true }
-                }],
-                xAxes: [{
-                    scaleLabel: { display: true }
-                }],
-            },
             animation: {
                 duration: 0
             },
@@ -334,12 +343,17 @@ export const MyScatter2 = (props) => {
                 <div>
                     <Scatter data={data} options={options}  />
                 </div>
-                <div class=" space-x-10 ">
-                    <button style={ percentRemove==8 ? { color:'red'} : {color:'black'}} onClick={e => setPR(8)}>A Fifth of the Points</button>
-                    <button style={ percentRemove==5 ? { color:'red'} : {color:'black'}} onClick={e => setPR(5)}>Half of the Points</button>
-                    <button style={ percentRemove==0 ? { color:'red'} : {color:'black'}}  onClick={e => setPR(0)}>All of the Points</button>
-                    <button onClick={e => setBase(!base)}> {base ? "Show Only Custom" : "Show Full Dataset"}</button>
-                    <button onClick={e => setEdit(!editable)} > {editable ? "Disable Editing" : "Enable Editing"} </button>
+                <div className="flex-row space-x-10 mb-5">
+                    <div className="axis-selector inline">
+                        <button className={ percentRemove===8 && "selected"} onClick={e => setPR(8)}>A Fifth of the Points</button>
+                        <button className={ percentRemove===5 && "selected"} onClick={e => setPR(5)}>Half of the Points</button>
+                        <button className={ percentRemove===0 && "selected"}  onClick={e => setPR(0)}>All of the Points</button>
+                    </div>
+                    <div className="axis-selector inline">
+                        <button style={{color:'white'}} onClick={e => setBase(!base)}> {base ? "Show Only Custom" : "Show Full Dataset"}</button>
+                        <button style={{color:'white'}} onClick={e => setEdit(!editable)} > {editable ? "Disable Editing" : "Enable Editing"} </button>
+                    </div>
+
                 </div>
             </div>);
     };
@@ -364,14 +378,12 @@ for(let ci = 0; ci < 1; ci++) {
     let colour = cl_colors[ci];
     console.log(colour)
     bubbleData.push({
-        label: [`Cluster #${ci}`],
+        label: [`cluster #${ci}`],
         backgroundColor: colour,
         borderColor: colour,
         data: newCluster,
     });
 }
-
-
 
 
 // processing for second and third chart
@@ -388,7 +400,7 @@ function processdata(bdata, clsters, cntroids, hidden, data3) {
 
         let colour = c_colors[c];
         bdata.push({
-            label: [`Center #${c }`],
+            label: [`center ${c }`],
             backgroundColor: colour,
             borderColor: colour,
             data: newCluster,
@@ -411,7 +423,7 @@ function processdata(bdata, clsters, cntroids, hidden, data3) {
 
         const colour = cl_colors[ci];
         bdata.push({
-            label: [`Cluster #${ci}`],
+            label: [`cluster ${ci}`],
             backgroundColor: colour,
             borderColor: colour,
             data: newCluster,

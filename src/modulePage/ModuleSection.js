@@ -15,12 +15,14 @@ export default function ModuleSection(props) {
         "bgColor": "bg-moduleDarkBlue",
         "titleColor": "text-modulePaleBlue",
         "headingColor": "text-moduleTeal",
-        "bodyColor": "text-moduleOffwhite"
+        "bodyColor": "text-moduleOffwhite",
+        "labelColorHex": "#CBD9F2"
     } : {
         "bgColor": "bg-modulePaleBlue",
         "titleColor": "text-moduleNavy",
         "headingColor": "text-moduleDarkBlue",
-        "bodyColor": "text-moduleNavy"
+        "bodyColor": "text-moduleNavy",
+        "labelColorHex": "#394D73"
     };
 
     return (
@@ -69,11 +71,11 @@ function getDemo(comp, scheme) {
         case "RawDataTable":
             return <RawDataTable />
         case "StaticAxisChart":
-            return <StaticAxisChart xIdx={4} yIdx={5} columnSet={pcaConfig.columns} classes={["versicolor", "setosa"]} />
+            return <StaticAxisChart xIdx={4} yIdx={5} columnSet={pcaConfig.columns} classes={["versicolor", "setosa"]} labelColorHex={scheme.labelColorHex}/>
         case "SelectableAxisChart":
-            return <SelectableAxisChart columnSet={pcaConfig.columns} initXIdx={4} initYIdx={5} />
+            return <SelectableAxisChart columnSet={pcaConfig.columns} initXIdx={4} initYIdx={5} labelColor={scheme.titleColor} labelColorHex={scheme.labelColorHex}/>
         case "PCASelectableAxisChart":
-            return <SelectableAxisChart columnSet={pcaConfig.pcaColumns} initXIdx={0} initYIdx={1} />
+            return <SelectableAxisChart columnSet={pcaConfig.pcaColumns} initXIdx={0} initYIdx={1} labelColor={scheme.titleColor} labelColorHex={scheme.labelColorHex}/>
         case "InteractiveKMeans":
             return <div><MyScatter2 clstrs ={kmeansConfig.ans1['clusters']} cntrds = {kmeansConfig.ans0['centroids']} hidden = {false} /></div>
         case "StepKMeans":

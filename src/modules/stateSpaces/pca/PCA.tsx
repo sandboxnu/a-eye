@@ -9,20 +9,20 @@ import './PCA.css';
  * 
  * @param props 
  */
-export const PCADemo = (props: { labelColor: string }) => {
+export const PCADemo = (props: { labelColor: string, labelColorHex: string}) => {
 
     return (
         <div className={`PCA-div ${props.labelColor}`}>
             <RawDataTable />
-            <StaticAxisChart xIdx={4} yIdx={5} columnSet={columns} classes={["versicolor", "setosa"]} />
-            <SelectableAxisChart columnSet={columns} initXIdx={2} initYIdx={3} />
-            <SelectableAxisChart columnSet={pcaColumns} initXIdx={0} initYIdx={1} />
+            <StaticAxisChart xIdx={4} yIdx={5} columnSet={columns} classes={["versicolor", "setosa"]} labelColorHex={props.labelColorHex}/>
+            <SelectableAxisChart columnSet={columns} initXIdx={2} initYIdx={3} labelColor={"text-white"} labelColorHex={props.labelColorHex}/>
+            <SelectableAxisChart columnSet={pcaColumns} initXIdx={0} initYIdx={1} labelColor={"text-white"} labelColorHex={props.labelColorHex}/>
         </div>
     );
 }
 
 export const RawDataTable = () =>
-    <div className="container flex">
+    <div className="container flex mx-auto my-4">
         <div className="pca raw-data-table mx-auto">
             <table className="table-auto">
                 <thead>
@@ -42,7 +42,7 @@ export const RawDataTable = () =>
     </div>
 
 // Plot all samples in dataset, choose what 2 features to use as the axes
-export const SelectableAxisChart = (props: { columnSet: string[], initXIdx: number, initYIdx: number }) => {
+export const SelectableAxisChart = (props: { columnSet: string[], initXIdx: number, initYIdx: number, labelColor: string, labelColorHex: string}) => {
     const [xIdx, setXIdx] = useState(props.initXIdx);
     const [yIdx, setYIdx] = useState(props.initYIdx);
     const points: DataSeriesMap = {};
@@ -53,20 +53,20 @@ export const SelectableAxisChart = (props: { columnSet: string[], initXIdx: numb
     return (
         <div className="pca raw-data-chart">
             <div className="select-axis-menu yIdx">
-                <p className="font-opensans font-bold italic"> Select Y Axis </p>
+                <p className={`font-opensans font-bold italic ${props.labelColor}`}> Select Y Axis </p>
                 <AxisSelector selected={yIdx} onChange={setYIdx} columnSet={props.columnSet} />
             </div>
             <div className="raw-data-scatter">
-                <BasicScatter colorMap={colorMap} points={points} xLabel={props.columnSet[xIdx]} yLabel={props.columnSet[yIdx]} />
+                <BasicScatter colorMap={colorMap} points={points} xLabel={props.columnSet[xIdx]} yLabel={props.columnSet[yIdx]} labelColorHex={props.labelColorHex}/>
             </div>
             <div className="select-axis-menu xIdx">
-                <p className="font-opensans font-bold italic"> Select X Axis</p>
+                <p className={`font-opensans font-bold italic ${props.labelColor}`}> Select X Axis</p>
                 <AxisSelector selected={xIdx} onChange={setXIdx} columnSet={props.columnSet} />
             </div>
         </div>);
 };
 
-export const StaticAxisChart = (props: { xIdx: number, yIdx: number, columnSet: string[], classes: string[] }) => {
+export const StaticAxisChart = (props: { xIdx: number, yIdx: number, columnSet: string[], classes: string[], labelColorHex: string}) => {
 
     const points: DataSeriesMap = {};
     props.classes.forEach((dataClass) => {
@@ -77,7 +77,7 @@ export const StaticAxisChart = (props: { xIdx: number, yIdx: number, columnSet: 
     return (
         <div className="pca pca-chart">
             <div className="raw-data-scatter">
-                <BasicScatter colorMap={colorMap} points={points} xLabel={props.columnSet[props.xIdx]} yLabel={props.columnSet[props.yIdx]} />
+                <BasicScatter colorMap={colorMap} points={points} xLabel={props.columnSet[props.xIdx]} yLabel={props.columnSet[props.yIdx]} labelColorHex={props.labelColorHex}/>
             </div>
         </div>);
 

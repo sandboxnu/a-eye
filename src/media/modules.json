@@ -213,7 +213,7 @@
       },
       {
         "title": "Interactive 'K-Means'",
-        "colorScheme": "light",
+        "colorScheme": "dark",
         "subsections": [
           {
             "title": "Subsection 1",
