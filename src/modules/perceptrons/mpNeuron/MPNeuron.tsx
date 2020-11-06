@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
+import {AddCircle, RemoveCircle} from '@material-ui/icons';
 
 type NeuronInput = {
-    val: number | null, 
+    val: number | null,
     weight: number | null
 }
 
@@ -11,7 +12,7 @@ type NeuronInput = {
 // this can take a number => number func, use its tostring to render
 const MPNeuron = () => {
     // react draggable?
-    const [inputs, setInputs] = useState <NeuronInput[]>(
+    const [inputs, setInputs] = useState<NeuronInput[]>(
         [{ val: 0, weight: .5 },
         { val: 1, weight: 1 },
         { val: 0, weight: .2 }]
@@ -38,6 +39,16 @@ const MPNeuron = () => {
     }
     const onFuncChange = (func: (n: number) => number) => {
         setFunc(() => ((n: number) => func(n)));
+    }
+    const removeInput = () => {
+        const newInputs = [...inputs];
+        newInputs.pop();
+        setInputs(newInputs);
+    }
+    const addInput = () => {
+        const newInputs = [...inputs];
+        newInputs.push({ val: 1, weight: .5 });
+        setInputs(newInputs);
     }
 
     const inputSum = inputs.reduce((prev, acc) => {
@@ -74,10 +85,12 @@ const MPNeuron = () => {
     }
 
     return (
+        <div className="m-2 flex flex-col items-center justify-center">
         <div className="flex items-center">
             <div className="flex flex-col">
                 {inputs.map((val, idx) => makeInput(val, idx))}
             </div>
+            <InputLines numInpts={inputs.length} />
             <div className="rounded-full w-20 h-20 bg-brightOrange 
                 flex items-center justify-center">
                 {inputSum}
@@ -95,16 +108,47 @@ const MPNeuron = () => {
                 {output}
             </div>
         </div>
+        <div>
+            <RemoveCircle className="icon-button" fontSize="large" onClick={removeInput}/>
+            <p className="inline m-2">{inputs.length} inputs</p>
+            <AddCircle className="icon-button" fontSize="large" onClick={addInput}/>
+        </div>
+        </div>
+    );
+}
+
+const InputLines = (props: { numInpts: number }) => {
+    const height = 56 * props.numInpts;
+    const centerY = height / 2;
+
+    return (
+        <div>
+            <svg width='125px' height={height} viewBox={`0 0 125 ${height}`} xmlns="http://www.w3.org/2000/svg">
+                {Array(props.numInpts).fill(null).map((_, idx) => (
+                    <line key={idx}
+                        x1="0" y1={idx * 56 + 28}
+                        x2="125" y2={centerY}
+                        stroke-width="4px" stroke="#394D73"
+                    />
+                ))}
+            </svg>
+        </div>
     );
 }
 
 const ThresholdFunc = (props: { onFuncChange: ((func: (n: number) => number) => void) }) => {
     const [isGreater, setIsGreater] = useState(true);
-    const [threshold, setThreshold] = useState<number|null>(2);
+    const [threshold, setThreshold] = useState<number | null>(2);
 
     useEffect(() => {
         if (threshold === null) return;
-        const func = (n: number) => (n - threshold > 0) === isGreater ? 1 : 0;
+        const func = (n: number) => {
+            if (isGreater) {
+                return n > threshold ? 1 : 0;
+            } else {
+                return n < threshold ? 1 : 0;
+            }
+        };
         props.onFuncChange(func);
     }, [isGreater, threshold])
 
@@ -117,14 +161,14 @@ const ThresholdFunc = (props: { onFuncChange: ((func: (n: number) => number) => 
                 {isGreater ? '>' : '<'}
             </div>
             <input className="number-input w-10 border-0 bg-transparent"
-                        type="number"
-                        value={threshold !== null ? threshold : ''}
-                        onChange={(e) => {
-                            if (e.target.value === '') setThreshold(null);
-                            const val = parseFloat(e.target.value);
-                            if (!isNaN(val)) setThreshold(val);
-                        }}
-                    />
+                type="number"
+                value={threshold !== null ? threshold : ''}
+                onChange={(e) => {
+                    if (e.target.value === '') setThreshold(null);
+                    const val = parseFloat(e.target.value);
+                    if (!isNaN(val)) setThreshold(val);
+                }}
+            />
         </div>
     );
 }

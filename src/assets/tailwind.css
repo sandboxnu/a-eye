@@ -31,6 +31,13 @@
         image-rendering: pixelated;
         image-rendering: crisp-edges;
     }
+
+    .icon-button {
+        @apply text-orange-500 cursor-pointer;
+    }
+    .icon-button:hover {
+        @apply text-brightOrange cursor-pointer;
+    }
     
 
 }

@@ -664,6 +664,20 @@ video {
   image-rendering: crisp-edges;
 }
 
+.icon-button {
+  --text-opacity: 1;
+  color: #394D73;
+  color: rgba(57, 77, 115, var(--text-opacity));
+  cursor: pointer;
+}
+
+.icon-button:hover {
+  --text-opacity: 1;
+  color: #2B4B62;
+  color: rgba(43, 75, 98, var(--text-opacity));
+  cursor: pointer;
+}
+
 #app .space-y-0 > :not(template) ~ :not(template){
   --space-y-reverse: 0;
   margin-top: calc(0px * calc(1 - var(--space-y-reverse)));
