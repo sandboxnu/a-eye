@@ -1,5 +1,5 @@
 import React from 'react';
-import descriptions from './media/module_descriptions.json';
+import descriptions from './media/modules/module_descriptions.json';
 
 export default class ModuleDropdown extends React.Component {
     state = {

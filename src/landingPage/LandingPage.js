@@ -1,7 +1,7 @@
 import React from 'react';
 import background_img from '../media/background.jpeg';
 import landing_background from '../media/background_landing_page.svg';
-import descriptions from '../media/module_descriptions.json';
+import descriptions from '../media/modules/module_descriptions.json';
 import ModuleIntro from "./ModuleIntro";
 
 let top_style = {backgroundImage: `url(${background_img})`};
