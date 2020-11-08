@@ -8,8 +8,6 @@ const modules = {'computer-vision': module8, 'classification' : module9, 'percep
 
 export default function ModulePage(props) {
     const module = modules[props.match.params.module];
-    console.log(module)
-    console.log(props.match.params.module)
     if (!module) {
         return (
             <div>
@@ -20,7 +18,7 @@ export default function ModulePage(props) {
     }
     return (
         <div className="container w-screen">
-            <p className={`w-screen p-4 text-5xl font-bold font-opensans bg-modulePaleBlue text-moduleNavy`}>{module.title}</p>
+            <p className={`w-screen p-4 text-5xl font-bold font-opensans bg-modulePaleBlue text-moduleNavy`}>{module[props.match.params.module].title}</p>
             <ul>
                 {
                     module[props.match.params.module].sections.map((section) =>    
