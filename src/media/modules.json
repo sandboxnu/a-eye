@@ -124,7 +124,7 @@
     "title": "Module 9: Recognition as a Classification Problem",
     "sections": [
       {
-        "title": "State Spaces",
+        "title": "Why State Spaces?",
         "colorScheme": "dark",
         "subsections": [
           {
@@ -146,7 +146,7 @@
         "demoComp": "RawDataTable"
       },
       {
-        "title": "State Spaces",
+        "title": "Projecting Data",
         "colorScheme": "light",
         "subsections": [
           {
@@ -168,7 +168,7 @@
         "demoComp": "StaticAxisChart"
       },
       {
-        "title": "State Spaces",
+        "title": "Comparing Projections",
         "colorScheme": "dark",
         "subsections": [
           {
@@ -190,7 +190,7 @@
         "demoComp": "SelectableAxisChart"
       },
       {
-        "title": "State Spaces",
+        "title": "Advanced Projections",
         "colorScheme": "light",
         "subsections": [
           {
@@ -212,7 +212,7 @@
         "demoComp": "PCASelectableAxisChart"
       },
       {
-        "title": "Interactive 'K-Means'",
+        "title": "Interactive Clustering",
         "colorScheme": "dark",
         "subsections": [
           {
@@ -234,7 +234,7 @@
         "demoComp": "InteractiveKMeans"
       },
       {
-        "title": "Step by Step K-Means",
+        "title": "K-Means",
         "colorScheme": "light",
         "subsections": [
           {
