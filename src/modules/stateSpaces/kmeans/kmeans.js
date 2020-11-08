@@ -116,7 +116,7 @@ export const MyDemo = (props) => {
     return (
         <div>
             <Scatter data={data} options={options}/>
-            <div className="text-moduleOffwhite m-3">
+            <div className="text-moduleOffwhite m-3 -mt-2">
                 <div className="flex justify-around rounded w-1/4 mx-auto bg-moduleNavy">
                     <button onClick={() => setR(prevR => Math.max(prevR - 1, 0))}
                             className="rounded mx-auto py-1 hover:text-moduleTeal outline-none">
