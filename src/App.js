@@ -12,26 +12,26 @@ import ModulePage from "./modulePage/ModulePage";
 
 function App() {
   return (
-    <BrowserRouter>
-      <div className="App" id="app">
-        <ThemeProvider theme={THEME}>
-        <div className="App-header">
-          <Navbar />
+      <BrowserRouter>
+        <div className="App" id="app">
+          <ThemeProvider theme={THEME}>
+            <div className="App-header">
+              <Navbar />
+            </div>
+            <main className="font-mono text-lg font-charcoal">
+              <Switch>
+                <Route exact path="/" component={LandingPage} />
+                <Route path="/home" component={LandingPage} />
+                <Route path="/modules/:module" component={ModulePage} />
+                <Route path="/about" component={AboutPage} />
+              </Switch>
+            </main>
+            <div>
+              <Footer />
+            </div>
+          </ThemeProvider>
         </div>
-        <main className="font-mono text-lg font-charcoal">
-          <Switch>
-            <Route exact path="/" component={LandingPage} />
-            <Route path="/home" component={LandingPage} />
-            <Route path="/modules/:module" component={ModulePage} />
-            <Route path="/about" component={AboutPage} />
-          </Switch>
-        </main>
-        <div>
-          <Footer />
-        </div>
-        </ThemeProvider>
-      </div>
-    </BrowserRouter>
+      </BrowserRouter>
   );
 }
 
