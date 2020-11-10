@@ -6,6 +6,7 @@ import randomColour from 'randomcolor';
 import './kmeans.css';
 import trainData from './train.json';
 import trainDataIris from './iris.json';
+import trainDataIris2 from './iris2.json'; 
 import dragData from 'chartjs-plugin-dragdata';
 
 import kmeans from 'ml-kmeans';
@@ -24,14 +25,25 @@ const organiseData = (data) => {
     for (let i = 0; i < data.length; i++) {
         const newRow = [];
         const curRow = data[i];
-        if (curRow.Distance_Feature) {
+        if (i == 0) {
+            console.log(curRow)
+            
+        }
+        if (curRow.hasOwnProperty('Distance_Feature')) {
             newRow.push(curRow.Distance_Feature);
             newRow.push(curRow.Speeding_Feature);
+            // console.log('1')
         }
-        else {
+        else if (curRow.hasOwnProperty('sepalLength')) {
             newRow.push(curRow.sepalLength);
             newRow.push(curRow.sepalWidth);
-            // console.log(newRow)
+            // console.log('2')
+        }
+        else {
+
+            newRow.push(curRow.petalLength * 10);
+            newRow.push(curRow.petalWidth * 10);
+            // console.log('3');
         }
         organisedData.push(newRow);
     }
@@ -59,7 +71,10 @@ let ans1iris = kmeans(organiseData(trainDataIris), k, { initialization: centersI
 // let centers2Iris = [[50, 70], [50, 80]];
 // let ans2iris = kmeans(organiseData(trainData), k, { initialization: centersIris, withIterations: true }, );
 
+let centersIris2 = [[20, 20], [40, 40]]
+let ans0iris2 = kmeans(organiseData(trainDataIris2), k, { initialization: centersIris2, maxIterations: 1 }, );
 
+let ans1iris2 = kmeans(organiseData(trainDataIris2), k, { initialization: centersIris2, maxIterations: 2 }, );
 
 
 let gen_out = [];
@@ -200,31 +215,40 @@ export const MyScatter2 = (props) => {
         // true == original data
         // false == iris data
         // change to an int if more datasets
-        const [original, setO] = useState(true);
+        const [original, setO] = useState(0);
 
         // ans0['centroids']
         // ans0iris['centroids']
         const changeO = (props) => {
             let c = null;
-            if (original) {
+            // not sure why this is backwards
+            if (original == 0) {
                 setX1Idx(ans0iris['centroids'][0].centroid[0]);
                 setY1Idx(ans0iris['centroids'][0].centroid[1]);
                 setX2Idx(ans0iris['centroids'][1].centroid[0]);
                 setY2Idx(ans0iris['centroids'][1].centroid[1]);
             } 
-            else {
+            else if(original == 1) {
                 // console.log(centers)
                 setX1Idx(ans0['centroids'][0].centroid[0]);
                 setY1Idx(ans0['centroids'][0].centroid[1]);
                 setX2Idx(ans0['centroids'][1].centroid[0]);
                 setY2Idx(ans0['centroids'][1].centroid[1]);
             }
+            else {
+                setX1Idx(ans0iris2['centroids'][0].centroid[0]);
+                setY1Idx(ans0iris2['centroids'][0].centroid[1]);
+                setX2Idx(ans0iris2['centroids'][1].centroid[0]);
+                setY2Idx(ans0iris2['centroids'][1].centroid[1]);
+                
+            }
             
             setO(props)
         }
+
         // console.log(ans0['centroids'])
         // console.log(ans0iris['centroids'])
-        let centersx = original ? ans0['centroids'] : ans0iris['centroids']
+        let centersx = (original == 0 ? ans0['centroids'] : (original == 1 ? ans0iris['centroids'] : ans0iris2['centroids']))
         // console.log(centers, original)
 
         // in order to make the chart updateable after moving a center
@@ -234,10 +258,12 @@ export const MyScatter2 = (props) => {
         const [y2Idx, setY2Idx] = useState(centersx[1].centroid[1]);
         const [addedPoints, setAP]  = useState([]);
         const [addedPoints2, setAP2]  = useState([]);
+        const [addedPoints3, setAP3] = useState([]);
         const fakepoints = [{ Driver_ID: 0, Distance_Feature: 0, Speeding_Feature: 0 },
             { Driver_ID: 0, Distance_Feature: 1, Speeding_Feature: 1 }];
         const [removethese, setRT] = useState([]);
         const [removethese2, setRT2] = useState([]);
+        const [removethese3, setRT3] = useState([]);
         const [percentRemove, setPR] = useState(16);
         const [editable, setEdit] = useState(true);
         const [base, setBase] = useState(true);
@@ -250,11 +276,18 @@ export const MyScatter2 = (props) => {
 
         // console.log(addedPoints)
             
-        let trainData2 = original ? trainData.slice() : trainDataIris.slice()
-        if (original) {
+        let trainData2 = original == 0 ? trainData.slice() : (original == 1 ? trainDataIris.slice() : trainDataIris2.slice())
+        if (original == 0) {
             for (let i = trainData2.length; i > 0; i--) {
                 if (i % 20 == 0) {
                     trainData2.splice(i, percentRemove)
+                }
+            }
+        }
+        else {
+            for (let i = trainData2.length; i > 0; i--) {
+                if (i % 4 == 0) {
+                    trainData2.splice(i, percentRemove - 16)
                 }
             }
         }
@@ -262,19 +295,25 @@ export const MyScatter2 = (props) => {
         // trainData2 = base ? trainData2.concat(addedPoints) : addedPoints
 
         if (base) {
-            if (original) {
+            if (original == 0) {
                 trainData2 = trainData2.concat(addedPoints)
             }
-            else {
+            else if (original == 1) {
                 trainData2 = trainData2.concat(addedPoints2)
+            }
+            else {
+                trainData2 = trainData2.concat(addedPoints3)
             }
         }
         else {
-            if (original) {
+            if (original == 0) {
                 trainData2 = addedPoints
             }
-            else {
+            else if (original == 1) {
                 trainData2 = addedPoints2
+            }
+            else {
+                trainData2 = addedPoints3
             }
         }
 
@@ -282,6 +321,7 @@ export const MyScatter2 = (props) => {
         let bubData = []
 
         if (trainData2.length >= 2) {
+            console.log(organiseData(trainData2))
             let ans_x = kmeans(organiseData(trainData2), k, { initialization: c2, maxIterations: 1 }, );
             let data3 = organiseData(trainData2)
             processdata(bubData, ans_x.clusters, c2, props.hidden, data3)
@@ -289,8 +329,11 @@ export const MyScatter2 = (props) => {
         else {
             // console.log(organiseData(trainData2.concat(fakepoints)))
             // console.log(c2)
-
-            let ans_x = kmeans(organiseData(trainData2.concat(fakepoints)), k, { initialization: c2, maxIterations: 1 }, );
+            // console.log(organiseData(trainData2.concat(fakepoints)))
+            let s = trainData2.concat(fakepoints)
+            console.log(s)
+            console.log(organiseData(s))
+            let ans_x = kmeans(organiseData(s), k, { initialization: c2, maxIterations: 1 }, );
             let data3 = organiseData(trainData2)
             let clustersss = trainData2.length == 1 ? [ans_x.clusters[0]] : []
             processdata(bubData, clustersss, c2, props.hidden, data3)
@@ -333,8 +376,8 @@ export const MyScatter2 = (props) => {
                     ticks: {
                         fontColor: '#CBD9F2',
                         beginAtZero: true,
-                        min: original ? 0 : 1,
-                        max: original ? 120 : 7
+                        min: original == 0 ? 0 : (original == 1 ? 1 : 0),
+                        max: original == 0 ? 120 : (original == 1 ? 7 : 40),
                     }
                 }],
                 xAxes: [{
@@ -343,8 +386,8 @@ export const MyScatter2 = (props) => {
                     ticks: {
                         fontColor: '#CBD9F2',
                         beginAtZero: true,
-                        min: original ? 0 : 1,
-                        max: original ? 250 : 10
+                        min: original == 0 ? 0 : (original == 1 ? 1 : 0),
+                        max: original == 0 ? 250 : (original == 1 ? 10 : 100),   
                     }
                 }],
             },
@@ -366,9 +409,9 @@ export const MyScatter2 = (props) => {
                     if (asdgwg) {
                         let ds_index = asdgwg._datasetIndex
                         let ind = asdgwg._index
-                        let a = original ? removethese : removethese2
+                        let a = original == 0 ? removethese : (original == 1 ? removethese2 : removethese3)
                         a.push({ds_index, ind})
-                        original ? setRT(a) : setRT2(a)
+                        original == 0 ? setRT(a) : (original == 1 ? setRT2(a) : setRT3(a))
 
                         setX1Idx(this.chart.data.datasets[0].data[0].x  + 0.1)
                         setX1Idx(this.chart.data.datasets[0].data[0].x  - 0.1)
@@ -405,9 +448,9 @@ export const MyScatter2 = (props) => {
                         if (newX > 0 && newY > 0) {
 
                         
-                            let a = original ? addedPoints : addedPoints2
+                            let a = original == 0 ? addedPoints : (original == 1 ? addedPoints2 : addedPoints3)
                             a.push({Driver_ID: 0, Distance_Feature: newX, Speeding_Feature: newY})
-                            original ? setAP(a) : setAP2(a)
+                            original == 0 ? setAP(a) : (original == 1 ? setAP2(a) : setAP3(a))
 
                             // turn a blind eye here
                             setX1Idx(this.chart.data.datasets[0].data[0].x  + 0.1)
@@ -423,6 +466,18 @@ export const MyScatter2 = (props) => {
             },
 
         };
+
+        const name = (num) => {
+            if (num == 0) {
+                return "Current: Original Dataset"
+            } else if (num == 1) {
+                return "Current: Iris Sepal Dataset"
+            }
+            else {
+                return "Current: Metro Bike Dataset"
+            }
+        }
+
         return (
             <div>
                 <div>
@@ -437,7 +492,7 @@ export const MyScatter2 = (props) => {
                     <div className="axis-selector inline">
                         <button style={{color:'white'}} onClick={e => setBase(!base)}> {base ? "Show Only Custom" : "Show Full Dataset"}</button>
                         <button style={{color:'white'}} onClick={e => setEdit(!editable)} > {editable ? "Disable Editing" : "Enable Editing"} </button>
-                        <button onClick={e => changeO(!original)}>{original ? "Current: Original Dataset" : "Current: Iris Dataset"}</button>
+                        <button onClick={e => changeO((original+1) % 3)}>{original == 0 ? "Current: Original Dataset" : (original == 1 ? "Current: Iris Sepal Dataset" : "Current: Iris Petal Dataset")}</button>
                     </div>
 
                 </div>
