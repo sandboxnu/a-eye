@@ -5,6 +5,7 @@ import { Scatter } from 'react-chartjs-2';
 import randomColour from 'randomcolor';
 import './kmeans.css';
 import trainData from './train.json';
+import trainDataIris from './iris.json';
 import dragData from 'chartjs-plugin-dragdata';
 
 import kmeans from 'ml-kmeans';
@@ -23,23 +24,43 @@ const organiseData = (data) => {
     for (let i = 0; i < data.length; i++) {
         const newRow = [];
         const curRow = data[i];
-        newRow.push(curRow.Distance_Feature);
-        newRow.push(curRow.Speeding_Feature);
+        if (curRow.Distance_Feature) {
+            newRow.push(curRow.Distance_Feature);
+            newRow.push(curRow.Speeding_Feature);
+        }
+        else {
+            newRow.push(curRow.sepalLength);
+            newRow.push(curRow.sepalWidth);
+            // console.log(newRow)
+        }
         organisedData.push(newRow);
     }
+    console.log(organisedData)
     return organisedData;
 }
 
-let dataa = organiseData(trainData)
+// let dataa = organiseData(trainData)
 let centers = [[0, 0], [50, 50]];
 let k = 2
+// trainData = trainDataIris
 let ans0 = kmeans(organiseData(trainData), k, { initialization: centers, maxIterations: 1 }, );
 let ans100 = kmeans(organiseData(trainData), k, { initialization: centers, maxIterations: 100 }, );
 let ans1 = kmeans(organiseData(trainData), k, { initialization: centers, maxIterations: 2 }, );
 let centers2 = [[50, 70], [50, 80]];
 let ans2 = kmeans(organiseData(trainData), k, { initialization: centers2, withIterations: true }, );
-console.log(ans2)
-// console.log(ans2.next())
+
+// trainDataIris
+let centersIris = [[2, 2], [7, 5]];
+// let k = 2
+console.log(trainDataIris)
+let ans0iris = kmeans(organiseData(trainDataIris), k, { initialization: centersIris, maxIterations: 1 }, );
+// let ans100iris = kmeans(organiseData(trainData), k, { initialization: centersIris, maxIterations: 100 }, );
+let ans1iris = kmeans(organiseData(trainDataIris), k, { initialization: centersIris, maxIterations: 2 }, );
+// let centers2Iris = [[50, 70], [50, 80]];
+// let ans2iris = kmeans(organiseData(trainData), k, { initialization: centersIris, withIterations: true }, );
+
+
+
 
 let gen_out = [];
 for (const element of ans2) {
@@ -130,6 +151,10 @@ export const MyDemo = (props) => {
 let cl_colors = ['#99FF99', '#99CCFF']
 // center
 let c_colors = ['#3cb450', "#5360fc"]
+// center borders
+let cb_colors = ['#004E00', '#00007D' ]
+//#dd0303 red
+// #e76a04 orange
 
 const MyScatter =
     (graphdata) => {
@@ -144,7 +169,7 @@ const MyScatter =
                     x: point[1].x,
                     y: point[1].y,
                     // fill: false,
-                    pointRadius: 1,
+                    pointRadius: 15,
                     backgroundColor: '#ef5675',
                 });
 
@@ -171,34 +196,87 @@ const MyScatter =
 
 
 export const MyScatter2 = (props) => {
+
+        // true == original data
+        // false == iris data
+        // change to an int if more datasets
+        const [original, setO] = useState(true);
+
+        // ans0['centroids']
+        // ans0iris['centroids']
+        const changeO = (props) => {
+            let c = null;
+            if (original) {
+                setX1Idx(ans0iris['centroids'][0].centroid[0]);
+                setY1Idx(ans0iris['centroids'][0].centroid[1]);
+                setX2Idx(ans0iris['centroids'][1].centroid[0]);
+                setY2Idx(ans0iris['centroids'][1].centroid[1]);
+            } 
+            else {
+                // console.log(centers)
+                setX1Idx(ans0['centroids'][0].centroid[0]);
+                setY1Idx(ans0['centroids'][0].centroid[1]);
+                setX2Idx(ans0['centroids'][1].centroid[0]);
+                setY2Idx(ans0['centroids'][1].centroid[1]);
+            }
+            
+            setO(props)
+        }
+        // console.log(ans0['centroids'])
+        // console.log(ans0iris['centroids'])
+        let centersx = original ? ans0['centroids'] : ans0iris['centroids']
+        // console.log(centers, original)
+
         // in order to make the chart updateable after moving a center
-        const [x1Idx, setX1Idx] = useState(props.cntrds[0].centroid[0]);
-        const [y1Idx, setY1Idx] = useState(props.cntrds[0].centroid[1]);
-        const [x2Idx, setX2Idx] = useState(props.cntrds[1].centroid[0]);
-        const [y2Idx, setY2Idx] = useState(props.cntrds[1].centroid[1]);
+        const [x1Idx, setX1Idx] = useState(centersx[0].centroid[0]);
+        const [y1Idx, setY1Idx] = useState(centersx[0].centroid[1]);
+        const [x2Idx, setX2Idx] = useState(centersx[1].centroid[0]);
+        const [y2Idx, setY2Idx] = useState(centersx[1].centroid[1]);
         const [addedPoints, setAP]  = useState([]);
+        const [addedPoints2, setAP2]  = useState([]);
         const fakepoints = [{ Driver_ID: 0, Distance_Feature: 0, Speeding_Feature: 0 },
             { Driver_ID: 0, Distance_Feature: 1, Speeding_Feature: 1 }];
         const [removethese, setRT] = useState([]);
-        const [percentRemove, setPR] = useState(0);
+        const [removethese2, setRT2] = useState([]);
+        const [percentRemove, setPR] = useState(16);
         const [editable, setEdit] = useState(true);
         const [base, setBase] = useState(true);
+        
 
         // format needed for kmeans()
         let c2 = [[x1Idx, y1Idx], [x2Idx, y2Idx]];
+        console.log(c2, original)
         // console.log(trainData, addedPoints)
 
-        console.log(addedPoints)
-
-        let trainData2 = trainData.slice()
-
-        for (let i = trainData2.length; i > 0; i--) {
-            if (i % 10 == 0) {
-                trainData2.splice(i, percentRemove)
+        // console.log(addedPoints)
+            
+        let trainData2 = original ? trainData.slice() : trainDataIris.slice()
+        if (original) {
+            for (let i = trainData2.length; i > 0; i--) {
+                if (i % 20 == 0) {
+                    trainData2.splice(i, percentRemove)
+                }
             }
         }
 
-        trainData2 = base ? trainData2.concat(addedPoints) : addedPoints
+        // trainData2 = base ? trainData2.concat(addedPoints) : addedPoints
+
+        if (base) {
+            if (original) {
+                trainData2 = trainData2.concat(addedPoints)
+            }
+            else {
+                trainData2 = trainData2.concat(addedPoints2)
+            }
+        }
+        else {
+            if (original) {
+                trainData2 = addedPoints
+            }
+            else {
+                trainData2 = addedPoints2
+            }
+        }
 
         // where our data is going to be, 'bubble data'
         let bubData = []
@@ -209,6 +287,9 @@ export const MyScatter2 = (props) => {
             processdata(bubData, ans_x.clusters, c2, props.hidden, data3)
         }
         else {
+            // console.log(organiseData(trainData2.concat(fakepoints)))
+            // console.log(c2)
+
             let ans_x = kmeans(organiseData(trainData2.concat(fakepoints)), k, { initialization: c2, maxIterations: 1 }, );
             let data3 = organiseData(trainData2)
             let clustersss = trainData2.length == 1 ? [ans_x.clusters[0]] : []
@@ -219,6 +300,7 @@ export const MyScatter2 = (props) => {
         const data = { datasets : [] };
 
         Object.entries(bubData).forEach((cluster) => {
+            // console.log(cluster)
             data.datasets.push(
                 cluster[1]
             )
@@ -251,8 +333,8 @@ export const MyScatter2 = (props) => {
                     ticks: {
                         fontColor: '#CBD9F2',
                         beginAtZero: true,
-                        min: 0,
-                        max: 120
+                        min: original ? 0 : 1,
+                        max: original ? 120 : 7
                     }
                 }],
                 xAxes: [{
@@ -261,8 +343,8 @@ export const MyScatter2 = (props) => {
                     ticks: {
                         fontColor: '#CBD9F2',
                         beginAtZero: true,
-                        min: 0,
-                        max: 250
+                        min: original ? 0 : 1,
+                        max: original ? 250 : 10
                     }
                 }],
             },
@@ -284,9 +366,9 @@ export const MyScatter2 = (props) => {
                     if (asdgwg) {
                         let ds_index = asdgwg._datasetIndex
                         let ind = asdgwg._index
-                        let a = removethese
+                        let a = original ? removethese : removethese2
                         a.push({ds_index, ind})
-                        setRT(a)
+                        original ? setRT(a) : setRT2(a)
 
                         setX1Idx(this.chart.data.datasets[0].data[0].x  + 0.1)
                         setX1Idx(this.chart.data.datasets[0].data[0].x  - 0.1)
@@ -320,14 +402,17 @@ export const MyScatter2 = (props) => {
                         newY = Math.round(newY)
 
                         console.log(newX, newY);
-                        let a = addedPoints
-                        a.push({Driver_ID: 0, Distance_Feature: newX, Speeding_Feature: newY})
-                        setAP(a)
+                        if (newX > 0 && newY > 0) {
 
-                        // turn a blind eye here
-                        setX1Idx(this.chart.data.datasets[0].data[0].x  + 0.1)
-                        setX1Idx(this.chart.data.datasets[0].data[0].x  - 0.1)
+                        
+                            let a = original ? addedPoints : addedPoints2
+                            a.push({Driver_ID: 0, Distance_Feature: newX, Speeding_Feature: newY})
+                            original ? setAP(a) : setAP2(a)
 
+                            // turn a blind eye here
+                            setX1Idx(this.chart.data.datasets[0].data[0].x  + 0.1)
+                            setX1Idx(this.chart.data.datasets[0].data[0].x  - 0.1)
+                        }
 
                     }
                 }
@@ -345,13 +430,14 @@ export const MyScatter2 = (props) => {
                 </div>
                 <div className="flex-row space-x-10 mb-5">
                     <div className="axis-selector inline">
-                        <button className={ percentRemove===8 && "selected"} onClick={e => setPR(8)}>A Fifth of the Points</button>
-                        <button className={ percentRemove===5 && "selected"} onClick={e => setPR(5)}>Half of the Points</button>
-                        <button className={ percentRemove===0 && "selected"}  onClick={e => setPR(0)}>All of the Points</button>
+                        <button className={ percentRemove===19 && "selected"} onClick={e => setPR(19)}>A Fourth of the Points</button>
+                        <button className={ percentRemove===18 && "selected"} onClick={e => setPR(18)}>Half of the Points</button>
+                        <button className={ percentRemove===16 && "selected"}  onClick={e => setPR(16)}>All of the Points</button>
                     </div>
                     <div className="axis-selector inline">
                         <button style={{color:'white'}} onClick={e => setBase(!base)}> {base ? "Show Only Custom" : "Show Full Dataset"}</button>
                         <button style={{color:'white'}} onClick={e => setEdit(!editable)} > {editable ? "Disable Editing" : "Enable Editing"} </button>
+                        <button onClick={e => changeO(!original)}>{original ? "Current: Original Dataset" : "Current: Iris Dataset"}</button>
                     </div>
 
                 </div>
@@ -376,12 +462,13 @@ for(let ci = 0; ci < 1; ci++) {
 
     }
     let colour = cl_colors[ci];
-    console.log(colour)
+    // console.log(colour)
     bubbleData.push({
         label: [`cluster #${ci}`],
         backgroundColor: colour,
         borderColor: colour,
         data: newCluster,
+        pointRadius: 5,
     });
 }
 
@@ -399,12 +486,14 @@ function processdata(bdata, clsters, cntroids, hidden, data3) {
         })
 
         let colour = c_colors[c];
+        let cb = cb_colors[c];
         bdata.push({
             label: [`center ${c }`],
             backgroundColor: colour,
-            borderColor: colour,
+            borderColor: cb,
             data: newCluster,
-            hidden: hidden
+            hidden: hidden,
+            pointRadius: 7,
         });
     }
 
@@ -437,6 +526,7 @@ function processdata(bdata, clsters, cntroids, hidden, data3) {
 function App() {
     return (
         <div>
+            
             <div className="kmeansgraph">
                 <MyScatter graphdata={bubbleData} />
             </div>
@@ -464,6 +554,6 @@ function App() {
     );
 }
 
-export const config = {ans0, ans1, ans2};
+export const config = {ans0, ans1, ans2, ans0iris, ans1iris};
 
 export default App;
