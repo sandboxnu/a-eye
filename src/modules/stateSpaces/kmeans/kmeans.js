@@ -152,11 +152,18 @@ export const MyDemo = (props) => {
     return (
         <div>
             <Scatter data={data} options={options}/>
-            <div className="font-bold m-3 h-10">
-                <p className="inline">Step {r}</p>
-                <input className="number-input mx-2"
-                       type="range" min="0" max="4" step={1}
-                       value={r} onChange={(e) => setR(Number(e.target.value))}/>
+            <div className="text-moduleOffwhite m-3 -mt-2">
+                <div className="flex justify-around rounded w-1/4 mx-auto bg-moduleNavy">
+                    <button onClick={() => setR(prevR => Math.max(prevR - 1, 0))}
+                            className="rounded mx-auto py-1 hover:text-moduleTeal outline-none">
+                        <span className="m-auto text-2xl font-thin">−</span>
+                    </button>
+                    <div className="md:inline py-2">Step {r}/4</div>
+                    <button onClick={() => setR(prevR => Math.min(prevR + 1, 4))}
+                            className="rounded mx-auto py-1 hover:text-moduleTeal outline-none">
+                        <span className="m-auto text-2xl font-thin">+</span>
+                    </button>
+                </div>
             </div>
         </div>
     )
