@@ -83,7 +83,7 @@ for (const element of ans2) {
 }
 
 export const MyDemo = (props) => {
-    const [r, setR] = useState(2);
+    const [r, setR] = useState(0);
 
     if (gen_out.length === 0) return <div></div>;
 
