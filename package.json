@@ -15,6 +15,7 @@
     "autoprefixer": "^10.0.0",
     "filter": "^0.1.1",
     "gaussian-convolution-kernel": "^1.0.0",
+    "jsxgraph": "^1.1.0",
     "node-forge": "^0.10.0",
     "pixelmatch": "^5.2.1",
     "postcss": "^8.0.4",

@@ -9,7 +9,8 @@ import './App.css';
 import AboutPage from "./aboutPage/AboutPage"
 import LandingPage from "./landingPage/LandingPage";
 import ModulePage from "./modulePage/ModulePage";
-import MPNeuron from "./modules/perceptrons/mpNeuron/MPNeuron"
+import MPNeuron from "./modules/perceptrons/mpNeuron/MPNeuron";
+import RosenblattDemo from "./modules/perceptrons/rosenblatt/RosenblattDemo";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
             <Route path="/modules/:module" component={ModulePage} />
             <Route path="/about" component={AboutPage} />
             <Route path="/neuron" component={MPNeuron} />
+            <Route path="/rblatt" component={RosenblattDemo} />
           </Switch>
         </main>
         <div>
