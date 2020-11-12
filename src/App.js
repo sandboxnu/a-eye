@@ -9,7 +9,8 @@ import './index.css';
 import AboutPage from "./aboutPage/AboutPage"
 import LandingPage from "./landingPage/LandingPage";
 import ModulePage from "./modulePage/ModulePage";
-import MPNeuron from "./modules/perceptrons/mpNeuron/MPNeuron"
+import MPNeuron from "./modules/perceptrons/mpNeuron/MPNeuron";
+import RosenblattDemo from "./modules/perceptrons/rosenblatt/RosenblattDemo";
 
 function App() {
   return (

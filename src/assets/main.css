@@ -669,15 +669,15 @@ video {
 
 .icon-button {
   --text-opacity: 1;
-  color: #394D73;
-  color: rgba(57, 77, 115, var(--text-opacity));
+  color: #ed8936;
+  color: rgba(237, 137, 54, var(--text-opacity));
   cursor: pointer;
 }
 
 .icon-button:hover {
   --text-opacity: 1;
-  color: #2B4B62;
-  color: rgba(43, 75, 98, var(--text-opacity));
+  color: #f15e2c;
+  color: rgba(241, 94, 44, var(--text-opacity));
   cursor: pointer;
 }
 

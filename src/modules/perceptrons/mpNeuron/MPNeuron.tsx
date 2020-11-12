@@ -59,7 +59,7 @@ const MPNeuron = () => {
     const makeInput = (inpt: NeuronInput, idx: number) => {
         const isOne = inpt.val === 1;
         return (
-            <div className="flex items-center">
+            <div className="flex items-center cursor-pointer">
                 <div
                     className="font-bold rounded-full w-12 h-12 bg-navy m-1
                                 flex items-center justify-center"
@@ -136,6 +136,8 @@ const InputLines = (props: { numInpts: number }) => {
     );
 }
 
+// outlines
+// both > and < shown, highlight the one you want
 const ThresholdFunc = (props: { onFuncChange: ((func: (n: number) => number) => void) }) => {
     const [isGreater, setIsGreater] = useState(true);
     const [threshold, setThreshold] = useState<number | null>(2);
