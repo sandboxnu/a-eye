@@ -1,6 +1,10 @@
 import React from "react";
 import ModuleSection from "./ModuleSection";
-import modules from '../media/modules.json';
+import module8 from '../media/modules/module_8.json';
+import module9 from '../media/modules/module_9.json';
+import module10 from '../media/modules/module_10.json';
+import module11 from '../media/modules/module_11.json';
+const modules = {'computer-vision': module8, 'classification' : module9, 'perceptrons' : module10, 'neural-nets' : module11}
 
 export default function ModulePage(props) {
     const module = modules[props.match.params.module];
@@ -14,10 +18,10 @@ export default function ModulePage(props) {
     }
     return (
         <div className="container w-screen">
-            <p className={`w-screen p-4 text-5xl font-bold font-opensans bg-modulePaleBlue text-moduleNavy`}>{module.title}</p>
+            <p className={`w-screen p-4 text-5xl font-bold font-opensans bg-modulePaleBlue text-moduleNavy`}>{module[props.match.params.module].title}</p>
             <ul>
                 {
-                    module.sections.map((section) =>
+                    module[props.match.params.module].sections.map((section) =>    
                         <ModuleSection title={section.title}
                                        sections={section.subsections}
                                        colorScheme={section.colorScheme}
