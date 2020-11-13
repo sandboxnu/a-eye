@@ -19,7 +19,7 @@
               },
               {
                 "title": "Subsection 3",
-                "body": "Fantastic! Now we have that data for every single one of our plants, each being an 'observation', with their corresponding characteristic values which we will refer to as 'features' from now on. We can easily combine the singular observations into a table of observations since each has the exact same features. Now, times are tough for the flower industry so we cannot hire someone to label each of our Iris flowers as the correct subtype when a new shipment comes in. Can you come up with a way to determine subtype just based on the table below? Note that you can click the triangle in the top right corner of the table to reveal the true subtypes.",
+                "body": "Fantastic! Now we have that data for every single one of our plants, each being an 'observation', with their corresponding characteristic values which we will refer to as 'features' from now on. We can easily combine the singular observations into a table of observations since each has the exact same features. Now, times are tough for the flower industry so we cannot hire someone to label each of our Iris flowers as the correct subtype when a new shipment comes in. Can you come up with a way to determine subtype just based on the table below? Note that you can click the triangle in the top right corner of the table to reveal the true subtypes. ",
                 "imgSrc": "/blank.png"
               }
             ],
@@ -41,7 +41,7 @@
               },
               {
                 "title": "Subsection 3",
-                "body": "First, let's only compare the Setosa and Versicolor flowers. Since we remembered to write down what subtype each of our flowers/observations is our current garden, we can color our points based on that information. Here, the Setosa flowers are blue and the Versicolor flowers are red. We also see a nice separation between the two groups of points! By using the Petal Length and Petal Width, we could draw a line to separate the classes down from 1.8 on the y-axis down to 3.5 on the x-axis. Now if new flowers come in, we can say that the flower's coordinates lie above that line then it is a Versicolor and if the coordinates are below, it is a Setosa.",
+                "body": "First, let's only compare the Setosa and Versicolor flowers. Since we remembered to write down what subtype each of our flowers/observations is our current garden, we can color our points based on that information. Here, the Setosa flowers are blue and the Versicolor flowers are red. We also see a nice separation between the two groups of points! By using the Petal Length and Petal Width, we could draw a line to separate the classes down from 1.8 on the y-axis down to 3.5 on the x-axis. Now if new flowers come in, we can say that the flower's coordinates lie above that line then it is a Versicolor and if the coordinates are below, it is a Setosa. Note that you can click the box of a class in the legend to hide the points belonging to that class.",
                 "imgSrc": "/blank.png"
               }
             ],
@@ -80,12 +80,12 @@
               },
               {
                 "title": "Subsection 2",
-                "body": "One technique is to combine our features to create a new feature that maximizes such variation. This technique is known as Principle Component Analysis and it uses a combination of the original features to develop new features called Principle Components (PCs). These PCs are ranked in the order of variation they provide across all data points. We can then plot these new features to obtain better separation results than using our original features, sometimes more than two PCs may have to be used.",
+                "body": "One technique is to combine our features to create a new feature that maximizes such variation. This technique is known as Principle Component Analysis and it uses a *combination of the original features to develop new features called Principle Components (PCs)*. This combination of features is referred to as a *linear combination* in linear algebra since individual features are scaled and added to create the PCs. These PCs are ranked in the order of variation they provide across all data points. Notice that when you plot them below, the first PC provides an axis where points from the same class are tightly packed but points from separate classes are much more spread out. We can then plot these new features to obtain better separation results than using our original features, sometimes more than two PCs may have to be used.",
                 "imgSrc": "/blank.png"
               },
               {
                 "title": "Subsection 3",
-                "body": "Below, we see that this is the case when we attempt to use the first two Principle Components to separate the data. Notice that the first principle component maximizes the difference between the blue cluster (Setosa) and the rest of the points. However, the second PC does not possess nearly as much variation between the classes, making it possible to learn an approximate but not entirely accurate separation boundary for the Versicolor and Virginica classes. Note that you are not restricted to plotting PCs against other PCs in real life so feel free to do the below but remember that since all the features can used to develop a PC you may be seeing some duplicate information! Do you think that the visualization here creates more separation? Why or why not?",
+                "body": "Below, we see that this is the case when we attempt to use the first two Principle Components to separate the data. Notice that the first principle component maximizes the difference between the blue cluster (Setosa) and the rest of the points. However, the second PC does not possess nearly as much variation between the classes, making it possible to learn an approximate but not entirely accurate separation boundary (i.e. a single or set of line(s) we can draw between the two sets of points) for the Versicolor and Virginica classes. Note that you are not restricted to plotting PCs against other PCs in real life so feel free to do the below, but remember that since all the features can used to develop a PC you may be seeing some duplicate information! Do you think that the visualization here creates more separation? Why or why not?",
                 "imgSrc": "/blank.png"
               }
             ],
@@ -97,7 +97,7 @@
             "subsections": [
               {
                 "title": "Subsection 1",
-                "body": "Now we will explore a different, contextless example where we have two classes of points that we want to label as the appropriate class. Here, we do not have any prior information about what point belongs to what class which begs the question: how can we classify new points when we do not know the classes of the original points? Instead of finding a separation boundary directly like we did above, we first have to determine which points belong to the same group!",
+                "body": "Now we will explore a different, contextless example where we have two classes of points that we want to label as the appropriate class. Here, we do not have any prior information about what point belongs to what class which begs the question: how can we classify new points when we do not know the classes of the original points? Instead of finding a separation boundary directly -  like we did above where we were able to find a set of lines that separated the two groups of points - we first have to determine which points belong to the same group!",
                 "imgSrc": "/blank.png"
               },
               {
@@ -124,7 +124,7 @@
               },
               {
                 "title": "Subsection 2",
-                "body": "Remember that you can do this yourself in the plot above! As you drag the centers around, notice the data points may be recolored, they change color based on where the centers are repositioned to. While we are not displaying the values for the distances within and between clusters, you can still take the logical steps to find the locations where these differences would be logically optimized and then compare this to the results of the algorithm by looking at what the output is of the plot below for the last iteration",
+                "body": "Remember that you can do this yourself in the plot above! As you drag the centers around, notice the data points may be recolored, they change color based on where the centers are repositioned to. While we are not displaying the values for the distances within and between clusters, you can still take the logical steps to find the locations where these differences would be logically optimized and then compare this to the results of the algorithm by looking at what the output is of the plot below for the last iteration.",
                 "imgSrc": "/blank.png"
               },
               {

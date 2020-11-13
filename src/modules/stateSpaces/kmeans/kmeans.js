@@ -174,7 +174,7 @@ export const MyDemo = (props) => {
     return (
         <div>
             <Scatter data={data} options={options}/>
-            <div className="text-moduleOffwhite m-3 -mt-2">
+            <div className="text-moduleOffwhite m-3 -mt-2 space-x-2 inline">
                 <div className="flex justify-around rounded w-1/4 mx-auto bg-moduleNavy">
                     <button onClick={() => setR(prevR => Math.max(prevR - 1, 0))}
                             className="rounded mx-auto py-1 hover:text-moduleTeal outline-none">
@@ -185,9 +185,10 @@ export const MyDemo = (props) => {
                             className="rounded mx-auto py-1 hover:text-moduleTeal outline-none">
                         <span className="m-auto text-2xl font-thin">+</span>
                     </button>
-                    
+                </div>
+                <div className="mx-auto rounded w-1/4 bg-moduleNavy">
                     <button onClick={e => changeO()}
-                            className="rounded mx-auto py-1 hover:text-moduleTeal outline-none">
+                            className="py-1 hover:text-moduleTeal">
                         {original == 0 ? "Current: Original Dataset" : (original == 1 ? "Current: Iris Sepal Dataset" : "Current: Iris Petal Dataset")}
                     </button>
                 </div>
