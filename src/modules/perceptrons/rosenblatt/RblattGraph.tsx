@@ -3,7 +3,7 @@ import { RblattInput, RblattConfig } from './RosenblattDemo';
 const JXG = require('jsxgraph');
 
 
-const RblattGraph = (props: { inputs: RblattInput[], line: RblattConfig }) => {
+const RblattGraph = (props: { inputs: RblattInput[], line: RblattConfig, highlighted: RblattInput }) => {
     const [brdId, setBrdId] = useState('board_' + Math.random().toString(36).substr(2, 9));
     const [board, setBoard] = useState<any>(null);
     const [pointA, setPointA] = useState<any>(null); // 2 points to define the line
@@ -14,11 +14,11 @@ const RblattGraph = (props: { inputs: RblattInput[], line: RblattConfig }) => {
         setBoard(newBoard);
         props.inputs.forEach(inpt => {
             const color = inpt.z === 1 ? COL_1 : COL_0
-            newBoard.create('point', [inpt.x, inpt.y], { name: '', size: 1, color });
+            newBoard.create('point', [inpt.x, inpt.y], { name: '', size: 1, color, fixed: true });
         });
         const {aCoords, bCoords} = getLinePoints(props.line);
-        const pA = newBoard.create('point', aCoords, { name: '', size: 0, fixed: true });
-        const pB = newBoard.create('point', bCoords, { name: '', size: 0, fixed: true});
+        const pA = newBoard.create('point', aCoords, { name: '', fixed: true, color: 'transparent'});
+        const pB = newBoard.create('point', bCoords, { name: '', fixed: true, color: 'transparent'});
         const li = newBoard.create('line', [pA, pB], { strokeColor: 'black', strokeWidth: 2, fixed: true });
         newBoard.create('inequality', [li], {fillColor: COL_0});
         newBoard.create('inequality', [li], { inverse: true, fillColor: COL_1 });
@@ -34,6 +34,16 @@ const RblattGraph = (props: { inputs: RblattInput[], line: RblattConfig }) => {
         pointA?.moveTo(aCoords, 700);
         pointB?.moveTo(bCoords, 700);
     }, [props.line]);
+
+    useEffect(() => {
+        board?.select({
+            elementClass: JXG.OBJECT_CLASS_POINT
+        }).setAttribute({size: 1});
+        board?.select({
+            Y: (v: number) => v === props.highlighted.y, 
+            X: (v: number) => v === props.highlighted.x
+        }).setAttribute({size: 4});
+    }, [props.highlighted]);
 
     // todo: draw all points thru a useEffect depending on inputs. make the points controlled
     const addPoint = (e: any) => {
