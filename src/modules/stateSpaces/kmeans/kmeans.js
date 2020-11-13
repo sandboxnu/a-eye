@@ -68,6 +68,7 @@ console.log(trainDataIris)
 let ans0iris = kmeans(organiseData(trainDataIris), k, { initialization: centersIris, maxIterations: 1 }, );
 // let ans100iris = kmeans(organiseData(trainData), k, { initialization: centersIris, maxIterations: 100 }, );
 let ans1iris = kmeans(organiseData(trainDataIris), k, { initialization: centersIris, maxIterations: 2 }, );
+let ans2iris = kmeans(organiseData(trainDataIris), k, { initialization: centersIris, withIterations: true }, );
 // let centers2Iris = [[50, 70], [50, 80]];
 // let ans2iris = kmeans(organiseData(trainData), k, { initialization: centersIris, withIterations: true }, );
 
@@ -75,24 +76,45 @@ let centersIris2 = [[20, 20], [40, 40]]
 let ans0iris2 = kmeans(organiseData(trainDataIris2), k, { initialization: centersIris2, maxIterations: 1 }, );
 
 let ans1iris2 = kmeans(organiseData(trainDataIris2), k, { initialization: centersIris2, maxIterations: 2 }, );
-
+let ans2iris2 = kmeans(organiseData(trainDataIris2), k, { initialization: centersIris2, withIterations: true }, );
 
 let gen_out = [];
 for (const element of ans2) {
     gen_out.push(element);
 }
 
-export const MyDemo = (props) => {
-    const [r, setR] = useState(0);
+let gen_outIris = [];
+for (const element of ans2iris) {
+    gen_outIris.push(element);
+}
 
-    if (gen_out.length === 0) return <div></div>;
+let gen_outIris2 = [];
+for (const element of ans2iris2) {
+    gen_outIris2.push(element);
+}
+
+console.log(gen_out, gen_outIris, gen_outIris2)
+
+export const MyDemo = (props) => {
+    const [original, setO] = useState(0);
+    
+
+    let gen = original == 0 ? gen_out : (original == 1 ? gen_outIris : gen_outIris2)
+    const [r, setR] = useState(0);
+    const changeO = () => {
+        setO((original+1) % 3)
+        setR(0)
+        return;
+    }
+
+    if (gen.length === 0) return <div></div>;
 
     let bubData = []
-    let data3 = organiseData(trainData)
+    let data3 = original == 0 ? organiseData(trainData) : (original == 1 ? organiseData(trainDataIris) : organiseData(trainDataIris2))
     //console.log('GEN OUT: ' + gen_out);
     //console.log(gen_out[r].centroids)
     //console.log(data3)
-    let cntrdss = gen_out[r].centroids
+    let cntrdss = gen[r].centroids
     let c2 = [cntrdss[0].centroid, cntrdss[1].centroid];
 
     let labels = getClasses(data3, c2)
@@ -121,8 +143,8 @@ export const MyDemo = (props) => {
                 ticks: {
                     fontColor: '#394D73',
                     beginAtZero: true,
-                    min: 0,
-                    max: 120
+                    min: original == 0 ? 0 : (original == 1 ? 1 : 0),
+                    max: original == 0 ? 120 : (original == 1 ? 7 : 40),
                 }
             }],
             xAxes: [{
@@ -131,8 +153,8 @@ export const MyDemo = (props) => {
                 ticks: {
                     fontColor: '#394D73',
                     beginAtZero: true,
-                    min: 0,
-                    max: 250
+                    min: original == 0 ? 0 : (original == 1 ? 1 : 0),
+                    max: original == 0 ? 250 : (original == 1 ? 10 : 100), 
                 }
             }],
         },
@@ -148,20 +170,26 @@ export const MyDemo = (props) => {
             duration: 0
         }
     };
-
+    // TODO how do I add space between the buttons
     return (
         <div>
             <Scatter data={data} options={options}/>
-            <div className="text-moduleOffwhite m-3 -mt-2">
+            <div className="text-moduleOffwhite m-3 -mt-2 space-x-2 inline">
                 <div className="flex justify-around rounded w-1/4 mx-auto bg-moduleNavy">
                     <button onClick={() => setR(prevR => Math.max(prevR - 1, 0))}
                             className="rounded mx-auto py-1 hover:text-moduleTeal outline-none">
                         <span className="m-auto text-2xl font-thin">−</span>
                     </button>
-                    <div className="md:inline py-2">Step {r}/4</div>
-                    <button onClick={() => setR(prevR => Math.min(prevR + 1, 4))}
+                    <div className="md:inline py-2">Step {r}/{gen.length - 1}</div>
+                    <button onClick={() => setR(prevR => Math.min(prevR + 1, gen.length - 1))}
                             className="rounded mx-auto py-1 hover:text-moduleTeal outline-none">
                         <span className="m-auto text-2xl font-thin">+</span>
+                    </button>
+                </div>
+                <div className="mx-auto rounded w-1/4 bg-moduleNavy">
+                    <button onClick={e => changeO()}
+                            className="py-1 hover:text-moduleTeal">
+                        {original == 0 ? "Current: Original Dataset" : (original == 1 ? "Current: Iris Sepal Dataset" : "Current: Iris Petal Dataset")}
                     </button>
                 </div>
             </div>
@@ -219,8 +247,9 @@ const MyScatter =
 
 export const MyScatter2 = (props) => {
 
-        // true == original data
-        // false == iris data
+        // 0 == original data
+        // 1 == iris data
+        // 2 == diff iris data
         // change to an int if more datasets
         const [original, setO] = useState(0);
 
@@ -474,16 +503,6 @@ export const MyScatter2 = (props) => {
 
         };
 
-        const name = (num) => {
-            if (num == 0) {
-                return "Current: Original Dataset"
-            } else if (num == 1) {
-                return "Current: Iris Sepal Dataset"
-            }
-            else {
-                return "Current: Metro Bike Dataset"
-            }
-        }
 
         return (
             <div>
