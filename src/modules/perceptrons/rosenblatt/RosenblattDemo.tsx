@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import RblattGraph from './RblattGraph';
+import RblattNeuron from './RblattNeuron';
 
 export type RblattInput = { x: number, y: number, z: 0 | 1 };
 export type RblattConfig = { weightX: number, weightY: number, bias: number, learningRate: number };
@@ -7,15 +8,46 @@ export type RblattConfig = { weightX: number, weightY: number, bias: number, lea
 const RosenBlattDemo = (props: { labelColor: string }) => {
     const [inputs, setInputs] = useState<RblattInput[]>(INIT_INPUTS);
     const [config, setConfig] = useState<RblattConfig>(INIT_CONFIG);
+    const [currPoint, setCurrPoint] = useState<number>(0);
 
-    setTimeout(() => {
-        const newC = trainRblatt(inputs[0], config);
-        setConfig({...newC, learningRate: config.learningRate});
-    }, 1000);
+    // highlight the currently training point, display equation for the line
+    const trainSingle = (prevPoint: number) => {
+        const nextPoint = (prevPoint + 1) % inputs.length;
+        setCurrPoint(nextPoint);
+        setConfig(oldConf => {
+            const newC = trainRblatt(inputs[nextPoint], oldConf);
+            return {...newC, learningRate: oldConf.learningRate}
+        });
+    } 
+
+    const trainAll = () => {
+        // have to keep track of the point index ourselves, because of weird closure things
+        // regarding state variables and setInterval
+        let prev = 0;
+        const trainEach = () => {
+            trainSingle(prev) 
+            prev += 1;
+            if (prev === inputs.length) { clearInterval(interval); }
+        }
+        const interval = setInterval(trainEach, 1000);
+    }
 
     return (
-        <div className="m-4">
-            <RblattGraph inputs={inputs} line={config} />
+        <div>
+        <div className="m-4 flex items-center justify-center">
+            <RblattNeuron input={inputs[currPoint || 0]} config={config}/>
+            <RblattGraph inputs={inputs} line={config} highlighted={inputs[currPoint]}/>
+        </div>
+        <button className="basic-button"
+            onClick={() => trainSingle(currPoint)}
+        >
+            Train Single Point
+        </button>
+        <button className="basic-button"
+            onClick={trainAll}
+        >
+            Train All Points
+        </button>
         </div>
     );
 }

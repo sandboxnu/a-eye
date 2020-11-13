@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import {AddCircle, RemoveCircle} from '@material-ui/icons';
 
-type NeuronInput = {
+export type NeuronInput = {
     val: number | null,
     weight: number | null
 }
@@ -117,7 +117,7 @@ const MPNeuron = () => {
     );
 }
 
-const InputLines = (props: { numInpts: number }) => {
+export const InputLines = (props: { numInpts: number }) => {
     const height = 56 * props.numInpts;
     const centerY = height / 2;
 
@@ -128,7 +128,7 @@ const InputLines = (props: { numInpts: number }) => {
                     <line key={idx}
                         x1="0" y1={idx * 56 + 28}
                         x2="125" y2={centerY}
-                        stroke-width="4px" stroke="#394D73"
+                        strokeWidth="4px" stroke="#394D73"
                     />
                 ))}
             </svg>
@@ -155,12 +155,12 @@ const ThresholdFunc = (props: { onFuncChange: ((func: (n: number) => number) => 
     }, [isGreater, threshold])
 
     return (
-        <div className="font-bold w-20 h-10 rounded-md bg-orange-500 
+        <div className="font-bold w-20 h-10 rounded-md border-2 border-orange-500 
                         flex items-center justify-center px-2">
             <div className="cursor-pointer"
                 onClick={() => setIsGreater(!isGreater)}
             >
-                {isGreater ? '>' : '<'}
+                {isGreater ? '>' : '<'} 
             </div>
             <input className="number-input w-10 border-0 bg-transparent"
                 type="number"
