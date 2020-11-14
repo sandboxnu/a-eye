@@ -9,9 +9,10 @@ const RosenBlattDemo = (props: { labelColor: string }) => {
     const [inputs, setInputs] = useState<RblattInput[]>(INIT_INPUTS);
     const [config, setConfig] = useState<RblattConfig>(INIT_CONFIG);
     const [currPoint, setCurrPoint] = useState<number>(0);
+    const [animInterval, setAnimInterval] = useState<NodeJS.Timeout | null>(null);
 
-    // highlight the currently training point, display equation for the line
     const trainSingle = (prevPoint: number) => {
+        if (animInterval) return;
         const nextPoint = (prevPoint + 1) % inputs.length;
         setCurrPoint(nextPoint);
         setConfig(oldConf => {
@@ -21,37 +22,96 @@ const RosenBlattDemo = (props: { labelColor: string }) => {
     } 
 
     const trainAll = () => {
+        if (animInterval) return;
         // have to keep track of the point index ourselves, because of weird closure things
         // regarding state variables and setInterval
-        let prev = 0;
-        const trainEach = () => {
-            trainSingle(prev) 
-            prev += 1;
-            if (prev === inputs.length) { clearInterval(interval); }
-        }
-        const interval = setInterval(trainEach, 1000);
+        let newConf: RblattConfig = config;
+        inputs.forEach(inpt => {
+            newConf = trainRblatt(inpt, newConf);
+        })
+        setConfig(newConf);
     }
 
+    const animateAll = () => {
+        if (animInterval) {
+            clearInterval(animInterval);
+            setAnimInterval(null);
+        } else {
+            let prev = -1;
+            const interval = setInterval(() => {
+                trainSingle(prev) 
+                prev += 1;
+            }, 1000);
+            setAnimInterval(interval);
+        }
+    }
+
+    const resetConfig = () => {setConfig(INIT_CONFIG)};
+
     return (
-        <div>
-        <div className="m-4 flex items-center justify-center">
-            <RblattNeuron input={inputs[currPoint || 0]} config={config}/>
-            <RblattGraph inputs={inputs} line={config} highlighted={inputs[currPoint]}/>
-        </div>
-        <button className="basic-button"
-            onClick={() => trainSingle(currPoint)}
-        >
-            Train Single Point
-        </button>
-        <button className="basic-button"
-            onClick={trainAll}
-        >
-            Train All Points
-        </button>
+        <div className="m-4">
+            <div className="m-4 flex items-center justify-center">
+                <div className="flex flex-col items-center justify-center">
+                    <p className="-m-6 font-bold text-2xl"> 
+                        {`${config.weightX.toFixed(1)}x + ${config.weightY.toFixed(1)}y + ${config.bias.toFixed(1)} > 0`}
+                    </p>
+                    <RblattNeuron input={inputs[currPoint]} config={config}/>
+                </div>
+                <EditingRblattGraph 
+                    inputs={inputs} line={config} 
+                    highlighted={inputs[currPoint]}
+                    onInputsChange={setInputs}
+                />
+            </div>
+            <button className={`basic-button ${animInterval ? 'alt' : ''}`}
+                onClick={animateAll}
+            >
+                {animInterval ? 'Stop ■' : 'Animate ▶'}
+            </button>
+            <button className='basic-button' disabled={!!animInterval}
+                onClick={() => trainSingle(currPoint)}
+            >
+                Train Single Point
+            </button>
+            <button className='basic-button' disabled={!!animInterval}
+                onClick={trainAll}
+            >
+                Train All Points
+            </button>
+            <button className={`basic-button`}
+                onClick={resetConfig}
+            >
+                Reset
+            </button>
         </div>
     );
 }
 export default RosenBlattDemo;
+
+
+const EditingRblattGraph = (props: {inputs: RblattInput[], line: RblattConfig,  highlighted: RblattInput,
+                            onInputsChange: (inpts: React.SetStateAction<RblattInput[]>) => void}) => 
+{
+    const [editingType, setEditingType] = useState<1 | 0 | null>(null);
+
+    return (
+    <div className="flex flex-col items-center justify-center">
+        <RblattGraph {...props} editingType={editingType} />
+        <div className="flex items-center justify-center">
+            Add/Remove Points:
+            <button className="basic-button alt py-1 px-2"
+                onClick={() => editingType === 0 ? setEditingType(null) : setEditingType(0)}
+            >
+                Orange
+            </button>
+            <button className="basic-button py-1 px-2"
+                onClick={() => editingType === 1 ? setEditingType(null) : setEditingType(1)}
+            >
+                Blue
+            </button>
+        </div>
+    </div>);
+}
 
 // ooooohh the sexy sexy math
 function trainRblatt(inpt: RblattInput, config: RblattConfig) {
@@ -62,7 +122,7 @@ function trainRblatt(inpt: RblattInput, config: RblattConfig) {
         const newWeightX = config.weightX + config.learningRate * error * inpt.x;
         const newWeightY = config.weightY + config.learningRate * error * inpt.y;
         const newBias = config.bias + config.learningRate * error;
-        return { bias: newBias, weightX: newWeightX, weightY: newWeightY, error };
+        return { ...config, bias: newBias, weightX: newWeightX, weightY: newWeightY, error };
     } else {
         return { ...config, error }
     }

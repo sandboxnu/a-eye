@@ -17,6 +17,15 @@
     .basic-button:disabled {
         @apply bg-navy-disabled cursor-auto;
     }
+    .basic-button.alt {
+        @apply bg-brightOrange;
+    }
+    .basic-button.alt:hover {
+        @apply bg-orange-600;
+    }
+    .basic-button.alt:disabled {
+        @apply bg-orange-400;
+    }
 
     .number-input {
         @apply w-16 border-2 border-solid border-gray-500 pl-2 rounded-md;
