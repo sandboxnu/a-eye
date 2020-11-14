@@ -637,6 +637,24 @@ video {
   cursor: auto;
 }
 
+.basic-button.alt {
+  --bg-opacity: 1;
+  background-color: #f15e2c;
+  background-color: rgba(241, 94, 44, var(--bg-opacity));
+}
+
+.basic-button.alt:hover {
+  --bg-opacity: 1;
+  background-color: #c05621;
+  background-color: rgba(192, 86, 33, var(--bg-opacity));
+}
+
+.basic-button.alt:disabled {
+  --bg-opacity: 1;
+  background-color: #f6ad55;
+  background-color: rgba(246, 173, 85, var(--bg-opacity));
+}
+
 .number-input {
   width: 4rem;
   border-width: 2px;
