@@ -20,7 +20,8 @@ module.exports = {
         moduleTeal: '#0FD4C0',
         moduleOffwhite: '#F2F2F2',
         moduleNavy: '#394D73',
-        brightOrange: '#f15e2c'
+        brightOrange: '#f15e2c',
+        lightNavy: '#5e76a2'
       },
       fontFamily: {
         opensans: ["open sans", "sans-serif"],

@@ -6,7 +6,7 @@ type RblattGraphProps = {
     inputs: RblattInput[], 
     line: RblattConfig, 
     highlighted: RblattInput,
-    editingType: 0 | 1 | null, 
+    editingType: {val:  0 | 1 | null}, 
     onInputsChange: (inpts: React.SetStateAction<RblattInput[]>) => void
  }
 
@@ -55,7 +55,7 @@ const RblattGraph = (props: RblattGraphProps) => {
     }, [props.highlighted]);
 
     const addPoint = (e: any) => {
-        if (props.editingType === null) return;
+        if (props.editingType.val === null) return;
 
         var canCreate = true, i, coords: any, el;
         if (e[JXG.touchProperty]) {
@@ -71,21 +71,21 @@ const RblattGraph = (props: RblattGraphProps) => {
         if (canCreate) {
             const newIdx = props.inputs.length;
             props.onInputsChange(oldInpts => {
-                const z = props.editingType || 0;
+                const z = props.editingType.val || 0;
                 oldInpts.push({x: coords.usrCoords[1], y: coords.usrCoords[2], z });
                 return oldInpts;
             });
             // creating points here is *technically* going against controlled components
             // shhh do not look
             const p = board.create('point', [coords.usrCoords[1], coords.usrCoords[2]],
-                { name: '', size: 1, color: props.editingType ? COL_1 : COL_0 });
+                { name: '', size: 1, color: props.editingType.val ? COL_1 : COL_0 });
             p.on('down', () => removePoint(p, newIdx));
 
         }
     }
 
     const removePoint = (point: any, idx: number, currBoard?: any) => {
-        if (props.editingType === null) return;
+        if (props.editingType.val === null) return;
         props.onInputsChange(oldInpts => oldInpts.filter(inpt => inpt.x != point.X() && inpt.y != point.Y()));
 
         // can't directly use state var for board bc of closures
