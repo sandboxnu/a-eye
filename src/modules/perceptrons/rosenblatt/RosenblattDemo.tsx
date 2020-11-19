@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import RblattGraph from './RblattGraph';
+import RblattInputsTable from './RblattInputsTable';
 import RblattNeuron from './RblattNeuron';
 
 export type RblattInput = { x: number, y: number, z: 0 | 1 };
@@ -83,6 +84,7 @@ const RosenBlattDemo = (props: { labelColor: string }) => {
             >
                 Reset
             </button>
+            <RblattInputsTable labelColor={props.labelColor} data={inputs}/>
         </div>
     );
 }

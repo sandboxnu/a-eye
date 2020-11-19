@@ -49,4 +49,14 @@
     }
     
 
+    .a-eye-table {
+        @apply w-full border-collapse border border-modulePaleBlue;
+    }
+    .a-eye-table th {
+        @apply bg-moduleNavy text-modulePaleBlue sticky top-0 h-16 shadow-md;
+    }
+    .a-eye-table th, td {
+        @apply text-center p-1 border border-modulePaleBlue;
+    }
+    
 }
