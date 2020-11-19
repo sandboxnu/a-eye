@@ -639,12 +639,6 @@ video {
   cursor: auto;
 }
 
-.basic-button.faded {
-  --bg-opacity: 1;
-  background-color: #526790;
-  background-color: rgba(82, 103, 144, var(--bg-opacity));
-}
-
 .basic-button.alt {
   --bg-opacity: 1;
   background-color: #f15e2c;
@@ -657,8 +651,7 @@ video {
   background-color: rgba(221, 107, 32, var(--bg-opacity));
 }
 
-.basic-button.alt:disabled,
-    .basic-button.alt.faded {
+.basic-button.alt:disabled {
   --bg-opacity: 1;
   background-color: #f6ad55;
   background-color: rgba(246, 173, 85, var(--bg-opacity));
@@ -704,6 +697,37 @@ video {
   color: #f15e2c;
   color: rgba(241, 94, 44, var(--text-opacity));
   cursor: pointer;
+}
+
+.a-eye-table {
+  width: 100%;
+  border-collapse: collapse;
+  border-width: 1px;
+  --border-opacity: 1;
+  border-color: #CBD9F2;
+  border-color: rgba(203, 217, 242, var(--border-opacity));
+}
+
+.a-eye-table th {
+  --bg-opacity: 1;
+  background-color: #394D73;
+  background-color: rgba(57, 77, 115, var(--bg-opacity));
+  --text-opacity: 1;
+  color: #CBD9F2;
+  color: rgba(203, 217, 242, var(--text-opacity));
+  position: sticky;
+  top: 0;
+  height: 4rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.a-eye-table th, td {
+  text-align: center;
+  padding: 0.25rem;
+  border-width: 1px;
+  --border-opacity: 1;
+  border-color: #CBD9F2;
+  border-color: rgba(203, 217, 242, var(--border-opacity));
 }
 
 #app .space-y-0 > :not(template) ~ :not(template){
