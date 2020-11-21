@@ -42,6 +42,9 @@ const RblattGraph = (props: RblattGraphProps) => {
         const {aCoords, bCoords} = getLinePoints(props.line);
         pointA?.moveTo(aCoords, 700);
         pointB?.moveTo(bCoords, 700);
+        board?.removeObject('prevLine');
+        board?.create('line', [[pointA?.X(), pointA?.Y()], [pointB?.X(), pointB?.Y()]],
+                        {name: 'prevLine', color: 'rgba(0, 0, 0, 0.2)'});
     }, [props.line]);
 
     useEffect(() => {
