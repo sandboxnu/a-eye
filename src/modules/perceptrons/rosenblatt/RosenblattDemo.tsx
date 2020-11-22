@@ -1,7 +1,8 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import RblattGraph from './RblattGraph';
 import RblattInputsTable from './RblattInputsTable';
 import RblattNeuron from './RblattNeuron';
+import distanceToLineSegment from 'distance-to-line-segment';
 
 export type RblattInput = { x: number, y: number, z: 0 | 1 };
 export type RblattConfig = { weightX: number, weightY: number, bias: number, learningRate: number };
@@ -11,6 +12,34 @@ const RosenBlattDemo = (props: { labelColor: string }) => {
     const [config, setConfig] = useState<RblattConfig>(INIT_CONFIG);
     const [currPoint, setCurrPoint] = useState<number>(0);
     const [animInterval, setAnimInterval] = useState<NodeJS.Timeout | null>(null);
+    const [binMisclass, setBinMisclass] = useState<number>(0);
+    const [msError, setMSEror] = useState<number>(0);
+
+    useEffect(() => {
+        updateErrors(inputs, config);
+    })
+
+    const updateErrors = (inputs: RblattInput[], config: RblattConfig) => {
+        let binCount = 0;
+        let msCount = 0
+        inputs.forEach(inpt => {
+            const sum = inpt.x * config.weightX + inpt.y * config.weightY + config.bias;
+            const predicted = sum > 0 ? 1 : 0;
+            const error = inpt.z - predicted;
+
+            const x1 = 0, y1 = config.bias / - config.weightY;
+            const x2 = config.bias / - config.weightX,  y2 = 0;
+            const msq = distanceToLineSegment.squared(x1, y1, x2, y2, inpt.x, inpt.y);
+
+            if (error !== 0) {
+                binCount++;
+            }
+            msCount += msq;
+        })
+
+        setBinMisclass(binCount);
+        setMSEror(round(msCount / inputs.length, 3));
+    }
 
     const trainSingle = (prevPoint: number) => {
         if (animInterval) return;
@@ -20,6 +49,7 @@ const RosenBlattDemo = (props: { labelColor: string }) => {
             const newC = trainRblatt(inputs[nextPoint], oldConf);
             return {...newC, learningRate: oldConf.learningRate}
         });
+        updateErrors(inputs, config);
     } 
 
     const trainAll = () => {
@@ -31,6 +61,7 @@ const RosenBlattDemo = (props: { labelColor: string }) => {
             newConf = trainRblatt(inpt, newConf);
         })
         setConfig(newConf);
+        updateErrors(inputs, config);
     }
 
     const animateAll = () => {
@@ -60,7 +91,7 @@ const RosenBlattDemo = (props: { labelColor: string }) => {
         <div className="m-4">
             <div className="m-4 flex items-center justify-center">
                 <div className="flex flex-col items-center justify-center">
-                    <p className="-m-6 font-bold text-2xl"> 
+                    <p className="-m-6 font-bold text-2xl">
                         {`${config.weightX.toFixed(1)}x + ${config.weightY.toFixed(1)}y + ${config.bias.toFixed(1)} > 0`}
                     </p>
                     <RblattNeuron input={inputs[currPoint]} config={config}/>
@@ -68,11 +99,17 @@ const RosenBlattDemo = (props: { labelColor: string }) => {
                         <div>Learning rate: {config.learningRate}</div>
                         <input type="range" min="-7" max="1" step="0.1" value={Math.log2(config.learningRate)}
                                 onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                                    setConfig({...(config), learningRate: round(2 ** parseFloat(e.target.value), 4)})}/>
+                                    setConfig({...(config), learningRate: round(2 ** parseFloat(e.target.value), 3)})}/>
+                    </div>
+                    <div>
+                        <div>Binary Misclassification: {binMisclass}</div>
+                    </div>
+                    <div>
+                        <div>Mean-Squared Error: {msError}</div>
                     </div>
                 </div>
-                <EditingRblattGraph 
-                    inputs={inputs} line={config} 
+                <EditingRblattGraph
+                    inputs={inputs} line={config}
                     highlighted={inputs[currPoint]}
                     onInputsChange={setInputs}
                 />
