@@ -1,3 +1,4 @@
+import { config } from 'process';
 import React, { useState } from 'react';
 import RblattGraph from './RblattGraph';
 import RblattNeuron from './RblattNeuron';
@@ -5,9 +6,14 @@ import RblattNeuron from './RblattNeuron';
 export type RblattInput = { x: number, y: number, z: 0 | 1 };
 export type RblattConfig = { weightX: number, weightY: number, bias: number, learningRate: number };
 
-const RawDataTable = (props: {config: Object}) => {
+const RawDataTable = (props: {config: RblattConfig}) => {
     // const [showClass, setShowClass] = useState(false);
 
+    const sqerror = (inpt: number[], config: RblattConfig) => {
+        const sum = inpt[0] * config.weightX + inpt[1] * config.weightY + config.bias;
+        const predicted = sum > 0 ? 1 : 0;
+        return predicted
+    }
 
     return (
     <div className="container flex mx-auto my-4">
@@ -21,12 +27,13 @@ const RawDataTable = (props: {config: Object}) => {
                 </thead>
                 <tbody>
                     {INIT_INPUTS_2.map((data: number[]) => {
-                        console.log(data)
+                        console.log(props.config)
                         return (
                             <tr className="'datarow' text-black">
                                 <td >{data[0]} </td>
                                 <td > {data[1]} </td>
                                 <td> {data[2]}</td>
+                                <td> {sqerror([data[0], data[1]], props.config)}</td>
                             </tr>);
                     })}
                 </tbody>
