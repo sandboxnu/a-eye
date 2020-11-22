@@ -645,8 +645,8 @@ video {
 
 .basic-button.alt:hover {
   --bg-opacity: 1;
-  background-color: #c05621;
-  background-color: rgba(192, 86, 33, var(--bg-opacity));
+  background-color: #dd6b20;
+  background-color: rgba(221, 107, 32, var(--bg-opacity));
 }
 
 .basic-button.alt:disabled {
