@@ -49,6 +49,10 @@ const RosenBlattDemo = (props: { labelColor: string }) => {
 
     const resetConfig = () => {setConfig(INIT_CONFIG)};
 
+    const round = (x: number, length: number) => {
+        return Math.round(x * (10 ** length)) / (10 ** length);
+    }
+
     return (
         <div className="m-4">
             <div className="m-4 flex items-center justify-center">
@@ -59,8 +63,9 @@ const RosenBlattDemo = (props: { labelColor: string }) => {
                     <RblattNeuron input={inputs[currPoint]} config={config}/>
                     <div>
                         <div>Learning rate: {config.learningRate}</div>
-                        <input type="range" min="0" max="2" step="0.001" value={config.learningRate}
-                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setConfig({...(config), learningRate: parseFloat(e.target.value)})}/>
+                        <input type="range" min="-7" max="1" step="0.1" value={Math.log2(config.learningRate)}
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                                    setConfig({...(config), learningRate: round(2 ** parseFloat(e.target.value), 4)})}/>
                     </div>
                 </div>
                 <EditingRblattGraph 
