@@ -13,6 +13,7 @@
     "@types/react": "^16.9.49",
     "@types/react-dom": "^16.9.8",
     "autoprefixer": "^10.0.0",
+    "distance-to-line-segment": "^0.2.0",
     "filter": "^0.1.1",
     "gaussian-convolution-kernel": "^1.0.0",
     "jsxgraph": "^1.1.0",
