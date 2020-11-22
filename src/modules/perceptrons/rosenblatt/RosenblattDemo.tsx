@@ -47,7 +47,10 @@ const RosenBlattDemo = (props: { labelColor: string }) => {
         }
     }
 
-    const resetConfig = () => {setConfig(INIT_CONFIG)};
+    const resetConfig = () => {
+        setConfig(INIT_CONFIG);
+        setCurrPoint(0);
+    }
 
     const round = (x: number, length: number) => {
         return Math.round(x * (10 ** length)) / (10 ** length);
@@ -151,6 +154,7 @@ function trainRblatt(inpt: RblattInput, config: RblattConfig) {
 const INIT_CONFIG = { weightX: -.5, weightY: 1, bias: 7, learningRate: .1 };
 const INIT_INPUTS: RblattInput[] = [
     { x: 2.101231155778894, y: 4.947319932998326, z: 0 },
+    { x: 8.27, y: -3.94, z: 0 },
     { x: 0.7838107202680059, y: 4.2886097152428815, z: 0 },
     { x: 2.7711055276381822, y: 9.000921273031828, z: 0 },
     { x: 5.344112227805695, y: 5.910050251256282, z: 0 },
