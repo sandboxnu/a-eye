@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import RblattGraph from './RblattGraph';
 import RblattInputsTable from './RblattInputsTable';
 import RblattNeuron from './RblattNeuron';
@@ -57,12 +57,18 @@ const RosenBlattDemo = (props: { labelColor: string }) => {
                         {`${config.weightX.toFixed(1)}x + ${config.weightY.toFixed(1)}y + ${config.bias.toFixed(1)} > 0`}
                     </p>
                     <RblattNeuron input={inputs[currPoint]} config={config}/>
+                    <div>
+                        <div>Learning rate: {config.learningRate}</div>
+                        <input type="range" min="0" max="2" step="0.001" value={config.learningRate}
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setConfig({...(config), learningRate: parseFloat(e.target.value)})}/>
+                    </div>
                 </div>
                 <EditingRblattGraph 
                     inputs={inputs} line={config} 
                     highlighted={inputs[currPoint]}
                     onInputsChange={setInputs}
                 />
+
             </div>
             <button className={`basic-button ${animInterval ? 'alt' : ''}`}
                 onClick={animateAll}
