@@ -5,6 +5,36 @@ import RblattNeuron from './RblattNeuron';
 export type RblattInput = { x: number, y: number, z: 0 | 1 };
 export type RblattConfig = { weightX: number, weightY: number, bias: number, learningRate: number };
 
+const RawDataTable = (props: {config: Object}) => {
+    // const [showClass, setShowClass] = useState(false);
+
+
+    return (
+    <div className="container flex mx-auto my-4">
+        <div className="pca raw-data-table mx-auto">
+            <table className="table-auto">
+                <thead>
+                    <tr>
+                        {columns.map(title => title && <th key={title}>{title}</th>)}
+
+                    </tr>
+                </thead>
+                <tbody>
+                    {INIT_INPUTS_2.map((data: number[]) => {
+                        console.log(data)
+                        return (
+                            <tr className="'datarow' text-black">
+                                <td >{data[0]} </td>
+                                <td > {data[1]} </td>
+                                <td> {data[2]}</td>
+                            </tr>);
+                    })}
+                </tbody>
+            </table>
+        </div>
+    </div>);
+}
+
 const RosenBlattDemo = (props: { labelColor: string }) => {
     const [inputs, setInputs] = useState<RblattInput[]>(INIT_INPUTS);
     const [config, setConfig] = useState<RblattConfig>(INIT_CONFIG);
@@ -83,6 +113,9 @@ const RosenBlattDemo = (props: { labelColor: string }) => {
             >
                 Reset
             </button>
+            <div>
+                <RawDataTable config={config}/>
+            </div>
         </div>
     );
 }
@@ -146,3 +179,7 @@ const INIT_INPUTS: RblattInput[] = [
     { x: 0.5304606365159121, y: -3.109212730318259, z: 1 },
     { x: -4.485871021775546, y: -3.1598827470686774, z: 1 }
 ];
+//array of arrays instead
+var INIT_INPUTS_2 = INIT_INPUTS.map( Object.values );
+
+const columns = ['', '', 'X', 'Y', 'Category', 'Error'];
