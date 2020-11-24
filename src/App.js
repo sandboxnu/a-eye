@@ -11,6 +11,7 @@ import LandingPage from "./landingPage/LandingPage";
 import ModulePage from "./modulePage/ModulePage";
 import MPNeuron from "./modules/perceptrons/mpNeuron/MPNeuron";
 import RosenblattDemo from "./modules/perceptrons/rosenblatt/RosenblattDemo";
+import RblattVectorsDemo from "./modules/perceptrons/rblattVectors/RblattVectorsDemo.tsx";
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
             <Route path="/about" component={AboutPage} />
             <Route path="/neuron" component={MPNeuron} />
             <Route path="/rblatt" component={RosenblattDemo} />
+            <Route path="/vector" component={RblattVectorsDemo} />
           </Switch>
         </main>
         <div>
