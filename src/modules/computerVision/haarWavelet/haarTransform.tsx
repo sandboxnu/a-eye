@@ -34,7 +34,7 @@ function haarFilter(inCanvas: HTMLCanvasElement, outCanvas: HTMLCanvasElement, i
     //Do a Haar Wavelet Transform
     let currWidth = imgWidth;
     let currHeight = imgHeight;
-    let haarRow = [];
+    let haarRow: number[] = [];
     while( (currWidth > 1 || currHeight > 1) && (iterations > 1) ) {
         iterations = iterations -1;
 
@@ -99,7 +99,7 @@ function oneDHaarTransform(pixRow: number[]) {
     var sum = 0;
     var diff = 0;
     var halfLen = pixRow.length/2;
-    var tempHaar = [];
+    var tempHaar: number[] = [];
 
     //It only recurses on first half of the array
     for (var i = 0; i < halfLen; i++) {

@@ -13,20 +13,20 @@ function makeMeshgrid(sz: number[]) {
 
     var radius = [Math.floor(sz[0] / 2.0), Math.floor(sz[1] / 2.0)]
 
-    var result_x = [];
-    var result_y = [];
+    var result_x: number[][] = [];
+    var result_y: number[][] = [];
 
     for (let i = 0; i < (2 * Math.floor(sz[1] / 2)) + 1; i++) {
-        let x_row = []
-        for (let j = -radius[0]; j < radius[0] + 1; j++) {
+        let x_row: number[] = []
+        for (let j: number = -radius[0]; j < radius[0] + 1; j++) {
             x_row.push(j)
         }
         result_x.push(x_row)
     }
 
     for (let i = -Math.floor(sz[1] / 2); i < Math.floor(sz[1] / 2) + 1; i++) {
-        let y_row = []
-        for (let j = 0; j < sz[0] + 1; j++) {
+        let y_row: number[] = []
+        for (let j: number = 0; j < sz[0] + 1; j++) {
             y_row.push(i)
         }
         result_y.push(y_row)

@@ -4202,6 +4202,11 @@ dir-glob@^3.0.1:
   dependencies:
     path-type "^4.0.0"
 
+distance-to-line-segment@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/distance-to-line-segment/-/distance-to-line-segment-0.2.0.tgz#e45427bb8360eb59a86ffd9814a7578dd2c3d679"
+  integrity sha1-5FQnu4Ng61mob/2YFKdXjdLD1nk=
+
 dns-equal@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/dns-equal/-/dns-equal-1.0.0.tgz#b39e7f1da6eb0a75ba9c17324b34753c47e0654d"
