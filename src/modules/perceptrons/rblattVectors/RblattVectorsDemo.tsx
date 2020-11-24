@@ -16,11 +16,12 @@ const RblattVectorsDemo = () => {
             const p = newBoard.create('point', [inpt.x, inpt.y], 
                                       { name: '', size: 1, color, fixed: true });
         });
-        const pA = newBoard.create('point', [6, 2.5], { name: '', fixed: true, color: 'transparent'});
+        const pA = newBoard.create('point', INIT_PERP_POINT, { name: '', fixed: true, color: 'transparent'});
         setPerpPoint(pA);
-        const perpArrow = newBoard.create('arrow', [[4.5, 2.5], pA], 
+        const perpArrow = newBoard.create('arrow', [MAINLINE_INTERSECTION, pA], 
             { strokeColor: 'black', strokeWidth: 2, fixed: true, name: 'Wt', withLabel:true, label: {position: 'top'} });
-        const li = newBoard.create('perpendicular', [perpArrow, [4.5, 2.5]], { name: 'mainLine', strokeColor: 'black', strokeWidth: 2, fixed: true });
+        const li = newBoard.create('perpendicular', [perpArrow, MAINLINE_INTERSECTION], 
+            { name: 'mainLine',  withLabel:false, strokeColor: 'black', strokeWidth: 2, fixed: true });
         newBoard.create('inequality', [li], {name: 'ineq1', inverse: true, fillColor: COL_0});
         newBoard.create('inequality', [li], {name: 'ineq2', fillColor: COL_1 });
     }, []);
@@ -30,30 +31,30 @@ const RblattVectorsDemo = () => {
         switch (phase) {
             case 0:
                 board?.select({
-                    X: (v: number) => v === 5.281875, 
-                    Y: (v: number) => v === .96
+                    X: (v: number) => v === CURR_POINT[0], 
+                    Y: (v: number) => v === CURR_POINT[1]
                 }).setAttribute({size: 4});
-                const dist = board?.create('arrow', [[4.5, 2.5], [ 5.281875, .96]], 
+                const dist = board?.create('arrow', [MAINLINE_INTERSECTION, CURR_POINT], 
                     { strokeColor: 'black', strokeWidth: 2, fixed: true, dash: 2, name: 'd', withLabel:true, label: {position: 'top'}});
                 setPhase(1);
                 break;
             case 1:
-                const distTransposed = board?.create('arrow', [[6, 2.5], [5.22, 4.04]],
+                board?.create('arrow', [INIT_PERP_POINT, NEW_PERP_POINT],
                      { strokeColor: 'black', strokeWidth: 2, fixed: true, dash: 2, name: '-d', withLabel:true, label: {position: 'top'}});
-                const newPerp = board?.create('arrow', [[4.5, 2.5], [5.22, 4.04]], 
+                board?.create('arrow', [MAINLINE_INTERSECTION, NEW_PERP_POINT], 
                     { strokeColor: 'black', strokeWidth: 2, fixed: true, dash: 3, name: 'Wt - d', withLabel:true, label: {position: 'top'}});
                 setPhase(2);
                 break;
             case 2:
                 board?.select({
-                    X: (v: number) => v === 5.281875, 
-                    Y: (v: number) => v === .96
+                    X: (v: number) => v === CURR_POINT[0], 
+                    Y: (v: number) => v === CURR_POINT[1]
                 }).setAttribute({size: 1});
                 board?.removeObject('d');
                 board?.removeObject('-d');
                 board?.removeObject('ineq1');
                 board?.removeObject('ineq2');
-                perpPoint.moveTo([5.22, 4.04], 700, {callback: () => {
+                perpPoint.moveTo(NEW_PERP_POINT, 700, {callback: () => {
                     board?.create('inequality', ['mainLine'], {name: 'ineq1', fillColor: COL_0});
                     board?.create('inequality', ['mainLine'], {name: 'ineq2', inverse: true, fillColor: COL_1 });
                 }});
@@ -66,8 +67,8 @@ const RblattVectorsDemo = () => {
         switch (phase) {
             case 1:
                 board?.select({
-                    X: (v: number) => v === 5.281875, 
-                    Y: (v: number) => v === .96
+                    X: (v: number) => v === CURR_POINT[0], 
+                    Y: (v: number) => v === CURR_POINT[1]
                 }).setAttribute({size: 1});
                 board?.removeObject('d');
                 setPhase(0);
@@ -80,12 +81,12 @@ const RblattVectorsDemo = () => {
             case 3:
                 board?.removeObject('ineq1');
                 board?.removeObject('ineq2');
-                perpPoint.moveTo([6, 2.5], 700, {callback: () => {
+                perpPoint.moveTo(INIT_PERP_POINT, 700, {callback: () => {
                     board?.create('inequality', ['mainLine'], {name: 'ineq1', inverse: true, fillColor: COL_0});
                     board?.create('inequality', ['mainLine'], {name: 'ineq2', fillColor: COL_1 });
-                    const dist = board?.create('arrow', [[4.5, 2.5], [ 5.281875, .96]], 
+                    board?.create('arrow', [MAINLINE_INTERSECTION, CURR_POINT],
                     { strokeColor: 'black', strokeWidth: 2, fixed: true, dash: 2, name: 'd', withLabel:true, label: {position: 'top'}});
-                    board?.create('arrow', [[6, 2.5], [5.22, 4.04]],
+                    board?.create('arrow', [INIT_PERP_POINT, NEW_PERP_POINT],
                      { strokeColor: 'black', strokeWidth: 2, fixed: true, dash: 2, name: '-d', withLabel:true, label: {position: 'top'}});
                 }});
                 setPhase(2);
@@ -94,8 +95,8 @@ const RblattVectorsDemo = () => {
     }
 
     return (
-        <div>
-            <div className="bg-white" id={brdId} style={{ width: '500px', height: '500px' }} />
+        <div className="m-4">
+            <div className="bg-white mx-auto" id={brdId} style={{ width: '500px', height: '500px' }} />
             <button className='basic-button' onClick={goPrev} disabled={phase === 0}>
                 Previous Step
             </button>
@@ -117,4 +118,8 @@ const POINTS = [
     {x: 3.161875, y: 0.88, z: 1},
     {x: 3.721875, y: 1.84, z: 1},
     {x: 5.281875, y: .96, z: 1}];
+const INIT_PERP_POINT = [6, 2.5];
+const NEW_PERP_POINT = [5.22, 4.04];
+const MAINLINE_INTERSECTION = [4.5, 2.5];
+const CURR_POINT = [ 5.281875, .96];
 
