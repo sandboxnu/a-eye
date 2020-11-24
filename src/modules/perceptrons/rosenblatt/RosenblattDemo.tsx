@@ -95,11 +95,14 @@ const RosenBlattDemo = (props: { labelColor: string }) => {
                         {`${config.weightX.toFixed(1)}x + ${config.weightY.toFixed(1)}y + ${config.bias.toFixed(1)} > 0`}
                     </p>
                     <RblattNeuron input={inputs[currPoint]} config={config}/>
-                    <div>
-                        <div>Learning rate: {config.learningRate}</div>
-                        <input type="range" min="-7" max="1" step="0.1" value={Math.log2(config.learningRate)}
-                                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    <div className="font-bold flex items-center justify-center m-4">
+                        Learning rate:
+                        <input type="range" min="-7" max="1" step="0.1" 
+                            className="mx-2 w-64"
+                            value={Math.log2(config.learningRate)}
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                                     setConfig({...(config), learningRate: round(2 ** parseFloat(e.target.value), 3)})}/>
+                        {config.learningRate}
                     </div>
                     <div>
                         <div>Binary Misclassification: {binMisclass}</div>
