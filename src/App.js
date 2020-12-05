@@ -9,9 +9,6 @@ import './App.css';
 import AboutPage from "./aboutPage/AboutPage"
 import LandingPage from "./landingPage/LandingPage";
 import ModulePage from "./modulePage/ModulePage";
-import MPNeuron from "./modules/perceptrons/mpNeuron/MPNeuron";
-import RosenblattDemo from "./modules/perceptrons/rosenblatt/RosenblattDemo";
-import RblattVectorsDemo from "./modules/perceptrons/rblattVectors/RblattVectorsDemo.tsx";
 
 function App() {
   return (
