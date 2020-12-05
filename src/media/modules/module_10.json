@@ -1,72 +1,89 @@
 {
-  "number": 10,
-  "title": "Module 10: Introduction to Machine Learning: Perceptrons",
-  "sections": [
-    {
-      "title": "Section 1",
-      "colorScheme": "dark",
-      "subsections": [
+    "number": 10,
+    "title": "Module 10: Introduction to Machine Learning: Perceptrons",
+    "sections": [
         {
-          "title": "Subsection 1",
-          "body": "lorem ipsum",
-          "imgSrc": "mod10"
+            "title": "Section 1",
+            "colorScheme": "dark",
+            "subsections": [
+                {
+                    "title": "Subsection 1",
+                    "body": "lorem ipsum",
+                    "imgSrc": "mod10"
+                },
+                {
+                    "title": "Subsection 2",
+                    "body": "lorem ipsum",
+                    "imgSrc": "mod10"
+                },
+                {
+                    "title": "Subsection 3",
+                    "body": "lorem ipsum",
+                    "imgSrc": "mod10"
+                }
+            ],
+            "demoComp": ""
         },
         {
-          "title": "Subsection 2",
-          "body": "lorem ipsum",
-          "imgSrc": "mod10"
+            "title": "Section 2",
+            "colorScheme": "light",
+            "subsections": [
+                {
+                    "title": "Subsection 1",
+                    "body": "lorem ipsum",
+                    "imgSrc": "mod10"
+                },
+                {
+                    "title": "Subsection 2",
+                    "body": "lorem ipsum",
+                    "imgSrc": "mod10"
+                },
+                {
+                    "title": "Subsection 3",
+                    "body": "lorem ipsum",
+                    "imgSrc": "mod10"
+                }
+            ],
+            "demoComp": ""
         },
         {
-          "title": "Subsection 3",
-          "body": "lorem ipsum",
-          "imgSrc": "mod10"
+            "title": "Section 3",
+            "colorScheme": "dark",
+            "subsections": [
+                {
+                    "title": "Subsection 1",
+                    "body": "lorem ipsum",
+                    "imgSrc": "mod10"
+                },
+                {
+                    "title": "Subsection 2",
+                    "body": "lorem ipsum",
+                    "imgSrc": "mod10"
+                },
+                {
+                    "title": "Subsection 3",
+                    "body": "lorem ipsum",
+                    "imgSrc": "mod10"
+                }
+            ],
+            "demoComp": ""
+        },
+        {
+            "title": "",
+            "colorScheme": "dark",
+            "subsections": [
+                {
+                    "title": "Subsection 1",
+                    "body": "So how does each iteration of this algorithm work to minimize error? The answer is some clever vector math. The animation below demonstrates how this process works as it processes a single point from the input.",
+                    "imgSrc": "/blank.png"
+                },
+                {
+                    "title": "Subsection 2",
+                    "body": "We can think of the line dividing our two input groups as represented by a vector Wt; that is, given a vector, you can always draw a line perpendicular to where it starts. When the algorithm encounters a point that has been misclassified, it finds the vector representing the distance, d, between that point our dividing line. To update the dividing line, we subtract d from Wt. This new vector corresponds to a new perpendicular line, which forms a more accurate division between the inputs.",
+                    "imgSrc": "/blank.png"
+                }
+            ],
+            "demoComp": "RblattVectorsDemo"
         }
-      ],
-      "demoComp": ""
-    },
-    {
-      "title": "Section 2",
-      "colorScheme": "light",
-      "subsections": [
-        {
-          "title": "Subsection 1",
-          "body": "lorem ipsum",
-          "imgSrc": "mod10"
-        },
-        {
-          "title": "Subsection 2",
-          "body": "lorem ipsum",
-          "imgSrc": "mod10"
-        },
-        {
-          "title": "Subsection 3",
-          "body": "lorem ipsum",
-          "imgSrc": "mod10"
-        }
-      ],
-      "demoComp": ""
-    },
-    {
-      "title": "Section 3",
-      "colorScheme": "dark",
-      "subsections": [
-        {
-          "title": "Subsection 1",
-          "body": "lorem ipsum",
-          "imgSrc": "mod10"
-        },
-        {
-          "title": "Subsection 2",
-          "body": "lorem ipsum",
-          "imgSrc": "mod10"
-        },
-        {
-          "title": "Subsection 3",
-          "body": "lorem ipsum",
-          "imgSrc": "mod10"
-        }
-      ],
-      "demoComp": ""
-    }
-  ]
+    ]
 }
