@@ -39,7 +39,7 @@
               },
               {
                 "title": "Subsection 3",
-                "body": "The most simple kind of perceptron is the McCulloch-Pitts Neuron. Data used for this perceptron are of the form of a boolean vector; each feature is either activated (value 1) or not (value 0). The MP neuron has two key components; it has weights that it assigns to each of the features, and a threshold value used to determine the classification. It functions by performing a weighted sum of all of the features (the dot product of the input vector and weight vector) and compares the sum to the threshold. The output of the perceptron is a boolean value indicating whether the weighted sum meets the threshold (value 1) or doesn't (value 0).",
+                "body": "The most simple kind of perceptron is the McCulloch-Pitts Neuron. Data used for this perceptron are of the form of a binary vector; each feature is either activated (value 1) or not (value 0). The MP neuron has two key components; it has weights that it assigns to each of the features, and a threshold value used to determine the classification. It functions by performing a weighted sum of all of the features (the dot product of the input vector and weight vector) and compares the sum to the threshold. The output of the perceptron is a binary value indicating whether the weighted sum meets the threshold (value 1) or doesn't (value 0). To use the MP neuron below, you can change the number of inputs, the weights, and the threshold value (including whether we want > or < ).",
                 "imgSrc": "/blank.png"
               }
             ],
