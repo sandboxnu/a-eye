@@ -1,0 +1,94 @@
+.pca.raw-data-table {
+    height: 350px;
+    width: 600px;
+    overflow-y: scroll;
+    margin: 10px;
+}
+
+.pca.raw-data-table table{
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.pca.raw-data-table th {
+    position: sticky; 
+    top: 0;
+    height: 65px;
+    background-color: #394D73;
+    color: #cbd9f2;
+    box-shadow: inset 0 -1px 0 #9fb0ce, inset 0 1px 0 #9fb0ce;
+}
+
+.pca.raw-data-table th, td {
+    text-align: center;
+    border: 1px solid #9fb0ce;
+    padding: 5px;
+}
+
+.pca.raw-data-chart {
+    display: grid;
+    grid-template-columns: min-content auto;
+    grid-template-rows: auto min-content;
+    align-items: center;
+    justify-items: center;
+    margin: 10px;
+}
+
+.pca.raw-data-chart .yIdx {
+    grid-column: 1;
+    grid-row: 1;
+}
+
+.pca.raw-data-chart .xIdx {
+    grid-column: 2;
+    grid-row: 2;
+    display: flex;
+    align-items: center;
+}
+
+.pca.raw-data-chart .xIdx > p {
+    margin: 0 7px;
+}
+
+.pca.raw-data-chart .axis-selector {
+    display: flex;
+}
+
+.pca.raw-data-chart .yIdx .axis-selector {
+    flex-direction: column;
+    margin: 0px 16px;
+}
+
+.pca.raw-data-chart .xIdx .axis-selector {
+    margin: 16px 0px;
+}
+
+.pca.raw-data-chart .axis-selector button {
+    border: none;
+    outline: none;
+    padding: 7px 10px;
+    margin: 1px;
+    background-color: #8D9DBA;
+    font-weight: bold;
+    font-size: 12pt;
+    color: #f2f2f2;
+}
+
+.pca.raw-data-chart .axis-selector button:hover {
+    background-color: #617394;
+}
+
+.pca.raw-data-chart .axis-selector button.selected {
+    background-color: #394D73;
+}
+
+.pca.raw-data-chart .raw-data-scatter {
+    grid-column: 2;
+    grid-row: 1;
+    width: 100%;
+    height: 100%;
+}
+
+.pca.pca-chart {
+    margin: auto;
+}

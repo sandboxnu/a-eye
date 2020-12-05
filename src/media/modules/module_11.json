@@ -1,0 +1,72 @@
+
+{
+  "neural-nets": {
+    "number": 11,
+    "title": "Module 11: Multi-layer Perceptrons & Backpropagation",
+    "sections": [
+      {
+        "title": "Section 1",
+        "colorScheme": "dark",
+        "subsections": [
+          {
+            "title": "Subsection 1",
+            "body": "lorem ipsum",
+            "imgSrc": "mod11.png"
+          },
+          {
+            "title": "Subsection 2",
+            "body": "lorem ipsum",
+            "imgSrc": "mod11.png"
+          },
+          {
+            "title": "Subsection 3",
+            "body": "lorem ipsum",
+            "imgSrc": "mod11.png"
+          }
+        ]
+      },
+      {
+        "title": "Section 2",
+        "colorScheme": "light",
+        "subsections": [
+          {
+            "title": "Subsection 1",
+            "body": "lorem ipsum",
+            "imgSrc": "mod11.png"
+          },
+          {
+            "title": "Subsection 2",
+            "body": "lorem ipsum",
+            "imgSrc": "mod11.png"
+          },
+          {
+            "title": "Subsection 3",
+            "body": "lorem ipsum",
+            "imgSrc": "mod11.png"
+          }
+        ]
+      },
+      {
+        "title": "Section 3",
+        "colorScheme": "dark",
+        "subsections": [
+          {
+            "title": "Subsection 1",
+            "body": "lorem ipsum",
+            "imgSrc": "mod11.png"
+          },
+          {
+            "title": "Subsection 2",
+            "body": "lorem ipsum",
+            "imgSrc": "mod11.png"
+          },
+          {
+            "title": "Subsection 3",
+            "body": "lorem ipsum",
+            "imgSrc": "mod11.png"
+          }
+        ]
+      }
+    ]
+  }
+}

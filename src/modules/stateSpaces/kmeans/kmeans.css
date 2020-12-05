@@ -1,0 +1,25 @@
+.kmeansgraph {
+    position: relative;
+    width: 60%;
+    height: 50%;
+    float: right;
+}
+
+.axis-selector button {
+    border: none;
+    outline: none;
+    padding: 7px 10px;
+    margin: 1px;
+    background-color: #8D9DBA;
+    font-weight: bold;
+    font-size: 12pt;
+    color: #f2f2f2;
+}
+
+.axis-selector button:hover {
+    background-color: #617394;
+}
+
+.axis-selector button.selected {
+    background-color: #394D73;
+}
