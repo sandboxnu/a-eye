@@ -25,25 +25,26 @@
             ]
           },
           {
-            "title": "Section 2",
+            "title": "The Perceptron",
             "colorScheme": "light",
             "subsections": [
               {
                 "title": "Subsection 1",
-                "body": "lorem ipsum",
-                "imgSrc": "mod10.png"
+                "body": "We previously showed how we can use PCA and clustering to classify data. However, those methods are limited by the dimensions of our data and can only take us so far; how can we perform more reliable classifications on high-dimensional data? The answer is the perceptron.",
+                "imgSrc": "/blank.png"
               },
               {
                 "title": "Subsection 2",
-                "body": "lorem ipsum",
-                "imgSrc": "mod10.png"
+                "body": "The perceptron is a single-layer neural network that serves as a linear classifier. In other words, it is an algorithm that establishes a binary classification rule for input data. The crux of the perceptron is that certain features of the data are more important (ie weighted more heavily) to the classification.",
+                "imgSrc": "/blank.png"
               },
               {
                 "title": "Subsection 3",
-                "body": "lorem ipsum",
-                "imgSrc": "mod10.png"
+                "body": "The most simple kind of perceptron is the McCulloch-Pitts Neuron. Data used for this perceptron are of the form of a boolean vector; each feature is either activated (value 1) or not (value 0). The MP neuron has two key components; it has weights that it assigns to each of the features, and a threshold value used to determine the classification. It functions by performing a weighted sum of all of the features (the dot product of the input vector and weight vector) and compares the sum to the threshold. The output of the perceptron is a boolean value indicating whether the weighted sum meets the threshold (value 1) or doesn't (value 0).",
+                "imgSrc": "/blank.png"
               }
-            ]
+            ],
+            "demoComp": "MPNeuron"
           },
           {
             "title": "",
