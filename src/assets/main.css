@@ -614,7 +614,8 @@ video {
   color: rgba(255, 255, 255, var(--text-opacity));
   margin: 0.75rem;
   padding: 0.75rem;
-  outline: 0;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
   border-width: 0;
   border-radius: 0.375rem;
   font-weight: 700;
@@ -627,7 +628,8 @@ video {
 }
 
 .basic-button:focus {
-  outline: 0;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
 }
 
 .basic-button:disabled {
@@ -672,7 +674,8 @@ video {
   border-color: #394D73;
   border-color: rgba(57, 77, 115, var(--border-opacity));
   padding-left: 0.5rem;
-  outline: 0;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
 }
 
 .crisp-pixels {
@@ -10999,6 +11002,18 @@ video {
   border-radius: 0.5rem;
 }
 
+#app .rounded-xl{
+  border-radius: 0.75rem;
+}
+
+#app .rounded-2xl{
+  border-radius: 1rem;
+}
+
+#app .rounded-3xl{
+  border-radius: 1.5rem;
+}
+
 #app .rounded-full{
   border-radius: 9999px;
 }
@@ -11105,6 +11120,66 @@ video {
 #app .rounded-l-lg{
   border-top-left-radius: 0.5rem;
   border-bottom-left-radius: 0.5rem;
+}
+
+#app .rounded-t-xl{
+  border-top-left-radius: 0.75rem;
+  border-top-right-radius: 0.75rem;
+}
+
+#app .rounded-r-xl{
+  border-top-right-radius: 0.75rem;
+  border-bottom-right-radius: 0.75rem;
+}
+
+#app .rounded-b-xl{
+  border-bottom-right-radius: 0.75rem;
+  border-bottom-left-radius: 0.75rem;
+}
+
+#app .rounded-l-xl{
+  border-top-left-radius: 0.75rem;
+  border-bottom-left-radius: 0.75rem;
+}
+
+#app .rounded-t-2xl{
+  border-top-left-radius: 1rem;
+  border-top-right-radius: 1rem;
+}
+
+#app .rounded-r-2xl{
+  border-top-right-radius: 1rem;
+  border-bottom-right-radius: 1rem;
+}
+
+#app .rounded-b-2xl{
+  border-bottom-right-radius: 1rem;
+  border-bottom-left-radius: 1rem;
+}
+
+#app .rounded-l-2xl{
+  border-top-left-radius: 1rem;
+  border-bottom-left-radius: 1rem;
+}
+
+#app .rounded-t-3xl{
+  border-top-left-radius: 1.5rem;
+  border-top-right-radius: 1.5rem;
+}
+
+#app .rounded-r-3xl{
+  border-top-right-radius: 1.5rem;
+  border-bottom-right-radius: 1.5rem;
+}
+
+#app .rounded-b-3xl{
+  border-bottom-right-radius: 1.5rem;
+  border-bottom-left-radius: 1.5rem;
+}
+
+#app .rounded-l-3xl{
+  border-top-left-radius: 1.5rem;
+  border-bottom-left-radius: 1.5rem;
 }
 
 #app .rounded-t-full{
@@ -11225,6 +11300,54 @@ video {
 
 #app .rounded-bl-lg{
   border-bottom-left-radius: 0.5rem;
+}
+
+#app .rounded-tl-xl{
+  border-top-left-radius: 0.75rem;
+}
+
+#app .rounded-tr-xl{
+  border-top-right-radius: 0.75rem;
+}
+
+#app .rounded-br-xl{
+  border-bottom-right-radius: 0.75rem;
+}
+
+#app .rounded-bl-xl{
+  border-bottom-left-radius: 0.75rem;
+}
+
+#app .rounded-tl-2xl{
+  border-top-left-radius: 1rem;
+}
+
+#app .rounded-tr-2xl{
+  border-top-right-radius: 1rem;
+}
+
+#app .rounded-br-2xl{
+  border-bottom-right-radius: 1rem;
+}
+
+#app .rounded-bl-2xl{
+  border-bottom-left-radius: 1rem;
+}
+
+#app .rounded-tl-3xl{
+  border-top-left-radius: 1.5rem;
+}
+
+#app .rounded-tr-3xl{
+  border-top-right-radius: 1.5rem;
+}
+
+#app .rounded-br-3xl{
+  border-bottom-right-radius: 1.5rem;
+}
+
+#app .rounded-bl-3xl{
+  border-bottom-left-radius: 1.5rem;
 }
 
 #app .rounded-tl-full{
@@ -13562,11 +13685,33 @@ video {
 }
 
 #app .outline-none{
-  outline: 0;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+
+#app .outline-white{
+  outline: 2px dotted white;
+  outline-offset: 2px;
+}
+
+#app .outline-black{
+  outline: 2px dotted black;
+  outline-offset: 2px;
 }
 
 #app .focus\:outline-none:focus{
-  outline: 0;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+
+#app .focus\:outline-white:focus{
+  outline: 2px dotted white;
+  outline-offset: 2px;
+}
+
+#app .focus\:outline-black:focus{
+  outline: 2px dotted black;
+  outline-offset: 2px;
 }
 
 #app .overflow-auto{
@@ -18167,11 +18312,13 @@ video {
 }
 
 #app .break-normal{
+  word-wrap: normal;
   overflow-wrap: normal;
   word-break: normal;
 }
 
 #app .break-words{
+  word-wrap: break-word;
   overflow-wrap: break-word;
 }
 
@@ -18952,6 +19099,22 @@ video {
   grid-template-columns: none;
 }
 
+#app .auto-cols-auto{
+  grid-auto-columns: auto;
+}
+
+#app .auto-cols-min{
+  grid-auto-columns: min-content;
+}
+
+#app .auto-cols-max{
+  grid-auto-columns: max-content;
+}
+
+#app .auto-cols-fr{
+  grid-auto-columns: minmax(0, 1fr);
+}
+
 #app .col-auto{
   grid-column: auto;
 }
@@ -19002,6 +19165,10 @@ video {
 
 #app .col-span-12{
   grid-column: span 12 / span 12;
+}
+
+#app .col-span-full{
+  grid-column: 1 / -1;
 }
 
 #app .col-start-1{
@@ -19144,6 +19311,22 @@ video {
   grid-template-rows: none;
 }
 
+#app .auto-rows-auto{
+  grid-auto-rows: auto;
+}
+
+#app .auto-rows-min{
+  grid-auto-rows: min-content;
+}
+
+#app .auto-rows-max{
+  grid-auto-rows: max-content;
+}
+
+#app .auto-rows-fr{
+  grid-auto-rows: minmax(0, 1fr);
+}
+
 #app .row-auto{
   grid-row: auto;
 }
@@ -19170,6 +19353,10 @@ video {
 
 #app .row-span-6{
   grid-row: span 6 / span 6;
+}
+
+#app .row-span-full{
+  grid-row: 1 / -1;
 }
 
 #app .row-start-1{
@@ -19681,6 +19868,26 @@ video {
   --transform-rotate: 0;
 }
 
+#app .rotate-1{
+  --transform-rotate: 1deg;
+}
+
+#app .rotate-2{
+  --transform-rotate: 2deg;
+}
+
+#app .rotate-3{
+  --transform-rotate: 3deg;
+}
+
+#app .rotate-6{
+  --transform-rotate: 6deg;
+}
+
+#app .rotate-12{
+  --transform-rotate: 12deg;
+}
+
 #app .rotate-45{
   --transform-rotate: 45deg;
 }
@@ -19705,8 +19912,48 @@ video {
   --transform-rotate: -45deg;
 }
 
+#app .-rotate-12{
+  --transform-rotate: -12deg;
+}
+
+#app .-rotate-6{
+  --transform-rotate: -6deg;
+}
+
+#app .-rotate-3{
+  --transform-rotate: -3deg;
+}
+
+#app .-rotate-2{
+  --transform-rotate: -2deg;
+}
+
+#app .-rotate-1{
+  --transform-rotate: -1deg;
+}
+
 #app .hover\:rotate-0:hover{
   --transform-rotate: 0;
+}
+
+#app .hover\:rotate-1:hover{
+  --transform-rotate: 1deg;
+}
+
+#app .hover\:rotate-2:hover{
+  --transform-rotate: 2deg;
+}
+
+#app .hover\:rotate-3:hover{
+  --transform-rotate: 3deg;
+}
+
+#app .hover\:rotate-6:hover{
+  --transform-rotate: 6deg;
+}
+
+#app .hover\:rotate-12:hover{
+  --transform-rotate: 12deg;
 }
 
 #app .hover\:rotate-45:hover{
@@ -19733,8 +19980,48 @@ video {
   --transform-rotate: -45deg;
 }
 
+#app .hover\:-rotate-12:hover{
+  --transform-rotate: -12deg;
+}
+
+#app .hover\:-rotate-6:hover{
+  --transform-rotate: -6deg;
+}
+
+#app .hover\:-rotate-3:hover{
+  --transform-rotate: -3deg;
+}
+
+#app .hover\:-rotate-2:hover{
+  --transform-rotate: -2deg;
+}
+
+#app .hover\:-rotate-1:hover{
+  --transform-rotate: -1deg;
+}
+
 #app .focus\:rotate-0:focus{
   --transform-rotate: 0;
+}
+
+#app .focus\:rotate-1:focus{
+  --transform-rotate: 1deg;
+}
+
+#app .focus\:rotate-2:focus{
+  --transform-rotate: 2deg;
+}
+
+#app .focus\:rotate-3:focus{
+  --transform-rotate: 3deg;
+}
+
+#app .focus\:rotate-6:focus{
+  --transform-rotate: 6deg;
+}
+
+#app .focus\:rotate-12:focus{
+  --transform-rotate: 12deg;
 }
 
 #app .focus\:rotate-45:focus{
@@ -19759,6 +20046,26 @@ video {
 
 #app .focus\:-rotate-45:focus{
   --transform-rotate: -45deg;
+}
+
+#app .focus\:-rotate-12:focus{
+  --transform-rotate: -12deg;
+}
+
+#app .focus\:-rotate-6:focus{
+  --transform-rotate: -6deg;
+}
+
+#app .focus\:-rotate-3:focus{
+  --transform-rotate: -3deg;
+}
+
+#app .focus\:-rotate-2:focus{
+  --transform-rotate: -2deg;
+}
+
+#app .focus\:-rotate-1:focus{
+  --transform-rotate: -1deg;
 }
 
 #app .translate-x-0{
@@ -20749,6 +21056,14 @@ video {
   --transform-skew-x: 0;
 }
 
+#app .skew-x-1{
+  --transform-skew-x: 1deg;
+}
+
+#app .skew-x-2{
+  --transform-skew-x: 2deg;
+}
+
 #app .skew-x-3{
   --transform-skew-x: 3deg;
 }
@@ -20773,8 +21088,24 @@ video {
   --transform-skew-x: -3deg;
 }
 
+#app .-skew-x-2{
+  --transform-skew-x: -2deg;
+}
+
+#app .-skew-x-1{
+  --transform-skew-x: -1deg;
+}
+
 #app .skew-y-0{
   --transform-skew-y: 0;
+}
+
+#app .skew-y-1{
+  --transform-skew-y: 1deg;
+}
+
+#app .skew-y-2{
+  --transform-skew-y: 2deg;
 }
 
 #app .skew-y-3{
@@ -20801,8 +21132,24 @@ video {
   --transform-skew-y: -3deg;
 }
 
+#app .-skew-y-2{
+  --transform-skew-y: -2deg;
+}
+
+#app .-skew-y-1{
+  --transform-skew-y: -1deg;
+}
+
 #app .hover\:skew-x-0:hover{
   --transform-skew-x: 0;
+}
+
+#app .hover\:skew-x-1:hover{
+  --transform-skew-x: 1deg;
+}
+
+#app .hover\:skew-x-2:hover{
+  --transform-skew-x: 2deg;
 }
 
 #app .hover\:skew-x-3:hover{
@@ -20829,8 +21176,24 @@ video {
   --transform-skew-x: -3deg;
 }
 
+#app .hover\:-skew-x-2:hover{
+  --transform-skew-x: -2deg;
+}
+
+#app .hover\:-skew-x-1:hover{
+  --transform-skew-x: -1deg;
+}
+
 #app .hover\:skew-y-0:hover{
   --transform-skew-y: 0;
+}
+
+#app .hover\:skew-y-1:hover{
+  --transform-skew-y: 1deg;
+}
+
+#app .hover\:skew-y-2:hover{
+  --transform-skew-y: 2deg;
 }
 
 #app .hover\:skew-y-3:hover{
@@ -20857,8 +21220,24 @@ video {
   --transform-skew-y: -3deg;
 }
 
+#app .hover\:-skew-y-2:hover{
+  --transform-skew-y: -2deg;
+}
+
+#app .hover\:-skew-y-1:hover{
+  --transform-skew-y: -1deg;
+}
+
 #app .focus\:skew-x-0:focus{
   --transform-skew-x: 0;
+}
+
+#app .focus\:skew-x-1:focus{
+  --transform-skew-x: 1deg;
+}
+
+#app .focus\:skew-x-2:focus{
+  --transform-skew-x: 2deg;
 }
 
 #app .focus\:skew-x-3:focus{
@@ -20885,8 +21264,24 @@ video {
   --transform-skew-x: -3deg;
 }
 
+#app .focus\:-skew-x-2:focus{
+  --transform-skew-x: -2deg;
+}
+
+#app .focus\:-skew-x-1:focus{
+  --transform-skew-x: -1deg;
+}
+
 #app .focus\:skew-y-0:focus{
   --transform-skew-y: 0;
+}
+
+#app .focus\:skew-y-1:focus{
+  --transform-skew-y: 1deg;
+}
+
+#app .focus\:skew-y-2:focus{
+  --transform-skew-y: 2deg;
 }
 
 #app .focus\:skew-y-3:focus{
@@ -20911,6 +21306,14 @@ video {
 
 #app .focus\:-skew-y-3:focus{
   --transform-skew-y: -3deg;
+}
+
+#app .focus\:-skew-y-2:focus{
+  --transform-skew-y: -2deg;
+}
+
+#app .focus\:-skew-y-1:focus{
+  --transform-skew-y: -1deg;
 }
 
 #app .transition-none{
@@ -31373,6 +31776,18 @@ video {
     border-radius: 0.5rem;
   }
 
+  #app .sm\:rounded-xl{
+    border-radius: 0.75rem;
+  }
+
+  #app .sm\:rounded-2xl{
+    border-radius: 1rem;
+  }
+
+  #app .sm\:rounded-3xl{
+    border-radius: 1.5rem;
+  }
+
   #app .sm\:rounded-full{
     border-radius: 9999px;
   }
@@ -31479,6 +31894,66 @@ video {
   #app .sm\:rounded-l-lg{
     border-top-left-radius: 0.5rem;
     border-bottom-left-radius: 0.5rem;
+  }
+
+  #app .sm\:rounded-t-xl{
+    border-top-left-radius: 0.75rem;
+    border-top-right-radius: 0.75rem;
+  }
+
+  #app .sm\:rounded-r-xl{
+    border-top-right-radius: 0.75rem;
+    border-bottom-right-radius: 0.75rem;
+  }
+
+  #app .sm\:rounded-b-xl{
+    border-bottom-right-radius: 0.75rem;
+    border-bottom-left-radius: 0.75rem;
+  }
+
+  #app .sm\:rounded-l-xl{
+    border-top-left-radius: 0.75rem;
+    border-bottom-left-radius: 0.75rem;
+  }
+
+  #app .sm\:rounded-t-2xl{
+    border-top-left-radius: 1rem;
+    border-top-right-radius: 1rem;
+  }
+
+  #app .sm\:rounded-r-2xl{
+    border-top-right-radius: 1rem;
+    border-bottom-right-radius: 1rem;
+  }
+
+  #app .sm\:rounded-b-2xl{
+    border-bottom-right-radius: 1rem;
+    border-bottom-left-radius: 1rem;
+  }
+
+  #app .sm\:rounded-l-2xl{
+    border-top-left-radius: 1rem;
+    border-bottom-left-radius: 1rem;
+  }
+
+  #app .sm\:rounded-t-3xl{
+    border-top-left-radius: 1.5rem;
+    border-top-right-radius: 1.5rem;
+  }
+
+  #app .sm\:rounded-r-3xl{
+    border-top-right-radius: 1.5rem;
+    border-bottom-right-radius: 1.5rem;
+  }
+
+  #app .sm\:rounded-b-3xl{
+    border-bottom-right-radius: 1.5rem;
+    border-bottom-left-radius: 1.5rem;
+  }
+
+  #app .sm\:rounded-l-3xl{
+    border-top-left-radius: 1.5rem;
+    border-bottom-left-radius: 1.5rem;
   }
 
   #app .sm\:rounded-t-full{
@@ -31599,6 +32074,54 @@ video {
 
   #app .sm\:rounded-bl-lg{
     border-bottom-left-radius: 0.5rem;
+  }
+
+  #app .sm\:rounded-tl-xl{
+    border-top-left-radius: 0.75rem;
+  }
+
+  #app .sm\:rounded-tr-xl{
+    border-top-right-radius: 0.75rem;
+  }
+
+  #app .sm\:rounded-br-xl{
+    border-bottom-right-radius: 0.75rem;
+  }
+
+  #app .sm\:rounded-bl-xl{
+    border-bottom-left-radius: 0.75rem;
+  }
+
+  #app .sm\:rounded-tl-2xl{
+    border-top-left-radius: 1rem;
+  }
+
+  #app .sm\:rounded-tr-2xl{
+    border-top-right-radius: 1rem;
+  }
+
+  #app .sm\:rounded-br-2xl{
+    border-bottom-right-radius: 1rem;
+  }
+
+  #app .sm\:rounded-bl-2xl{
+    border-bottom-left-radius: 1rem;
+  }
+
+  #app .sm\:rounded-tl-3xl{
+    border-top-left-radius: 1.5rem;
+  }
+
+  #app .sm\:rounded-tr-3xl{
+    border-top-right-radius: 1.5rem;
+  }
+
+  #app .sm\:rounded-br-3xl{
+    border-bottom-right-radius: 1.5rem;
+  }
+
+  #app .sm\:rounded-bl-3xl{
+    border-bottom-left-radius: 1.5rem;
   }
 
   #app .sm\:rounded-tl-full{
@@ -33936,11 +34459,33 @@ video {
   }
 
   #app .sm\:outline-none{
-    outline: 0;
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+  }
+
+  #app .sm\:outline-white{
+    outline: 2px dotted white;
+    outline-offset: 2px;
+  }
+
+  #app .sm\:outline-black{
+    outline: 2px dotted black;
+    outline-offset: 2px;
   }
 
   #app .sm\:focus\:outline-none:focus{
-    outline: 0;
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+  }
+
+  #app .sm\:focus\:outline-white:focus{
+    outline: 2px dotted white;
+    outline-offset: 2px;
+  }
+
+  #app .sm\:focus\:outline-black:focus{
+    outline: 2px dotted black;
+    outline-offset: 2px;
   }
 
   #app .sm\:overflow-auto{
@@ -38541,11 +39086,13 @@ video {
   }
 
   #app .sm\:break-normal{
+    word-wrap: normal;
     overflow-wrap: normal;
     word-break: normal;
   }
 
   #app .sm\:break-words{
+    word-wrap: break-word;
     overflow-wrap: break-word;
   }
 
@@ -39326,6 +39873,22 @@ video {
     grid-template-columns: none;
   }
 
+  #app .sm\:auto-cols-auto{
+    grid-auto-columns: auto;
+  }
+
+  #app .sm\:auto-cols-min{
+    grid-auto-columns: min-content;
+  }
+
+  #app .sm\:auto-cols-max{
+    grid-auto-columns: max-content;
+  }
+
+  #app .sm\:auto-cols-fr{
+    grid-auto-columns: minmax(0, 1fr);
+  }
+
   #app .sm\:col-auto{
     grid-column: auto;
   }
@@ -39376,6 +39939,10 @@ video {
 
   #app .sm\:col-span-12{
     grid-column: span 12 / span 12;
+  }
+
+  #app .sm\:col-span-full{
+    grid-column: 1 / -1;
   }
 
   #app .sm\:col-start-1{
@@ -39518,6 +40085,22 @@ video {
     grid-template-rows: none;
   }
 
+  #app .sm\:auto-rows-auto{
+    grid-auto-rows: auto;
+  }
+
+  #app .sm\:auto-rows-min{
+    grid-auto-rows: min-content;
+  }
+
+  #app .sm\:auto-rows-max{
+    grid-auto-rows: max-content;
+  }
+
+  #app .sm\:auto-rows-fr{
+    grid-auto-rows: minmax(0, 1fr);
+  }
+
   #app .sm\:row-auto{
     grid-row: auto;
   }
@@ -39544,6 +40127,10 @@ video {
 
   #app .sm\:row-span-6{
     grid-row: span 6 / span 6;
+  }
+
+  #app .sm\:row-span-full{
+    grid-row: 1 / -1;
   }
 
   #app .sm\:row-start-1{
@@ -40055,6 +40642,26 @@ video {
     --transform-rotate: 0;
   }
 
+  #app .sm\:rotate-1{
+    --transform-rotate: 1deg;
+  }
+
+  #app .sm\:rotate-2{
+    --transform-rotate: 2deg;
+  }
+
+  #app .sm\:rotate-3{
+    --transform-rotate: 3deg;
+  }
+
+  #app .sm\:rotate-6{
+    --transform-rotate: 6deg;
+  }
+
+  #app .sm\:rotate-12{
+    --transform-rotate: 12deg;
+  }
+
   #app .sm\:rotate-45{
     --transform-rotate: 45deg;
   }
@@ -40079,8 +40686,48 @@ video {
     --transform-rotate: -45deg;
   }
 
+  #app .sm\:-rotate-12{
+    --transform-rotate: -12deg;
+  }
+
+  #app .sm\:-rotate-6{
+    --transform-rotate: -6deg;
+  }
+
+  #app .sm\:-rotate-3{
+    --transform-rotate: -3deg;
+  }
+
+  #app .sm\:-rotate-2{
+    --transform-rotate: -2deg;
+  }
+
+  #app .sm\:-rotate-1{
+    --transform-rotate: -1deg;
+  }
+
   #app .sm\:hover\:rotate-0:hover{
     --transform-rotate: 0;
+  }
+
+  #app .sm\:hover\:rotate-1:hover{
+    --transform-rotate: 1deg;
+  }
+
+  #app .sm\:hover\:rotate-2:hover{
+    --transform-rotate: 2deg;
+  }
+
+  #app .sm\:hover\:rotate-3:hover{
+    --transform-rotate: 3deg;
+  }
+
+  #app .sm\:hover\:rotate-6:hover{
+    --transform-rotate: 6deg;
+  }
+
+  #app .sm\:hover\:rotate-12:hover{
+    --transform-rotate: 12deg;
   }
 
   #app .sm\:hover\:rotate-45:hover{
@@ -40107,8 +40754,48 @@ video {
     --transform-rotate: -45deg;
   }
 
+  #app .sm\:hover\:-rotate-12:hover{
+    --transform-rotate: -12deg;
+  }
+
+  #app .sm\:hover\:-rotate-6:hover{
+    --transform-rotate: -6deg;
+  }
+
+  #app .sm\:hover\:-rotate-3:hover{
+    --transform-rotate: -3deg;
+  }
+
+  #app .sm\:hover\:-rotate-2:hover{
+    --transform-rotate: -2deg;
+  }
+
+  #app .sm\:hover\:-rotate-1:hover{
+    --transform-rotate: -1deg;
+  }
+
   #app .sm\:focus\:rotate-0:focus{
     --transform-rotate: 0;
+  }
+
+  #app .sm\:focus\:rotate-1:focus{
+    --transform-rotate: 1deg;
+  }
+
+  #app .sm\:focus\:rotate-2:focus{
+    --transform-rotate: 2deg;
+  }
+
+  #app .sm\:focus\:rotate-3:focus{
+    --transform-rotate: 3deg;
+  }
+
+  #app .sm\:focus\:rotate-6:focus{
+    --transform-rotate: 6deg;
+  }
+
+  #app .sm\:focus\:rotate-12:focus{
+    --transform-rotate: 12deg;
   }
 
   #app .sm\:focus\:rotate-45:focus{
@@ -40133,6 +40820,26 @@ video {
 
   #app .sm\:focus\:-rotate-45:focus{
     --transform-rotate: -45deg;
+  }
+
+  #app .sm\:focus\:-rotate-12:focus{
+    --transform-rotate: -12deg;
+  }
+
+  #app .sm\:focus\:-rotate-6:focus{
+    --transform-rotate: -6deg;
+  }
+
+  #app .sm\:focus\:-rotate-3:focus{
+    --transform-rotate: -3deg;
+  }
+
+  #app .sm\:focus\:-rotate-2:focus{
+    --transform-rotate: -2deg;
+  }
+
+  #app .sm\:focus\:-rotate-1:focus{
+    --transform-rotate: -1deg;
   }
 
   #app .sm\:translate-x-0{
@@ -41123,6 +41830,14 @@ video {
     --transform-skew-x: 0;
   }
 
+  #app .sm\:skew-x-1{
+    --transform-skew-x: 1deg;
+  }
+
+  #app .sm\:skew-x-2{
+    --transform-skew-x: 2deg;
+  }
+
   #app .sm\:skew-x-3{
     --transform-skew-x: 3deg;
   }
@@ -41147,8 +41862,24 @@ video {
     --transform-skew-x: -3deg;
   }
 
+  #app .sm\:-skew-x-2{
+    --transform-skew-x: -2deg;
+  }
+
+  #app .sm\:-skew-x-1{
+    --transform-skew-x: -1deg;
+  }
+
   #app .sm\:skew-y-0{
     --transform-skew-y: 0;
+  }
+
+  #app .sm\:skew-y-1{
+    --transform-skew-y: 1deg;
+  }
+
+  #app .sm\:skew-y-2{
+    --transform-skew-y: 2deg;
   }
 
   #app .sm\:skew-y-3{
@@ -41175,8 +41906,24 @@ video {
     --transform-skew-y: -3deg;
   }
 
+  #app .sm\:-skew-y-2{
+    --transform-skew-y: -2deg;
+  }
+
+  #app .sm\:-skew-y-1{
+    --transform-skew-y: -1deg;
+  }
+
   #app .sm\:hover\:skew-x-0:hover{
     --transform-skew-x: 0;
+  }
+
+  #app .sm\:hover\:skew-x-1:hover{
+    --transform-skew-x: 1deg;
+  }
+
+  #app .sm\:hover\:skew-x-2:hover{
+    --transform-skew-x: 2deg;
   }
 
   #app .sm\:hover\:skew-x-3:hover{
@@ -41203,8 +41950,24 @@ video {
     --transform-skew-x: -3deg;
   }
 
+  #app .sm\:hover\:-skew-x-2:hover{
+    --transform-skew-x: -2deg;
+  }
+
+  #app .sm\:hover\:-skew-x-1:hover{
+    --transform-skew-x: -1deg;
+  }
+
   #app .sm\:hover\:skew-y-0:hover{
     --transform-skew-y: 0;
+  }
+
+  #app .sm\:hover\:skew-y-1:hover{
+    --transform-skew-y: 1deg;
+  }
+
+  #app .sm\:hover\:skew-y-2:hover{
+    --transform-skew-y: 2deg;
   }
 
   #app .sm\:hover\:skew-y-3:hover{
@@ -41231,8 +41994,24 @@ video {
     --transform-skew-y: -3deg;
   }
 
+  #app .sm\:hover\:-skew-y-2:hover{
+    --transform-skew-y: -2deg;
+  }
+
+  #app .sm\:hover\:-skew-y-1:hover{
+    --transform-skew-y: -1deg;
+  }
+
   #app .sm\:focus\:skew-x-0:focus{
     --transform-skew-x: 0;
+  }
+
+  #app .sm\:focus\:skew-x-1:focus{
+    --transform-skew-x: 1deg;
+  }
+
+  #app .sm\:focus\:skew-x-2:focus{
+    --transform-skew-x: 2deg;
   }
 
   #app .sm\:focus\:skew-x-3:focus{
@@ -41259,8 +42038,24 @@ video {
     --transform-skew-x: -3deg;
   }
 
+  #app .sm\:focus\:-skew-x-2:focus{
+    --transform-skew-x: -2deg;
+  }
+
+  #app .sm\:focus\:-skew-x-1:focus{
+    --transform-skew-x: -1deg;
+  }
+
   #app .sm\:focus\:skew-y-0:focus{
     --transform-skew-y: 0;
+  }
+
+  #app .sm\:focus\:skew-y-1:focus{
+    --transform-skew-y: 1deg;
+  }
+
+  #app .sm\:focus\:skew-y-2:focus{
+    --transform-skew-y: 2deg;
   }
 
   #app .sm\:focus\:skew-y-3:focus{
@@ -41285,6 +42080,14 @@ video {
 
   #app .sm\:focus\:-skew-y-3:focus{
     --transform-skew-y: -3deg;
+  }
+
+  #app .sm\:focus\:-skew-y-2:focus{
+    --transform-skew-y: -2deg;
+  }
+
+  #app .sm\:focus\:-skew-y-1:focus{
+    --transform-skew-y: -1deg;
   }
 
   #app .sm\:transition-none{
@@ -51717,6 +52520,18 @@ video {
     border-radius: 0.5rem;
   }
 
+  #app .md\:rounded-xl{
+    border-radius: 0.75rem;
+  }
+
+  #app .md\:rounded-2xl{
+    border-radius: 1rem;
+  }
+
+  #app .md\:rounded-3xl{
+    border-radius: 1.5rem;
+  }
+
   #app .md\:rounded-full{
     border-radius: 9999px;
   }
@@ -51823,6 +52638,66 @@ video {
   #app .md\:rounded-l-lg{
     border-top-left-radius: 0.5rem;
     border-bottom-left-radius: 0.5rem;
+  }
+
+  #app .md\:rounded-t-xl{
+    border-top-left-radius: 0.75rem;
+    border-top-right-radius: 0.75rem;
+  }
+
+  #app .md\:rounded-r-xl{
+    border-top-right-radius: 0.75rem;
+    border-bottom-right-radius: 0.75rem;
+  }
+
+  #app .md\:rounded-b-xl{
+    border-bottom-right-radius: 0.75rem;
+    border-bottom-left-radius: 0.75rem;
+  }
+
+  #app .md\:rounded-l-xl{
+    border-top-left-radius: 0.75rem;
+    border-bottom-left-radius: 0.75rem;
+  }
+
+  #app .md\:rounded-t-2xl{
+    border-top-left-radius: 1rem;
+    border-top-right-radius: 1rem;
+  }
+
+  #app .md\:rounded-r-2xl{
+    border-top-right-radius: 1rem;
+    border-bottom-right-radius: 1rem;
+  }
+
+  #app .md\:rounded-b-2xl{
+    border-bottom-right-radius: 1rem;
+    border-bottom-left-radius: 1rem;
+  }
+
+  #app .md\:rounded-l-2xl{
+    border-top-left-radius: 1rem;
+    border-bottom-left-radius: 1rem;
+  }
+
+  #app .md\:rounded-t-3xl{
+    border-top-left-radius: 1.5rem;
+    border-top-right-radius: 1.5rem;
+  }
+
+  #app .md\:rounded-r-3xl{
+    border-top-right-radius: 1.5rem;
+    border-bottom-right-radius: 1.5rem;
+  }
+
+  #app .md\:rounded-b-3xl{
+    border-bottom-right-radius: 1.5rem;
+    border-bottom-left-radius: 1.5rem;
+  }
+
+  #app .md\:rounded-l-3xl{
+    border-top-left-radius: 1.5rem;
+    border-bottom-left-radius: 1.5rem;
   }
 
   #app .md\:rounded-t-full{
@@ -51943,6 +52818,54 @@ video {
 
   #app .md\:rounded-bl-lg{
     border-bottom-left-radius: 0.5rem;
+  }
+
+  #app .md\:rounded-tl-xl{
+    border-top-left-radius: 0.75rem;
+  }
+
+  #app .md\:rounded-tr-xl{
+    border-top-right-radius: 0.75rem;
+  }
+
+  #app .md\:rounded-br-xl{
+    border-bottom-right-radius: 0.75rem;
+  }
+
+  #app .md\:rounded-bl-xl{
+    border-bottom-left-radius: 0.75rem;
+  }
+
+  #app .md\:rounded-tl-2xl{
+    border-top-left-radius: 1rem;
+  }
+
+  #app .md\:rounded-tr-2xl{
+    border-top-right-radius: 1rem;
+  }
+
+  #app .md\:rounded-br-2xl{
+    border-bottom-right-radius: 1rem;
+  }
+
+  #app .md\:rounded-bl-2xl{
+    border-bottom-left-radius: 1rem;
+  }
+
+  #app .md\:rounded-tl-3xl{
+    border-top-left-radius: 1.5rem;
+  }
+
+  #app .md\:rounded-tr-3xl{
+    border-top-right-radius: 1.5rem;
+  }
+
+  #app .md\:rounded-br-3xl{
+    border-bottom-right-radius: 1.5rem;
+  }
+
+  #app .md\:rounded-bl-3xl{
+    border-bottom-left-radius: 1.5rem;
   }
 
   #app .md\:rounded-tl-full{
@@ -54280,11 +55203,33 @@ video {
   }
 
   #app .md\:outline-none{
-    outline: 0;
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+  }
+
+  #app .md\:outline-white{
+    outline: 2px dotted white;
+    outline-offset: 2px;
+  }
+
+  #app .md\:outline-black{
+    outline: 2px dotted black;
+    outline-offset: 2px;
   }
 
   #app .md\:focus\:outline-none:focus{
-    outline: 0;
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+  }
+
+  #app .md\:focus\:outline-white:focus{
+    outline: 2px dotted white;
+    outline-offset: 2px;
+  }
+
+  #app .md\:focus\:outline-black:focus{
+    outline: 2px dotted black;
+    outline-offset: 2px;
   }
 
   #app .md\:overflow-auto{
@@ -58885,11 +59830,13 @@ video {
   }
 
   #app .md\:break-normal{
+    word-wrap: normal;
     overflow-wrap: normal;
     word-break: normal;
   }
 
   #app .md\:break-words{
+    word-wrap: break-word;
     overflow-wrap: break-word;
   }
 
@@ -59670,6 +60617,22 @@ video {
     grid-template-columns: none;
   }
 
+  #app .md\:auto-cols-auto{
+    grid-auto-columns: auto;
+  }
+
+  #app .md\:auto-cols-min{
+    grid-auto-columns: min-content;
+  }
+
+  #app .md\:auto-cols-max{
+    grid-auto-columns: max-content;
+  }
+
+  #app .md\:auto-cols-fr{
+    grid-auto-columns: minmax(0, 1fr);
+  }
+
   #app .md\:col-auto{
     grid-column: auto;
   }
@@ -59720,6 +60683,10 @@ video {
 
   #app .md\:col-span-12{
     grid-column: span 12 / span 12;
+  }
+
+  #app .md\:col-span-full{
+    grid-column: 1 / -1;
   }
 
   #app .md\:col-start-1{
@@ -59862,6 +60829,22 @@ video {
     grid-template-rows: none;
   }
 
+  #app .md\:auto-rows-auto{
+    grid-auto-rows: auto;
+  }
+
+  #app .md\:auto-rows-min{
+    grid-auto-rows: min-content;
+  }
+
+  #app .md\:auto-rows-max{
+    grid-auto-rows: max-content;
+  }
+
+  #app .md\:auto-rows-fr{
+    grid-auto-rows: minmax(0, 1fr);
+  }
+
   #app .md\:row-auto{
     grid-row: auto;
   }
@@ -59888,6 +60871,10 @@ video {
 
   #app .md\:row-span-6{
     grid-row: span 6 / span 6;
+  }
+
+  #app .md\:row-span-full{
+    grid-row: 1 / -1;
   }
 
   #app .md\:row-start-1{
@@ -60399,6 +61386,26 @@ video {
     --transform-rotate: 0;
   }
 
+  #app .md\:rotate-1{
+    --transform-rotate: 1deg;
+  }
+
+  #app .md\:rotate-2{
+    --transform-rotate: 2deg;
+  }
+
+  #app .md\:rotate-3{
+    --transform-rotate: 3deg;
+  }
+
+  #app .md\:rotate-6{
+    --transform-rotate: 6deg;
+  }
+
+  #app .md\:rotate-12{
+    --transform-rotate: 12deg;
+  }
+
   #app .md\:rotate-45{
     --transform-rotate: 45deg;
   }
@@ -60423,8 +61430,48 @@ video {
     --transform-rotate: -45deg;
   }
 
+  #app .md\:-rotate-12{
+    --transform-rotate: -12deg;
+  }
+
+  #app .md\:-rotate-6{
+    --transform-rotate: -6deg;
+  }
+
+  #app .md\:-rotate-3{
+    --transform-rotate: -3deg;
+  }
+
+  #app .md\:-rotate-2{
+    --transform-rotate: -2deg;
+  }
+
+  #app .md\:-rotate-1{
+    --transform-rotate: -1deg;
+  }
+
   #app .md\:hover\:rotate-0:hover{
     --transform-rotate: 0;
+  }
+
+  #app .md\:hover\:rotate-1:hover{
+    --transform-rotate: 1deg;
+  }
+
+  #app .md\:hover\:rotate-2:hover{
+    --transform-rotate: 2deg;
+  }
+
+  #app .md\:hover\:rotate-3:hover{
+    --transform-rotate: 3deg;
+  }
+
+  #app .md\:hover\:rotate-6:hover{
+    --transform-rotate: 6deg;
+  }
+
+  #app .md\:hover\:rotate-12:hover{
+    --transform-rotate: 12deg;
   }
 
   #app .md\:hover\:rotate-45:hover{
@@ -60451,8 +61498,48 @@ video {
     --transform-rotate: -45deg;
   }
 
+  #app .md\:hover\:-rotate-12:hover{
+    --transform-rotate: -12deg;
+  }
+
+  #app .md\:hover\:-rotate-6:hover{
+    --transform-rotate: -6deg;
+  }
+
+  #app .md\:hover\:-rotate-3:hover{
+    --transform-rotate: -3deg;
+  }
+
+  #app .md\:hover\:-rotate-2:hover{
+    --transform-rotate: -2deg;
+  }
+
+  #app .md\:hover\:-rotate-1:hover{
+    --transform-rotate: -1deg;
+  }
+
   #app .md\:focus\:rotate-0:focus{
     --transform-rotate: 0;
+  }
+
+  #app .md\:focus\:rotate-1:focus{
+    --transform-rotate: 1deg;
+  }
+
+  #app .md\:focus\:rotate-2:focus{
+    --transform-rotate: 2deg;
+  }
+
+  #app .md\:focus\:rotate-3:focus{
+    --transform-rotate: 3deg;
+  }
+
+  #app .md\:focus\:rotate-6:focus{
+    --transform-rotate: 6deg;
+  }
+
+  #app .md\:focus\:rotate-12:focus{
+    --transform-rotate: 12deg;
   }
 
   #app .md\:focus\:rotate-45:focus{
@@ -60477,6 +61564,26 @@ video {
 
   #app .md\:focus\:-rotate-45:focus{
     --transform-rotate: -45deg;
+  }
+
+  #app .md\:focus\:-rotate-12:focus{
+    --transform-rotate: -12deg;
+  }
+
+  #app .md\:focus\:-rotate-6:focus{
+    --transform-rotate: -6deg;
+  }
+
+  #app .md\:focus\:-rotate-3:focus{
+    --transform-rotate: -3deg;
+  }
+
+  #app .md\:focus\:-rotate-2:focus{
+    --transform-rotate: -2deg;
+  }
+
+  #app .md\:focus\:-rotate-1:focus{
+    --transform-rotate: -1deg;
   }
 
   #app .md\:translate-x-0{
@@ -61467,6 +62574,14 @@ video {
     --transform-skew-x: 0;
   }
 
+  #app .md\:skew-x-1{
+    --transform-skew-x: 1deg;
+  }
+
+  #app .md\:skew-x-2{
+    --transform-skew-x: 2deg;
+  }
+
   #app .md\:skew-x-3{
     --transform-skew-x: 3deg;
   }
@@ -61491,8 +62606,24 @@ video {
     --transform-skew-x: -3deg;
   }
 
+  #app .md\:-skew-x-2{
+    --transform-skew-x: -2deg;
+  }
+
+  #app .md\:-skew-x-1{
+    --transform-skew-x: -1deg;
+  }
+
   #app .md\:skew-y-0{
     --transform-skew-y: 0;
+  }
+
+  #app .md\:skew-y-1{
+    --transform-skew-y: 1deg;
+  }
+
+  #app .md\:skew-y-2{
+    --transform-skew-y: 2deg;
   }
 
   #app .md\:skew-y-3{
@@ -61519,8 +62650,24 @@ video {
     --transform-skew-y: -3deg;
   }
 
+  #app .md\:-skew-y-2{
+    --transform-skew-y: -2deg;
+  }
+
+  #app .md\:-skew-y-1{
+    --transform-skew-y: -1deg;
+  }
+
   #app .md\:hover\:skew-x-0:hover{
     --transform-skew-x: 0;
+  }
+
+  #app .md\:hover\:skew-x-1:hover{
+    --transform-skew-x: 1deg;
+  }
+
+  #app .md\:hover\:skew-x-2:hover{
+    --transform-skew-x: 2deg;
   }
 
   #app .md\:hover\:skew-x-3:hover{
@@ -61547,8 +62694,24 @@ video {
     --transform-skew-x: -3deg;
   }
 
+  #app .md\:hover\:-skew-x-2:hover{
+    --transform-skew-x: -2deg;
+  }
+
+  #app .md\:hover\:-skew-x-1:hover{
+    --transform-skew-x: -1deg;
+  }
+
   #app .md\:hover\:skew-y-0:hover{
     --transform-skew-y: 0;
+  }
+
+  #app .md\:hover\:skew-y-1:hover{
+    --transform-skew-y: 1deg;
+  }
+
+  #app .md\:hover\:skew-y-2:hover{
+    --transform-skew-y: 2deg;
   }
 
   #app .md\:hover\:skew-y-3:hover{
@@ -61575,8 +62738,24 @@ video {
     --transform-skew-y: -3deg;
   }
 
+  #app .md\:hover\:-skew-y-2:hover{
+    --transform-skew-y: -2deg;
+  }
+
+  #app .md\:hover\:-skew-y-1:hover{
+    --transform-skew-y: -1deg;
+  }
+
   #app .md\:focus\:skew-x-0:focus{
     --transform-skew-x: 0;
+  }
+
+  #app .md\:focus\:skew-x-1:focus{
+    --transform-skew-x: 1deg;
+  }
+
+  #app .md\:focus\:skew-x-2:focus{
+    --transform-skew-x: 2deg;
   }
 
   #app .md\:focus\:skew-x-3:focus{
@@ -61603,8 +62782,24 @@ video {
     --transform-skew-x: -3deg;
   }
 
+  #app .md\:focus\:-skew-x-2:focus{
+    --transform-skew-x: -2deg;
+  }
+
+  #app .md\:focus\:-skew-x-1:focus{
+    --transform-skew-x: -1deg;
+  }
+
   #app .md\:focus\:skew-y-0:focus{
     --transform-skew-y: 0;
+  }
+
+  #app .md\:focus\:skew-y-1:focus{
+    --transform-skew-y: 1deg;
+  }
+
+  #app .md\:focus\:skew-y-2:focus{
+    --transform-skew-y: 2deg;
   }
 
   #app .md\:focus\:skew-y-3:focus{
@@ -61629,6 +62824,14 @@ video {
 
   #app .md\:focus\:-skew-y-3:focus{
     --transform-skew-y: -3deg;
+  }
+
+  #app .md\:focus\:-skew-y-2:focus{
+    --transform-skew-y: -2deg;
+  }
+
+  #app .md\:focus\:-skew-y-1:focus{
+    --transform-skew-y: -1deg;
   }
 
   #app .md\:transition-none{
@@ -72061,6 +73264,18 @@ video {
     border-radius: 0.5rem;
   }
 
+  #app .lg\:rounded-xl{
+    border-radius: 0.75rem;
+  }
+
+  #app .lg\:rounded-2xl{
+    border-radius: 1rem;
+  }
+
+  #app .lg\:rounded-3xl{
+    border-radius: 1.5rem;
+  }
+
   #app .lg\:rounded-full{
     border-radius: 9999px;
   }
@@ -72167,6 +73382,66 @@ video {
   #app .lg\:rounded-l-lg{
     border-top-left-radius: 0.5rem;
     border-bottom-left-radius: 0.5rem;
+  }
+
+  #app .lg\:rounded-t-xl{
+    border-top-left-radius: 0.75rem;
+    border-top-right-radius: 0.75rem;
+  }
+
+  #app .lg\:rounded-r-xl{
+    border-top-right-radius: 0.75rem;
+    border-bottom-right-radius: 0.75rem;
+  }
+
+  #app .lg\:rounded-b-xl{
+    border-bottom-right-radius: 0.75rem;
+    border-bottom-left-radius: 0.75rem;
+  }
+
+  #app .lg\:rounded-l-xl{
+    border-top-left-radius: 0.75rem;
+    border-bottom-left-radius: 0.75rem;
+  }
+
+  #app .lg\:rounded-t-2xl{
+    border-top-left-radius: 1rem;
+    border-top-right-radius: 1rem;
+  }
+
+  #app .lg\:rounded-r-2xl{
+    border-top-right-radius: 1rem;
+    border-bottom-right-radius: 1rem;
+  }
+
+  #app .lg\:rounded-b-2xl{
+    border-bottom-right-radius: 1rem;
+    border-bottom-left-radius: 1rem;
+  }
+
+  #app .lg\:rounded-l-2xl{
+    border-top-left-radius: 1rem;
+    border-bottom-left-radius: 1rem;
+  }
+
+  #app .lg\:rounded-t-3xl{
+    border-top-left-radius: 1.5rem;
+    border-top-right-radius: 1.5rem;
+  }
+
+  #app .lg\:rounded-r-3xl{
+    border-top-right-radius: 1.5rem;
+    border-bottom-right-radius: 1.5rem;
+  }
+
+  #app .lg\:rounded-b-3xl{
+    border-bottom-right-radius: 1.5rem;
+    border-bottom-left-radius: 1.5rem;
+  }
+
+  #app .lg\:rounded-l-3xl{
+    border-top-left-radius: 1.5rem;
+    border-bottom-left-radius: 1.5rem;
   }
 
   #app .lg\:rounded-t-full{
@@ -72287,6 +73562,54 @@ video {
 
   #app .lg\:rounded-bl-lg{
     border-bottom-left-radius: 0.5rem;
+  }
+
+  #app .lg\:rounded-tl-xl{
+    border-top-left-radius: 0.75rem;
+  }
+
+  #app .lg\:rounded-tr-xl{
+    border-top-right-radius: 0.75rem;
+  }
+
+  #app .lg\:rounded-br-xl{
+    border-bottom-right-radius: 0.75rem;
+  }
+
+  #app .lg\:rounded-bl-xl{
+    border-bottom-left-radius: 0.75rem;
+  }
+
+  #app .lg\:rounded-tl-2xl{
+    border-top-left-radius: 1rem;
+  }
+
+  #app .lg\:rounded-tr-2xl{
+    border-top-right-radius: 1rem;
+  }
+
+  #app .lg\:rounded-br-2xl{
+    border-bottom-right-radius: 1rem;
+  }
+
+  #app .lg\:rounded-bl-2xl{
+    border-bottom-left-radius: 1rem;
+  }
+
+  #app .lg\:rounded-tl-3xl{
+    border-top-left-radius: 1.5rem;
+  }
+
+  #app .lg\:rounded-tr-3xl{
+    border-top-right-radius: 1.5rem;
+  }
+
+  #app .lg\:rounded-br-3xl{
+    border-bottom-right-radius: 1.5rem;
+  }
+
+  #app .lg\:rounded-bl-3xl{
+    border-bottom-left-radius: 1.5rem;
   }
 
   #app .lg\:rounded-tl-full{
@@ -74624,11 +75947,33 @@ video {
   }
 
   #app .lg\:outline-none{
-    outline: 0;
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+  }
+
+  #app .lg\:outline-white{
+    outline: 2px dotted white;
+    outline-offset: 2px;
+  }
+
+  #app .lg\:outline-black{
+    outline: 2px dotted black;
+    outline-offset: 2px;
   }
 
   #app .lg\:focus\:outline-none:focus{
-    outline: 0;
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+  }
+
+  #app .lg\:focus\:outline-white:focus{
+    outline: 2px dotted white;
+    outline-offset: 2px;
+  }
+
+  #app .lg\:focus\:outline-black:focus{
+    outline: 2px dotted black;
+    outline-offset: 2px;
   }
 
   #app .lg\:overflow-auto{
@@ -79229,11 +80574,13 @@ video {
   }
 
   #app .lg\:break-normal{
+    word-wrap: normal;
     overflow-wrap: normal;
     word-break: normal;
   }
 
   #app .lg\:break-words{
+    word-wrap: break-word;
     overflow-wrap: break-word;
   }
 
@@ -80014,6 +81361,22 @@ video {
     grid-template-columns: none;
   }
 
+  #app .lg\:auto-cols-auto{
+    grid-auto-columns: auto;
+  }
+
+  #app .lg\:auto-cols-min{
+    grid-auto-columns: min-content;
+  }
+
+  #app .lg\:auto-cols-max{
+    grid-auto-columns: max-content;
+  }
+
+  #app .lg\:auto-cols-fr{
+    grid-auto-columns: minmax(0, 1fr);
+  }
+
   #app .lg\:col-auto{
     grid-column: auto;
   }
@@ -80064,6 +81427,10 @@ video {
 
   #app .lg\:col-span-12{
     grid-column: span 12 / span 12;
+  }
+
+  #app .lg\:col-span-full{
+    grid-column: 1 / -1;
   }
 
   #app .lg\:col-start-1{
@@ -80206,6 +81573,22 @@ video {
     grid-template-rows: none;
   }
 
+  #app .lg\:auto-rows-auto{
+    grid-auto-rows: auto;
+  }
+
+  #app .lg\:auto-rows-min{
+    grid-auto-rows: min-content;
+  }
+
+  #app .lg\:auto-rows-max{
+    grid-auto-rows: max-content;
+  }
+
+  #app .lg\:auto-rows-fr{
+    grid-auto-rows: minmax(0, 1fr);
+  }
+
   #app .lg\:row-auto{
     grid-row: auto;
   }
@@ -80232,6 +81615,10 @@ video {
 
   #app .lg\:row-span-6{
     grid-row: span 6 / span 6;
+  }
+
+  #app .lg\:row-span-full{
+    grid-row: 1 / -1;
   }
 
   #app .lg\:row-start-1{
@@ -80743,6 +82130,26 @@ video {
     --transform-rotate: 0;
   }
 
+  #app .lg\:rotate-1{
+    --transform-rotate: 1deg;
+  }
+
+  #app .lg\:rotate-2{
+    --transform-rotate: 2deg;
+  }
+
+  #app .lg\:rotate-3{
+    --transform-rotate: 3deg;
+  }
+
+  #app .lg\:rotate-6{
+    --transform-rotate: 6deg;
+  }
+
+  #app .lg\:rotate-12{
+    --transform-rotate: 12deg;
+  }
+
   #app .lg\:rotate-45{
     --transform-rotate: 45deg;
   }
@@ -80767,8 +82174,48 @@ video {
     --transform-rotate: -45deg;
   }
 
+  #app .lg\:-rotate-12{
+    --transform-rotate: -12deg;
+  }
+
+  #app .lg\:-rotate-6{
+    --transform-rotate: -6deg;
+  }
+
+  #app .lg\:-rotate-3{
+    --transform-rotate: -3deg;
+  }
+
+  #app .lg\:-rotate-2{
+    --transform-rotate: -2deg;
+  }
+
+  #app .lg\:-rotate-1{
+    --transform-rotate: -1deg;
+  }
+
   #app .lg\:hover\:rotate-0:hover{
     --transform-rotate: 0;
+  }
+
+  #app .lg\:hover\:rotate-1:hover{
+    --transform-rotate: 1deg;
+  }
+
+  #app .lg\:hover\:rotate-2:hover{
+    --transform-rotate: 2deg;
+  }
+
+  #app .lg\:hover\:rotate-3:hover{
+    --transform-rotate: 3deg;
+  }
+
+  #app .lg\:hover\:rotate-6:hover{
+    --transform-rotate: 6deg;
+  }
+
+  #app .lg\:hover\:rotate-12:hover{
+    --transform-rotate: 12deg;
   }
 
   #app .lg\:hover\:rotate-45:hover{
@@ -80795,8 +82242,48 @@ video {
     --transform-rotate: -45deg;
   }
 
+  #app .lg\:hover\:-rotate-12:hover{
+    --transform-rotate: -12deg;
+  }
+
+  #app .lg\:hover\:-rotate-6:hover{
+    --transform-rotate: -6deg;
+  }
+
+  #app .lg\:hover\:-rotate-3:hover{
+    --transform-rotate: -3deg;
+  }
+
+  #app .lg\:hover\:-rotate-2:hover{
+    --transform-rotate: -2deg;
+  }
+
+  #app .lg\:hover\:-rotate-1:hover{
+    --transform-rotate: -1deg;
+  }
+
   #app .lg\:focus\:rotate-0:focus{
     --transform-rotate: 0;
+  }
+
+  #app .lg\:focus\:rotate-1:focus{
+    --transform-rotate: 1deg;
+  }
+
+  #app .lg\:focus\:rotate-2:focus{
+    --transform-rotate: 2deg;
+  }
+
+  #app .lg\:focus\:rotate-3:focus{
+    --transform-rotate: 3deg;
+  }
+
+  #app .lg\:focus\:rotate-6:focus{
+    --transform-rotate: 6deg;
+  }
+
+  #app .lg\:focus\:rotate-12:focus{
+    --transform-rotate: 12deg;
   }
 
   #app .lg\:focus\:rotate-45:focus{
@@ -80821,6 +82308,26 @@ video {
 
   #app .lg\:focus\:-rotate-45:focus{
     --transform-rotate: -45deg;
+  }
+
+  #app .lg\:focus\:-rotate-12:focus{
+    --transform-rotate: -12deg;
+  }
+
+  #app .lg\:focus\:-rotate-6:focus{
+    --transform-rotate: -6deg;
+  }
+
+  #app .lg\:focus\:-rotate-3:focus{
+    --transform-rotate: -3deg;
+  }
+
+  #app .lg\:focus\:-rotate-2:focus{
+    --transform-rotate: -2deg;
+  }
+
+  #app .lg\:focus\:-rotate-1:focus{
+    --transform-rotate: -1deg;
   }
 
   #app .lg\:translate-x-0{
@@ -81811,6 +83318,14 @@ video {
     --transform-skew-x: 0;
   }
 
+  #app .lg\:skew-x-1{
+    --transform-skew-x: 1deg;
+  }
+
+  #app .lg\:skew-x-2{
+    --transform-skew-x: 2deg;
+  }
+
   #app .lg\:skew-x-3{
     --transform-skew-x: 3deg;
   }
@@ -81835,8 +83350,24 @@ video {
     --transform-skew-x: -3deg;
   }
 
+  #app .lg\:-skew-x-2{
+    --transform-skew-x: -2deg;
+  }
+
+  #app .lg\:-skew-x-1{
+    --transform-skew-x: -1deg;
+  }
+
   #app .lg\:skew-y-0{
     --transform-skew-y: 0;
+  }
+
+  #app .lg\:skew-y-1{
+    --transform-skew-y: 1deg;
+  }
+
+  #app .lg\:skew-y-2{
+    --transform-skew-y: 2deg;
   }
 
   #app .lg\:skew-y-3{
@@ -81863,8 +83394,24 @@ video {
     --transform-skew-y: -3deg;
   }
 
+  #app .lg\:-skew-y-2{
+    --transform-skew-y: -2deg;
+  }
+
+  #app .lg\:-skew-y-1{
+    --transform-skew-y: -1deg;
+  }
+
   #app .lg\:hover\:skew-x-0:hover{
     --transform-skew-x: 0;
+  }
+
+  #app .lg\:hover\:skew-x-1:hover{
+    --transform-skew-x: 1deg;
+  }
+
+  #app .lg\:hover\:skew-x-2:hover{
+    --transform-skew-x: 2deg;
   }
 
   #app .lg\:hover\:skew-x-3:hover{
@@ -81891,8 +83438,24 @@ video {
     --transform-skew-x: -3deg;
   }
 
+  #app .lg\:hover\:-skew-x-2:hover{
+    --transform-skew-x: -2deg;
+  }
+
+  #app .lg\:hover\:-skew-x-1:hover{
+    --transform-skew-x: -1deg;
+  }
+
   #app .lg\:hover\:skew-y-0:hover{
     --transform-skew-y: 0;
+  }
+
+  #app .lg\:hover\:skew-y-1:hover{
+    --transform-skew-y: 1deg;
+  }
+
+  #app .lg\:hover\:skew-y-2:hover{
+    --transform-skew-y: 2deg;
   }
 
   #app .lg\:hover\:skew-y-3:hover{
@@ -81919,8 +83482,24 @@ video {
     --transform-skew-y: -3deg;
   }
 
+  #app .lg\:hover\:-skew-y-2:hover{
+    --transform-skew-y: -2deg;
+  }
+
+  #app .lg\:hover\:-skew-y-1:hover{
+    --transform-skew-y: -1deg;
+  }
+
   #app .lg\:focus\:skew-x-0:focus{
     --transform-skew-x: 0;
+  }
+
+  #app .lg\:focus\:skew-x-1:focus{
+    --transform-skew-x: 1deg;
+  }
+
+  #app .lg\:focus\:skew-x-2:focus{
+    --transform-skew-x: 2deg;
   }
 
   #app .lg\:focus\:skew-x-3:focus{
@@ -81947,8 +83526,24 @@ video {
     --transform-skew-x: -3deg;
   }
 
+  #app .lg\:focus\:-skew-x-2:focus{
+    --transform-skew-x: -2deg;
+  }
+
+  #app .lg\:focus\:-skew-x-1:focus{
+    --transform-skew-x: -1deg;
+  }
+
   #app .lg\:focus\:skew-y-0:focus{
     --transform-skew-y: 0;
+  }
+
+  #app .lg\:focus\:skew-y-1:focus{
+    --transform-skew-y: 1deg;
+  }
+
+  #app .lg\:focus\:skew-y-2:focus{
+    --transform-skew-y: 2deg;
   }
 
   #app .lg\:focus\:skew-y-3:focus{
@@ -81973,6 +83568,14 @@ video {
 
   #app .lg\:focus\:-skew-y-3:focus{
     --transform-skew-y: -3deg;
+  }
+
+  #app .lg\:focus\:-skew-y-2:focus{
+    --transform-skew-y: -2deg;
+  }
+
+  #app .lg\:focus\:-skew-y-1:focus{
+    --transform-skew-y: -1deg;
   }
 
   #app .lg\:transition-none{
@@ -92405,6 +94008,18 @@ video {
     border-radius: 0.5rem;
   }
 
+  #app .xl\:rounded-xl{
+    border-radius: 0.75rem;
+  }
+
+  #app .xl\:rounded-2xl{
+    border-radius: 1rem;
+  }
+
+  #app .xl\:rounded-3xl{
+    border-radius: 1.5rem;
+  }
+
   #app .xl\:rounded-full{
     border-radius: 9999px;
   }
@@ -92511,6 +94126,66 @@ video {
   #app .xl\:rounded-l-lg{
     border-top-left-radius: 0.5rem;
     border-bottom-left-radius: 0.5rem;
+  }
+
+  #app .xl\:rounded-t-xl{
+    border-top-left-radius: 0.75rem;
+    border-top-right-radius: 0.75rem;
+  }
+
+  #app .xl\:rounded-r-xl{
+    border-top-right-radius: 0.75rem;
+    border-bottom-right-radius: 0.75rem;
+  }
+
+  #app .xl\:rounded-b-xl{
+    border-bottom-right-radius: 0.75rem;
+    border-bottom-left-radius: 0.75rem;
+  }
+
+  #app .xl\:rounded-l-xl{
+    border-top-left-radius: 0.75rem;
+    border-bottom-left-radius: 0.75rem;
+  }
+
+  #app .xl\:rounded-t-2xl{
+    border-top-left-radius: 1rem;
+    border-top-right-radius: 1rem;
+  }
+
+  #app .xl\:rounded-r-2xl{
+    border-top-right-radius: 1rem;
+    border-bottom-right-radius: 1rem;
+  }
+
+  #app .xl\:rounded-b-2xl{
+    border-bottom-right-radius: 1rem;
+    border-bottom-left-radius: 1rem;
+  }
+
+  #app .xl\:rounded-l-2xl{
+    border-top-left-radius: 1rem;
+    border-bottom-left-radius: 1rem;
+  }
+
+  #app .xl\:rounded-t-3xl{
+    border-top-left-radius: 1.5rem;
+    border-top-right-radius: 1.5rem;
+  }
+
+  #app .xl\:rounded-r-3xl{
+    border-top-right-radius: 1.5rem;
+    border-bottom-right-radius: 1.5rem;
+  }
+
+  #app .xl\:rounded-b-3xl{
+    border-bottom-right-radius: 1.5rem;
+    border-bottom-left-radius: 1.5rem;
+  }
+
+  #app .xl\:rounded-l-3xl{
+    border-top-left-radius: 1.5rem;
+    border-bottom-left-radius: 1.5rem;
   }
 
   #app .xl\:rounded-t-full{
@@ -92631,6 +94306,54 @@ video {
 
   #app .xl\:rounded-bl-lg{
     border-bottom-left-radius: 0.5rem;
+  }
+
+  #app .xl\:rounded-tl-xl{
+    border-top-left-radius: 0.75rem;
+  }
+
+  #app .xl\:rounded-tr-xl{
+    border-top-right-radius: 0.75rem;
+  }
+
+  #app .xl\:rounded-br-xl{
+    border-bottom-right-radius: 0.75rem;
+  }
+
+  #app .xl\:rounded-bl-xl{
+    border-bottom-left-radius: 0.75rem;
+  }
+
+  #app .xl\:rounded-tl-2xl{
+    border-top-left-radius: 1rem;
+  }
+
+  #app .xl\:rounded-tr-2xl{
+    border-top-right-radius: 1rem;
+  }
+
+  #app .xl\:rounded-br-2xl{
+    border-bottom-right-radius: 1rem;
+  }
+
+  #app .xl\:rounded-bl-2xl{
+    border-bottom-left-radius: 1rem;
+  }
+
+  #app .xl\:rounded-tl-3xl{
+    border-top-left-radius: 1.5rem;
+  }
+
+  #app .xl\:rounded-tr-3xl{
+    border-top-right-radius: 1.5rem;
+  }
+
+  #app .xl\:rounded-br-3xl{
+    border-bottom-right-radius: 1.5rem;
+  }
+
+  #app .xl\:rounded-bl-3xl{
+    border-bottom-left-radius: 1.5rem;
   }
 
   #app .xl\:rounded-tl-full{
@@ -94968,11 +96691,33 @@ video {
   }
 
   #app .xl\:outline-none{
-    outline: 0;
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+  }
+
+  #app .xl\:outline-white{
+    outline: 2px dotted white;
+    outline-offset: 2px;
+  }
+
+  #app .xl\:outline-black{
+    outline: 2px dotted black;
+    outline-offset: 2px;
   }
 
   #app .xl\:focus\:outline-none:focus{
-    outline: 0;
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+  }
+
+  #app .xl\:focus\:outline-white:focus{
+    outline: 2px dotted white;
+    outline-offset: 2px;
+  }
+
+  #app .xl\:focus\:outline-black:focus{
+    outline: 2px dotted black;
+    outline-offset: 2px;
   }
 
   #app .xl\:overflow-auto{
@@ -99573,11 +101318,13 @@ video {
   }
 
   #app .xl\:break-normal{
+    word-wrap: normal;
     overflow-wrap: normal;
     word-break: normal;
   }
 
   #app .xl\:break-words{
+    word-wrap: break-word;
     overflow-wrap: break-word;
   }
 
@@ -100358,6 +102105,22 @@ video {
     grid-template-columns: none;
   }
 
+  #app .xl\:auto-cols-auto{
+    grid-auto-columns: auto;
+  }
+
+  #app .xl\:auto-cols-min{
+    grid-auto-columns: min-content;
+  }
+
+  #app .xl\:auto-cols-max{
+    grid-auto-columns: max-content;
+  }
+
+  #app .xl\:auto-cols-fr{
+    grid-auto-columns: minmax(0, 1fr);
+  }
+
   #app .xl\:col-auto{
     grid-column: auto;
   }
@@ -100408,6 +102171,10 @@ video {
 
   #app .xl\:col-span-12{
     grid-column: span 12 / span 12;
+  }
+
+  #app .xl\:col-span-full{
+    grid-column: 1 / -1;
   }
 
   #app .xl\:col-start-1{
@@ -100550,6 +102317,22 @@ video {
     grid-template-rows: none;
   }
 
+  #app .xl\:auto-rows-auto{
+    grid-auto-rows: auto;
+  }
+
+  #app .xl\:auto-rows-min{
+    grid-auto-rows: min-content;
+  }
+
+  #app .xl\:auto-rows-max{
+    grid-auto-rows: max-content;
+  }
+
+  #app .xl\:auto-rows-fr{
+    grid-auto-rows: minmax(0, 1fr);
+  }
+
   #app .xl\:row-auto{
     grid-row: auto;
   }
@@ -100576,6 +102359,10 @@ video {
 
   #app .xl\:row-span-6{
     grid-row: span 6 / span 6;
+  }
+
+  #app .xl\:row-span-full{
+    grid-row: 1 / -1;
   }
 
   #app .xl\:row-start-1{
@@ -101087,6 +102874,26 @@ video {
     --transform-rotate: 0;
   }
 
+  #app .xl\:rotate-1{
+    --transform-rotate: 1deg;
+  }
+
+  #app .xl\:rotate-2{
+    --transform-rotate: 2deg;
+  }
+
+  #app .xl\:rotate-3{
+    --transform-rotate: 3deg;
+  }
+
+  #app .xl\:rotate-6{
+    --transform-rotate: 6deg;
+  }
+
+  #app .xl\:rotate-12{
+    --transform-rotate: 12deg;
+  }
+
   #app .xl\:rotate-45{
     --transform-rotate: 45deg;
   }
@@ -101111,8 +102918,48 @@ video {
     --transform-rotate: -45deg;
   }
 
+  #app .xl\:-rotate-12{
+    --transform-rotate: -12deg;
+  }
+
+  #app .xl\:-rotate-6{
+    --transform-rotate: -6deg;
+  }
+
+  #app .xl\:-rotate-3{
+    --transform-rotate: -3deg;
+  }
+
+  #app .xl\:-rotate-2{
+    --transform-rotate: -2deg;
+  }
+
+  #app .xl\:-rotate-1{
+    --transform-rotate: -1deg;
+  }
+
   #app .xl\:hover\:rotate-0:hover{
     --transform-rotate: 0;
+  }
+
+  #app .xl\:hover\:rotate-1:hover{
+    --transform-rotate: 1deg;
+  }
+
+  #app .xl\:hover\:rotate-2:hover{
+    --transform-rotate: 2deg;
+  }
+
+  #app .xl\:hover\:rotate-3:hover{
+    --transform-rotate: 3deg;
+  }
+
+  #app .xl\:hover\:rotate-6:hover{
+    --transform-rotate: 6deg;
+  }
+
+  #app .xl\:hover\:rotate-12:hover{
+    --transform-rotate: 12deg;
   }
 
   #app .xl\:hover\:rotate-45:hover{
@@ -101139,8 +102986,48 @@ video {
     --transform-rotate: -45deg;
   }
 
+  #app .xl\:hover\:-rotate-12:hover{
+    --transform-rotate: -12deg;
+  }
+
+  #app .xl\:hover\:-rotate-6:hover{
+    --transform-rotate: -6deg;
+  }
+
+  #app .xl\:hover\:-rotate-3:hover{
+    --transform-rotate: -3deg;
+  }
+
+  #app .xl\:hover\:-rotate-2:hover{
+    --transform-rotate: -2deg;
+  }
+
+  #app .xl\:hover\:-rotate-1:hover{
+    --transform-rotate: -1deg;
+  }
+
   #app .xl\:focus\:rotate-0:focus{
     --transform-rotate: 0;
+  }
+
+  #app .xl\:focus\:rotate-1:focus{
+    --transform-rotate: 1deg;
+  }
+
+  #app .xl\:focus\:rotate-2:focus{
+    --transform-rotate: 2deg;
+  }
+
+  #app .xl\:focus\:rotate-3:focus{
+    --transform-rotate: 3deg;
+  }
+
+  #app .xl\:focus\:rotate-6:focus{
+    --transform-rotate: 6deg;
+  }
+
+  #app .xl\:focus\:rotate-12:focus{
+    --transform-rotate: 12deg;
   }
 
   #app .xl\:focus\:rotate-45:focus{
@@ -101165,6 +103052,26 @@ video {
 
   #app .xl\:focus\:-rotate-45:focus{
     --transform-rotate: -45deg;
+  }
+
+  #app .xl\:focus\:-rotate-12:focus{
+    --transform-rotate: -12deg;
+  }
+
+  #app .xl\:focus\:-rotate-6:focus{
+    --transform-rotate: -6deg;
+  }
+
+  #app .xl\:focus\:-rotate-3:focus{
+    --transform-rotate: -3deg;
+  }
+
+  #app .xl\:focus\:-rotate-2:focus{
+    --transform-rotate: -2deg;
+  }
+
+  #app .xl\:focus\:-rotate-1:focus{
+    --transform-rotate: -1deg;
   }
 
   #app .xl\:translate-x-0{
@@ -102155,6 +104062,14 @@ video {
     --transform-skew-x: 0;
   }
 
+  #app .xl\:skew-x-1{
+    --transform-skew-x: 1deg;
+  }
+
+  #app .xl\:skew-x-2{
+    --transform-skew-x: 2deg;
+  }
+
   #app .xl\:skew-x-3{
     --transform-skew-x: 3deg;
   }
@@ -102179,8 +104094,24 @@ video {
     --transform-skew-x: -3deg;
   }
 
+  #app .xl\:-skew-x-2{
+    --transform-skew-x: -2deg;
+  }
+
+  #app .xl\:-skew-x-1{
+    --transform-skew-x: -1deg;
+  }
+
   #app .xl\:skew-y-0{
     --transform-skew-y: 0;
+  }
+
+  #app .xl\:skew-y-1{
+    --transform-skew-y: 1deg;
+  }
+
+  #app .xl\:skew-y-2{
+    --transform-skew-y: 2deg;
   }
 
   #app .xl\:skew-y-3{
@@ -102207,8 +104138,24 @@ video {
     --transform-skew-y: -3deg;
   }
 
+  #app .xl\:-skew-y-2{
+    --transform-skew-y: -2deg;
+  }
+
+  #app .xl\:-skew-y-1{
+    --transform-skew-y: -1deg;
+  }
+
   #app .xl\:hover\:skew-x-0:hover{
     --transform-skew-x: 0;
+  }
+
+  #app .xl\:hover\:skew-x-1:hover{
+    --transform-skew-x: 1deg;
+  }
+
+  #app .xl\:hover\:skew-x-2:hover{
+    --transform-skew-x: 2deg;
   }
 
   #app .xl\:hover\:skew-x-3:hover{
@@ -102235,8 +104182,24 @@ video {
     --transform-skew-x: -3deg;
   }
 
+  #app .xl\:hover\:-skew-x-2:hover{
+    --transform-skew-x: -2deg;
+  }
+
+  #app .xl\:hover\:-skew-x-1:hover{
+    --transform-skew-x: -1deg;
+  }
+
   #app .xl\:hover\:skew-y-0:hover{
     --transform-skew-y: 0;
+  }
+
+  #app .xl\:hover\:skew-y-1:hover{
+    --transform-skew-y: 1deg;
+  }
+
+  #app .xl\:hover\:skew-y-2:hover{
+    --transform-skew-y: 2deg;
   }
 
   #app .xl\:hover\:skew-y-3:hover{
@@ -102263,8 +104226,24 @@ video {
     --transform-skew-y: -3deg;
   }
 
+  #app .xl\:hover\:-skew-y-2:hover{
+    --transform-skew-y: -2deg;
+  }
+
+  #app .xl\:hover\:-skew-y-1:hover{
+    --transform-skew-y: -1deg;
+  }
+
   #app .xl\:focus\:skew-x-0:focus{
     --transform-skew-x: 0;
+  }
+
+  #app .xl\:focus\:skew-x-1:focus{
+    --transform-skew-x: 1deg;
+  }
+
+  #app .xl\:focus\:skew-x-2:focus{
+    --transform-skew-x: 2deg;
   }
 
   #app .xl\:focus\:skew-x-3:focus{
@@ -102291,8 +104270,24 @@ video {
     --transform-skew-x: -3deg;
   }
 
+  #app .xl\:focus\:-skew-x-2:focus{
+    --transform-skew-x: -2deg;
+  }
+
+  #app .xl\:focus\:-skew-x-1:focus{
+    --transform-skew-x: -1deg;
+  }
+
   #app .xl\:focus\:skew-y-0:focus{
     --transform-skew-y: 0;
+  }
+
+  #app .xl\:focus\:skew-y-1:focus{
+    --transform-skew-y: 1deg;
+  }
+
+  #app .xl\:focus\:skew-y-2:focus{
+    --transform-skew-y: 2deg;
   }
 
   #app .xl\:focus\:skew-y-3:focus{
@@ -102317,6 +104312,14 @@ video {
 
   #app .xl\:focus\:-skew-y-3:focus{
     --transform-skew-y: -3deg;
+  }
+
+  #app .xl\:focus\:-skew-y-2:focus{
+    --transform-skew-y: -2deg;
+  }
+
+  #app .xl\:focus\:-skew-y-1:focus{
+    --transform-skew-y: -1deg;
   }
 
   #app .xl\:transition-none{

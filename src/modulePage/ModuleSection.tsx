@@ -14,6 +14,7 @@ import animation3 from '../media/modules/computerVision/animation-3.gif';
 import {ModuleSubsection} from "./ModulePage";
 import RblattVectorsDemo from '../modules/perceptrons/rblattVectors/RblattVectorsDemo';
 import MPNeuron from "../modules/perceptrons/mpNeuron/MPNeuron";
+import RosenBlattDemo from "../modules/perceptrons/rosenblatt/RosenblattDemo";
 
 const lorem = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.';
 
@@ -126,6 +127,8 @@ function getDemo(comp: string, scheme: ColorScheme) {
             return <RblattVectorsDemo />
         case "MPNeuron":
             return <MPNeuron />
+        case "RblattDemo":
+            return <RosenBlattDemo/>
         default: return <div></div>
     }
 }

@@ -110,7 +110,7 @@ const MPNeuron = () => {
         </div>
         <div>
             <RemoveCircle className="icon-button" fontSize="large" onClick={removeInput}/>
-            <p className="inline m-2">{inputs.length} inputs</p>
+            <p className="inline m-2 text-white">{inputs.length} inputs</p>
             <AddCircle className="icon-button" fontSize="large" onClick={addInput}/>
         </div>
         </div>
@@ -156,7 +156,7 @@ const ThresholdFunc = (props: { onFuncChange: ((func: (n: number) => number) => 
 
     return (
         <div className="font-bold w-20 h-10 rounded-md border-2 border-orange-500 
-                        flex items-center justify-center px-2">
+                        flex items-center justify-center px-2 text-white">
             <div className="cursor-pointer"
                 onClick={() => setIsGreater(!isGreater)}
             >
