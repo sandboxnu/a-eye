@@ -22,7 +22,6 @@ const RawDataTable = (props: {config: RblattConfig}) => {
                 <thead>
                     <tr>
                         {columns.map(title => title && <th key={title}>{title}</th>)}
-
                     </tr>
                 </thead>
                 <tbody>
