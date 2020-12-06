@@ -43,7 +43,7 @@ const RblattNeuron = (props: {input: RblattInput, config: RblattConfig}) => {
                     bias
                     <div
                         className="font-bold rounded-full w-12 h-12 bg-pink-700 m-1
-                                    flex items-center justify-center text-white"
+                                    flex items-center justify-center    "
                     >
                         {props.config.bias.toFixed(1)}
                 </div>

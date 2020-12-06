@@ -91,10 +91,10 @@ const RosenBlattDemo = (props: { labelColor: string }) => {
         <div className="m-4">
             <div className="m-4 flex items-center justify-center">
                 <div className="flex flex-col items-center justify-center">
-                    <p className="-m-6 font-bold text-2xl">
+                    <p className="-m-6 font-bold text-2xl ">
                         {`${config.weightX.toFixed(1)}x + ${config.weightY.toFixed(1)}y + ${config.bias.toFixed(1)} > 0`}
                     </p>
-                    <RblattNeuron input={inputs[currPoint]} config={config}/>
+                    <RblattNeuron input={inputs[currPoint]} config={config} />
                     <div className="font-bold flex items-center justify-center m-4">
                         Learning rate:
                         <input type="range" min="-7" max="1" step="0.1" 
@@ -104,10 +104,10 @@ const RosenBlattDemo = (props: { labelColor: string }) => {
                                     setConfig({...(config), learningRate: round(2 ** parseFloat(e.target.value), 3)})}/>
                         {config.learningRate}
                     </div>
-                    <div>
+                    <div >
                         <div>Binary Misclassification: {binMisclass}</div>
                     </div>
-                    <div>
+                    <div >
                         <div>Mean-Squared Error: {msError}</div>
                     </div>
                 </div>

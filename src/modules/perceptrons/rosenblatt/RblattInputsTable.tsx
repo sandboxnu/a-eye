@@ -16,7 +16,7 @@ const RblattInputsTable = (props: { data: RblattInput[], labelColor: string }) =
                 <tbody>
                     {props.data.map((inpt, idx) => (
                         <tr key={idx} className="datarow">
-                            <td> {inpt.x} </td>
+                            <td > {inpt.x} </td>
                             <td> {inpt.y} </td>
                             <td> 
                                 <div className={`font-bold text-white ${inpt.z ? 'bg-lightNavy' : 'bg-orange-500'}`}>
