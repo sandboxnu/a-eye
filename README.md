@@ -1,6 +1,8 @@
 # a-eye
 Interactive computer vision modules developed for Prof. Mingolla's HONR1310 **Your Eye and AI course**
 
+This course was first taught in Fall 2020. Currently, in Spring 2021, we are looking to add more modules for the following semester.
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
