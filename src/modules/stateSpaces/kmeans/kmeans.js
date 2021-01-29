@@ -170,11 +170,11 @@ export const MyDemo = (props) => {
             duration: 0
         }
     };
-    // TODO how do I add space between the buttons
+
     return (
         <div>
             <Scatter data={data} options={options}/>
-            <div className="text-moduleOffwhite m-3 -mt-2 space-x-2 inline">
+            <div className="text-moduleOffwhite m-3 -mt-2 space-x-2 justify-center space-y-3">
                 <div className="flex justify-around rounded w-1/4 mx-auto bg-moduleNavy">
                     <button onClick={() => setR(prevR => Math.max(prevR - 1, 0))}
                             className="rounded mx-auto py-1 hover:text-moduleTeal outline-none">
@@ -186,9 +186,9 @@ export const MyDemo = (props) => {
                         <span className="m-auto text-2xl font-thin">+</span>
                     </button>
                 </div>
-                <div className="mx-auto rounded w-1/4 bg-moduleNavy">
+                <div className="flex justify-around rounded bg-transparent">
                     <button onClick={e => changeO()}
-                            className="py-1 hover:text-moduleTeal">
+                            className="rounded w-1/3 mx-auto px-1 py-2 bg-moduleNavy hover:text-moduleTeal outline-none">
                         {original == 0 ? "Current: Original Dataset" : (original == 1 ? "Current: Iris Sepal Dataset" : "Current: Iris Petal Dataset")}
                     </button>
                 </div>
