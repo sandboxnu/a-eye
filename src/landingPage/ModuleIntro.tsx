@@ -1,6 +1,7 @@
 import React from 'react';
 
-export default function ModuleIntro(props) {
+export default function ModuleIntro(props:
+    {bgColor: string, textColor: string, margin: string, title: string, imgSrc: string, body: string}) {
     return (
         <div className={`flex-col w-full md:w-2/3 mx-4 md:mx-0 py-6 shadow-module rounded-module ${props.bgColor} ${props.textColor} md:${props.margin}`}>
             <h1 className="text-3.5xl float-left italic font-bold font-opensans mt-5 ml-10">{props.title}</h1>
