@@ -1,23 +1,21 @@
-import React, { Component, useState, useEffect } from 'react';
-// import './App.css';
-// import Chart from 'chart.js';
+import React, { useState } from 'react';
+
 import { Scatter } from 'react-chartjs-2';
-import randomColour from 'randomcolor';
 import './kmeans.css';
 import trainData from './train.json';
 import trainDataIris from './iris.json';
-import trainDataIris2 from './iris2.json'; 
-import dragData from 'chartjs-plugin-dragdata';
+import trainDataIris2 from './iris2.json';
 
+import './ml-kmeans.d.ts';
 import kmeans from 'ml-kmeans';
 import { squaredEuclidean } from 'ml-distance-euclidean';
-import KMeansResult from 'ml-kmeans';
+// import KMeansResult from 'ml-kmeans';
+type KMeansResult = {clusters: [], centroids: {centroid: number[]}[], converged: [], iterations: number};
 
-function getClasses(data:number[][], centers) {
+function getClasses(data:number[][], centers: number[][]) {
     // data is a array of points
     // centers are two centers
     // return array of labels (which its closer to), 0 for first center, 1 for second center
-    
     return data.map(x => squaredEuclidean(x, centers[0]) > squaredEuclidean(x, centers[1]) ? 1 : 0);
 }
 
@@ -35,7 +33,7 @@ type RemoveThese = {ds_index:number, ind: number}[]
 type RemoveTheseList = [RemoveThese, Function]
 
 type NewClusterType = {x:number, y:number, r:number}
-type BubbleDataEntry = {label:string[], backgroundColor:string, borderColor:string, data:NewClusterType[], pointRadius:number}
+type BubbleDataEntry = {label:string[], backgroundColor:string, borderColor:string, data:NewClusterType[], pointRadius?:number, hidden?: boolean, dragData?: boolean }
 
 type AddedPoint = {Driver_ID:number, Distance_Feature:number, Speeding_Feature:number}[]
 type AddedPointList = [AddedPoint, Function]
@@ -46,9 +44,8 @@ const organiseData = (data: InputData[]) => {
     for (let i = 0; i < data.length; i++) {
         const newRow:number[] = [];
         const curRow:InputData = data[i];
-        if (i == 0) {
+        if (i === 0) {
             console.log(curRow)
-            
         }
         if ((curRow as DataFormat).Speeding_Feature) {
             const temp:DataFormat = curRow as DataFormat
@@ -82,7 +79,7 @@ let ans0 = kmeans(organiseData(trainData), k, { initialization: centers, maxIter
 let ans100 = kmeans(organiseData(trainData), k, { initialization: centers, maxIterations: 100 }, );
 let ans1 = kmeans(organiseData(trainData), k, { initialization: centers, maxIterations: 2 }, );
 let centers2 = [[50, 70], [50, 80]];
-let ans2 = kmeans(organiseData(trainData), k, { initialization: centers2, withIterations: true }, );
+let ans2: KMeansResult[] = kmeans(organiseData(trainData), k, { initialization: centers2, withIterations: true }, );
 console.log(ans2)
 
 // trainDataIris
@@ -98,11 +95,9 @@ let ans2iris = kmeans(organiseData(trainDataIris), k, { initialization: centersI
 
 let centersIris2 = [[20, 20], [40, 40]]
 let ans0iris2 = kmeans(organiseData(trainDataIris2), k, { initialization: centersIris2, maxIterations: 1 }, );
-
-let ans1iris2 = kmeans(organiseData(trainDataIris2), k, { initialization: centersIris2, maxIterations: 2 }, );
 let ans2iris2 = kmeans(organiseData(trainDataIris2), k, { initialization: centersIris2, withIterations: true }, );
 
-let gen_out:KMeansResult[] = [];
+let gen_out: KMeansResult[] = [];
 for (const element of ans2) {
     gen_out.push(element);
 }
@@ -119,11 +114,10 @@ for (const element of ans2iris2) {
 
 console.log(gen_out, gen_outIris, gen_outIris2)
 
-export const MyDemo = (props) => {
-    const [original, setO] = useState(0);
-    
+export const MyDemo = (props: {hidden: boolean, xLabel?: string, yLabel?: string, kmeans_gen: KMeansResult[]}) => {
+    const [original, setO]: [number, Function] = useState(0);
 
-    let gen = original == 0 ? gen_out : (original == 1 ? gen_outIris : gen_outIris2)
+    let gen = original === 0 ? gen_out : (original === 1 ? gen_outIris : gen_outIris2)
     const [r, setR] = useState(0);
     const changeO = () => {
         setO((original+1) % 3)
@@ -133,22 +127,22 @@ export const MyDemo = (props) => {
 
     if (gen.length === 0) return <div></div>;
 
-    let bubData = []
-    let data3 = original == 0 ? organiseData(trainData) : (original == 1 ? organiseData(trainDataIris) : organiseData(trainDataIris2))
+    let bubData:BubbleDataEntry[] = []
+    let data3 = original === 0 ? organiseData(trainData) : (original === 1 ? organiseData(trainDataIris) : organiseData(trainDataIris2))
     //console.log('GEN OUT: ' + gen_out);
     //console.log(gen_out[r].centroids)
     //console.log(data3)
     let cntrdss = gen[r].centroids
     let c2 = [cntrdss[0].centroid, cntrdss[1].centroid];
 
-    let labels = getClasses(data3, c2)
+    let labels: number[] = getClasses(data3, c2)
     //console.log(labels)
 
     processdata(bubData, labels, c2, props.hidden, data3)
     //console.log(bubData)
 
     // data that will be put into the chart
-    const data = {datasets: []};
+    const data:{datasets: BubbleDataEntry[]} = {datasets: []};
 
     Object.entries(bubData).forEach((cluster) => {
         //console.log(cluster[1])
@@ -167,8 +161,8 @@ export const MyDemo = (props) => {
                 ticks: {
                     fontColor: '#394D73',
                     beginAtZero: true,
-                    min: original == 0 ? 0 : (original == 1 ? 1 : 0),
-                    max: original == 0 ? 120 : (original == 1 ? 7 : 40),
+                    min: original === 0 ? 0 : (original === 1 ? 1 : 0),
+                    max: original === 0 ? 120 : (original === 1 ? 7 : 40),
                 }
             }],
             xAxes: [{
@@ -177,8 +171,8 @@ export const MyDemo = (props) => {
                 ticks: {
                     fontColor: '#394D73',
                     beginAtZero: true,
-                    min: original == 0 ? 0 : (original == 1 ? 1 : 0),
-                    max: original == 0 ? 250 : (original == 1 ? 10 : 100), 
+                    min: original === 0 ? 0 : (original === 1 ? 1 : 0),
+                    max: original === 0 ? 250 : (original === 1 ? 10 : 100),
                 }
             }],
         },
@@ -201,19 +195,19 @@ export const MyDemo = (props) => {
             <div className="text-moduleOffwhite m-3 -mt-2 space-x-2 justify-center space-y-3">
                 <div className="flex justify-around rounded w-1/4 mx-auto bg-moduleNavy">
                     <button onClick={() => setR(prevR => Math.max(prevR - 1, 0))}
-                            className="rounded mx-auto py-1 hover:text-moduleTeal outline-none">
+                        className="rounded mx-auto py-1 hover:text-moduleTeal outline-none">
                         <span className="m-auto text-2xl font-thin">−</span>
                     </button>
                     <div className="md:inline py-2">Step {r}/{gen.length - 1}</div>
                     <button onClick={() => setR(prevR => Math.min(prevR + 1, gen.length - 1))}
-                            className="rounded mx-auto py-1 hover:text-moduleTeal outline-none">
+                        className="rounded mx-auto py-1 hover:text-moduleTeal outline-none">
                         <span className="m-auto text-2xl font-thin">+</span>
                     </button>
                 </div>
                 <div className="flex justify-around rounded bg-transparent">
                     <button onClick={e => changeO()}
-                            className="rounded w-1/3 mx-auto px-1 py-2 bg-moduleNavy hover:text-moduleTeal outline-none">
-                        {original == 0 ? "Current: Original Dataset" : (original == 1 ? "Current: Iris Sepal Dataset" : "Current: Iris Petal Dataset")}
+                        className="rounded w-1/3 mx-auto px-1 py-2 bg-moduleNavy hover:text-moduleTeal outline-none">
+                        {original === 0 ? "Current: Original Dataset" : (original === 1 ? "Current: Iris Sepal Dataset" : "Current: Iris Petal Dataset")}
                     </button>
                 </div>
             </div>
@@ -231,105 +225,98 @@ let cb_colors = ['#004E00', '#00007D' ]
 // #e76a04 orange
 
 const MyScatter =
-    (graphdata) => {
-        
-        const scatterData:ScatterData =  { datasets : [{
-                data: []
-            }] };
+    () => {
+    const scatterData:ScatterData =  { datasets : [{
+        data: []
+    }]};
 
-            
-
-        Object.entries(bubbleData).forEach((cluster) => {
-            Object.entries(cluster[1].data).forEach((point) => {
-                scatterData.datasets[0].data.push({
-                    x: point[1].x,
-                    y: point[1].y,
-                    // fill: false,
-                    pointRadius: 15,
-                    backgroundColor: '#ef5675',
-                });
-
+    Object.entries(bubbleData).forEach((cluster) => {
+        Object.entries(cluster[1].data).forEach((point) => {
+            scatterData.datasets[0].data.push({
+                x: point[1].x,
+                y: point[1].y,
+                // fill: false,
+                pointRadius: 15,
+                backgroundColor: '#ef5675',
             });
-        })
+
+        });
+    })
 
 
-        console.log(scatterData)
-        const options = {
-            showLines: false,
-            tooltips: { enabled: false },
-            scales: {
-                yAxes: [{
-                    scaleLabel: { display: true }
-                }],
-                xAxes: [{
-                    scaleLabel: { display: true }
-                }],
-            }
-        };
-        return (<Scatter data={scatterData} options={options} />);
+    console.log(scatterData)
+    const options = {
+        showLines: false,
+        tooltips: { enabled: false },
+        scales: {
+            yAxes: [{
+                scaleLabel: { display: true }
+            }],
+            xAxes: [{
+                scaleLabel: { display: true }
+            }],
+        }
     };
+    return (<Scatter data={scatterData} options={options} />);
+};
 
 
 
-export const MyScatter2 = (props) => {
+export const MyScatter2 = (props: {clstrs:number[], cntrds: number[], hidden: boolean, yLabel?: string, xLabel?: string}) => {
 
-        // 0 == original data
-        // 1 == iris data
-        // 2 == diff iris data
-        // change to an int if more datasets
-        const [original, setO] = useState(0);
+    // 0 == original data
+    // 1 == iris data
+    // 2 == diff iris data
+    // change to an int if more datasets
+    const [original, setO] = useState(0);
 
-        // ans0['centroids']
-        // ans0iris['centroids']
-        const changeO = (props) => {
-            let c = null;
-            // not sure why this is backwards
-            if (original == 0) {
-                setX1Idx(ans0iris['centroids'][0].centroid[0]);
-                setY1Idx(ans0iris['centroids'][0].centroid[1]);
-                setX2Idx(ans0iris['centroids'][1].centroid[0]);
-                setY2Idx(ans0iris['centroids'][1].centroid[1]);
-            } 
-            else if(original == 1) {
-                // console.log(centers)
-                setX1Idx(ans0['centroids'][0].centroid[0]);
-                setY1Idx(ans0['centroids'][0].centroid[1]);
-                setX2Idx(ans0['centroids'][1].centroid[0]);
-                setY2Idx(ans0['centroids'][1].centroid[1]);
-            }
-            else {
-                setX1Idx(ans0iris2['centroids'][0].centroid[0]);
-                setY1Idx(ans0iris2['centroids'][0].centroid[1]);
-                setX2Idx(ans0iris2['centroids'][1].centroid[0]);
-                setY2Idx(ans0iris2['centroids'][1].centroid[1]);
-                
-            }
-            
-            setO(props)
+    // ans0['centroids']
+    // ans0iris['centroids']
+    const changeO = (props: number) => {
+        if (original === 0) {
+            setX1Idx(ans0iris['centroids'][0].centroid[0]);
+            setY1Idx(ans0iris['centroids'][0].centroid[1]);
+            setX2Idx(ans0iris['centroids'][1].centroid[0]);
+            setY2Idx(ans0iris['centroids'][1].centroid[1]);
+        }
+        else if(original === 1) {
+            // console.log(centers)
+            setX1Idx(ans0['centroids'][0].centroid[0]);
+            setY1Idx(ans0['centroids'][0].centroid[1]);
+            setX2Idx(ans0['centroids'][1].centroid[0]);
+            setY2Idx(ans0['centroids'][1].centroid[1]);
+        }
+        else {
+            setX1Idx(ans0iris2['centroids'][0].centroid[0]);
+            setY1Idx(ans0iris2['centroids'][0].centroid[1]);
+            setX2Idx(ans0iris2['centroids'][1].centroid[0]);
+            setY2Idx(ans0iris2['centroids'][1].centroid[1]);
         }
 
-        // console.log(ans0['centroids'])
-        // console.log(ans0iris['centroids'])
-        let centersx = (original == 0 ? ans0['centroids'] : (original == 1 ? ans0iris['centroids'] : ans0iris2['centroids']))
-        // console.log(centers, original)
+        setO(props);
+    }
 
-        // in order to make the chart updateable after moving a center
-        const [x1Idx, setX1Idx] = useState(centersx[0].centroid[0]);
-        const [y1Idx, setY1Idx] = useState(centersx[0].centroid[1]);
-        const [x2Idx, setX2Idx] = useState(centersx[1].centroid[0]);
-        const [y2Idx, setY2Idx] = useState(centersx[1].centroid[1]);
-        const [addedPoints, setAP]:AddedPointList  = useState([]);
-        const [addedPoints2, setAP2]:AddedPointList  = useState([]);
-        const [addedPoints3, setAP3]:AddedPointList = useState([]);
-        const fakepoints = [{ Driver_ID: 0, Distance_Feature: 0, Speeding_Feature: 0 },
-            { Driver_ID: 0, Distance_Feature: 1, Speeding_Feature: 1 }];
+    // console.log(ans0['centroids'])
+    // console.log(ans0iris['centroids'])
+    let centersx = (original === 0 ? ans0['centroids'] : (original === 1 ? ans0iris['centroids'] : ans0iris2['centroids']))
+    // console.log(centers, original)
+
+    // in order to make the chart updateable after moving a center
+    const [x1Idx, setX1Idx] = useState(centersx[0].centroid[0]);
+    const [y1Idx, setY1Idx] = useState(centersx[0].centroid[1]);
+    const [x2Idx, setX2Idx] = useState(centersx[1].centroid[0]);
+    const [y2Idx, setY2Idx] = useState(centersx[1].centroid[1]);
+    const [addedPoints, setAP]:AddedPointList  = useState([]);
+    const [addedPoints2, setAP2]:AddedPointList  = useState([]);
+    const [addedPoints3, setAP3]:AddedPointList = useState([]);
+    const fakepoints = [{ Driver_ID: 0, Distance_Feature: 0, Speeding_Feature: 0 },
+        { Driver_ID: 0, Distance_Feature: 1, Speeding_Feature: 1 }];
         const [removethese, setRT]:RemoveTheseList = useState([]);
         const [removethese2, setRT2]:RemoveTheseList = useState([]);
         const [removethese3, setRT3]:RemoveTheseList = useState([]);
         const [percentRemove, setPR] = useState(16);
         const [editable, setEdit] = useState(true);
         const [base, setBase] = useState(true);
-        
 
         // format needed for kmeans()
         let c2 = [[x1Idx, y1Idx], [x2Idx, y2Idx]];
@@ -337,18 +324,18 @@ export const MyScatter2 = (props) => {
         // console.log(trainData, addedPoints)
 
         // console.log(addedPoints)
-            
-        let trainData2:InputData[] = original == 0 ? trainData.slice() : (original == 1 ? trainDataIris.slice() : trainDataIris2.slice())
-        if (original == 0) {
+
+        let trainData2:InputData[] = original === 0 ? trainData.slice() : (original === 1 ? trainDataIris.slice() : trainDataIris2.slice())
+        if (original === 0) {
             for (let i = trainData2.length; i > 0; i--) {
-                if (i % 20 == 0) {
+                if (i % 20 === 0) {
                     trainData2.splice(i, percentRemove)
                 }
             }
         }
         else {
             for (let i = trainData2.length; i > 0; i--) {
-                if (i % 4 == 0) {
+                if (i % 4 === 0) {
                     trainData2.splice(i, percentRemove - 16)
                 }
             }
@@ -357,10 +344,10 @@ export const MyScatter2 = (props) => {
         // trainData2 = base ? trainData2.concat(addedPoints) : addedPoints
 
         if (base) {
-            if (original == 0) {
+            if (original === 0) {
                 trainData2 = trainData2.concat(addedPoints)
             }
-            else if (original == 1) {
+            else if (original === 1) {
                 trainData2 = trainData2.concat(addedPoints2)
             }
             else {
@@ -368,10 +355,10 @@ export const MyScatter2 = (props) => {
             }
         }
         else {
-            if (original == 0) {
+            if (original === 0) {
                 trainData2 = addedPoints
             }
-            else if (original == 1) {
+            else if (original === 1) {
                 trainData2 = addedPoints2
             }
             else {
@@ -380,7 +367,7 @@ export const MyScatter2 = (props) => {
         }
 
         // where our data is going to be, 'bubble data'
-        let bubData = []
+        let bubData: BubbleDataEntry[] = []
 
         if (trainData2.length >= 2) {
             console.log(organiseData(trainData2))
@@ -397,12 +384,12 @@ export const MyScatter2 = (props) => {
             console.log(organiseData(s))
             let ans_x = kmeans(organiseData(s), k, { initialization: c2, maxIterations: 1 }, );
             let data3 = organiseData(trainData2)
-            let clustersss = trainData2.length == 1 ? [ans_x.clusters[0]] : []
+            let clustersss = trainData2.length === 1 ? [ans_x.clusters[0]] : []
             processdata(bubData, clustersss, c2, props.hidden, data3)
         }
 
         // data that will be put into the chart
-        const data:ScatterData = { datasets : [] };
+        const data:{datasets: BubbleDataEntry[]} = { datasets : [] };
 
         Object.entries(bubData).forEach((cluster) => {
             // console.log(cluster)
@@ -415,13 +402,13 @@ export const MyScatter2 = (props) => {
             data.datasets[removethese[i].ds_index].data.splice(removethese[i].ind, 1)
         }
 
-        const onDragEnd = (e, datasetIndex, index, value) => {
+        const onDragEnd = (e: React.ChangeEvent, datasetIndex: number, index: number, value: {x: number, y: number}) => {
             if (!e) return;
-            if (datasetIndex == 0) {
+            if (datasetIndex === 0) {
                 setX1Idx(value.x)
                 setY1Idx(value.y)
             }
-            if (datasetIndex == 1) {
+            if (datasetIndex === 1) {
                 setX2Idx(value.x)
                 setY2Idx(value.y)
             }
@@ -438,8 +425,8 @@ export const MyScatter2 = (props) => {
                     ticks: {
                         fontColor: '#CBD9F2',
                         beginAtZero: true,
-                        min: original == 0 ? 0 : (original == 1 ? 1 : 0),
-                        max: original == 0 ? 120 : (original == 1 ? 7 : 40),
+                        min: original === 0 ? 0 : (original === 1 ? 1 : 0),
+                        max: original === 0 ? 120 : (original === 1 ? 7 : 40),
                     }
                 }],
                 xAxes: [{
@@ -448,8 +435,8 @@ export const MyScatter2 = (props) => {
                     ticks: {
                         fontColor: '#CBD9F2',
                         beginAtZero: true,
-                        min: original == 0 ? 0 : (original == 1 ? 1 : 0),
-                        max: original == 0 ? 250 : (original == 1 ? 10 : 100),   
+                        min: original === 0 ? 0 : (original === 1 ? 1 : 0),
+                        max: original === 0 ? 250 : (original === 1 ? 10 : 100),
                     }
                 }],
             },
@@ -464,7 +451,7 @@ export const MyScatter2 = (props) => {
             dragData: true,
             dragX: true,
             dragDataRound: 0,
-            onClick : function (evt, item) {
+            onClick : function (evt: MouseEvent) {
                 if (editable) {
                     // all the // @ts-ignore 's from here on are due to the fact that we can't access of 'this' until onClick is called
                     // inside the react component
@@ -473,9 +460,9 @@ export const MyScatter2 = (props) => {
                     if (asdgwg) {
                         let ds_index = asdgwg._datasetIndex
                         let ind = asdgwg._index
-                        let a:RemoveThese = original == 0 ? removethese : (original == 1 ? removethese2 : removethese3)
+                        let a:RemoveThese = original === 0 ? removethese : (original === 1 ? removethese2 : removethese3)
                         a.push({ds_index, ind})
-                        original == 0 ? setRT(a) : (original == 1 ? setRT2(a) : setRT3(a))
+                        original === 0 ? setRT(a) : (original === 1 ? setRT2(a) : setRT3(a))
                         // @ts-ignore
                         setX1Idx(this.chart.data.datasets[0].data[0].x  + 0.1)
                         // @ts-ignore
@@ -488,7 +475,9 @@ export const MyScatter2 = (props) => {
                         // @ts-ignore
                         var yBottom = this.chartArea.bottom;
 
+                        // @ts-ignore
                         var yMin = this.scales['y-axis-1'].min;
+                        // @ts-ignore
                         var yMax = this.scales['y-axis-1'].max;
                         var newY = 0;
 
@@ -501,7 +490,9 @@ export const MyScatter2 = (props) => {
                         var xTop = this.chartArea.left;
                         // @ts-ignore
                         var xBottom = this.chartArea.right;
+                        // @ts-ignore
                         var xMin = this.scales['x-axis-1'].min;
+                        // @ts-ignore
                         var xMax = this.scales['x-axis-1'].max;
                         var newX = 0;
 
@@ -515,10 +506,10 @@ export const MyScatter2 = (props) => {
                         console.log(newX, newY);
                         if (newX > 0 && newY > 0) {
 
-                            
-                            let a:AddedPoint = original == 0 ? addedPoints : (original == 1 ? addedPoints2 : addedPoints3)
+
+                            let a:AddedPoint = original === 0 ? addedPoints : (original === 1 ? addedPoints2 : addedPoints3)
                             a.push({Driver_ID: 0, Distance_Feature: newX, Speeding_Feature: newY})
-                            original == 0 ? setAP(a) : (original == 1 ? setAP2(a) : setAP3(a))
+                            original === 0 ? setAP(a) : (original === 1 ? setAP2(a) : setAP3(a))
 
                             // turn a blind eye here
                             // @ts-ignore
@@ -534,9 +525,7 @@ export const MyScatter2 = (props) => {
             animation: {
                 duration: 0
             },
-
         };
-
 
         return (
             <div>
@@ -552,7 +541,7 @@ export const MyScatter2 = (props) => {
                     <div className="axis-selector inline">
                         <button style={{color:'white'}} onClick={e => setBase(!base)}> {base ? "Show Only Custom" : "Show Full Dataset"}</button>
                         <button style={{color:'white'}} onClick={e => setEdit(!editable)} > {editable ? "Disable Editing" : "Enable Editing"} </button>
-                        <button onClick={e => changeO((original+1) % 3)}>{original == 0 ? "Current: Original Dataset" : (original == 1 ? "Current: Iris Sepal Dataset" : "Current: Iris Petal Dataset")}</button>
+                        <button onClick={e => changeO((original+1) % 3)}>{original === 0 ? "Current: Original Dataset" : (original === 1 ? "Current: Iris Sepal Dataset" : "Current: Iris Petal Dataset")}</button>
                     </div>
 
                 </div>
@@ -587,8 +576,7 @@ for(let ci = 0; ci < 1; ci++) {
 
 
 // processing for second and third chart
-function processdata(bdata, clsters, cntroids, hidden, data3) {
-
+function processdata(bdata: BubbleDataEntry[], clsters: number[], cntroids: number[][], hidden: boolean, data3: number[][]) {
     // add centers
     for (let c = 0; c < cntroids.length; c++ ){
         const newCluster:NewClusterType[] = [];
@@ -614,7 +602,7 @@ function processdata(bdata, clsters, cntroids, hidden, data3) {
     for (let ci = 0; ci < k; ci++) {
         const newCluster:NewClusterType[] = [];
         for (let ri = 0; ri < clsters.length; ri++){
-            if (clsters[ri] == ci) {
+            if (clsters[ri] === ci) {
                 newCluster.push({
                     x: data3[ri][0],
                     y: data3[ri][1],
@@ -636,12 +624,12 @@ function processdata(bdata, clsters, cntroids, hidden, data3) {
 }
 
 
+// graphdata={bubbleData}: belongs to MyScatter
 function App() {
     return (
         <div>
-            
             <div className="kmeansgraph">
-                <MyScatter graphdata={bubbleData} />
+                <MyScatter  />
             </div>
             <div  className="kmeansgraph">
                 <MyScatter2 clstrs ={ans1['clusters']} cntrds = {ans0['centroids']} hidden = {false} />
@@ -661,7 +649,7 @@ function App() {
                 you can do it yourself and get the same result!
             </p>
             <div  className="kmeansgraph">
-                <MyDemo kmeans_gen={ans2} hidden = {false}/>
+                <MyDemo hidden = {false} kmeans_gen={ans2} />
             </div>
         </div>
     );

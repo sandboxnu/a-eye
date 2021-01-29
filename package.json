@@ -9,7 +9,6 @@
     "@material-ui/icons": "4.9.1",
     "autoprefixer": "10.0.2",
     "chart.js": "2.9.3",
-    "chartjs-plugin-dragdata": "1.1.3",
     "filter": "0.1.1",
     "gaussian-convolution-kernel": "1.0.0",
     "ml-dataset-iris": "1.1.1",
@@ -37,12 +36,13 @@
     "@testing-library/user-event": "7.1.2",
     "@types/jest": "26.0.13",
     "@types/node": "14.6.4",
+    "@types/randomcolor": "0.5.5",
     "@types/react": "16.9.49",
     "@types/react-dom": "16.9.8",
     "@types/react-router-dom": "5.1.7",
     "postcss": "8.1.13",
     "postcss-cli": "7.1.2",
-    "react-scripts": "3.4.3",
+    "react-scripts": "4.0.1",
     "tailwind": "4.0.0",
     "tailwindcss": "1.9.6",
     "tailwindcss-blend-mode": "1.0.0",
@@ -71,7 +71,7 @@
       "last 1 safari version"
     ],
     "typeRoots": [
-      "./node_modules/ml-kmeans"
+      "./ml-kmeans.d.ts"
     ]
   }
 }
