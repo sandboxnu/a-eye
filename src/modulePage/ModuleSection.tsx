@@ -7,10 +7,19 @@ import { ImageSelectableDemo } from "../modules/computerVision/imageSelector/Ima
 import PCADemo from "../modules/stateSpaces/pca/PCA";
 import {RawDataTable, SelectableAxisChart, StaticAxisChart, AxisSelector, config as pcaConfig} from "../modules/stateSpaces/pca/PCA";
 import KMeans, {MyDemo, MyScatter2, config as kmeansConfig} from '../modules/stateSpaces/kmeans/kmeans';
+import {ModuleSubsection} from "./ModulePage";
 
 const lorem = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.';
+interface ColorScheme {
+    "bgColor": string,
+    "titleColor": string,
+    "headingColor": string,
+    "bodyColor": string,
+    "labelColorHex": string
+}
 
-export default function ModuleSection(props) {
+export default function ModuleSection(props:
+    {title: string, sections: ModuleSubsection[], colorScheme: string, key: string, demoComp: string}) {
     const scheme = props.colorScheme === 'dark' ? {
         "bgColor": "bg-moduleDarkBlue",
         "titleColor": "text-modulePaleBlue",
@@ -54,7 +63,7 @@ export default function ModuleSection(props) {
     );
 }
 
-function getDemo(comp, scheme) {
+function getDemo(comp: string, scheme: ColorScheme) {
     const demoArgs = {labelColor: scheme.titleColor}
 
     switch (comp) {
@@ -67,7 +76,7 @@ function getDemo(comp, scheme) {
         case "HaarWaveletDemo": 
             return <ImageSelectableDemo Demo={HaarWaveletDemo} initImg='bwWoman.jpg' demoProps={demoArgs}/>
         case "PCADemo":
-            return <PCADemo {...demoArgs}/>
+            return <PCADemo {...demoArgs} labelColorHex=''/>
         case "RawDataTable":
             return <RawDataTable />
         case "StaticAxisChart":

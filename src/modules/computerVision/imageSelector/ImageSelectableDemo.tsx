@@ -1,16 +1,16 @@
 import React, {useState} from 'react';
 import ImageSelector from './ImageSelector';
 
-
 export interface DemoProps {
     imgUrl: string,
+    labelColor: string,
     [arg: string]: any
 }
 
 export interface ImageSelectableDemoProps {
     initImg: string,
     Demo: React.ComponentType<DemoProps>,
-    demoProps?: {[prop: string]: any}
+    demoProps: {labelColor: string}
 }
 
 /**
@@ -33,7 +33,7 @@ export const ImageSelectableDemo = ({initImg, Demo, demoProps} : ImageSelectable
     return (
         <div>
             <ImageSelector currImg={imgName} onSelect={onImgChange}/>
-            <Demo imgUrl={imgUrl} {...demoProps}/>
+            <Demo imgUrl={imgUrl} labelColor={demoProps.labelColor}/>
         </div>  
     );
 }
