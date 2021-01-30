@@ -47,12 +47,14 @@ const organiseData = (data: InputData[]) => {
         if (i === 0) {
             console.log(curRow)
         }
-        if ((curRow as DataFormat).Speeding_Feature) {
+        /* if (curRow.hasOwnProperty('Distance_Feature')) { */
+        if ((curRow as DataFormat).Distance_Feature) {
             const temp:DataFormat = curRow as DataFormat
             newRow.push(temp.Distance_Feature);
             newRow.push(temp.Speeding_Feature);
             // console.log('1')
         }
+        /* else if (curRow.hasOwnProperty('sepalLength')) {  */
         else if ((curRow as DataFormat2).sepalLength) {
             const temp:DataFormat2 = curRow as DataFormat2
             newRow.push(temp.sepalLength);
