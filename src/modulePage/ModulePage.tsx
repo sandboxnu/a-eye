@@ -24,6 +24,10 @@ interface Module {
 }
 const modules: Record<string, Module> = {'computer-vision': module8, 'classification' : module9, 'perceptrons' : module10, 'neural-nets' : module11}
 
+/**
+ * Renders the entire module page.
+ * @param props.match.params.module name of the current module (route has path /modules/module)
+ */
 export default function ModulePage(props: RouteComponentProps<{module: string}>) {
     const module = modules[props.match.params.module];
     if (!module) {

@@ -8,6 +8,9 @@ import CSS from 'csstype';
 let top_style: CSS.Properties = {backgroundImage: `url(${background_img})`};
 let bot_style: CSS.Properties = {backgroundImage: `url(${landing_background})`};
 
+/**
+ * Renders the landing page.
+ */
 export default function LandingPage() {
   return (
       <div className="container w-screen">
