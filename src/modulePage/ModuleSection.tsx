@@ -86,7 +86,7 @@ function getDemo(comp: string, scheme: ColorScheme) {
         case "HaarWaveletDemo": 
             return <ImageSelectableDemo Demo={HaarWaveletDemo} initImg='bwWoman.jpg' demoProps={demoArgs}/>
         case "PCADemo":
-            return <PCADemo {...demoArgs} labelColorHex=''/>
+            return <PCADemo {...demoArgs} />
         case "RawDataTable":
             return <RawDataTable />
         case "StaticAxisChart":
