@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import FilterByKernel from '../common/FilterByKernel';
-import KernelDisplay from './KernelDisplay';
+import KernelDisplay from '../common/KernelDisplay';
 // have to use require for this bc it doesn't have a module declaration file or something
 const generateGaussianKernel = require('gaussian-convolution-kernel');
 

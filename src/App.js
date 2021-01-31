@@ -5,7 +5,7 @@ import { ThemeProvider } from '@material-ui/styles';
 import Navbar from "./Navbar";
 import Footer from './footer';
 
-import './App.css';
+import './index.css';
 import AboutPage from "./aboutPage/AboutPage"
 import LandingPage from "./landingPage/LandingPage";
 import ModulePage from "./modulePage/ModulePage";

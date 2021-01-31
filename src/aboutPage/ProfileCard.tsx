@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import linkedinIcon from './profileAssets/iconmonstr-linkedin-1.svg';
-import emailIcon from './profileAssets/mail-24px.svg';
+import linkedinIcon from '../assets/profileAssets/iconmonstr-linkedin-1.svg';
+import emailIcon from '../assets/profileAssets/mail-24px.svg';
 
 /**
  * 

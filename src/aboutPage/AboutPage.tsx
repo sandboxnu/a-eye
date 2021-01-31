@@ -1,11 +1,11 @@
 import React from 'react';
 import ProfileCard from './ProfileCard';
-import krishPic from './profileAssets/krishPic.png';
-import liliPic from './profileAssets/liliPic.png';
-import cassiePic from './profileAssets/cassiePic.png';
-import danPic from './profileAssets/danPic.jpg';
-import irisPic from './profileAssets/irisPic.jpg';
-import maxPic from './profileAssets/maxPic.png';
+import krishPic from '../assets/profileAssets/krishPic.png';
+import liliPic from '../assets/profileAssets/liliPic.png';
+import cassiePic from '../assets/profileAssets/cassiePic.png';
+import danPic from '../assets/profileAssets/danPic.jpg';
+import irisPic from '../assets/profileAssets/irisPic.jpg';
+import maxPic from '../assets/profileAssets/maxPic.png';
 
 const AboutPage = () => {
     return (

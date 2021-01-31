@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import KernelDisplay from '../gaussianBlur/KernelDisplay';
+import KernelDisplay from '../common/KernelDisplay';
 import FilterByKernel from '../common/FilterByKernel';
 import DiffofFiltered from '../common/DiffofFiltered';
 
