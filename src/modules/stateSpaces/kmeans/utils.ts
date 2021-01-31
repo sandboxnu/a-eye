@@ -2,23 +2,41 @@ import './kmeans.css';
 
 import { squaredEuclidean } from 'ml-distance-euclidean';
 
+// types for each of the four datasets
 export type KMeansResult = {clusters: [], centroids: {centroid: number[]}[], converged: [], iterations: number};
 export interface DataFormat { Driver_ID: number, Distance_Feature: number, Speeding_Feature:number};
 export interface DataFormat2 { sepalLength: number, sepalWidth: number, petalLength:number, petalWidth:number, species:string};
 export interface DataFormat3 { petalLength:number, petalWidth:number, species:string };
-export type InputData = DataFormat | DataFormat2 | DataFormat3;
+export interface TitanicData {
+    PassengerId: number,
+    Survived: number,
+    Pclass: number,
+    Name: string,
+    Sex: string,
+    Age: number,
+    SibSp: number,
+    Parch: number,
+    Ticket: string | number,
+    Fare: number,
+    Cabin: string,
+    Embarked: string
+};
+// artificially added points (all datasets are converted into this format with two features)
+export interface AddedPoint {Distance_Feature:number, Speeding_Feature:number};
+
+export type InputData = DataFormat | DataFormat2 | DataFormat3 | TitanicData | AddedPoint;
 
 export type ScatterData = {datasets: ScatterDataData[]};
 export type ScatterDataData = {data:{x:number, y:number, pointRadius:number, backgroundColor:string}[]};
 
-export type RemoveThese = {ds_index:number, ind: number}[];
-export type RemoveTheseList = [RemoveThese, Function];
+// points to remove
+export type PointToRemove = {ds_index: number, ind: number};
+export type PointToRemoveList = [PointToRemove[][], Function];
 
 export type NewClusterType = {x:number, y:number, r:number};
 export type BubbleDataEntry = {label:string[], backgroundColor:string, borderColor:string, data:NewClusterType[], pointRadius?:number, hidden?: boolean, dragData?: boolean };
 
-export type AddedPoint = {Driver_ID:number, Distance_Feature:number, Speeding_Feature:number}[];
-export type AddedPointList = [AddedPoint, Function];
+export type AddedPointList = [AddedPoint[][], Function];
 
 // kmeans for clusters
 export const cluster_colors = ['#99FF99', '#99CCFF'];
@@ -49,6 +67,11 @@ export const organiseData = (data: InputData[]) => {
             const temp:DataFormat2 = curRow as DataFormat2;
             newRow.push(temp.sepalLength);
             newRow.push(temp.sepalWidth);
+        }
+        else if((curRow as TitanicData).Age) {
+            const temp:TitanicData = curRow as TitanicData;
+            newRow.push(temp.Age);
+            newRow.push(temp.Fare);
         }
         else {
             const temp:DataFormat3 = curRow as DataFormat3;
