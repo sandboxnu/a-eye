@@ -206,9 +206,51 @@ const InteractiveClusteringExample: React.FC<InteractiveClusteringExampleType> =
                 // inside the react component
                 // @ts-ignore
                 const asdgwg = this.chart.getElementAtEvent(evt)[0];
-                if (asdgwg) {
+
+                 // @ts-ignore
+                 let yTop = this.chartArea.top;
+                 // @ts-ignore
+                 let yBottom = this.chartArea.bottom;
+                 // @ts-ignore
+                 let yMin = this.scales['y-axis-1'].min;
+                 // @ts-ignore
+                 let yMax = this.scales['y-axis-1'].max;
+                 let newY = 0;
+
+                 if (evt.offsetY <= yBottom && evt.offsetY >= yTop) {
+                     newY = Math.abs((evt.offsetY - yTop) / (yBottom - yTop));
+                     newY = (newY - 1) * -1;
+                     newY = newY * (Math.abs(yMax - yMin)) + yMin;
+                 };
+                 // @ts-ignore
+                 let xTop = this.chartArea.left;
+                 // @ts-ignore
+                 let xBottom = this.chartArea.right;
+                 // @ts-ignore
+                 let xMin = this.scales['x-axis-1'].min;
+                 // @ts-ignore
+                 let xMax = this.scales['x-axis-1'].max;
+                 let newX = 0;
+
+                 if (evt.offsetX <= xBottom && evt.offsetX >= xTop) {
+                     newX = Math.abs((evt.offsetX - xTop) / (xBottom - xTop));
+                     newX = newX * (Math.abs(xMax - xMin)) + xMin;
+                 };
+                 newX = newX
+                 newY = newY
+                 const rad = 7
+                 const inXBounds = ((newX < x1Idx + rad) && (newX > x1Idx - rad)) || ((newX < x2Idx + rad) && (newX > x2Idx - rad))
+                 const inYBounds = ((newY < y1Idx + rad) && (newY > y1Idx - rad)) || ((newY < y2Idx + rad) && (newY > y2Idx - rad))
+
+                const onCentroid =  inXBounds && inYBounds
+                console.log(
+                    newX, newY, x1Idx, y1Idx, x2Idx, y2Idx, inXBounds, inYBounds
+                )
+                if (asdgwg && !onCentroid) {
                     let ds_index = asdgwg._datasetIndex
                     let ind = asdgwg._index
+
+                    
                     addPointToRemove(originalDataset, {ds_index, ind});
 
                     // @ts-ignore
@@ -218,38 +260,7 @@ const InteractiveClusteringExample: React.FC<InteractiveClusteringExampleType> =
                     return;
                 }
                 else {
-                    // @ts-ignore
-                    let yTop = this.chartArea.top;
-                    // @ts-ignore
-                    let yBottom = this.chartArea.bottom;
-                    // @ts-ignore
-                    let yMin = this.scales['y-axis-1'].min;
-                    // @ts-ignore
-                    let yMax = this.scales['y-axis-1'].max;
-                    let newY = 0;
-
-                    if (evt.offsetY <= yBottom && evt.offsetY >= yTop) {
-                        newY = Math.abs((evt.offsetY - yTop) / (yBottom - yTop));
-                        newY = (newY - 1) * -1;
-                        newY = newY * (Math.abs(yMax - yMin)) + yMin;
-                    };
-                    // @ts-ignore
-                    let xTop = this.chartArea.left;
-                    // @ts-ignore
-                    let xBottom = this.chartArea.right;
-                    // @ts-ignore
-                    let xMin = this.scales['x-axis-1'].min;
-                    // @ts-ignore
-                    let xMax = this.scales['x-axis-1'].max;
-                    let newX = 0;
-
-                    if (evt.offsetX <= xBottom && evt.offsetX >= xTop) {
-                        newX = Math.abs((evt.offsetX - xTop) / (xBottom - xTop));
-                        newX = newX * (Math.abs(xMax - xMin)) + xMin;
-                    };
-                    newX = Math.round(newX)
-                    newY = Math.round(newY)
-
+                
                     if (newX > 0 && newY > 0) {
 
                         const point = {Distance_Feature: newX, Speeding_Feature: newY};
