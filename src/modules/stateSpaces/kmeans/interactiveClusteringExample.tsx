@@ -197,10 +197,9 @@ const InteractiveClusteringExample: React.FC<InteractiveClusteringExampleType> =
             }
         },
         dragData: true,
-        dragX: false,
+        dragX: true,
         dragDataRound: 0,
         onClick : function (evt: MouseEvent) {
-            console.log("onclick called")
             if (editable) {
                 // all the // @ts-ignore 's from here on are due to the fact that we can't access of 'this' until onClick is called
                 // inside the react component
@@ -236,16 +235,15 @@ const InteractiveClusteringExample: React.FC<InteractiveClusteringExampleType> =
                      newX = Math.abs((evt.offsetX - xTop) / (xBottom - xTop));
                      newX = newX * (Math.abs(xMax - xMin)) + xMin;
                  };
-                 newX = newX
-                 newY = newY
+                 
+                 // checking to make sure where you click isnt on the centroids
+                 // dont want to remove those
                  const rad = 7
                  const inXBounds = ((newX < x1Idx + rad) && (newX > x1Idx - rad)) || ((newX < x2Idx + rad) && (newX > x2Idx - rad))
                  const inYBounds = ((newY < y1Idx + rad) && (newY > y1Idx - rad)) || ((newY < y2Idx + rad) && (newY > y2Idx - rad))
 
                 const onCentroid =  inXBounds && inYBounds
-                console.log(
-                    newX, newY, x1Idx, y1Idx, x2Idx, y2Idx, inXBounds, inYBounds
-                )
+
                 if (asdgwg && !onCentroid) {
                     let ds_index = asdgwg._datasetIndex
                     let ind = asdgwg._index
