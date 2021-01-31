@@ -10,9 +10,17 @@ export { haarFilter };
  * @param outCanvas
  * @param iterations how many recursions to do
  */
-function haarFilter(inCanvas: HTMLCanvasElement, outCanvas: HTMLCanvasElement, iterations: number) {
-  const inData = inCanvas.getContext('2d')?.getImageData(0, 0, inCanvas.width, inCanvas.height);
-  const outData = outCanvas.getContext('2d')?.getImageData(0, 0, outCanvas.width, outCanvas.height);
+function haarFilter(
+  inCanvas: HTMLCanvasElement,
+  outCanvas: HTMLCanvasElement,
+  iterations: number,
+) {
+  const inData = inCanvas
+    .getContext('2d')
+    ?.getImageData(0, 0, inCanvas.width, inCanvas.height);
+  const outData = outCanvas
+    .getContext('2d')
+    ?.getImageData(0, 0, outCanvas.width, outCanvas.height);
   if (!inData || !outData) return;
 
   const inPix = inData.data;
@@ -20,7 +28,7 @@ function haarFilter(inCanvas: HTMLCanvasElement, outCanvas: HTMLCanvasElement, i
   const imgHeight = inCanvas.height;
 
   // initialize array with original pix values
-  const haar :number[][][] = [];
+  const haar: number[][][] = [];
   for (let row = 0; row < imgHeight; row++) {
     haar[row] = [];
     for (let col = 0; col < imgWidth; col++) {
@@ -35,7 +43,7 @@ function haarFilter(inCanvas: HTMLCanvasElement, outCanvas: HTMLCanvasElement, i
   let currWidth = imgWidth;
   let currHeight = imgHeight;
   let haarRow = [];
-  while ((currWidth > 1 || currHeight > 1) && (iterations > 1)) {
+  while ((currWidth > 1 || currHeight > 1) && iterations > 1) {
     iterations -= 1;
 
     // Do it for each row first
@@ -74,8 +82,12 @@ function haarFilter(inCanvas: HTMLCanvasElement, outCanvas: HTMLCanvasElement, i
     }
     haarRow = [];
 
-    if (currHeight > 1) { currHeight /= 2; }
-    if (currWidth > 1) { currWidth /= 2; }
+    if (currHeight > 1) {
+      currHeight /= 2;
+    }
+    if (currWidth > 1) {
+      currWidth /= 2;
+    }
   }
 
   // Copy pix data to canvas

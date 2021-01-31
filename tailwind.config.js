@@ -33,9 +33,10 @@ module.exports = {
       fontWeight: {
         micro: 25,
       },
-      backgroundImage: (theme) => ({
+      backgroundImage: theme => ({
         about: 'url("../media/aboutPage/aboutCurve.svg")',
-        'landing-page': 'url("../media/landingPage/background_landing_page.svg")',
+        'landing-page':
+          'url("../media/landingPage/background_landing_page.svg")',
       }),
       backgroundSize: {
         stretchBottom: '103% 50%',
@@ -67,8 +68,6 @@ module.exports = {
       backgroundBlendMode: ['responsive'],
       isolation: ['responsive'],
     },
-    plugins: [
-      require('tailwindcss-blend-mode')(),
-    ],
+    plugins: [require('tailwindcss-blend-mode')()],
   },
 };

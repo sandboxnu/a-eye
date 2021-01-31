@@ -2,15 +2,15 @@ import React, { useState } from 'react';
 import ImageSelector from './ImageSelector';
 
 export interface DemoProps {
-  imgUrl: string,
-  labelColor: string,
-  [arg: string]: any
+  imgUrl: string;
+  labelColor: string;
+  [arg: string]: any;
 }
 
 export interface ImageSelectableDemoProps {
-  initImg: string,
-  Demo: React.ComponentType<DemoProps>,
-  demoProps: {labelColor: string}
+  initImg: string;
+  Demo: React.ComponentType<DemoProps>;
+  demoProps: { labelColor: string };
 }
 
 /**
@@ -21,7 +21,11 @@ export interface ImageSelectableDemoProps {
  * @param props.Demo    react component for the demo
  * @param props.demoProps     object containing any other props that the demo needs
  */
-export const ImageSelectableDemo = ({ initImg, Demo, demoProps } : ImageSelectableDemoProps) => {
+export const ImageSelectableDemo = ({
+  initImg,
+  Demo,
+  demoProps,
+}: ImageSelectableDemoProps) => {
   const [imgName, setImgName] = useState(initImg);
   const [imgUrl, setImgUrl] = useState('');
 

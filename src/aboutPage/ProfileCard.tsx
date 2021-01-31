@@ -11,24 +11,34 @@ import emailIcon from '../media/aboutPage/mail-24px.svg';
  * @param props.email email address of the person
  * @param props.linkedin linkedin url of the person
  */
-const ProfileCard = (props:
-{ image: string, name: string, title: string, email: string, linkedin: string }) => {
+const ProfileCard = (props: {
+  image: string;
+  name: string;
+  title: string;
+  email: string;
+  linkedin: string;
+}) => {
   const [hovered, setHovered] = useState(false);
 
   // TODO all these images need to be hosted somewhere?
   const Overlay = () => (
-    <div id="image-overlay" className="bg-transteal absolute flex justify-center items-center h-48 w-48 rounded-full">
+    <div
+      id="image-overlay"
+      className="bg-transteal absolute flex justify-center items-center h-48 w-48 rounded-full"
+    >
       <a href={props.linkedin} target="_blank" rel="noopener noreferrer">
-        <div id="icon linkedin" className="rounded-full bg-navy h-10 w-10 flex items-center justify-around m-3">
-          <img
-            className="h-4"
-            alt="LinkedIn Address"
-            src={linkedinIcon}
-          />
+        <div
+          id="icon linkedin"
+          className="rounded-full bg-navy h-10 w-10 flex items-center justify-around m-3"
+        >
+          <img className="h-4" alt="LinkedIn Address" src={linkedinIcon} />
         </div>
       </a>
       <a href={`mailto:${props.email}`}>
-        <div id="icon linkedin" className="rounded-full bg-navy h-10 w-10 flex items-center justify-around m-3">
+        <div
+          id="icon linkedin"
+          className="rounded-full bg-navy h-10 w-10 flex items-center justify-around m-3"
+        >
           <img
             className="relative -top-1 h-6"
             alt="Email Address"

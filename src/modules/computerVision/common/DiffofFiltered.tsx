@@ -7,7 +7,11 @@ const pixelmatch = require('pixelmatch');
 // http://dev.theomader.com/gaussian-kernel-calculator/
 // https://blog.cloudboost.io/using-html5-canvas-with-react-ff7d93f5dc76
 
-const FilterByDiffKernel = (props: { kernel?: number[], kernel2?:number[], imgUrl: string }) => (
+const FilterByDiffKernel = (props: {
+  kernel?: number[];
+  kernel2?: number[];
+  imgUrl: string;
+}) => (
   <InteractiveFilter
     disabled={!props.kernel}
     imgUrl={props.imgUrl}
@@ -30,7 +34,9 @@ const FilterByDiffKernel = (props: { kernel?: number[], kernel2?:number[], imgUr
       const { width } = check;
       const { height } = check;
 
-      const diff = result1.map((pix, i) => ((i + 1) % 4 == 0 ? 255 : 255 - Math.abs(pix - result2[i])));
+      const diff = result1.map((pix, i) =>
+        (i + 1) % 4 == 0 ? 255 : 255 - Math.abs(pix - result2[i]),
+      );
 
       const output = new ImageData(diff, width, height);
 

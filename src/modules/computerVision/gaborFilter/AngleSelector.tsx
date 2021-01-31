@@ -9,8 +9,15 @@ import mainCircle from './main-circle.svg';
  * @param props.initAngle {number} initial angle for the selector, in radians
  * @param props.onAngleChange {function} callback for when the angle changes
  */
-const AngleSelector = ({ diameter, initAngle = 0, onAngleChange }:
-{ diameter: string, initAngle?: number, onAngleChange: (angle :number) => any }) => {
+const AngleSelector = ({
+  diameter,
+  initAngle = 0,
+  onAngleChange,
+}: {
+  diameter: string;
+  initAngle?: number;
+  onAngleChange: (angle: number) => any;
+}) => {
   const [moving, setMoving] = useState(false);
   const [angle, setAngle] = useState<number | string>(initAngle); // in radians
 
@@ -25,7 +32,7 @@ const AngleSelector = ({ diameter, initAngle = 0, onAngleChange }:
     const y = -e.clientY + circleBounds.top + radius;
     let newAngle = Math.atan(y / x);
     if (x < 0) newAngle += Math.PI;
-    newAngle %= (Math.PI * 2);
+    newAngle %= Math.PI * 2;
     setAngle(newAngle);
     onAngleChange(newAngle);
   };
@@ -65,7 +72,7 @@ const AngleSelector = ({ diameter, initAngle = 0, onAngleChange }:
         <input
           className="angle-textbox-input number-input"
           value={angle}
-          onChange={(e) => {
+          onChange={e => {
             setAngle(e.target.value);
             const val = parseFloat(e.target.value);
             if (!isNaN(val)) onAngleChange(val);

@@ -1,6 +1,4 @@
-export {
-  convolute, getPixels, createImageData,
-};
+export { convolute, getPixels, createImageData };
 
 /// utility functions for filtering / manipulating a DOM canvas
 // reference: https://www.html5rocks.com/en/tutorials/canvas/imagefilters/
@@ -15,7 +13,13 @@ export {
  * @param weights the kernel (matrix of numbers)
  * @param opaque (optional) is the image opaque?
  */
-function convolute(inCanvas: HTMLCanvasElement, outCanvas: HTMLCanvasElement, animate: boolean, weights: number[], opaque?: boolean) {
+function convolute(
+  inCanvas: HTMLCanvasElement,
+  outCanvas: HTMLCanvasElement,
+  animate: boolean,
+  weights: number[],
+  opaque?: boolean,
+) {
   const pixels = getPixels(inCanvas);
   const output = getPixels(outCanvas);
   if (!pixels || !output) return;
@@ -32,7 +36,7 @@ function convolute(inCanvas: HTMLCanvasElement, outCanvas: HTMLCanvasElement, an
   // go through the destination image pixels
   const alphaFac = opaque ? 1 : 0;
 
-  const processRow = (y : number) => {
+  const processRow = (y: number) => {
     for (let x = 0; x < w; x++) {
       const sy = y;
       const sx = x;
@@ -40,8 +44,10 @@ function convolute(inCanvas: HTMLCanvasElement, outCanvas: HTMLCanvasElement, an
       const nextDstOff = ((y + 1) * w + x) * 4;
       // calculate the weighed sum of the source image pixels that
       // fall under the convolution matrix
-      let r = 0; let g = 0; let b = 0; let
-        a = 0;
+      let r = 0;
+      let g = 0;
+      let b = 0;
+      let a = 0;
       for (let cy = 0; cy < side; cy++) {
         for (let cx = 0; cx < side; cx++) {
           const scy = sy + cy - halfSide;

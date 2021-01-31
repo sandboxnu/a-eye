@@ -4,12 +4,14 @@ import KernelDisplay from '../common/KernelDisplay';
 // have to use require for this bc it doesn't have a module declaration file or something
 const generateGaussianKernel = require('gaussian-convolution-kernel');
 
-const GaussianBlurDemo = (props: {labelColor: string, imgUrl: string}) => {
+const GaussianBlurDemo = (props: { labelColor: string; imgUrl: string }) => {
   const [kernel, setKernel] = useState<number[] | undefined>(undefined);
-  const [kernelGrid, setKernelGrid] = useState<number[][] | undefined>(undefined);
+  const [kernelGrid, setKernelGrid] = useState<number[][] | undefined>(
+    undefined,
+  );
 
   const configureKernel = (kernelSize: number, sigma: number) => {
-    let newKernel :number[];
+    let newKernel: number[];
     if (kernelSize === 1) {
       newKernel = [1];
     } else {
@@ -33,14 +35,17 @@ const GaussianBlurDemo = (props: {labelColor: string, imgUrl: string}) => {
   );
 };
 
-const KernelConfig = (props: { onConfig: (kernelSize: number, sigma: number) => void, labelColor: string}) => {
+const KernelConfig = (props: {
+  onConfig: (kernelSize: number, sigma: number) => void;
+  labelColor: string;
+}) => {
   const [kernelSize, setKernelSize] = useState<number>(5);
   const [sigma, setSigma] = useState<number>(1);
 
   const changeSigma = (e: any) => setSigma(parseFloat(e.target.value));
   const changeKernelSize = (e: any) => setKernelSize(parseInt(e.target.value));
 
-  const invalidSize = (kernelSize % 2 !== 1 || kernelSize < 1 || kernelSize > 7);
+  const invalidSize = kernelSize % 2 !== 1 || kernelSize < 1 || kernelSize > 7;
   const invalidConfig = !sigma || invalidSize;
   return (
     <div>
@@ -53,7 +58,7 @@ const KernelConfig = (props: { onConfig: (kernelSize: number, sigma: number) => 
           max="10"
           step="any"
           value={sigma}
-          onChange={(e) => changeSigma(e)}
+          onChange={e => changeSigma(e)}
         />
         <input
           className="number-input text-black"
@@ -61,7 +66,7 @@ const KernelConfig = (props: { onConfig: (kernelSize: number, sigma: number) => 
           min=".1"
           max="10"
           value={sigma}
-          onChange={(e) => changeSigma(e)}
+          onChange={e => changeSigma(e)}
         />
       </div>
       <div className={`font-bold m-3 h-10 ${props.labelColor}`}>
@@ -73,7 +78,7 @@ const KernelConfig = (props: { onConfig: (kernelSize: number, sigma: number) => 
           max="7"
           step={2}
           value={kernelSize}
-          onChange={(e) => changeKernelSize(e)}
+          onChange={e => changeKernelSize(e)}
         />
         <input
           className="number-input text-black"
@@ -82,13 +87,17 @@ const KernelConfig = (props: { onConfig: (kernelSize: number, sigma: number) => 
           max="7"
           step={2}
           value={kernelSize}
-          onChange={(e) => changeKernelSize(e)}
+          onChange={e => changeKernelSize(e)}
         />
         <div className="font-light italic text-sm">
-          { invalidSize ? 'Enter an odd kernel size, between 1 and 7' : ''}
+          {invalidSize ? 'Enter an odd kernel size, between 1 and 7' : ''}
         </div>
       </div>
-      <button className="basic-button" disabled={invalidConfig} onClick={(e) => props.onConfig(kernelSize, sigma)}>
+      <button
+        className="basic-button"
+        disabled={invalidConfig}
+        onClick={e => props.onConfig(kernelSize, sigma)}
+      >
         Generate Kernel
       </button>
     </div>

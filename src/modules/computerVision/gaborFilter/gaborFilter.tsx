@@ -14,7 +14,7 @@ function makeMeshgrid(sz: number[]) {
   const result_x = [];
   const result_y = [];
 
-  for (let i = 0; i < (2 * Math.floor(sz[1] / 2)) + 1; i++) {
+  for (let i = 0; i < 2 * Math.floor(sz[1] / 2) + 1; i++) {
     const x_row = [];
     for (let j = -radius[0]; j < radius[0] + 1; j++) {
       x_row.push(j);
@@ -34,11 +34,13 @@ function makeMeshgrid(sz: number[]) {
 }
 
 // http://vision.psych.umn.edu/users/kersten/kersten-lab/courses/Psy5036W2017/Lectures/17_PythonForVision/Demos/html/2b.Gabor.html
-function gaborFilter(sz: number,
+function gaborFilter(
+  sz: number,
   omega: number,
   theta: number,
   func = Math.cos,
-  K = Math.PI) {
+  K = Math.PI,
+) {
   // EXAMPLE INPUTS
 
   // let sz = [4,4]
@@ -51,24 +53,45 @@ function gaborFilter(sz: number,
   const x = xy[0];
   const y = xy[1];
 
-  const x1 = x.map((inner, i) => inner.map((v, j) => (v * Math.cos(theta)) + (y[i][j] * Math.sin(theta))));
-  const y1 = x.map((inner, i) => inner.map((v, j) => (-v * Math.sin(theta)) + (y[i][j] * Math.cos(theta))));
+  const x1 = x.map((inner, i) =>
+    inner.map((v, j) => v * Math.cos(theta) + y[i][j] * Math.sin(theta)),
+  );
+  const y1 = x.map((inner, i) =>
+    inner.map((v, j) => -v * Math.sin(theta) + y[i][j] * Math.cos(theta)),
+  );
 
   const p = Math.pow(omega, 2) / (4 * Math.PI * Math.pow(K, 2));
-  const gaussian = x1.map((inner, i) => inner.map((v, j) => p * Math.exp(-Math.pow(omega, 2) / (8 * Math.pow(K, 2)) * (4 * Math.pow(v, 2) + Math.pow(y1[i][j], 2)))));
-  const sinusoid = x1.map((inner, i) => inner.map((v, j) => (func(omega * v) * Math.exp(Math.pow(K, 2) / 2))));
-  const gabor = sinusoid.map((inner, i) => inner.map((v, j) => (v * gaussian[i][j])));
+  const gaussian = x1.map((inner, i) =>
+    inner.map(
+      (v, j) =>
+        p *
+        Math.exp(
+          (-Math.pow(omega, 2) / (8 * Math.pow(K, 2))) *
+            (4 * Math.pow(v, 2) + Math.pow(y1[i][j], 2)),
+        ),
+    ),
+  );
+  const sinusoid = x1.map((inner, i) =>
+    inner.map((v, j) => func(omega * v) * Math.exp(Math.pow(K, 2) / 2)),
+  );
+  const gabor = sinusoid.map((inner, i) =>
+    inner.map((v, j) => v * gaussian[i][j]),
+  );
   return gabor;
 }
 
-const GaborDemo = (props: {labelColor: string, imgUrl: string}) => {
+const GaborDemo = (props: { labelColor: string; imgUrl: string }) => {
   const [kernel, setKernel] = useState<number[] | undefined>(undefined);
-  const [kernelGrid, setKernelGrid] = useState<number[][] | undefined>(undefined);
+  const [kernelGrid, setKernelGrid] = useState<number[][] | undefined>(
+    undefined,
+  );
 
-  const configureKernel = (kernelSize: number,
+  const configureKernel = (
+    kernelSize: number,
     omega: number,
     theta: number,
-    K: number) => {
+    K: number,
+  ) => {
     const func = Math.cos;
 
     const gabor = gaborFilter(kernelSize, omega, theta, func, K);
@@ -81,7 +104,10 @@ const GaborDemo = (props: {labelColor: string, imgUrl: string}) => {
   return (
     <div className="m-4">
       <div className="grid grid-cols-1 md:grid-cols-2 mx-auto items-center mb-5">
-        <KernelConfig onConfig={configureKernel} labelColor={props.labelColor} />
+        <KernelConfig
+          onConfig={configureKernel}
+          labelColor={props.labelColor}
+        />
         <KernelDisplay kernelGrid={kernelGrid} labelColor={props.labelColor} />
       </div>
       <FilterByKernel kernel={kernel} imgUrl={props.imgUrl} />
@@ -89,7 +115,15 @@ const GaborDemo = (props: {labelColor: string, imgUrl: string}) => {
   );
 };
 
-const KernelConfig = (props: { onConfig: (kernelSize: number, omega: number, theta: number, K: number) => void, labelColor: string}) => {
+const KernelConfig = (props: {
+  onConfig: (
+    kernelSize: number,
+    omega: number,
+    theta: number,
+    K: number,
+  ) => void;
+  labelColor: string;
+}) => {
   const [kernelSize, setKernelSize] = useState<number>(5);
   const [omega, setOmega] = useState<number>(1);
   const [theta, setTheta] = useState<number>(0);
@@ -100,7 +134,7 @@ const KernelConfig = (props: { onConfig: (kernelSize: number, omega: number, the
   const changeTheta = (t: number) => setTheta(t);
   const changeK = (e: any) => setK(parseFloat(e.target.value));
 
-  const invalidConfig = (kernelSize < 1 || kernelSize > 7);
+  const invalidConfig = kernelSize < 1 || kernelSize > 7;
   return (
     <div>
       <div className={`font-bold m-3 h-10 ${props.labelColor}`}>
@@ -112,7 +146,7 @@ const KernelConfig = (props: { onConfig: (kernelSize: number, omega: number, the
           max="7"
           step={1}
           value={kernelSize}
-          onChange={(e) => changeKernelSize(e)}
+          onChange={e => changeKernelSize(e)}
         />
         <input
           className="number-input text-black"
@@ -121,16 +155,24 @@ const KernelConfig = (props: { onConfig: (kernelSize: number, omega: number, the
           max="7"
           step={1}
           value={kernelSize}
-          onChange={(e) => changeKernelSize(e)}
+          onChange={e => changeKernelSize(e)}
         />
-
       </div>
       <div className={`font-bold m-3 ${props.labelColor}`}>
         Theta
-        <AngleSelector diameter="150px" initAngle={theta} onAngleChange={changeTheta} />
+        <AngleSelector
+          diameter="150px"
+          initAngle={theta}
+          onAngleChange={changeTheta}
+        />
       </div>
-      <Accordion className={`gabor-extras-accordion w-3/4 mx-auto my-2 ${props.labelColor}`}>
-        <AccordionSummary className="font-bold h-1" expandIcon={<ExpandMoreIcon />}>
+      <Accordion
+        className={`gabor-extras-accordion w-3/4 mx-auto my-2 ${props.labelColor}`}
+      >
+        <AccordionSummary
+          className="font-bold h-1"
+          expandIcon={<ExpandMoreIcon />}
+        >
           Extra Parameters
         </AccordionSummary>
         <AccordionDetails className="display-flex flex-col">
@@ -142,7 +184,7 @@ const KernelConfig = (props: { onConfig: (kernelSize: number, omega: number, the
               min="0"
               max="10"
               value={omega}
-              onChange={(e) => changeOmega(e)}
+              onChange={e => changeOmega(e)}
             />
             <input
               className="number-input text-black"
@@ -150,20 +192,20 @@ const KernelConfig = (props: { onConfig: (kernelSize: number, omega: number, the
               min="0"
               max="10"
               value={omega}
-              onChange={(e) => changeOmega(e)}
+              onChange={e => changeOmega(e)}
             />
           </div>
           <div className="font-bold m-3 h-10">
             K
             <input
               className="mx-2 w-64"
-                            // Math.PI/4 ~= 0.79
+              // Math.PI/4 ~= 0.79
               type="range"
               min="0"
               max="12.56"
               step={0.785}
               value={K}
-              onChange={(e) => changeK(e)}
+              onChange={e => changeK(e)}
             />
             <input
               className="number-input text-black"
@@ -172,12 +214,16 @@ const KernelConfig = (props: { onConfig: (kernelSize: number, omega: number, the
               max="12.56"
               step={0.785}
               value={K}
-              onChange={(e) => changeK(e)}
+              onChange={e => changeK(e)}
             />
           </div>
         </AccordionDetails>
       </Accordion>
-      <button className="basic-button" disabled={invalidConfig} onClick={(e) => props.onConfig(kernelSize, omega, theta, K)}>
+      <button
+        className="basic-button"
+        disabled={invalidConfig}
+        onClick={e => props.onConfig(kernelSize, omega, theta, K)}
+      >
         Generate Kernel
       </button>
     </div>

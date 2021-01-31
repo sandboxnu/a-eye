@@ -2,17 +2,22 @@ import React, { useState } from 'react';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 
-const KernelDisplay = (props: { kernelGrid?: number[][], labelColor: string}) => {
+const KernelDisplay = (props: {
+  kernelGrid?: number[][];
+  labelColor: string;
+}) => {
   const [showNums, setShowNums] = useState(true);
 
   if (!props.kernelGrid) return <></>;
 
   let max = 0;
   let min = Infinity;
-  props.kernelGrid.forEach((row) => row.forEach((ele) => {
-    if (ele > max) max = ele;
-    if (ele < min) min = ele;
-  }));
+  props.kernelGrid.forEach(row =>
+    row.forEach(ele => {
+      if (ele > max) max = ele;
+      if (ele < min) min = ele;
+    }),
+  );
 
   const getCell = (val: number, j: number) => {
     const color = getCellColor(val, max, min);
@@ -37,9 +42,7 @@ const KernelDisplay = (props: { kernelGrid?: number[][], labelColor: string}) =>
         <table className="m-auto">
           <tbody>
             {props.kernelGrid.map((row, i) => (
-              <tr key={i}>
-                {row.map((val, j) => getCell(val, j))}
-              </tr>
+              <tr key={i}>{row.map((val, j) => getCell(val, j))}</tr>
             ))}
           </tbody>
         </table>
@@ -48,10 +51,10 @@ const KernelDisplay = (props: { kernelGrid?: number[][], labelColor: string}) =>
         control={(
           <Switch
             checked={showNums}
-            onChange={(e) => setShowNums(e.target.checked)}
+            onChange={e => setShowNums(e.target.checked)}
             color="primary"
           />
-                  )}
+        )}
         className={props.labelColor}
         label="Show kernel numbers"
       />
@@ -63,7 +66,7 @@ function getCellColor(val: number, max: number, min: number) {
   if (max === min) {
     return 'rgb(0, 212, 192)';
   }
-  const red = 255 - ((val - min) / (max - min) * 255);
+  const red = 255 - ((val - min) / (max - min)) * 255;
   return `rgb(${red}, 212, 192)`;
 }
 

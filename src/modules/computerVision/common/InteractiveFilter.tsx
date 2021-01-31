@@ -12,9 +12,9 @@ import React, { useLayoutEffect, useRef, useState } from 'react';
  * @param props.disabled  whether or not the "apply filter" button should be disabled
  */
 const InteractiveFilter = (props: {
-  filter: (inCanvas: HTMLCanvasElement, outCanvas: HTMLCanvasElement) => any,
-  imgUrl: string,
-  disabled: boolean
+  filter: (inCanvas: HTMLCanvasElement, outCanvas: HTMLCanvasElement) => any;
+  imgUrl: string;
+  disabled: boolean;
 }) => {
   const [isFiltered, setIsFiltered] = useState(false);
   const [imgWidth, setImgWidth] = useState<number | undefined>(undefined);
