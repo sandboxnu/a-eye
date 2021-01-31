@@ -44,7 +44,7 @@
                 "imgSrc": "/blank.png"
               }
             ],
-            "demoComp": "RblattDemo"
+            "demoComp": "RblattVectorsDemo"
           },
           {
             "title": "",
@@ -61,7 +61,7 @@
                     "imgSrc": "/blank.png"
                 }
             ],
-            "demoComp": "RblattVectorsDemo"
-        }
-    ]
-}
+            "demoComp": "RblattDemo"
+          }
+        ]
+      }
