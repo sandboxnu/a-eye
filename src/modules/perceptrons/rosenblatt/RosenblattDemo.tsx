@@ -91,7 +91,7 @@ const RosenBlattDemo = (props: { labelColor: string }) => {
         <div className="m-4">
             <div className="m-4 flex items-center justify-center">
                 <div className="flex flex-col items-center justify-center">
-                    <p className={`-m-6 font-bold text-2xl ${props.labelColor}}`}>
+                    <p className={`m-6 font-bold text-2xl ${props.labelColor}`}>
                         {`${config.weightX.toFixed(1)}x + ${config.weightY.toFixed(1)}y + ${config.bias.toFixed(1)} > 0`}
                     </p>
                     <RblattNeuron input={inputs[currPoint]} config={config} labelColor={props.labelColor}/>
