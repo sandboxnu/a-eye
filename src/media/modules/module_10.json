@@ -47,7 +47,7 @@
             "demoComp": "RblattVectorsDemo"
           },
           {
-            "title": "",
+            "title": "Linear Classification with a Perceptron",
             "colorScheme": "dark",
             "subsections": [
                 {

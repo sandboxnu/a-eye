@@ -15,10 +15,10 @@ const RblattNeuron = (props: {input: RblattInput, config: RblattConfig, labelCol
 
     const makeInput = (val: number, weight: number, label: string) => {
         return (
-            <div className={`flex items-center ${props.labelColor}}`}>
+            <div className={`flex items-center ${props.labelColor}`}>
                 {label}
                 <div
-                    className="font-bold rounded-full w-12 h-12 m-1 border-2 border-pink-700 bg-white
+                    className="text-black font-bold rounded-full w-12 h-12 m-1 border-2 border-pink-700 bg-white
                                 flex items-center justify-center"
                 >
                     {val.toFixed(1)}
@@ -43,7 +43,7 @@ const RblattNeuron = (props: {input: RblattInput, config: RblattConfig, labelCol
                     <p className={props.labelColor}>bias</p>
                     <div
                         className="font-bold rounded-full w-12 h-12 bg-pink-700 m-1
-                                    flex items-center justify-center    "
+                                    flex items-center justify-center text-white"
                     >
                         {props.config.bias.toFixed(1)}
                 </div>
