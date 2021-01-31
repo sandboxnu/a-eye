@@ -5,9 +5,9 @@ import trainDataIris from './iris.json';
 import trainDataIris2 from './iris2.json';
 import titanicData from './titanic.json';
 
+import dragData from 'chartjs-plugin-dragdata'; 
 import { Scatter } from 'react-chartjs-2';
 import kmeans from 'ml-kmeans';
-import dragData from 'chartjs-plugin-dragdata';
 import './chartjs-plugin-dragdata.d.ts';
 
 import {organiseData, InputData, AddedPointList, PointToRemove, PointToRemoveList, BubbleDataEntry, processdata, AddedPoint, KMeansResult} from './utils';
@@ -26,13 +26,18 @@ const InteractiveClusteringExample: React.FC<InteractiveClusteringExampleType> =
     xLabel = '',
     yLabel = '',
     k = 2,
+    // 0 == original data
+    // 1 == iris data
+    // 2 == diff iris data
+    // 3 == titanic data
+    // change to an int if more datasets
+    trainingDatasets = [trainData, trainDataIris, trainDataIris2, titanicData],
     centersList = [
         [[0, 0], [50, 50]],
         [[2, 2], [7, 5]],
         [[20, 20], [40, 40]],
         [[10, 10], [40, 40]],
     ],
-    trainingDatasets = [trainData, trainDataIris, trainDataIris2, titanicData],
 }) => {
 
     let organizedDatasets = [];
@@ -45,11 +50,6 @@ const InteractiveClusteringExample: React.FC<InteractiveClusteringExampleType> =
         kmeansAnswers.push(kmeans(organizedDatasets[i], k, { initialization: centersList[i], maxIterations: 1 }, ));
     }
 
-    // 0 == original data
-    // 1 == iris data
-    // 2 == diff iris data
-    // 3 == titanic data
-    // change to an int if more datasets
     const [originalDataset, setO] = useState(0);
 
     const changeO = (nextDataset: number) => {
@@ -114,7 +114,7 @@ const InteractiveClusteringExample: React.FC<InteractiveClusteringExampleType> =
     // as users can remove datapoints this is necessary
     const fakepoints = [{ Distance_Feature: 2, Speeding_Feature: 2 },
         { Distance_Feature: 1, Speeding_Feature: 1 }];
-    
+
     // format needed for kmeans()
     const c2 = [[x1Idx, y1Idx], [x2Idx, y2Idx]];
 
@@ -131,16 +131,12 @@ const InteractiveClusteringExample: React.FC<InteractiveClusteringExampleType> =
         processdata(bubData, clustersss, c2, hidden, data3, k);
     }
 
-    console.log(bubData);
-
     // data that will be put into the chart
     const data:{datasets: BubbleDataEntry[]} = { datasets : [] };
 
     Object.entries(bubData).forEach((cluster) => {
         data.datasets.push(cluster[1]);
     });
-
-    console.log(data);
 
     // remove removethese from data
     for (const removethese of pointsToRemove) {
@@ -150,15 +146,14 @@ const InteractiveClusteringExample: React.FC<InteractiveClusteringExampleType> =
     }
 
     const onDragEnd = (e: React.ChangeEvent, datasetIndex: number, index: number, value: {x: number, y: number}) => {
-
         if (!e) return;
         if (datasetIndex === 0) {
-            setX1Idx(value.x)
-            setY1Idx(value.y)
+            setX1Idx(value.x);
+            setY1Idx(value.y);
         }
         if (datasetIndex === 1) {
-            setX2Idx(value.x)
-            setY2Idx(value.y)
+            setX2Idx(value.x);
+            setY2Idx(value.y);
         }
     }
 
@@ -202,7 +197,7 @@ const InteractiveClusteringExample: React.FC<InteractiveClusteringExampleType> =
             }
         },
         dragData: true,
-        dragX: true,
+        dragX: false,
         dragDataRound: 0,
         onClick : function (evt: MouseEvent) {
             console.log("onclick called")

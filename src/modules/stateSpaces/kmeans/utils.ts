@@ -125,7 +125,7 @@ export const processdata = (bdata: BubbleDataEntry[], clsters: number[], cntroid
             backgroundColor: colour,
             borderColor: colour,
             data: newCluster,
-            dragData: false
+            // dragData: t
         });
     };
 }
