@@ -6,6 +6,8 @@ import trainDataIris2 from './iris2.json';
 
 import { Scatter } from 'react-chartjs-2';
 import kmeans from 'ml-kmeans';
+import dragData from 'chartjs-plugin-dragdata';
+import './chartjs-plugin-dragdata.d.ts';
 
 import {organiseData, InputData, AddedPointList, RemoveTheseList, BubbleDataEntry, processdata, RemoveThese, AddedPoint} from './utils';
 
@@ -159,6 +161,7 @@ const InteractiveClusteringExample: React.FC<InteractiveClusteringExampleType> =
     }
 
     const onDragEnd = (e: React.ChangeEvent, datasetIndex: number, index: number, value: {x: number, y: number}) => {
+        console.log("ondragend")
         if (!e) return;
         if (datasetIndex === 0) {
             setX1Idx(value.x)
@@ -169,6 +172,8 @@ const InteractiveClusteringExample: React.FC<InteractiveClusteringExampleType> =
             setY2Idx(value.y)
         }
     }
+
+    
 
     const options = {
         showLines: false,
@@ -207,6 +212,7 @@ const InteractiveClusteringExample: React.FC<InteractiveClusteringExampleType> =
         dragX: true,
         dragDataRound: 0,
         onClick : function (evt: MouseEvent) {
+            console.log("onclick called")
             if (editable) {
                 // all the // @ts-ignore 's from here on are due to the fact that we can't access of 'this' until onClick is called
                 // inside the react component
@@ -258,6 +264,8 @@ const InteractiveClusteringExample: React.FC<InteractiveClusteringExampleType> =
                     newY = Math.round(newY)
 
                     if (newX > 0 && newY > 0) {
+
+
                         let a:AddedPoint = originalDataset === 0 ? addedPoints : (originalDataset === 1 ? addedPoints2 : addedPoints3)
                         a.push({Driver_ID: 0, Distance_Feature: newX, Speeding_Feature: newY})
                         originalDataset === 0 ? setAP(a) : (originalDataset === 1 ? setAP2(a) : setAP3(a))
@@ -272,16 +280,19 @@ const InteractiveClusteringExample: React.FC<InteractiveClusteringExampleType> =
                 }
             }
         },
+        
         onDragEnd,
+        onDragStart:onDragEnd,
+        onDrag:onDragEnd,
         animation: {
             duration: 0
         },
     };
-
+    
     return (
         <div>
             <div>
-                <Scatter data={data} options={options}  />
+                <Scatter data={data} options={options} plugins={[dragData]}  />
             </div>
             <div className="flex-row space-x-10 mb-5">
                 <div className="axis-selector inline">
