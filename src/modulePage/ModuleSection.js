@@ -6,7 +6,7 @@ import HaarWaveletDemo from "../modules/computerVision/haarWavelet/HaarWaveletDe
 import { ImageSelectableDemo } from "../modules/computerVision/imageSelector/ImageSelectableDemo";
 import PCADemo from "../modules/stateSpaces/pca/PCA";
 import {RawDataTable, SelectableAxisChart, StaticAxisChart, AxisSelector, config as pcaConfig} from "../modules/stateSpaces/pca/PCA";
-import KMeans, {KMeansStepExample, InteractiveClusteringExample} from '../modules/stateSpaces/kmeans/kmeans';
+import KMeans, {KMeansStepExample, InteractiveClusteringExample} from '../modules/stateSpaces/kmeans';
 
 const lorem = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.';
 
