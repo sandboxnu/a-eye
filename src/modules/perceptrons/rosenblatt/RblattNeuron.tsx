@@ -8,14 +8,14 @@ import {RblattConfig, RblattInput} from './RosenblattDemo';
 
 
 // a static version of the neuron demo, for the Rblatt demo
-const RblattNeuron = (props: {input: RblattInput, config: RblattConfig}) => {
+const RblattNeuron = (props: {input: RblattInput, config: RblattConfig, labelColor: string}) => {
 
     const inputSum = props.input.x * props.config.weightX + props.input.y * props.config.weightY + props.config.bias;
     const output = inputSum > 0 ? 1 : 0;
 
     const makeInput = (val: number, weight: number, label: string) => {
         return (
-            <div className="flex items-center">
+            <div className={`flex items-center ${props.labelColor}}`}>
                 {label}
                 <div
                     className="font-bold rounded-full w-12 h-12 m-1 border-2 border-pink-700 bg-white
@@ -40,7 +40,7 @@ const RblattNeuron = (props: {input: RblattInput, config: RblattConfig}) => {
                 {makeInput(props.input.x, props.config.weightX, 'x')}
                 {makeInput(props.input.y, props.config.weightY, 'y')}
                 <div className="flex items-center self-end">
-                    bias
+                    <p className={props.labelColor}>bias</p>
                     <div
                         className="font-bold rounded-full w-12 h-12 bg-pink-700 m-1
                                     flex items-center justify-center    "
@@ -55,8 +55,7 @@ const RblattNeuron = (props: {input: RblattInput, config: RblattConfig}) => {
                 {inputSum.toFixed(1)}
             </div>
             <div className="w-2 h-1 bg-navy" />
-            <div className="w-20 h-10 rounded-md border-2 border-orange-500 
-                        flex items-center justify-center px-2">
+            <div className={`w-20 h-10 rounded-md border-2 border-orange-500 flex items-center justify-center px-2 ${props.labelColor}`}>
                 {'> 0'}
             </div>
             <div className="w-16 h-1 bg-navy" />

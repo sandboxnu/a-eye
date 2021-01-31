@@ -90,7 +90,7 @@ function getDemo(comp, scheme) {
         case "MPNeuron":
             return <MPNeuron />
         case "RblattDemo":
-            return <RosenBlattDemo/>
+            return <RosenBlattDemo {...demoArgs}/>
         default: return <div></div>
     }
 }
