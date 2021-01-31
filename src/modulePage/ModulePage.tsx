@@ -1,57 +1,130 @@
-import React from "react";
-import {RouteComponentProps} from 'react-router';
-import ModuleSection from "./ModuleSection";
-import module8 from '../media/modules/module_8.json';
-import module9 from '../media/modules/module_9.json';
-import module10 from '../media/modules/module_10.json';
-import module11 from '../media/modules/module_11.json';
+import React from 'react';
+import GaussianBlurDemo from '../modules/computerVision/gaussianBlur/GaussianBlurDemo';
+import GaborDemo from '../modules/computerVision/gaborFilter/gaborFilter';
+import DiffOfGaussianDemo from '../modules/computerVision/diffofgaussian/DiffOfGaussian';
+import HaarWaveletDemo from '../modules/computerVision/haarWavelet/HaarWaveletDemo';
+import { ImageSelectableDemo } from '../modules/computerVision/imageSelector/ImageSelectableDemo';
+import PCADemo, {
+  RawDataTable, SelectableAxisChart, StaticAxisChart, AxisSelector, config as pcaConfig,
+} from '../modules/stateSpaces/pca/PCA';
 
-export interface ModuleSubsection {
-    "title": string,
-    "body": string,
-    "imgSrc": string
+import KMeans, { KMeansStepExample, InteractiveClusteringExample } from '../modules/stateSpaces/kmeans';
+import blank from '../media/modules/blank.png';
+import animation1 from '../media/modules/computerVision/animation-1.gif';
+import animation2 from '../media/modules/computerVision/animation-2.gif';
+import animation3 from '../media/modules/computerVision/animation-3.gif';
+import { ModuleSubsection } from './ModulePage';
+
+const lorem = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.';
+
+interface ColorScheme {
+  'bgColor': string,
+  'titleColor': string,
+  'headingColor': string,
+  'bodyColor': string,
+  'labelColorHex': string
 }
-interface ModuleSection {
-    "title": string,
-    "colorScheme": string,
-    "subsections": ModuleSubsection[],
-    "demoComp": string
-}
-interface Module {
-    "number": number,
-    "title": string,
-    "sections": ModuleSection[]
-}
-const modules: Record<string, Module> = {'computer-vision': module8, 'classification' : module9, 'perceptrons' : module10, 'neural-nets' : module11}
 
 /**
- * Renders the entire module page.
- * @param props.match.params.module name of the current module (route has path /modules/module)
+ * Renders a single section on the module page.
+ *
+ * @param props.title section title
+ * @param props.sections subsections of the section
+ * @param props.colorScheme configuration for the section's color scheme, see ColorScheme interface
+ * @param props.key section's identifier; usually the section title
+ * @param props.demoComp name of the React component used as a demo
  */
-export default function ModulePage(props: RouteComponentProps<{module: string}>) {
-    const module = modules[props.match.params.module];
-    if (!module) {
-        return (
-            <div>
-                <p>This module does not exist.</p>
-                <a href="/">Return to home</a>
-            </div>
-        )
-    }
-    return (
-        <div className="container w-screen">
-            <p className={`w-screen p-4 text-5xl font-bold font-opensans bg-modulePaleBlue text-moduleNavy`}>{module.title}</p>
-            <ul>
-                {
-                    module.sections.map((section) =>
-                        <ModuleSection title={section.title}
-                                       sections={section.subsections}
-                                       colorScheme={section.colorScheme}
-                                       key={section.title}
-                                       demoComp={section.demoComp}/>
-                    )
+export default function ModuleSection(props:
+{title: string, sections: ModuleSubsection[], colorScheme: string, key: string, demoComp: string}) {
+  const scheme = props.colorScheme === 'dark' ? {
+    bgColor: 'bg-moduleDarkBlue',
+    titleColor: 'text-modulePaleBlue',
+    headingColor: 'text-moduleTeal',
+    bodyColor: 'text-moduleOffwhite',
+    labelColorHex: '#CBD9F2',
+  } : {
+    bgColor: 'bg-modulePaleBlue',
+    titleColor: 'text-moduleNavy',
+    headingColor: 'text-moduleDarkBlue',
+    bodyColor: 'text-moduleNavy',
+    labelColorHex: '#394D73',
+  };
+
+  return (
+    <div className={`flex flex-col w-screen ${scheme.bgColor}`}>
+      <div className="mx-12 md:mx-40">
+        <p className={`my-12 text-3xl md:text-6xl italic font-bold font-opensans ${scheme.titleColor}`}>{props.title}</p>
+        <ul className="">
+          {
+                        props.sections.map((section, index) => (
+                          <div className={`flex flex-col md:flex-row mx-2 md:my-5 ${section.imgSrc === '/blank.png' && 'my-10'} ${section.body ? '' : 'hidden'}`} key={index}>
+                            <img
+                              src={GetImage(section.imgSrc)}
+                              alt=""
+                              className={`hidden ${index % 2 !== 0 && 'md:flex'} ${section.imgSrc === '/blank.png' ? 'hidden md:object-none' : 'object-contain'} md:w-1/4 md:mr-16 md:-mt-12`}
+                            />
+                            <div className="md:w-2/3 flex-col">
+                              <p className={`my-2 text-left text-lg font-medium font-mono ${scheme.bodyColor}`}>{section.body || lorem}</p>
+                            </div>
+                            <img
+                              src={GetImage(section.imgSrc)}
+                              alt=""
+                              className={`${index % 2 !== 0 && 'md:hidden'} ${section.imgSrc === '/blank.png' ? 'hidden md:object-none' : 'object-contain'} md:w-1/4 md:mr-16 md:-mt-12`}
+                            />
+                          </div>
+                        ))
+                    }
+        </ul>
+        {
+                    getDemo(props.demoComp, scheme)
                 }
-            </ul>
-        </div>
-    );
+      </div>
+    </div>
+  );
+}
+
+function GetImage(imgName: string) {
+  switch (imgName) {
+    case 'blank':
+      return blank;
+    case 'animation1':
+      return animation1;
+    case 'animation2':
+      return animation2;
+    case 'animation3':
+      return animation3;
+    default:
+  }
+}
+
+function getDemo(comp: string, scheme: ColorScheme) {
+  const demoArgs = { labelColor: scheme.titleColor };
+
+  switch (comp) {
+    case 'GaussianBlurDemo':
+      return <ImageSelectableDemo Demo={GaussianBlurDemo} initImg="purpleFlowers.jpeg" demoProps={demoArgs} />;
+    case 'GaborDemo':
+      return <ImageSelectableDemo Demo={GaborDemo} initImg="zebra.jpg" demoProps={demoArgs} />;
+    case 'DiffOfGaussian':
+      return <ImageSelectableDemo Demo={DiffOfGaussianDemo} initImg="tabbyCat.jpg" demoProps={demoArgs} />;
+    case 'HaarWaveletDemo':
+      return <ImageSelectableDemo Demo={HaarWaveletDemo} initImg="bwWoman.jpg" demoProps={demoArgs} />;
+    case 'PCADemo':
+      return <PCADemo {...demoArgs} />;
+    case 'RawDataTable':
+      return <RawDataTable />;
+    case 'StaticAxisChart':
+      return <StaticAxisChart xIdx={4} yIdx={5} columnSet={pcaConfig.columns} classes={['versicolor', 'setosa']} labelColorHex={scheme.labelColorHex} />;
+    case 'SelectableAxisChart':
+      return <SelectableAxisChart columnSet={pcaConfig.columns} initXIdx={4} initYIdx={5} labelColor={scheme.titleColor} labelColorHex={scheme.labelColorHex} />;
+    case 'PCASelectableAxisChart':
+      return <SelectableAxisChart columnSet={pcaConfig.pcaColumns} initXIdx={0} initYIdx={1} labelColor={scheme.titleColor} labelColorHex={scheme.labelColorHex} />;
+    case 'InteractiveKMeans':
+      return <div><InteractiveClusteringExample hidden={false} /></div>;
+    case 'StepKMeans':
+      return <div><KMeansStepExample hidden={false} /></div>;
+    case 'KMeans':
+      return <KMeans />;
+    default: return <div />;
+  }
 }
