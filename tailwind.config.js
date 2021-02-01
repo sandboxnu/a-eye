@@ -34,8 +34,8 @@ module.exports = {
         'micro': 25
       },
       backgroundImage: theme => ({
-        'about': 'url("../media/aboutCurve.svg")',
-        'landing-page': 'url("../media/background_landing_page.svg")'
+        'about': 'url("../assets/aboutCurve.svg")',
+        'landing-page': 'url("../assets/background_landing_page.svg")'
       }),
       backgroundSize: {
         stretchBottom: '103% 50%'

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import FilterByKernel from '../common/FilterByKernel';
-import KernelDisplay from '../gaussianBlur/KernelDisplay';
+import KernelDisplay from '../common/KernelDisplay';
 import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
