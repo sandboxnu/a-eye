@@ -155,7 +155,7 @@ const EditingRblattGraph = (props: {inputs: RblattInput[], line: RblattConfig,  
     <div className="flex flex-col items-center justify-center">
         <RblattGraph {...props} editingType={editingType} />
         <div className="flex items-center justify-center">
-            Add/Remove Points:
+            <p className="text-modulePaleBlue">Add/Remove Points:</p>
             <button className={`basic-button alt py-1 px-2 bg-orange-500 border-4 ${editingType.val === 0 ? 'border-orange-800' : 'border-transparent'} `}
                 onClick={() => {
                     editingType.val === 0 ? setEditingType(et => {et.val = null; return et}) : setEditingType(et => {et.val = 0; return et});
@@ -191,7 +191,7 @@ function trainRblatt(inpt: RblattInput, config: RblattConfig) {
     }
 }
 
-const INIT_CONFIG = { weightX: -.5, weightY: 1, bias: 7, learningRate: .1 };
+const INIT_CONFIG = { weightX: .7, weightY: -1, bias: 0, learningRate: .1 };
 const INIT_INPUTS: RblattInput[] = [
     { x: 2.101231155778894, y: 4.947319932998326, z: 0 },
     { x: 8.27, y: -3.94, z: 0 },
