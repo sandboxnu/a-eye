@@ -4,6 +4,7 @@ import trainData from './datasets/train.json';
 import trainDataIris from './datasets/iris.json';
 import trainDataIris2 from './datasets/iris2.json';
 import titanicData from './datasets/titanic.json';
+import bookData from './datasets/books.json';
 
 import dragData from 'chartjs-plugin-dragdata'; 
 import { Scatter } from 'react-chartjs-2';
@@ -31,14 +32,19 @@ const InteractiveClusteringExample: React.FC<InteractiveClusteringExampleType> =
     // 2 == diff iris data
     // 3 == titanic data
     // change to an int if more datasets
-    trainingDatasets = [trainData, trainDataIris, trainDataIris2, titanicData],
+    trainingDatasets = [trainData, trainDataIris, trainDataIris2, bookData],
     centersList = [
         [[0, 0], [50, 50]],
         [[2, 2], [7, 5]],
         [[20, 20], [40, 40]],
-        [[10, 10], [40, 40]],
+        [[3000, 3], [12000, 20]]
     ],
 }) => {
+    // index corresponds to the datasets as numbered above
+    const yAxisMin: number[] = [0, 1, 0, 0];
+    const yAxisMax: number[] = [120, 7, 40, 40];
+    const xAxisMin: number[] = [0, 1, 0, 0];
+    const xAxisMax: number[] = [250, 10, 100, 50000];
 
     let organizedDatasets = [];
     for(const dataset of trainingDatasets) {
@@ -156,12 +162,6 @@ const InteractiveClusteringExample: React.FC<InteractiveClusteringExampleType> =
             setY2Idx(value.y);
         }
     }
-
-    // index corresponds to the datasets as numbered above
-    const yAxisMin: number[] = [0, 1, 0, 0];
-    const yAxisMax: number[] = [120, 7, 40, 100];
-    const xAxisMin: number[] = [0, 1, 0, 0];
-    const xAxisMax: number[] = [250, 10, 100, 100];
 
     const options = {
         showLines: false,
@@ -287,7 +287,7 @@ const InteractiveClusteringExample: React.FC<InteractiveClusteringExampleType> =
         "Original Dataset",
         "Iris Sepal Dataset",
         "Iris Petal Dataset",
-        "Titanic Dataset",
+        "Books Dataset",
     ];
 
     return (

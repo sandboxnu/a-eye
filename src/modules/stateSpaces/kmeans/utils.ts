@@ -21,10 +21,21 @@ export interface TitanicData {
     Cabin: string,
     Embarked: string
 };
+
+export interface BookData {
+    Name: string,
+    Author: string,
+    "User Rating": number,
+    Reviews: number,
+    Price: number,
+    Year: number,
+    Genre: string
+};
+
 // artificially added points (all datasets are converted into this format with two features)
 export interface AddedPoint {Distance_Feature:number, Speeding_Feature:number};
 
-export type InputData = DataFormat | DataFormat2 | DataFormat3 | TitanicData | AddedPoint;
+export type InputData = DataFormat | DataFormat2 | DataFormat3 | TitanicData | AddedPoint | BookData;
 
 export type ScatterData = {datasets: ScatterDataData[]};
 export type ScatterDataData = {data:{x:number, y:number, pointRadius:number, backgroundColor:string}[]};
@@ -72,6 +83,11 @@ export const organiseData = (data: InputData[]) => {
             const temp:TitanicData = curRow as TitanicData;
             newRow.push(temp.Age);
             newRow.push(temp.Fare);
+        }
+        else if((curRow as BookData).Genre) {
+            const temp:BookData = curRow as BookData;
+            newRow.push(temp.Reviews);
+            newRow.push(temp.Price);
         }
         else {
             const temp:DataFormat3 = curRow as DataFormat3;
