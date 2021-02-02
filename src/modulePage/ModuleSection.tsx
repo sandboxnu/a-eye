@@ -91,7 +91,7 @@ function getDemo(comp: string, scheme: ColorScheme) {
         case "RawDataTable":
             return <RawDataTable />
         case "StaticAxisChart":
-            return <StaticAxisChart xIdx={4} yIdx={5} columnSet={pcaConfig.columns} classes={["versicolor", "setosa"]} labelColorHex={scheme.labelColorHex}/>
+            return <StaticAxisChart xIdx={[4, 4]} yIdx={[5, 5]} columnSet={[pcaConfig.columns]} classes={[["versicolor", "setosa"], ["Fiction", "Nonfiction"]]} labelColorHex={scheme.labelColorHex}/>
         case "SelectableAxisChart":
             return <SelectableAxisChart columnSet={pcaConfig.columns} initXIdx={4} initYIdx={5} labelColor={scheme.titleColor} labelColorHex={scheme.labelColorHex}/>
         case "PCASelectableAxisChart":

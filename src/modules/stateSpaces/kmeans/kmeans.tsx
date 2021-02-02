@@ -1,6 +1,6 @@
 import React from 'react';
 
-import trainData from './datasets/train.json';
+import trainData from '../datasets/train.json';
 
 import { Scatter } from 'react-chartjs-2';
 

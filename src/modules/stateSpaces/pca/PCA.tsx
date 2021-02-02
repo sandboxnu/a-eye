@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import { PCA } from 'ml-pca';
 import datasetIris from 'ml-dataset-iris';
+
+import irisData from '../datasets/iris.json';
+import bookData from '../datasets/books.json';
+
 import { BasicScatter, DataSeriesMap, ColorMap } from '../common/BasicScatter';
 import './PCA.css';
 
@@ -17,7 +21,7 @@ export const PCADemo = ({labelColor, labelColorHex = ''}: PCAProps) => {
     return (
         <div className={`PCA-div ${labelColor}`}>
             <RawDataTable />
-            <StaticAxisChart xIdx={4} yIdx={5} columnSet={columns} classes={["versicolor", "setosa"]} labelColorHex={labelColorHex} />
+            <StaticAxisChart xIdx={[4]} yIdx={[5]} columnSet={[columns]} classes={[["versicolor", "setosa"]]} labelColorHex={labelColorHex} />
             <SelectableAxisChart columnSet={columns} initXIdx={2} initYIdx={3} labelColor={"text-white"} labelColorHex={labelColorHex} />
             <SelectableAxisChart columnSet={pcaColumns} initXIdx={0} initYIdx={1} labelColor={"text-white"} labelColorHex={labelColorHex} />
         </div>
@@ -82,21 +86,32 @@ export const SelectableAxisChart = (props: { columnSet: string[], initXIdx: numb
         </div>);
 };
 
-export const StaticAxisChart = (props: { xIdx: number, yIdx: number, columnSet: string[], classes: string[], labelColorHex: string }) => {
+export const StaticAxisChart = (props: { xIdx: number[], yIdx: number[], columnSet: string[][], classes: string[][], labelColorHex: string }) => {
+    const [selectedData, setO] = useState(0);
+    const changeO = (nextDataset: number) =>  setO(nextDataset);
 
     const points: DataSeriesMap = {};
-    props.classes.forEach((dataClass) => {
-        console.log(dataClass);
-        points[dataClass] = dataByClass[dataClass].map(row => ({ x: row[props.xIdx], y: row[props.yIdx] }));
+    props.classes[selectedData].forEach((dataClass) => {
+        points[dataClass] = dataByClass[dataClass].map(row => ({ x: row[props.xIdx[selectedData]], y: row[props.yIdx[selectedData]] }));
     });
+
+    const datasetLabel = [
+        "Original Dataset",
+        "Iris Sepal Dataset",
+        "Iris Petal Dataset",
+        "Books Dataset",
+    ];
+
+    const curXIdx = props.xIdx[selectedData];
+    const curYIdx = props.yIdx[selectedData];
 
     return (
         <div className="pca pca-chart">
             <div className="raw-data-scatter">
-                <BasicScatter colorMap={colorMap} points={points} xLabel={props.columnSet[props.xIdx]} yLabel={props.columnSet[props.yIdx]} labelColorHex={props.labelColorHex} />
+                <BasicScatter colorMap={colorMap} points={points} xLabel={props.columnSet[selectedData][curXIdx]} yLabel={props.columnSet[selectedData][curYIdx]} labelColorHex={props.labelColorHex} />
             </div>
+                <button onClick={e => changeO((selectedData+1) % 4)}>Current: {datasetLabel[selectedData]}</button>
         </div>);
-
 }
 
 export const AxisSelector = (props: { columnSet: string[], selected: number, onChange: (arg: number) => void }) =>
@@ -113,25 +128,86 @@ export const AxisSelector = (props: { columnSet: string[], selected: number, onC
 
 const COLORS = ['#003f5c', '#ef5675', '#FFC107', '#00B0FF', '#FF3D00', '#4DB6AC'];
 
-// Moving these outside so they are only calculated once (this will change if we dynamically get datasets)
-const dataset: number[][] = datasetIris.getNumbers(); // rows represent the samples and columns the features
-const classes: string[] = datasetIris.getClasses(); // the whole column of flower types
-const columns = ['', '', 'Sepal Length', 'Sepal Width', 'Petal Length', 'Petal Width'];
-const pcaColumns = ['PC1', 'PC2', 'Sepal Length', 'Sepal Width', 'Petal Length', 'Petal Width'];
-const prediction = new PCA(dataset).predict(dataset);
+// ----- iris pca ----
+const irisColumns= ['', '', 'Sepal Length', 'Sepal Width', 'Petal Length', 'Petal Width'];
+const irisPcaColumns=  ['PC1', 'PC2', 'Sepal Length', 'Sepal Width', 'Petal Length', 'Petal Width'];
 
-export const config = { dataset, classes, columns, pcaColumns, prediction };
+let irisDataset: number[][] = [];
+let irisClasses: string[] = [];
 
-const colorMap: ColorMap = {};
-const dataByClass: { [dataClass: string]: number[][] } = {};
-datasetIris.getDistinctClasses().forEach((dataClass: string, i: number) => {
-    colorMap[dataClass] = COLORS[i] || '#de425b';
-    dataByClass[dataClass] = [];
-    dataset.forEach((row, idx) => {
-        if (dataClass === classes[idx]) {
-            dataByClass[dataClass].push([prediction.get(idx, 0), prediction.get(idx, 1)].concat(row));
-        }
-    });
-})
+irisData.forEach(({
+    sepalLength,
+    sepalWidth,
+    petalLength,
+    petalWidth,
+    species
+}) => {
+    irisDataset.push([
+        sepalLength,
+        sepalWidth,
+        petalLength,
+        petalWidth 
+    ]);
+    irisClasses.push(species);
+});
+
+const irisPrediction = new PCA(irisDataset).predict(irisDataset);
+
+// ----- books pca ----
+const bookColumns = ['', '', 'Sepal Length', 'Sepal Width', 'Petal Length', 'Petal Width'];
+const bookPcaColumns=  ['PC1', 'PC2', 'Sepal Length', 'Sepal Width', 'Petal Length', 'Petal Width'];
+
+let bookDataset: number[][] = [];
+let bookClasses: string[] = [];
+
+irisData.forEach(({
+    sepalLength,
+    sepalWidth,
+    petalLength,
+    petalWidth,
+    species
+}) => {
+    bookDataset.push([
+        sepalLength,
+        sepalWidth,
+        petalLength,
+        petalWidth 
+    ]);
+    bookClasses.push(species);
+});
+
+const bookPrediction = new PCA(bookDataset).predict(bookDataset);
+// export const config = { dataset, classes, irisColumns, irisPcaColumns, irisPrediction };
+
+const pcaData = [
+    {
+        columns: irisColumns,
+        pcaColumns:  irisPcaColumns,
+        dataset: irisData,
+        prediction: irisPrediction,
+    },
+    {
+        columns: bookColumns,
+        pcaColumns: bookPcaColumns,
+        dataset: bookData,
+        prediction: bookPrediction
+    },
+];
+
+// - change data format for props of graph
+// - export config
+// - add to the other non kmeans demos
+
+// const colorMap: ColorMap = {};
+// const dataByClass: { [dataClass: string]: number[][] } = {};
+// datasetIris.getDistinctClasses().forEach((dataClass: string, i: number) => {
+//     colorMap[dataClass] = COLORS[i] || '#de425b';
+//     dataByClass[dataClass] = [];
+//     dataset.forEach((row, idx) => {
+//         if (dataClass === classes[idx]) {
+//             dataByClass[dataClass].push([prediction.get(idx, 0), prediction.get(idx, 1)].concat(row));
+//         }
+//     });
+// })
 
 export default PCADemo;

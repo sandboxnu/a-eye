@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 
-import trainData from './datasets/train.json';
-import trainDataIris from './datasets/iris.json';
-import trainDataIris2 from './datasets/iris2.json';
-import titanicData from './datasets/titanic.json';
-import bookData from './datasets/books.json';
+import trainData from '../datasets/train.json';
+import trainDataIris from '../datasets/iris.json';
+import trainDataIris2 from '../datasets/iris2.json';
+import titanicData from '../datasets/titanic.json';
+import bookData from '../datasets/books.json';
 
 import dragData from 'chartjs-plugin-dragdata'; 
 import { Scatter } from 'react-chartjs-2';
