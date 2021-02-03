@@ -8,7 +8,7 @@
       "bgColor": "bg-lightblue",
       "textColor": "text-darkblue",
       "margin": "mr-64",
-      "imgSrc": "mod8.png",
+      "imgSrc": "mod8",
       "path": "computer-vision"
     },
     {
@@ -19,7 +19,7 @@
       "bgColor": "bg-darkblue",
       "textColor": "text-white",
       "margin": "ml-64",
-      "imgSrc": "mod9.png",
+      "imgSrc": "mod9",
       "path": "classification"
     },
     {
@@ -30,7 +30,7 @@
       "bgColor": "bg-offwhite",
       "textColor": "text-darkblue",
       "margin": "mr-64",
-      "imgSrc": "mod10.png",
+      "imgSrc": "mod10",
       "path": "perceptrons"
     },
     {
@@ -41,7 +41,7 @@
       "bgColor": "bg-darkblue",
       "textColor": "text-white",
       "margin": "ml-64",
-      "imgSrc": "mod11.png",
+      "imgSrc": "mod11",
       "path": "neural-nets"
     }
   ]
