@@ -5,7 +5,7 @@ import DiffOfGaussianDemo from "../modules/computerVision/diffofgaussian/DiffOfG
 import HaarWaveletDemo from "../modules/computerVision/haarWavelet/HaarWaveletDemo";
 import { ImageSelectableDemo } from "../modules/computerVision/imageSelector/ImageSelectableDemo";
 import PCADemo from "../modules/stateSpaces/pca/PCA";
-import {RawDataTable, SelectableAxisChart, StaticAxisChart, AxisSelector, config as pcaConfig} from "../modules/stateSpaces/pca/PCA";
+import { /**RawDataTable , SelectableAxisChart,**/ StaticAxisChart, AxisSelector, pcaData as pcaConfig} from "../modules/stateSpaces/pca/PCA";
 
 import {ModuleSubsection} from "./ModulePage";
 import KMeans, {KMeansStepExample, InteractiveClusteringExample} from '../modules/stateSpaces/kmeans';
@@ -88,14 +88,14 @@ function getDemo(comp: string, scheme: ColorScheme) {
             return <ImageSelectableDemo Demo={HaarWaveletDemo} initImg='bwWoman.jpg' demoProps={demoArgs}/>
         case "PCADemo":
             return <PCADemo {...demoArgs} />
-        case "RawDataTable":
-            return <RawDataTable />
+        // case "RawDataTable":
+        //     return <RawDataTable />
         case "StaticAxisChart":
-            return <StaticAxisChart xIdx={[4, 4]} yIdx={[5, 5]} columnSet={[pcaConfig.columns]} classes={[["versicolor", "setosa"], ["Fiction", "Nonfiction"]]} labelColorHex={scheme.labelColorHex}/>
-        case "SelectableAxisChart":
-            return <SelectableAxisChart columnSet={pcaConfig.columns} initXIdx={4} initYIdx={5} labelColor={scheme.titleColor} labelColorHex={scheme.labelColorHex}/>
-        case "PCASelectableAxisChart":
-            return <SelectableAxisChart columnSet={pcaConfig.pcaColumns} initXIdx={0} initYIdx={1} labelColor={scheme.titleColor} labelColorHex={scheme.labelColorHex}/>
+            return <StaticAxisChart {...pcaConfig}/>
+        // case "SelectableAxisChart":
+        //     return <SelectableAxisChart columnSet={pcaConfig.columns} initXIdx={4} initYIdx={5} labelColor={scheme.titleColor} labelColorHex={scheme.labelColorHex}/>
+        // case "PCASelectableAxisChart":
+        //     return <SelectableAxisChart columnSet={pcaConfig.pcaColumns} initXIdx={0} initYIdx={1} labelColor={scheme.titleColor} labelColorHex={scheme.labelColorHex}/>
         case "InteractiveKMeans":
             return <div><InteractiveClusteringExample hidden = {false} /></div>
         case "StepKMeans":

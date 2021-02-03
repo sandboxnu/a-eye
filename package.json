@@ -72,7 +72,8 @@
       "last 1 safari version"
     ],
     "typeRoots": [
-      "./ml-kmeans.d.ts"
+      "./ml-kmeans.d.ts",
+      "./node_modules/ml-pca"
     ]
   }
 }

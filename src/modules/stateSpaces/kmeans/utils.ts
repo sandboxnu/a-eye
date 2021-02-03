@@ -25,7 +25,7 @@ export interface TitanicData {
 export interface BookData {
     Name: string,
     Author: string,
-    "User Rating": number,
+    UserRating: number,
     Reviews: number,
     Price: number,
     Year: number,

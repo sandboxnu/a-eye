@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 import { PCA } from 'ml-pca';
-import datasetIris from 'ml-dataset-iris';
+import { Matrix } from 'ml-matrix';
+// import datasetIris from 'ml-dataset-iris';
 
 import irisData from '../datasets/iris.json';
 import bookData from '../datasets/books.json';
 
-import { BasicScatter, DataSeriesMap, ColorMap } from '../common/BasicScatter';
+
+// import { BasicScatter, DataSeriesMap, ColorMap } from '../common/BasicScatter';
+import { DataSeriesMap } from '../common/BasicScatter';
 import './PCA.css';
 
 type PCAProps = {labelColor: string, labelColorHex?: string};
@@ -20,79 +23,86 @@ export const PCADemo = ({labelColor, labelColorHex = ''}: PCAProps) => {
 
     return (
         <div className={`PCA-div ${labelColor}`}>
-            <RawDataTable />
-            <StaticAxisChart xIdx={[4]} yIdx={[5]} columnSet={[columns]} classes={[["versicolor", "setosa"]]} labelColorHex={labelColorHex} />
-            <SelectableAxisChart columnSet={columns} initXIdx={2} initYIdx={3} labelColor={"text-white"} labelColorHex={labelColorHex} />
-            <SelectableAxisChart columnSet={pcaColumns} initXIdx={0} initYIdx={1} labelColor={"text-white"} labelColorHex={labelColorHex} />
+            <p> hi </p>
+            {/* <RawDataTable /> */}
+            {/* <StaticAxisChart xIdx={[4]} yIdx={[5]} columnSet={[columns]} classes={[["versicolor", "setosa"]]} labelColorHex={labelColorHex} /> */}
+            {/* <SelectableAxisChart columnSet={columns} initXIdx={2} initYIdx={3} labelColor={"text-white"} labelColorHex={labelColorHex} />
+            <SelectableAxisChart columnSet={pcaColumns} initXIdx={0} initYIdx={1} labelColor={"text-white"} labelColorHex={labelColorHex} /> */}
         </div>
     );
 }
 
-export const RawDataTable = () => {
-    const [showClass, setShowClass] = useState(false);
+// export const RawDataTable = () => {
+//     const [showClass, setShowClass] = useState(false);
 
 
-    return (
-    <div className="container flex mx-auto my-4">
-        <div className="pca raw-data-table mx-auto">
-            <table className="table-auto">
-                <thead>
-                    <tr>
-                        {columns.map(title => title && <th key={title}>{title}</th>)}
-                        <th className="cursor-pointer"
-                            onClick={() => {setShowClass(!showClass)}}
-                            title={showClass ? 'Hide Classes' : 'Display Classes'}>
-                            {showClass ? 'Class' : '►'}
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {dataset.map((row: number[], idx: number) => {
-                        return (
-                            <tr key={idx} className="'datarow' text-white">
-                                {row.map((val: number, idx: number) => <td key={idx}>{val}</td>)}
-                                <td>{showClass && classes[idx]}</td>
-                            </tr>);
-                    })}
-                </tbody>
-            </table>
-        </div>
-    </div>);
-}
+//     return (
+//     <div className="container flex mx-auto my-4">
+//         <div className="pca raw-data-table mx-auto">
+//             <table className="table-auto">
+//                 <thead>
+//                     <tr>
+//                         {columns.map(title => title && <th key={title}>{title}</th>)}
+//                         <th className="cursor-pointer"
+//                             onClick={() => {setShowClass(!showClass)}}
+//                             title={showClass ? 'Hide Classes' : 'Display Classes'}>
+//                             {showClass ? 'Class' : '►'}
+//                         </th>
+//                     </tr>
+//                 </thead>
+//                 <tbody>
+//                     {dataset.map((row: number[], idx: number) => {
+//                         return (
+//                             <tr key={idx} className="'datarow' text-white">
+//                                 {row.map((val: number, idx: number) => <td key={idx}>{val}</td>)}
+//                                 <td>{showClass && classes[idx]}</td>
+//                             </tr>);
+//                     })}
+//                 </tbody>
+//             </table>
+//         </div>
+//     </div>);
+// }
 
 
-// Plot all samples in dataset, choose what 2 features to use as the axes
-export const SelectableAxisChart = (props: { columnSet: string[], initXIdx: number, initYIdx: number, labelColor: string, labelColorHex: string }) => {
-    const [xIdx, setXIdx] = useState(props.initXIdx);
-    const [yIdx, setYIdx] = useState(props.initYIdx);
-    const points: DataSeriesMap = {};
-    Object.entries(dataByClass).forEach(([dataClass, nums]) => {
-        points[dataClass] = nums.map(row => ({ x: row[xIdx], y: row[yIdx] }));
-    })
+// // Plot all samples in dataset, choose what 2 features to use as the axes
+// export const SelectableAxisChart = (props: { columnSet: string[], initXIdx: number, initYIdx: number, labelColor: string, labelColorHex: string }) => {
+//     const [xIdx, setXIdx] = useState(props.initXIdx);
+//     const [yIdx, setYIdx] = useState(props.initYIdx);
+//     const points: DataSeriesMap = {};
+//     Object.entries(dataByClass).forEach(([dataClass, nums]) => {
+//         points[dataClass] = nums.map(row => ({ x: row[xIdx], y: row[yIdx] }));
+//     })
 
-    return (
-        <div className="pca raw-data-chart">
-            <div className="select-axis-menu yIdx">
-                <p className={`font-opensans font-bold italic ${props.labelColor}`}> Select Y Axis </p>
-                <AxisSelector selected={yIdx} onChange={setYIdx} columnSet={props.columnSet} />
-            </div>
-            <div className="raw-data-scatter">
-                <BasicScatter colorMap={colorMap} points={points} xLabel={props.columnSet[xIdx]} yLabel={props.columnSet[yIdx]} labelColorHex={props.labelColorHex} />
-            </div>
-            <div className="select-axis-menu xIdx">
-                <p className={`font-opensans font-bold italic ${props.labelColor}`}> Select X Axis</p>
-                <AxisSelector selected={xIdx} onChange={setXIdx} columnSet={props.columnSet} />
-            </div>
-        </div>);
-};
+//     return (
+//         <div className="pca raw-data-chart">
+//             <div className="select-axis-menu yIdx">
+//                 <p className={`font-opensans font-bold italic ${props.labelColor}`}> Select Y Axis </p>
+//                 <AxisSelector selected={yIdx} onChange={setYIdx} columnSet={props.columnSet} />
+//             </div>
+//             <div className="raw-data-scatter">
+//                 <BasicScatter colorMap={colorMap} points={points} xLabel={props.columnSet[xIdx]} yLabel={props.columnSet[yIdx]} labelColorHex={props.labelColorHex} />
+//             </div>
+//             <div className="select-axis-menu xIdx">
+//                 <p className={`font-opensans font-bold italic ${props.labelColor}`}> Select X Axis</p>
+//                 <AxisSelector selected={xIdx} onChange={setXIdx} columnSet={props.columnSet} />
+//             </div>
+//         </div>);
+// };
 
-export const StaticAxisChart = (props: { xIdx: number[], yIdx: number[], columnSet: string[][], classes: string[][], labelColorHex: string }) => {
+export const StaticAxisChart = (props:pcaDataInterface[]) => {
+    //props: { xIdx: number, yIdx: number, columnSet: string[], classes: string[], labelColorHex: string 
+    
     const [selectedData, setO] = useState(0);
     const changeO = (nextDataset: number) =>  setO(nextDataset);
 
     const points: DataSeriesMap = {};
-    props.classes[selectedData].forEach((dataClass) => {
-        points[dataClass] = dataByClass[dataClass].map(row => ({ x: row[props.xIdx[selectedData]], y: row[props.yIdx[selectedData]] }));
+    props[selectedData].pcaColumns.forEach((dataClass) => {
+        // points[dataClass] = props[selectedData].prediction
+
+        
+        
+        // .map(row => ({ x: row[props.xIdx[selectedData]], y: row[props.yIdx[selectedData]] }));
     });
 
     const datasetLabel = [
@@ -102,15 +112,16 @@ export const StaticAxisChart = (props: { xIdx: number[], yIdx: number[], columnS
         "Books Dataset",
     ];
 
-    const curXIdx = props.xIdx[selectedData];
-    const curYIdx = props.yIdx[selectedData];
+    // const curXIdx = props.xIdx[selectedData];
+    // const curYIdx = props.yIdx[selectedData];
 
     return (
         <div className="pca pca-chart">
-            <div className="raw-data-scatter">
+            hi
+            {/* <div className="raw-data-scatter">
                 <BasicScatter colorMap={colorMap} points={points} xLabel={props.columnSet[selectedData][curXIdx]} yLabel={props.columnSet[selectedData][curYIdx]} labelColorHex={props.labelColorHex} />
             </div>
-                <button onClick={e => changeO((selectedData+1) % 4)}>Current: {datasetLabel[selectedData]}</button>
+                <button onClick={e => changeO((selectedData+1) % 4)}>Current: {datasetLabel[selectedData]}</button> */}
         </div>);
 }
 
@@ -160,39 +171,42 @@ const bookPcaColumns=  ['PC1', 'PC2', 'Sepal Length', 'Sepal Width', 'Petal Leng
 let bookDataset: number[][] = [];
 let bookClasses: string[] = [];
 
-irisData.forEach(({
-    sepalLength,
-    sepalWidth,
-    petalLength,
-    petalWidth,
-    species
+bookData.forEach(({
+    UserRating,
+    Reviews,
+    Price,
+    Year,
+    Genre
 }) => {
     bookDataset.push([
-        sepalLength,
-        sepalWidth,
-        petalLength,
-        petalWidth 
+        UserRating,
+        Reviews,
+        Price,
+        Year
     ]);
-    bookClasses.push(species);
+    bookClasses.push(Genre);
 });
 
 const bookPrediction = new PCA(bookDataset).predict(bookDataset);
+console.log(bookPrediction)
 // export const config = { dataset, classes, irisColumns, irisPcaColumns, irisPrediction };
 
-const pcaData = [
+export const pcaData:pcaDataInterface[] = [
     {
         columns: irisColumns,
         pcaColumns:  irisPcaColumns,
-        dataset: irisData,
+        dataset: irisDataset,
         prediction: irisPrediction,
     },
     {
         columns: bookColumns,
         pcaColumns: bookPcaColumns,
-        dataset: bookData,
+        dataset: bookDataset,
         prediction: bookPrediction
     },
 ];
+
+export interface pcaDataInterface {columns:string[], pcaColumns:string[], dataset:number[][], prediction:Matrix};
 
 // - change data format for props of graph
 // - export config
