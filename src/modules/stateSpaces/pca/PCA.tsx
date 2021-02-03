@@ -4,19 +4,22 @@ import datasetIris from 'ml-dataset-iris';
 import { BasicScatter, DataSeriesMap, ColorMap } from '../common/BasicScatter';
 import './PCA.css';
 
+type PCAProps = {labelColor: string, labelColorHex?: string};
+
 /**
  * Interactive demo of PCA.
  * 
- * @param props 
+ * @param labelColor color of the demo's label (as a tailwind class name)
+ * @param labelColorHex hex color of the demo's label
  */
-export const PCADemo = (props: { labelColor: string, labelColorHex: string }) => {
+export const PCADemo = ({labelColor, labelColorHex = ''}: PCAProps) => {
 
     return (
-        <div className={`PCA-div ${props.labelColor}`}>
+        <div className={`PCA-div ${labelColor}`}>
             <RawDataTable />
-            <StaticAxisChart xIdx={4} yIdx={5} columnSet={columns} classes={["versicolor", "setosa"]} labelColorHex={props.labelColorHex} />
-            <SelectableAxisChart columnSet={columns} initXIdx={2} initYIdx={3} labelColor={"text-white"} labelColorHex={props.labelColorHex} />
-            <SelectableAxisChart columnSet={pcaColumns} initXIdx={0} initYIdx={1} labelColor={"text-white"} labelColorHex={props.labelColorHex} />
+            <StaticAxisChart xIdx={4} yIdx={5} columnSet={columns} classes={["versicolor", "setosa"]} labelColorHex={labelColorHex} />
+            <SelectableAxisChart columnSet={columns} initXIdx={2} initYIdx={3} labelColor={"text-white"} labelColorHex={labelColorHex} />
+            <SelectableAxisChart columnSet={pcaColumns} initXIdx={0} initYIdx={1} labelColor={"text-white"} labelColorHex={labelColorHex} />
         </div>
     );
 }

@@ -1,71 +1,72 @@
 {
-    "perceptrons": {
-        "number": 10,
-        "title": "Module 10: Introduction to Machine Learning: Perceptrons",
-        "sections": [
-          {
-            "title": "Section 1",
-            "colorScheme": "dark",
-            "subsections": [
-              {
-                "title": "Subsection 1",
-                "body": "lorem ipsum",
-                "imgSrc": "mod10"
-              },
-              {
-                "title": "Subsection 2",
-                "body": "lorem ipsum",
-                "imgSrc": "mod10"
-              },
-              {
-                "title": "Subsection 3",
-                "body": "lorem ipsum",
-                "imgSrc": "mod10"
-              }
-            ]
-          },
-          {
-            "title": "Section 2",
-            "colorScheme": "light",
-            "subsections": [
-              {
-                "title": "Subsection 1",
-                "body": "lorem ipsum",
-                "imgSrc": "mod10"
-              },
-              {
-                "title": "Subsection 2",
-                "body": "lorem ipsum",
-                "imgSrc": "mod10"
-              },
-              {
-                "title": "Subsection 3",
-                "body": "lorem ipsum",
-                "imgSrc": "mod10"
-              }
-            ]
-          },
-          {
-            "title": "Section 3",
-            "colorScheme": "dark",
-            "subsections": [
-              {
-                "title": "Subsection 1",
-                "body": "lorem ipsum",
-                "imgSrc": "mod10"
-              },
-              {
-                "title": "Subsection 2",
-                "body": "lorem ipsum",
-                "imgSrc": "mod10"
-              },
-              {
-                "title": "Subsection 3",
-                "body": "lorem ipsum",
-                "imgSrc": "mod10"
-              }
-            ]
-          }
-        ]
-      }
+  "number": 10,
+  "title": "Module 10: Introduction to Machine Learning: Perceptrons",
+  "sections": [
+    {
+      "title": "Section 1",
+      "colorScheme": "dark",
+      "subsections": [
+        {
+          "title": "Subsection 1",
+          "body": "lorem ipsum",
+          "imgSrc": "mod10"
+        },
+        {
+          "title": "Subsection 2",
+          "body": "lorem ipsum",
+          "imgSrc": "mod10"
+        },
+        {
+          "title": "Subsection 3",
+          "body": "lorem ipsum",
+          "imgSrc": "mod10"
+        }
+      ],
+      "demoComp": ""
+    },
+    {
+      "title": "Section 2",
+      "colorScheme": "light",
+      "subsections": [
+        {
+          "title": "Subsection 1",
+          "body": "lorem ipsum",
+          "imgSrc": "mod10"
+        },
+        {
+          "title": "Subsection 2",
+          "body": "lorem ipsum",
+          "imgSrc": "mod10"
+        },
+        {
+          "title": "Subsection 3",
+          "body": "lorem ipsum",
+          "imgSrc": "mod10"
+        }
+      ],
+      "demoComp": ""
+    },
+    {
+      "title": "Section 3",
+      "colorScheme": "dark",
+      "subsections": [
+        {
+          "title": "Subsection 1",
+          "body": "lorem ipsum",
+          "imgSrc": "mod10"
+        },
+        {
+          "title": "Subsection 2",
+          "body": "lorem ipsum",
+          "imgSrc": "mod10"
+        },
+        {
+          "title": "Subsection 3",
+          "body": "lorem ipsum",
+          "imgSrc": "mod10"
+        }
+      ],
+      "demoComp": ""
+    }
+  ]
 }
