@@ -12,6 +12,7 @@ import animation1 from '../media/modules/computerVision/animation-1.gif';
 import animation2 from '../media/modules/computerVision/animation-2.gif';
 import animation3 from '../media/modules/computerVision/animation-3.gif';
 import {ModuleSubsection} from "./ModulePage";
+import KMeans, {KMeansStepExample, InteractiveClusteringExample} from '../modules/stateSpaces/kmeans';
 
 const lorem = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.';
 
@@ -115,9 +116,9 @@ function getDemo(comp: string, scheme: ColorScheme) {
         case "PCASelectableAxisChart":
             return <SelectableAxisChart columnSet={pcaConfig.pcaColumns} initXIdx={0} initYIdx={1} labelColor={scheme.titleColor} labelColorHex={scheme.labelColorHex}/>
         case "InteractiveKMeans":
-            return <div><MyScatter2 clstrs ={kmeansConfig.ans1['clusters']} cntrds = {kmeansConfig.ans0['centroids']} hidden = {false} /></div>
+            return <div><InteractiveClusteringExample hidden = {false} /></div>
         case "StepKMeans":
-            return <div><MyDemo kmeans_gen={kmeansConfig.ans2} hidden = {false}/></div>
+            return <div><KMeansStepExample hidden = {false}/></div>
         case "KMeans":
             return <KMeans />
         default: return <div></div>
