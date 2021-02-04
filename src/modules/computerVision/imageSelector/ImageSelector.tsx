@@ -29,9 +29,14 @@ const ALL_IMGS: { [name: string]: any } = {
     .default,
 };
 
-const ImageSelector = (props: {
+type ImageSelectorType = {
   currImg: string;
   onSelect: (img: string, imgUrl: string) => any;
+};
+
+const ImageSelector: React.FC<ImageSelectorType> = (props: {
+  currImg;
+  onSelect;
 }) => {
   useEffect(() => props.onSelect(props.currImg, ALL_IMGS[props.currImg]), []);
 

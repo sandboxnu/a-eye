@@ -3,6 +3,7 @@ import logo from './media/landingPage/staticLogo.svg';
 
 function Footer() {
   const scrollTop = () => {
+    // eslint-disable-next-line
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -33,9 +34,7 @@ function Footer() {
             className="mb-8 hover:text-teal-300 duration-300 ease-in-out"
             href="mailto:info@sandboxneu.com"
           >
-            {' '}
             info@sandboxneu.com
-{' '}
           </a>
           <div> Hosted By Vercel </div>
         </div>

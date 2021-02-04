@@ -33,7 +33,7 @@ module.exports = {
       fontWeight: {
         micro: 25,
       },
-      backgroundImage: theme => ({
+      backgroundImage: () => ({
         about: 'url("../media/aboutPage/aboutCurve.svg")',
         'landing-page':
           'url("../media/landingPage/background_landing_page.svg")',
@@ -68,6 +68,7 @@ module.exports = {
       backgroundBlendMode: ['responsive'],
       isolation: ['responsive'],
     },
+    /* eslint-disable-next-line */
     plugins: [require('tailwindcss-blend-mode')()],
   },
 };

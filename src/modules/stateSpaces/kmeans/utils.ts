@@ -81,9 +81,9 @@ export type BubbleDataEntry = {
 export type AddedPointList = [AddedPoint[][], Function];
 
 // kmeans for clusters
-export const cluster_colors = ['#99FF99', '#99CCFF'];
-export const center_colors = ['#3cb450', '#5360fc'];
-export const centerborder_colors = ['#004E00', '#00007D'];
+export const clusterColors = ['#99FF99', '#99CCFF'];
+export const centerColors = ['#3cb450', '#5360fc'];
+export const centerborderColors = ['#004E00', '#00007D'];
 
 /*
  * @param data: array of points
@@ -99,7 +99,7 @@ export function getClasses(data: number[][], centers: number[][]) {
 // Data processing
 export const organiseData = (data: InputData[]) => {
   const organisedData: number[][] = [];
-  for (let i = 0; i < data.length; i++) {
+  for (let i = 0; i < data.length; i += 1) {
     const newRow: number[] = [];
     const curRow: InputData = data[i];
     if ((curRow as DataFormat).Distance_Feature) {
@@ -134,7 +134,7 @@ export const processdata = (
   k: number,
 ) => {
   // add centers
-  for (let c = 0; c < cntroids.length; c++) {
+  for (let c = 0; c < cntroids.length; c += 1) {
     const newCluster: NewClusterType[] = [];
     newCluster.push({
       x: cntroids[c][0],
@@ -142,8 +142,8 @@ export const processdata = (
       r: 3,
     });
 
-    const colour = center_colors[c];
-    const cb = centerborder_colors[c];
+    const colour = centerColors[c];
+    const cb = centerborderColors[c];
     bdata.push({
       label: [`center ${c}`],
       backgroundColor: colour,
@@ -155,9 +155,9 @@ export const processdata = (
   }
 
   // add clusters
-  for (let ci = 0; ci < k; ci++) {
+  for (let ci = 0; ci < k; ci += 1) {
     const newCluster: NewClusterType[] = [];
-    for (let ri = 0; ri < clsters.length; ri++) {
+    for (let ri = 0; ri < clsters.length; ri += 1) {
       if (clsters[ri] === ci) {
         newCluster.push({
           x: data3[ri][0],
@@ -167,7 +167,7 @@ export const processdata = (
       }
     }
 
-    const colour = cluster_colors[ci];
+    const colour = clusterColors[ci];
     bdata.push({
       label: [`cluster ${ci}`],
       backgroundColor: colour,

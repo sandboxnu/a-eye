@@ -10,6 +10,18 @@ import AboutPage from './aboutPage/AboutPage';
 import LandingPage from './landingPage/LandingPage';
 import ModulePage from './modulePage/ModulePage';
 
+// change colors as needed
+const THEME = createMuiTheme({
+  palette: {
+    primary: {
+      main: '#394D73', // same as footer color
+    },
+    secondary: {
+      main: '#0FD4C0', // logo teal
+    },
+  },
+});
+
 function App() {
   return (
     <BrowserRouter>
@@ -34,17 +46,5 @@ function App() {
     </BrowserRouter>
   );
 }
-
-// change colors as needed idk
-const THEME = createMuiTheme({
-  palette: {
-    primary: {
-      main: '#394D73', // same as footer color
-    },
-    secondary: {
-      main: '#0FD4C0', // logo teal
-    },
-  },
-});
 
 export default App;

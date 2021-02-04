@@ -5,8 +5,8 @@ import landing_background from '../media/landingPage/background_landing_page.svg
 import descriptions from '../media/modules/module_descriptions.json';
 import ModuleIntro from './ModuleIntro';
 
-const top_style: CSS.Properties = { backgroundImage: `url(${background_img})` };
-const bot_style: CSS.Properties = {
+const topStyle: CSS.Properties = { backgroundImage: `url(${background_img})` };
+const botStyle: CSS.Properties = {
   backgroundImage: `url(${landing_background})`,
 };
 
@@ -18,7 +18,7 @@ export default function LandingPage() {
     <div className="container w-screen">
       <div
         className="flex justify-center items-center bg-fixed bg-cover w-screen h-screen"
-        style={top_style}
+        style={topStyle}
       >
         <div className="mb-16">
           <p className="text-center text-white text-7xl italic font-semibold font-mono my-4">
@@ -36,7 +36,7 @@ export default function LandingPage() {
       </div>
       <div
         className="flex items-center bg-cover w-screen h-auto"
-        style={bot_style}
+        style={botStyle}
       >
         <ul className="list-none">
           {descriptions.modules.map(module => (

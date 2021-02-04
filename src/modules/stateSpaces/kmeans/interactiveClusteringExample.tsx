@@ -1,3 +1,6 @@
+/* eslint-disable react/no-this-in-sfc  */
+/* eslint-disable no-underscore-dangle */
+// must disable due to referencing the inside of the chart
 import React, { useState } from 'react';
 
 import dragData from 'chartjs-plugin-dragdata';
@@ -7,8 +10,7 @@ import trainData from './train.json';
 import trainDataIris from './iris.json';
 import trainDataIris2 from './iris2.json';
 import titanicData from './titanic.json';
-
-import './chartjs-plugin-dragdata.d.ts';
+import './chartjs-plugin-dragdata.d';
 
 import {
   organiseData,
@@ -62,12 +64,14 @@ const InteractiveClusteringExample: React.FC<InteractiveClusteringExampleType> =
   ],
 }) => {
   const organizedDatasets = [];
+  // TODO
+  // eslint-disable-next-line
   for (const dataset of trainingDatasets) {
     organizedDatasets.push(organiseData(dataset));
   }
 
   const kmeansAnswers: KMeansResult[] = [];
-  for (let i = 0; i < trainingDatasets.length; ++i) {
+  for (let i = 0; i < trainingDatasets.length; i += 1) {
     kmeansAnswers.push(
       kmeans(organizedDatasets[i], k, {
         initialization: centersList[i],
@@ -77,15 +81,6 @@ const InteractiveClusteringExample: React.FC<InteractiveClusteringExampleType> =
   }
 
   const [originalDataset, setO] = useState(0);
-
-  const changeO = (nextDataset: number) => {
-    setX1Idx(kmeansAnswers[nextDataset].centroids[0].centroid[0]);
-    setY1Idx(kmeansAnswers[nextDataset].centroids[0].centroid[1]);
-    setX2Idx(kmeansAnswers[nextDataset].centroids[1].centroid[0]);
-    setY2Idx(kmeansAnswers[nextDataset].centroids[1].centroid[1]);
-
-    setO(nextDataset);
-  };
 
   const centersx = kmeansAnswers[originalDataset].centroids;
 
@@ -113,17 +108,26 @@ const InteractiveClusteringExample: React.FC<InteractiveClusteringExampleType> =
   const [editable, setEdit] = useState(true);
   const [base, setBase] = useState(true);
 
+  const changeO = (nextDataset: number) => {
+    setX1Idx(kmeansAnswers[nextDataset].centroids[0].centroid[0]);
+    setY1Idx(kmeansAnswers[nextDataset].centroids[0].centroid[1]);
+    setX2Idx(kmeansAnswers[nextDataset].centroids[1].centroid[0]);
+    setY2Idx(kmeansAnswers[nextDataset].centroids[1].centroid[1]);
+
+    setO(nextDataset);
+  };
+
   let trainData2: InputData[] = trainingDatasets[originalDataset].slice();
 
   // Remove a percentage of the data
   if (originalDataset === 0) {
-    for (let i = trainData2.length; i > 0; i--) {
+    for (let i = trainData2.length; i > 0; i -= 1) {
       if (i % 20 === 0) {
         trainData2.splice(i, percentRemove);
       }
     }
   } else {
-    for (let i = trainData2.length; i > 0; i--) {
+    for (let i = trainData2.length; i > 0; i -= 1) {
       if (i % 4 === 0) {
         trainData2.splice(i, percentRemove - 16);
       }
@@ -151,20 +155,20 @@ const InteractiveClusteringExample: React.FC<InteractiveClusteringExampleType> =
   ];
 
   if (trainData2.length >= 2) {
-    const ans_x = kmeans(organiseData(trainData2), k, {
+    const ansX = kmeans(organiseData(trainData2), k, {
       initialization: c2,
       maxIterations: 1,
     });
     const data3 = organiseData(trainData2);
-    processdata(bubData, ans_x.clusters, c2, hidden, data3, k);
+    processdata(bubData, ansX.clusters, c2, hidden, data3, k);
   } else {
     const s = trainData2.concat(fakepoints);
-    const ans_x = kmeans(organiseData(s), k, {
+    const ansX = kmeans(organiseData(s), k, {
       initialization: c2,
       maxIterations: 1,
     });
     const data3 = organiseData(trainData2);
-    const clustersss = trainData2.length === 1 ? [ans_x.clusters[0]] : [];
+    const clustersss = trainData2.length === 1 ? [ansX.clusters[0]] : [];
     processdata(bubData, clustersss, c2, hidden, data3, k);
   }
 
@@ -176,9 +180,11 @@ const InteractiveClusteringExample: React.FC<InteractiveClusteringExampleType> =
   });
 
   // remove removethese from data
+  // TODO
+  // eslint-disable-next-line
   for (const removethese of pointsToRemove) {
-    for (let i = 0; i < removethese.length; i++) {
-      data.datasets[removethese[i].ds_index].data.splice(removethese[i].ind, 1);
+    for (let i = 0; i < removethese.length; i += 1) {
+      data.datasets[removethese[i].dsIndex].data.splice(removethese[i].ind, 1);
     }
   }
 
@@ -309,10 +315,10 @@ const InteractiveClusteringExample: React.FC<InteractiveClusteringExampleType> =
         const onCentroid = inXBounds && inYBounds;
 
         if (asdgwg && !onCentroid) {
-          const ds_index = asdgwg._datasetIndex;
+          const dsIndex = asdgwg._datasetIndex;
           const ind = asdgwg._index;
 
-          addPointToRemove(originalDataset, { ds_index, ind });
+          addPointToRemove(originalDataset, { dsIndex, ind });
 
           // @ts-ignore
           setX1Idx(this.chart.data.datasets[0].data[0].x + 0.1);
@@ -354,35 +360,47 @@ const InteractiveClusteringExample: React.FC<InteractiveClusteringExampleType> =
       <div className="flex-row space-x-10 mb-5">
         <div className="axis-selector inline">
           <button
+            type="button"
             className={percentRemove === 19 ? 'selected' : ''}
-            onClick={e => setPR(19)}
+            onClick={() => setPR(19)}
           >
             A Fourth of the Points
           </button>
           <button
+            type="button"
             className={percentRemove === 18 ? 'selected' : ''}
-            onClick={e => setPR(18)}
+            onClick={() => setPR(18)}
           >
             Half of the Points
           </button>
           <button
+            type="button"
             className={percentRemove === 16 ? 'selected' : ''}
-            onClick={e => setPR(16)}
+            onClick={() => setPR(16)}
           >
             All of the Points
           </button>
         </div>
         <div className="axis-selector inline">
-          <button style={{ color: 'white' }} onClick={e => setBase(!base)}>
+          <button
+            type="button"
+            style={{ color: 'white' }}
+            onClick={() => setBase(!base)}
+          >
             {' '}
             {base ? 'Show Only Custom' : 'Show Full Dataset'}
           </button>
-          <button style={{ color: 'white' }} onClick={e => setEdit(!editable)}>
-            {' '}
+          <button
+            type="button"
+            style={{ color: 'white' }}
+            onClick={() => setEdit(!editable)}
+          >
             {editable ? 'Disable Editing' : 'Enable Editing'}
-{' '}
           </button>
-          <button onClick={e => changeO((originalDataset + 1) % 4)}>
+          <button
+            type="button"
+            onClick={() => changeO((originalDataset + 1) % 4)}
+          >
             Current:
             {datasetLabel[originalDataset]}
           </button>

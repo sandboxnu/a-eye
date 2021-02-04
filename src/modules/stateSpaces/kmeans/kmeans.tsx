@@ -7,7 +7,7 @@ import {
   BubbleDataEntry,
   ScatterData,
   NewClusterType,
-  cluster_colors,
+  clusterColors,
 } from './utils';
 
 import InteractiveClusteringExample from './interactiveClusteringExample';
@@ -61,16 +61,16 @@ const App = () => {
 
   // processing for first chart
   // (convert from json to more agreeable format)
-  for (let ci = 0; ci < 1; ci++) {
+  for (let ci = 0; ci < 1; ci += 1) {
     const newCluster: NewClusterType[] = [];
-    for (let ri = 0; ri < trainData.length; ri++) {
+    for (let ri = 0; ri < trainData.length; ri += 1) {
       newCluster.push({
         x: trainData[ri].Distance_Feature,
         y: trainData[ri].Speeding_Feature,
         r: 3,
       });
     }
-    const colour = cluster_colors[ci];
+    const colour = clusterColors[ci];
     bubbleData.push({
       label: [`cluster #${ci}`],
       backgroundColor: colour,

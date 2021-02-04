@@ -1,29 +1,37 @@
 import React from 'react';
 import InteractiveFilter from './InteractiveFilter';
-import { convolute, getPixels, createImageData } from './filter';
-
-const pixelmatch = require('pixelmatch');
+import { convolute, getPixels } from './filter';
 
 // http://dev.theomader.com/gaussian-kernel-calculator/
 // https://blog.cloudboost.io/using-html5-canvas-with-react-ff7d93f5dc76
 
-const FilterByDiffKernel = (props: {
+type DiffByKernelType = {
   kernel?: number[];
   kernel2?: number[];
   imgUrl: string;
+};
+
+const FilterByDiffKernel: React.FC<DiffByKernelType> = ({
+  kernel = [],
+  kernel2 = [],
+  imgUrl,
 }) => (
   <InteractiveFilter
-    disabled={!props.kernel}
-    imgUrl={props.imgUrl}
+    disabled={!kernel}
+    imgUrl={imgUrl}
     filter={(inCanvas, outCanvas) => {
-      props.kernel && convolute(inCanvas, outCanvas, false, props.kernel);
+      if (kernel) {
+        convolute(inCanvas, outCanvas, false, kernel);
+      }
       const check = getPixels(outCanvas);
       if (!check) {
         return;
       }
       const result1 = Uint8ClampedArray.from(check.data);
 
-      props.kernel2 && convolute(inCanvas, outCanvas, false, props.kernel2);
+      if (kernel2) {
+        convolute(inCanvas, outCanvas, false, props.kernel2);
+      }
       const check2 = getPixels(outCanvas);
 
       if (!check2) {
@@ -35,7 +43,7 @@ const FilterByDiffKernel = (props: {
       const { height } = check;
 
       const diff = result1.map((pix, i) =>
-        (i + 1) % 4 == 0 ? 255 : 255 - Math.abs(pix - result2[i]),
+        (i + 1) % 4 === 0 ? 255 : 255 - Math.abs(pix - result2[i]),
       );
 
       const output = new ImageData(diff, width, height);

@@ -8,7 +8,6 @@ import PCADemo, {
   RawDataTable,
   SelectableAxisChart,
   StaticAxisChart,
-  AxisSelector,
   config as pcaConfig,
 } from '../modules/stateSpaces/pca/PCA';
 
@@ -31,89 +30,6 @@ interface ColorScheme {
   headingColor: string;
   bodyColor: string;
   labelColorHex: string;
-}
-
-/**
- * Renders a single section on the module page.
- *
- * @param props.title section title
- * @param props.sections subsections of the section
- * @param props.colorScheme configuration for the section's color scheme, see ColorScheme interface
- * @param props.key section's identifier; usually the section title
- * @param props.demoComp name of the React component used as a demo
- */
-export default function ModuleSection(props: {
-  title: string;
-  sections: ModuleSubsection[];
-  colorScheme: string;
-  key: string;
-  demoComp: string;
-}) {
-  const scheme =
-    props.colorScheme === 'dark'
-      ? {
-        bgColor: 'bg-moduleDarkBlue',
-        titleColor: 'text-modulePaleBlue',
-        headingColor: 'text-moduleTeal',
-        bodyColor: 'text-moduleOffwhite',
-        labelColorHex: '#CBD9F2',
-      }
-      : {
-        bgColor: 'bg-modulePaleBlue',
-        titleColor: 'text-moduleNavy',
-        headingColor: 'text-moduleDarkBlue',
-        bodyColor: 'text-moduleNavy',
-        labelColorHex: '#394D73',
-      };
-
-  return (
-    <div className={`flex flex-col w-screen ${scheme.bgColor}`}>
-      <div className="mx-12 md:mx-40">
-        <p
-          className={`my-12 text-3xl md:text-6xl italic font-bold font-opensans ${scheme.titleColor}`}
-        >
-          {props.title}
-        </p>
-        <ul className="">
-          {props.sections.map((section, index) => (
-            <div
-              className={`flex flex-col md:flex-row mx-2 md:my-5 ${
-                section.imgSrc === '/blank.png' && 'my-10'
-              } ${section.body ? '' : 'hidden'}`}
-              key={index}
-            >
-              <img
-                src={GetImage(section.imgSrc)}
-                alt=""
-                className={`hidden ${index % 2 !== 0 && 'md:flex'} ${
-                  section.imgSrc === '/blank.png'
-                    ? 'hidden md:object-none'
-                    : 'object-contain'
-                } md:w-1/4 md:mr-16 md:-mt-12`}
-              />
-              <div className="md:w-2/3 flex-col">
-                <p
-                  className={`my-2 text-left text-lg font-medium font-mono ${scheme.bodyColor}`}
-                >
-                  {section.body || lorem}
-                </p>
-              </div>
-              <img
-                src={GetImage(section.imgSrc)}
-                alt=""
-                className={`${index % 2 !== 0 && 'md:hidden'} ${
-                  section.imgSrc === '/blank.png'
-                    ? 'hidden md:object-none'
-                    : 'object-contain'
-                } md:w-1/4 md:mr-16 md:-mt-12`}
-              />
-            </div>
-          ))}
-        </ul>
-        {getDemo(props.demoComp, scheme)}
-      </div>
-    </div>
-  );
 }
 
 function GetImage(imgName: string) {
@@ -218,3 +134,93 @@ function getDemo(comp: string, scheme: ColorScheme) {
       return <div />;
   }
 }
+
+/**
+ * Renders a single section on the module page.
+ *
+ * @param props.title section title
+ * @param props.sections subsections of the section
+ * @param props.colorScheme configuration for the section's color scheme, see ColorScheme interface
+ * @param props.demoComp name of the React component used as a demo
+ */
+type ModuleSectionType = {
+  title: string;
+  sections: ModuleSubsection[];
+  colorScheme: string;
+  key: string;
+  demoComp: string;
+};
+const ModuleSection: React.FC<ModuleSectionType> = ({
+  title,
+  sections,
+  colorScheme,
+  demoComp,
+}) => {
+  const scheme =
+    colorScheme === 'dark'
+      ? {
+          bgColor: 'bg-moduleDarkBlue',
+          titleColor: 'text-modulePaleBlue',
+          headingColor: 'text-moduleTeal',
+          bodyColor: 'text-moduleOffwhite',
+          labelColorHex: '#CBD9F2',
+        }
+      : {
+          bgColor: 'bg-modulePaleBlue',
+          titleColor: 'text-moduleNavy',
+          headingColor: 'text-moduleDarkBlue',
+          bodyColor: 'text-moduleNavy',
+          labelColorHex: '#394D73',
+        };
+
+  return (
+    <div className={`flex flex-col w-screen ${scheme.bgColor}`}>
+      <div className="mx-12 md:mx-40">
+        <p
+          className={`my-12 text-3xl md:text-6xl italic font-bold font-opensans ${scheme.titleColor}`}
+        >
+          {title}
+        </p>
+        <ul className="">
+          {sections.map((section, index) => (
+            <div
+              className={`flex flex-col md:flex-row mx-2 md:my-5 ${
+                section.imgSrc === '/blank.png' && 'my-10'
+              } ${section.body ? '' : 'hidden'}`}
+              key={index}
+            >
+              <img
+                src={GetImage(section.imgSrc)}
+                alt=""
+                className={`hidden ${index % 2 !== 0 && 'md:flex'} ${
+                  section.imgSrc === '/blank.png'
+                    ? 'hidden md:object-none'
+                    : 'object-contain'
+                } md:w-1/4 md:mr-16 md:-mt-12`}
+              />
+              <div className="md:w-2/3 flex-col">
+                <p
+                  className={`my-2 text-left text-lg font-medium font-mono ${scheme.bodyColor}`}
+                >
+                  {section.body || lorem}
+                </p>
+              </div>
+              <img
+                src={GetImage(section.imgSrc)}
+                alt=""
+                className={`${index % 2 !== 0 && 'md:hidden'} ${
+                  section.imgSrc === '/blank.png'
+                    ? 'hidden md:object-none'
+                    : 'object-contain'
+                } md:w-1/4 md:mr-16 md:-mt-12`}
+              />
+            </div>
+          ))}
+        </ul>
+        {getDemo(demoComp, scheme)}
+      </div>
+    </div>
+  );
+};
+
+export default ModuleSection;

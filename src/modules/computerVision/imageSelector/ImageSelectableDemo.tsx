@@ -29,9 +29,9 @@ export const ImageSelectableDemo = ({
   const [imgName, setImgName] = useState(initImg);
   const [imgUrl, setImgUrl] = useState('');
 
-  const onImgChange = (img: string, imgUrl: string) => {
+  const onImgChange = (img: string, url: string) => {
     setImgName(img);
-    setImgUrl(imgUrl);
+    setImgUrl(url);
   };
 
   return (

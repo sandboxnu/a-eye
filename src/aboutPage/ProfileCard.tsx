@@ -11,12 +11,19 @@ import emailIcon from '../media/aboutPage/mail-24px.svg';
  * @param props.email email address of the person
  * @param props.linkedin linkedin url of the person
  */
-const ProfileCard = (props: {
+type ProfileCardType = {
   image: string;
   name: string;
   title: string;
   email: string;
   linkedin: string;
+};
+const ProfileCard: React.FC<ProfileCardType> = ({
+  image,
+  name,
+  title,
+  email,
+  linkedin,
 }) => {
   const [hovered, setHovered] = useState(false);
 
@@ -26,7 +33,7 @@ const ProfileCard = (props: {
       id="image-overlay"
       className="bg-transteal absolute flex justify-center items-center h-48 w-48 rounded-full"
     >
-      <a href={props.linkedin} target="_blank" rel="noopener noreferrer">
+      <a href={linkedin} target="_blank" rel="noopener noreferrer">
         <div
           id="icon linkedin"
           className="rounded-full bg-navy h-10 w-10 flex items-center justify-around m-3"
@@ -34,7 +41,7 @@ const ProfileCard = (props: {
           <img className="h-4" alt="LinkedIn Address" src={linkedinIcon} />
         </div>
       </a>
-      <a href={`mailto:${props.email}`}>
+      <a href={`mailto:${email}`}>
         <div
           id="icon linkedin"
           className="rounded-full bg-navy h-10 w-10 flex items-center justify-around m-3"
@@ -57,18 +64,14 @@ const ProfileCard = (props: {
         onMouseLeave={() => setHovered(false)}
       >
         {hovered && <Overlay />}
-        <img
-          className="h-48 w-48 rounded-full"
-          alt="Profile"
-          src={props.image}
-        />
+        <img className="h-48 w-48 rounded-full" alt="Profile" src={image} />
       </div>
       <div className="caption">
         <p id="name" className="font-bold text-bgdiff mb-0 blend-difference">
-          {props.name}
+          {name}
         </p>
         <p id="title" className="italic text-teal-a-eye">
-          {props.title}
+          {title}
         </p>
       </div>
     </div>

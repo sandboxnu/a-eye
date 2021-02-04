@@ -10,6 +10,7 @@ ReactDOM.render(
   <React.StrictMode>
     <App />
   </React.StrictMode>,
+  // eslint-disable-next-line
   document.getElementById('root'),
 );
 

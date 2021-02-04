@@ -11,10 +11,15 @@ import React, { useLayoutEffect, useRef, useState } from 'react';
  * @param props.imgUrl  url to the image to display
  * @param props.disabled  whether or not the "apply filter" button should be disabled
  */
-const InteractiveFilter = (props: {
+type InteractiveFilterType = {
   filter: (inCanvas: HTMLCanvasElement, outCanvas: HTMLCanvasElement) => any;
   imgUrl: string;
   disabled: boolean;
+};
+const InteractiveFilter: React.FC<InteractiveFilterType> = ({
+  filter,
+  imgUrl,
+  disabled,
 }) => {
   const [isFiltered, setIsFiltered] = useState(false);
   const [imgWidth, setImgWidth] = useState<number | undefined>(undefined);
@@ -41,7 +46,7 @@ const InteractiveFilter = (props: {
     const inputElem = inputCanvas.current; // get the DOM element for the canvas
     const outputElem = outputCanvas.current;
     if (!(inputElem && outputElem)) return;
-    props.filter(inputElem, outputElem);
+    filter(inputElem, outputElem);
     setIsFiltered(true);
   };
 
@@ -58,7 +63,7 @@ const InteractiveFilter = (props: {
   return (
     <div>
       <div>
-        <img ref={imgRef} src={props.imgUrl} alt="input" className="hidden" />
+        <img ref={imgRef} src={imgUrl} alt="input" className="hidden" />
         <canvas
           className="inline m-2 crisp-pixels w-35vw"
           ref={inputCanvas}
@@ -73,8 +78,9 @@ const InteractiveFilter = (props: {
         />
       </div>
       <button
+        type="button"
         className="basic-button"
-        disabled={props.disabled}
+        disabled={disabled}
         onClick={() => (isFiltered ? resetImage() : applyFilter())}
       >
         {isFiltered ? 'Reset Image' : 'Apply Filter'}

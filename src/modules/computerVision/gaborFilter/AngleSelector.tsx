@@ -9,14 +9,17 @@ import mainCircle from './main-circle.svg';
  * @param props.initAngle {number} initial angle for the selector, in radians
  * @param props.onAngleChange {function} callback for when the angle changes
  */
-const AngleSelector = ({
-  diameter,
-  initAngle = 0,
-  onAngleChange,
-}: {
+
+type AngleSelectorType = {
   diameter: string;
   initAngle?: number;
   onAngleChange: (angle: number) => any;
+};
+
+const AngleSelector: React.FC<AngleSelectorType> = ({
+  diameter,
+  initAngle = 0,
+  onAngleChange,
 }) => {
   const [moving, setMoving] = useState(false);
   const [angle, setAngle] = useState<number | string>(initAngle); // in radians
@@ -58,6 +61,7 @@ const AngleSelector = ({
           }}
         >
           <div
+            aria-hidden
             className="handle-hitbox"
             onMouseDown={() => setMoving(true)}
             onMouseUp={() => setMoving(false)}
@@ -68,14 +72,14 @@ const AngleSelector = ({
           </div>
         </div>
       </div>
-      <label className="angle-textbox">
+      <label htmlFor="angleselector" className="angle-textbox">
         <input
           className="angle-textbox-input number-input"
           value={angle}
           onChange={e => {
             setAngle(e.target.value);
             const val = parseFloat(e.target.value);
-            if (!isNaN(val)) onAngleChange(val);
+            if (!Number.isNaN(val)) onAngleChange(val);
           }}
         />
         radians

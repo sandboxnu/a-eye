@@ -1,7 +1,10 @@
-export { convolute, getPixels, createImageData };
-
 /// utility functions for filtering / manipulating a DOM canvas
 // reference: https://www.html5rocks.com/en/tutorials/canvas/imagefilters/
+
+function getPixels(canvas: HTMLCanvasElement) {
+  const ctx = canvas.getContext('2d');
+  return ctx && ctx.getImageData(0, 0, canvas.width, canvas.height);
+}
 
 /**
  * Run an image convolution based on inCanvas, and draws the output to outCanvas.
@@ -37,7 +40,7 @@ function convolute(
   const alphaFac = opaque ? 1 : 0;
 
   const processRow = (y: number) => {
-    for (let x = 0; x < w; x++) {
+    for (let x = 0; x < w; x += 1) {
       const sy = y;
       const sx = x;
       const dstOff = (y * w + x) * 4;
@@ -48,8 +51,8 @@ function convolute(
       let g = 0;
       let b = 0;
       let a = 0;
-      for (let cy = 0; cy < side; cy++) {
-        for (let cx = 0; cx < side; cx++) {
+      for (let cy = 0; cy < side; cy += 1) {
+        for (let cx = 0; cx < side; cx += 1) {
           const scy = sy + cy - halfSide;
           const scx = sx + cx - halfSide;
           if (scy >= 0 && scy < sh && scx >= 0 && scx < sw) {
@@ -74,27 +77,24 @@ function convolute(
   };
 
   if (animate) {
-    var y = 0;
+    let y = 0;
     const interval = setInterval(() => {
       processRow(y);
       outCanvas.getContext('2d')?.putImageData(output, 0, 0);
-      y++;
+      y += 1;
       if (y >= h) clearInterval(interval);
     }, 10);
   } else {
-    for (var y = 0; y < h; y++) {
+    for (let y = 0; y < h; y += 1) {
       processRow(y);
     }
     outCanvas.getContext('2d')?.putImageData(output, 0, 0);
   }
 }
 
-function getPixels(canvas: HTMLCanvasElement) {
-  const ctx = canvas.getContext('2d');
-  return ctx && ctx.getImageData(0, 0, canvas.width, canvas.height);
-}
-
 function createImageData(canvas: HTMLCanvasElement) {
   const ctx = canvas.getContext('2d');
   return ctx && ctx.createImageData(canvas.width, canvas.height);
 }
+
+export { convolute, getPixels, createImageData };

@@ -7,20 +7,28 @@ export { BasicScatter };
 type DataSeriesMap = { [dataClass: string]: Array<{ x: number; y: number }> };
 type ColorMap = { [dataClass: string]: string };
 
-const BasicScatter = (props: {
+type BasicScatterType = {
   points: DataSeriesMap;
   xLabel: string;
   yLabel: string;
   colorMap: ColorMap;
   labelColorHex: string;
+};
+
+const BasicScatter: React.FC<BasicScatterType> = ({
+  points,
+  xLabel,
+  yLabel,
+  colorMap,
+  labelColorHex,
 }) => {
   const data: { datasets: Object[] } = { datasets: [] };
-  Object.entries(props.points).forEach(([dataClass, classPoints]) => {
+  Object.entries(points).forEach(([dataClass, classPoints]) => {
     data.datasets.push({
       label: dataClass,
       fill: true,
       pointRadius: 4,
-      backgroundColor: props.colorMap[dataClass],
+      backgroundColor: colorMap[dataClass],
       data: classPoints,
     });
   });
@@ -32,11 +40,11 @@ const BasicScatter = (props: {
         {
           scaleLabel: {
             display: true,
-            labelString: props.yLabel,
+            labelString: yLabel,
             fontSize: 16,
             fontFamily: 'open sans',
             fontStyle: 'italic bold',
-            fontColor: props.labelColorHex,
+            fontColor: labelColorHex,
           },
           gridLines: { lineWidth: 3, color: '#8D9DBA' },
           ticks: { fontColor: '#394D73' },
@@ -46,11 +54,11 @@ const BasicScatter = (props: {
         {
           scaleLabel: {
             display: true,
-            labelString: props.xLabel,
+            labelString: xLabel,
             fontSize: 16,
             fontFamily: 'open sans',
             fontStyle: 'italic bold',
-            fontColor: props.labelColorHex,
+            fontColor: labelColorHex,
           },
           gridLines: { lineWidth: 3, color: '#8D9DBA' },
           ticks: { fontColor: '#394D73' },
@@ -62,7 +70,7 @@ const BasicScatter = (props: {
         fontSize: 14,
         fontFamily: 'open sans',
         fontStyle: 'bold',
-        fontColor: props.labelColorHex,
+        fontColor: labelColorHex,
       },
     },
   };
