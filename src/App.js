@@ -11,7 +11,6 @@ import LandingPage from "./landingPage/LandingPage";
 import ModulePage from "./modulePage/ModulePage";
 
 function App() {
-  console.log("please");
   return (
       <BrowserRouter>
         <div className="App" id="app">
