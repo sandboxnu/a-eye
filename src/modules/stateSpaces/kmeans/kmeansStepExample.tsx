@@ -243,8 +243,8 @@ const KMeansStepExample: React.FC<KMeansStepExampleType> = ({
             onClick={changeO}
             className="rounded w-1/3 mx-auto px-1 py-2 bg-moduleNavy hover:text-moduleTeal outline-none"
           >
-            Current:
-            {datasetLabel[original]}
+            {/* eslint-disable-next-line */}
+            Current: {datasetLabel[original]}
           </button>
         </div>
       </div>
