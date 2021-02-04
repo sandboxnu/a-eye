@@ -6,7 +6,9 @@ import descriptions from '../media/modules/module_descriptions.json';
 import ModuleIntro from './ModuleIntro';
 
 const top_style: CSS.Properties = { backgroundImage: `url(${background_img})` };
-const bot_style: CSS.Properties = { backgroundImage: `url(${landing_background})` };
+const bot_style: CSS.Properties = {
+  backgroundImage: `url(${landing_background})`,
+};
 
 /**
  * Renders the landing page.
