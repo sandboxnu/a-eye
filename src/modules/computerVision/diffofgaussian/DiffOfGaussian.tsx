@@ -16,9 +16,10 @@ const generateGaussianKernel = require('gaussian-convolution-kernel');
 
 type KernelConfigType = {
   labelColor: string;
+  onConfig: (kernelSize: number, sigma: number, sigma2: number) => void;
 };
 
-const KernelConfig: React.FC<KernelConfigType> = ({ labelColor }) => {
+const KernelConfig: React.FC<KernelConfigType> = ({ labelColor, onConfig }) => {
   const [kernelSize, setKernelSize] = useState<number>(5);
   const [sigma, setSigma] = useState<number>(1);
   const [sigma2, setSigma2] = useState<number>(3);
@@ -100,7 +101,7 @@ const KernelConfig: React.FC<KernelConfigType> = ({ labelColor }) => {
         type="button"
         className="basic-button"
         disabled={invalidConfig}
-        onClick={() => props.onConfig(kernelSize, sigma, sigma2)}
+        onClick={() => onConfig(kernelSize, sigma, sigma2)}
       >
         Generate Kernel
       </button>

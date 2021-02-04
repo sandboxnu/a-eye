@@ -64,7 +64,7 @@ export type ScatterDataData = {
 };
 
 // points to remove
-export type PointToRemove = { ds_index: number; ind: number };
+export type PointToRemove = { dsIndex: number; ind: number };
 export type PointToRemoveList = [PointToRemove[][], Function];
 
 export type NewClusterType = { x: number; y: number; r: number };

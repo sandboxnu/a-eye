@@ -10,14 +10,12 @@ type FilterByKernelType = {
   imgUrl: string;
 };
 
-const FilterByKernel: React.FC<FilterByKernelType> = ({
-  kernel = [],
-  imgUrl,
-}) => (
+const FilterByKernel: React.FC<FilterByKernelType> = ({ kernel, imgUrl }) => (
   <InteractiveFilter
     disabled={!kernel}
     imgUrl={imgUrl}
     filter={(inCanvas, outCanvas) => {
+      console.log('in filter by kernel', inCanvas, outCanvas);
       if (kernel) {
         convolute(inCanvas, outCanvas, true, kernel);
       }

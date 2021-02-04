@@ -12,14 +12,21 @@ type DiffByKernelType = {
 };
 
 const FilterByDiffKernel: React.FC<DiffByKernelType> = ({
-  kernel = [],
-  kernel2 = [],
+  kernel,
+  kernel2,
   imgUrl,
 }) => (
   <InteractiveFilter
     disabled={!kernel}
     imgUrl={imgUrl}
     filter={(inCanvas, outCanvas) => {
+      console.log(
+        'big switch in FilterByDiffKernel',
+        inCanvas,
+        outCanvas,
+        kernel,
+        kernel2,
+      );
       if (kernel) {
         convolute(inCanvas, outCanvas, false, kernel);
       }
@@ -30,7 +37,7 @@ const FilterByDiffKernel: React.FC<DiffByKernelType> = ({
       const result1 = Uint8ClampedArray.from(check.data);
 
       if (kernel2) {
-        convolute(inCanvas, outCanvas, false, props.kernel2);
+        convolute(inCanvas, outCanvas, false, kernel2);
       }
       const check2 = getPixels(outCanvas);
 

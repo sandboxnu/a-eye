@@ -10,9 +10,9 @@ export default function ModuleDropdown() {
       <button
         type="button"
         onMouseOver={() => setButtonHover(true)}
-        onBlur={() => setButtonHover(true)}
+        onFocus={() => setButtonHover(true)}
         onMouseOut={() => setButtonHover(false)}
-        onFocus={() => setButtonHover(false)}
+        onBlur={() => setButtonHover(false)}
       >
         <p className="text-xs text-white uppercase font-opensans font-bold">
           Modules
@@ -23,9 +23,9 @@ export default function ModuleDropdown() {
           !(buttonHover || dropdownHover) && 'hidden'
         } -mt-1 -ml-10 justify-start rounded-b divide-y divide-moduleDarkBlue bg-navbar`}
         onMouseOver={() => setDropdownHover(true)}
-        onBlur={() => setDropdownHover(true)}
+        onFocus={() => setDropdownHover(true)}
         onMouseOut={() => setDropdownHover(false)}
-        onFocus={() => setDropdownHover(false)}
+        onBlur={() => setDropdownHover(false)}
       >
         <br />
         {descriptions.modules.map(module => (

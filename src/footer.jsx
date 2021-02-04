@@ -40,6 +40,7 @@ function Footer() {
         </div>
       </div>
       <div
+        aria-hidden
         className="flex bg-scrollBox w-3 sm:w-6 lg:w-20  justify-center  hover:text-teal-300 duration-300 ease-in-out"
         id="scroll-top-container"
         onClick={scrollTop}

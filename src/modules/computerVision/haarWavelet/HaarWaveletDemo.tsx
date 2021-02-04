@@ -49,6 +49,7 @@ const HaarWaveletDemo: React.FC<HaarWaveletDemoType> = ({
         disabled={invalidConfig}
         imgUrl={imgUrl}
         filter={(inCanvas, outCanvas) => {
+          console.log('called filter function in haar filter');
           haarFilter(inCanvas, outCanvas, recursions);
         }}
       />

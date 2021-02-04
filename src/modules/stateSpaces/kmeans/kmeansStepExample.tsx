@@ -116,16 +116,16 @@ const KMeansStepExample: React.FC<KMeansStepExampleType> = ({
   //   : original === 1
   //   ? organiseData(trainDataIris)
   //   : organiseData(trainDataIris2);
-  switch (original) {
-    case 0:
-      organiseData(trainData);
-      break;
-    case 1:
-      organiseData(trainDataIris);
-      break;
-    default:
-      organiseData(trainDataIris2);
-  }
+  const data3 = (() => {
+    switch (original) {
+      case 0:
+        return organiseData(trainData);
+      case 1:
+        return organiseData(trainDataIris);
+      default:
+        return organiseData(trainDataIris2);
+    }
+  })();
 
   const cntrdss = gen[r].centroids;
   const c2 = [cntrdss[0].centroid, cntrdss[1].centroid];

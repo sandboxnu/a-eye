@@ -48,7 +48,7 @@ datasetIris.getDistinctClasses().forEach((dataClass: string, i: number) => {
   colorMap[dataClass] = COLORS[i] || '#de425b';
   dataByClass[dataClass] = [];
   dataset.forEach((row, idx) => {
-    if (dataClass === classes[idx]) {
+    if (dataClass === irisClasses[idx]) {
       dataByClass[dataClass].push(
         [prediction.get(idx, 0), prediction.get(idx, 1)].concat(row),
       );
@@ -89,7 +89,7 @@ export const RawDataTable = () => {
                       <td key={idx}>{val}</td>
                     </>
                   ))}
-                  <td>{showClass && classes[idx]}</td>
+                  <td>{showClass && irisClasses[idx]}</td>
                 </tr>
               </>
             ))}
@@ -201,8 +201,8 @@ export const StaticAxisChart: React.FC<StaticAxisChartType> = ({
   const points: DataSeriesMap = {};
   classes.forEach(dataClass => {
     points[dataClass] = dataByClass[dataClass].map(row => ({
-      x: row[props.xIdx],
-      y: row[props.yIdx],
+      x: row[xIdx],
+      y: row[yIdx],
     }));
   });
 

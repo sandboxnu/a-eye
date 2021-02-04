@@ -16,7 +16,7 @@ type KernelGridType = {
 };
 
 const KernelDisplay: React.FC<KernelGridType> = ({
-  kernelGrid = [[]],
+  kernelGrid = undefined,
   labelColor,
 }) => {
   const [showNums, setShowNums] = useState(true);
