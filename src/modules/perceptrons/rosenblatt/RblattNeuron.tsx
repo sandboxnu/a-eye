@@ -1,6 +1,6 @@
 import React from 'react';
 import {InputLines} from '../mpNeuron/MPNeuron';
-import {RblattConfig, RblattInput} from './RosenblattDemo';
+import {RblattConfig, RblattInput} from './constants';
 
 // todo: make output colors match orange/blue
 // actually that doesnt work bc the output color changes based on the updated config

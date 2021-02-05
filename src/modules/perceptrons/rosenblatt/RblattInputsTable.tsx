@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { RblattInput } from './RosenblattDemo';
+import { RblattInput } from './constants';
 
 const RblattInputsTable = (props: { data: RblattInput[], labelColor: string }) => {
 
