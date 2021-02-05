@@ -85,6 +85,7 @@ const RosenBlattDemo = (props: { labelColor: string }) => {
         setConfig(INIT_CONFIG);
         setInputs(INIT_INPUTS);
         setCurrPoint(0);
+        updateErrors(INIT_INPUTS, INIT_CONFIG);
     }
 
     return (
