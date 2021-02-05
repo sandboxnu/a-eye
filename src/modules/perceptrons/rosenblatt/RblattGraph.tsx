@@ -10,9 +10,9 @@ type RblattGraphProps = {
     onInputsChange: (inpts: React.SetStateAction<RblattInput[]>) => void
  }
 
-const isInitialInputPoint = (x: number, y: number) => {
+const isInitialInputPoint = (xCoord: number, yCoord: number) => {
     INIT_INPUTS.forEach(({x: xInit, y: yInit}) => {
-        if(xInit === x && yInit === y) {
+        if(xInit === xCoord && yInit === yCoord) {
             return true;
         }
     });
@@ -69,12 +69,13 @@ const RblattGraph = (props: RblattGraphProps) => {
     useEffect(() => {
         console.log('refreshing points', props.inputs);
         if(board) {
-            props.inputs.forEach(({x, y, z}) => {
-                console.log(x, y, z);
+            props.inputs.forEach(({x, y}) => {
+                console.log(x, y);
                 for (let el in board.objects) {
-                    if (JXG.isPoint(board.objects[el]) && board.objects[el].hasPoint(x, y) && !isInitialInputPoint(x, y)) {
-                        console.log('point to remove', el, board.objects[el], x, y);
-                        removePoint(el, x, y);
+                    JXG.isPoint(board.objects[el]) && console.log( JXG.isPoint(board.objects[el]), board.objects[el].hasPoint(x, y), !isInitialInputPoint(x, y));
+                    if (JXG.isPoint(board.objects[el]) && isInitialInputPoint(x, y)) {
+                        board.removeObject(el); 
+                        // removePoint(el, x, y);
                     }
                 }
             })
