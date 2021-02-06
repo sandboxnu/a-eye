@@ -6,7 +6,13 @@ const RblattVectorsDemo = () => {
     const [brdId, setBrdId] = useState('board_' + Math.random().toString(36).substr(2, 9));
     const [phase, setPhase] = useState(0);
     const [board, setBoard] = useState<any>(null);
-    const [perpPoint, setPerpPoint] = useState<any>(null); 
+    const [perpPoint, setPerpPoint] = useState<any>(null);
+    const phaseMessages = [
+        'The initial classification line is represented by its perpendicular vector Wt.',
+        'After finding a misclassified point, we calculate the distance d between it and the vector\'s origin/',
+        'We then calculate the new vector by subtracting d from Wt.',
+        'Finally, we update the classification line to be perpendicular to the new vector (Wt - d).'];
+    const [brdMsg, setBrdMsg] = useState<string>(phaseMessages[0]);
 
     useEffect(() => {
         const newBoard = JXG.JSXGraph.initBoard(brdId, { boundingbox: [2, 6, 7, 0], axis: true });
@@ -22,12 +28,13 @@ const RblattVectorsDemo = () => {
             { strokeColor: 'black', strokeWidth: 2, fixed: true, name: 'Wt', withLabel:true, label: {position: 'top'} });
         const li = newBoard.create('perpendicular', [perpArrow, MAINLINE_INTERSECTION], 
             { name: 'mainLine',  withLabel:false, strokeColor: 'black', strokeWidth: 2, fixed: true });
-        newBoard.create('inequality', [li], {name: 'ineq1', inverse: true, fillColor: COL_0});
-        newBoard.create('inequality', [li], {name: 'ineq2', fillColor: COL_1 });
+        newBoard.create('inequality', [li], {name: 'ineq1', fillColor: COL_0});
+        newBoard.create('inequality', [li], {name: 'ineq2', inverse: true, fillColor: COL_1 });
     }, []);
 
     // todo colors
     const goNext = () => {
+        setBrdMsg(phaseMessages[phase+1]);
         switch (phase) {
             case 0:
                 board?.select({
@@ -64,6 +71,7 @@ const RblattVectorsDemo = () => {
     }
 
     const goPrev = () => {
+        setBrdMsg(phaseMessages[phase-1]);
         switch (phase) {
             case 1:
                 board?.select({
@@ -103,6 +111,7 @@ const RblattVectorsDemo = () => {
             <button className='basic-button' onClick={goNext} disabled={phase === 3}>
                 Next Step
             </button>
+            <p className=''>{brdMsg}</p>
         </div>
     );
 }
