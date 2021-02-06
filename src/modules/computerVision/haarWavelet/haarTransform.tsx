@@ -34,7 +34,6 @@ function haarFilter(
   outCanvas: HTMLCanvasElement,
   iterations: number,
 ) {
-  console.log('haar filter function call');
   const inData = inCanvas
     .getContext('2d')
     ?.getImageData(0, 0, inCanvas.width, inCanvas.height);

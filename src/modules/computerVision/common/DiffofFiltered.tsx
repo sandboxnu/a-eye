@@ -20,13 +20,6 @@ const FilterByDiffKernel: React.FC<DiffByKernelType> = ({
     disabled={!kernel}
     imgUrl={imgUrl}
     filter={(inCanvas, outCanvas) => {
-      console.log(
-        'big switch in FilterByDiffKernel',
-        inCanvas,
-        outCanvas,
-        kernel,
-        kernel2,
-      );
       if (kernel) {
         convolute(inCanvas, outCanvas, false, kernel);
       }

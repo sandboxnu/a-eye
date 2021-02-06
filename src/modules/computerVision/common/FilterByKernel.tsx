@@ -15,7 +15,6 @@ const FilterByKernel: React.FC<FilterByKernelType> = ({ kernel, imgUrl }) => (
     disabled={!kernel}
     imgUrl={imgUrl}
     filter={(inCanvas, outCanvas) => {
-      console.log('in filter by kernel', inCanvas, outCanvas);
       if (kernel) {
         convolute(inCanvas, outCanvas, true, kernel);
       }

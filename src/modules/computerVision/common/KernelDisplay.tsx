@@ -55,6 +55,7 @@ const KernelDisplay: React.FC<KernelGridType> = ({
         <table className="m-auto">
           <tbody>
             {kernelGrid.map((row, i) => (
+              // eslint-disable-next-line
               <tr key={i}>{row.map((val, j) => getCell(val, j))}</tr>
             ))}
           </tbody>

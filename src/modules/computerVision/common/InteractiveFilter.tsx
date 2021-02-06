@@ -46,7 +46,6 @@ const InteractiveFilter: React.FC<InteractiveFilterType> = ({
     const inputElem = inputCanvas.current; // get the DOM element for the canvas
     const outputElem = outputCanvas.current;
     if (!(inputElem && outputElem)) return;
-    console.log('applying filter with', inputElem, outputElem);
     filter(inputElem, outputElem);
     setIsFiltered(true);
   };

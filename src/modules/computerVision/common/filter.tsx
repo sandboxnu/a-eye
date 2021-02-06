@@ -23,9 +23,7 @@ function convolute(
   weights: number[],
   opaque?: boolean,
 ) {
-  console.log('convolute', inCanvas, outCanvas, animate, weights, opaque);
   const pixels = getPixels(inCanvas);
-  console.log(' is the out canvas the problem?', pixels);
   const output = getPixels(outCanvas);
   if (!pixels || !output) return;
 

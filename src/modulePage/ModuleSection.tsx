@@ -187,11 +187,13 @@ const ModuleSection: React.FC<ModuleSectionType> = ({
           {title}
         </p>
         <ul className="">
+          {/* eslint-disable-next-line */}
           {sections.map((section, index) => (
             <div
               className={`flex flex-col md:flex-row mx-2 md:my-5 ${
                 section.imgSrc === '/blank.png' && 'my-10'
               } ${section.body ? '' : 'hidden'}`}
+              // eslint-disable-next-line
               key={index}
             >
               <img
