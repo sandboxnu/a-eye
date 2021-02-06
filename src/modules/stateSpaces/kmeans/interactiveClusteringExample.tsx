@@ -40,7 +40,7 @@ const InteractiveClusteringExample: React.FC<InteractiveClusteringExampleType> =
     ],
 }) => {
 
-    let organizedDatasets = [];
+    let organizedDatasets: number[][][] = [];
     for(const dataset of trainingDatasets) {
         organizedDatasets.push(organiseData(dataset));
     };
