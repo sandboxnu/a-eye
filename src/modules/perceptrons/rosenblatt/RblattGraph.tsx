@@ -2,12 +2,15 @@ import React, { useEffect, useState } from 'react';
 import { RblattInput, RblattConfig, INIT_CONFIG, INIT_INPUTS } from './constants';
 import JXG from 'jsxgraph';
 
+
 type RblattGraphProps = { 
     inputs: RblattInput[], 
     line: RblattConfig, 
     highlighted: RblattInput,
     editingType: {val:  0 | 1 | null}, 
-    onInputsChange: (inpts: React.SetStateAction<RblattInput[]>) => void
+    onInputsChange: (inpts: React.SetStateAction<RblattInput[]>) => void,
+    isReset: boolean,
+    setReset: Function
  }
 
 const isInitialInputPoint = (xCoord: number, yCoord: number) => {
@@ -87,8 +90,10 @@ const RblattGraph = (props: RblattGraphProps) => {
     }, [props.highlighted]);
 
     useEffect(() => {
-        console.log('refreshing points', props.inputs);
-        if(board) {
+        console.log('refreshing points', props.inputs, props.isReset);
+
+        
+        if(board && props.isReset) {
             // props.inputs.forEach(({x, y}) => {
                 // console.log("x,y", x, y);
             console.log("hi", props.inputs, INIT_INPUTS)
@@ -119,6 +124,7 @@ const RblattGraph = (props: RblattGraphProps) => {
                     
                 }
             }
+            props.setReset(false);
             // })
         }
     }, [props]);

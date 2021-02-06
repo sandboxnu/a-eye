@@ -16,6 +16,9 @@ const RosenBlattDemo = (props: { labelColor: string }) => {
     const [animInterval, setAnimInterval] = useState<NodeJS.Timeout | null>(null);
     const [binMisclass, setBinMisclass] = useState<number>(0);
     const [msError, setMSEror] = useState<number>(0);
+    const [isReset, setReset] = useState(false);
+
+    
 
     useEffect(() => {
         updateErrors(inputs, config);
@@ -82,11 +85,17 @@ const RosenBlattDemo = (props: { labelColor: string }) => {
     }
 
     const resetConfig = () => {
-        setConfig(INIT_CONFIG);
-        setInputs(INIT_INPUTS);
-        setCurrPoint(0);
-        updateErrors(INIT_INPUTS, INIT_CONFIG);
+        setReset(true);
     }
+
+    useEffect(() => {
+        if (!isReset) {
+            setInputs(INIT_INPUTS);
+            setConfig(INIT_CONFIG);
+            setCurrPoint(0);
+            updateErrors(INIT_INPUTS, INIT_CONFIG);
+        }
+    }, [isReset])
 
     return (
         <div className="m-4">
@@ -116,6 +125,8 @@ const RosenBlattDemo = (props: { labelColor: string }) => {
                     inputs={inputs} line={config}
                     highlighted={inputs[currPoint]}
                     onInputsChange={setInputs}
+                    isReset={isReset}
+                    setReset={setReset}
                 />
 
             </div>
@@ -147,14 +158,14 @@ export default RosenBlattDemo;
 
 
 const EditingRblattGraph = (props: {inputs: RblattInput[], line: RblattConfig,  highlighted: RblattInput,
-                            onInputsChange: (inpts: React.SetStateAction<RblattInput[]>) => void}) => 
+                            onInputsChange: (inpts: React.SetStateAction<RblattInput[]>) => void, isReset:boolean, setReset:Function}) => 
 {
     const [editingType, setEditingType] = useState<{val: 1 | 0 | null}>({val: 0});
     const [updated, setUpdated] = useState(false); // yes this is a hack to get it to rerender shhh do not look
     
     return (
     <div className="flex flex-col items-center justify-center">
-        <RblattGraph {...props} editingType={editingType} />
+        <RblattGraph {...props} editingType={editingType}  />
         <div className="flex items-center justify-center">
             <p className="text-modulePaleBlue">Select Point Color:</p>
             <button className={`basic-button alt py-1 px-2 bg-orange-500 border-4 ${editingType.val === 0 ? 'border-orange-800' : 'border-transparent'} `}
