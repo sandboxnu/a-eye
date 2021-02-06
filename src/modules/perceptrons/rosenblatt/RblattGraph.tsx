@@ -11,13 +11,33 @@ type RblattGraphProps = {
  }
 
 const isInitialInputPoint = (xCoord: number, yCoord: number) => {
+    let result = false
     INIT_INPUTS.forEach(({x: xInit, y: yInit}) => {
+        // 
+        // console.log("comparison", xInit == xCoord, yInit==yCoord)
         if(xInit === xCoord && yInit === yCoord) {
-            return true;
+            // console.log("point values", xInit, yInit, xCoord, yCoord)
+            result = true;
         }
     });
-    return false;
+    return result;
 };
+
+// returns all the points which are all not initial inputs, aka all the points that have been added
+const getListInputs = (inputs: RblattInput[]) => {
+    console.log("starting getlistinputs", inputs)
+    let result:number[][] = []
+    inputs.forEach((input: RblattInput) => {
+        const {x,y,z} = input
+        console.log(x,y)
+        if (!isInitialInputPoint(x, y)) {
+            result.push([x,y])
+            console.log(result)
+        }
+    })
+    console.log(result)
+    return result
+}
 
 const RblattGraph = (props: RblattGraphProps) => {
     const [brdId, setBrdId] = useState('board_' + Math.random().toString(36).substr(2, 9));
@@ -69,16 +89,37 @@ const RblattGraph = (props: RblattGraphProps) => {
     useEffect(() => {
         console.log('refreshing points', props.inputs);
         if(board) {
-            props.inputs.forEach(({x, y}) => {
-                console.log(x, y);
-                for (let el in board.objects) {
-                    JXG.isPoint(board.objects[el]) && console.log( JXG.isPoint(board.objects[el]), board.objects[el].hasPoint(x, y), !isInitialInputPoint(x, y));
-                    if (JXG.isPoint(board.objects[el]) && isInitialInputPoint(x, y)) {
-                        board.removeObject(el); 
-                        // removePoint(el, x, y);
-                    }
+            // props.inputs.forEach(({x, y}) => {
+                // console.log("x,y", x, y);
+            console.log("hi", props.inputs, INIT_INPUTS)
+            const pointsToRemove = getListInputs(props.inputs)
+            for (let el in board.objects) {
+                
+                // hasPoint is always false
+                // isInitiallInputPoint is always false (without !)[]
+               
+                // JXG.isPoint(board.objects[el]) && console.log( JXG.isPoint(board.objects[el]), board.objects[el].hasPoint(x, y), !isInitialInputPoint(x, y));
+                if (JXG.isPoint(board.objects[el])) {
+                    // console.log("el", el, JXG.isPoint(board.objects[el]), board.objects[el])    
+                    const [z, x, y] = board.objects[el].coords.usrCoords
+                    console.log("x,y", x,y)
+                    console.log(pointsToRemove)
+                    pointsToRemove.forEach((point) => {
+                        const [x1, y1] = point
+                        if (x1 == x && y1 == y)  {
+                            removePoint(el, x, y)
+                        }
+                    })
+
+
+                    // if (pointsToRemove.([x,y])) {
+                    //     removePoint(el, x, y);
+                    // }
+
+                    
                 }
-            })
+            }
+            // })
         }
     }, [props]);
 
