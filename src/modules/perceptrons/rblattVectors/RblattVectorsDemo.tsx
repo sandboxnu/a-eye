@@ -9,8 +9,8 @@ const RblattVectorsDemo = () => {
     const [perpPoint, setPerpPoint] = useState<any>(null);
     const phaseMessages = [
         'The initial classification line is represented by its perpendicular vector Wt.',
-        'After finding a misclassified point, we calculate the distance d between it and the vector\'s origin/',
-        'We then calculate the new vector by subtracting d from Wt.',
+        'After finding a misclassified point, we calculate the distance d between it and the vector\'s origin.',
+        'We then update our vector Wt by subtracting the distance d from the current end point of Wt.',
         'Finally, we update the classification line to be perpendicular to the new vector (Wt - d).'];
     const [brdMsg, setBrdMsg] = useState<string>(phaseMessages[0]);
 
