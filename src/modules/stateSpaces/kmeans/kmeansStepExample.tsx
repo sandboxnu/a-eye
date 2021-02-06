@@ -67,21 +67,19 @@ const KMeansStepExample: React.FC<KMeansStepExampleType> = ({
   });
 
   const genOut: KMeansResult[] = [];
-  // TODO
   // eslint-disable-next-line
   for (const element of ans2) {
     genOut.push(element);
   }
 
   const genOutIris: KMeansResult[] = [];
-  // TODO
   // eslint-disable-next-line
   for (const element of ans2iris) {
     genOutIris.push(element);
   }
 
   const genOutIris2: KMeansResult[] = [];
-  // TODO
+
   // eslint-disable-next-line
   for (const element of ans2iris2) {
     genOutIris2.push(element);
@@ -89,18 +87,9 @@ const KMeansStepExample: React.FC<KMeansStepExampleType> = ({
 
   const [original, setO]: [number, Function] = useState(0);
 
-  // original === 0 ? genOut : original === 1 ? gen_outIris : gen_outIris2;
-  const gen = (() => {
-    switch (original) {
-      case 0:
-        return genOut;
-      case 1:
-        return genOutIris;
-      default:
-        return genOutIris2;
-    }
-  })();
-
+  const gen =
+    // eslint-disable-next-line
+    original === 0 ? genOut : original === 1 ? genOutIris : genOutIris2;
   const [r, setR] = useState(0);
   const changeO = () => {
     setO((original + 1) % 3);
@@ -110,23 +99,13 @@ const KMeansStepExample: React.FC<KMeansStepExampleType> = ({
   if (gen.length === 0) return <div />;
 
   const bubData: BubbleDataEntry[] = [];
-
-  // original === 0
-  //   ? organiseData(trainData)
-  //   : original === 1
-  //   ? organiseData(trainDataIris)
-  //   : organiseData(trainDataIris2);
-  const data3 = (() => {
-    switch (original) {
-      case 0:
-        return organiseData(trainData);
-      case 1:
-        return organiseData(trainDataIris);
-      default:
-        return organiseData(trainDataIris2);
-    }
-  })();
-
+  const data3 =
+    // eslint-disable-next-line
+    original === 0
+      ? organiseData(trainData)
+      : original === 1
+      ? organiseData(trainDataIris)
+      : organiseData(trainDataIris2);
   const cntrdss = gen[r].centroids;
   const c2 = [cntrdss[0].centroid, cntrdss[1].centroid];
 
@@ -140,16 +119,6 @@ const KMeansStepExample: React.FC<KMeansStepExampleType> = ({
   Object.entries(bubData).forEach(cluster => {
     data.datasets.push(cluster[1]);
   });
-
-  // min: original === 0 ? 0 : original === 1 ? 1 : 0,
-  const minYOptions = [0, 1, 0];
-  // max: original === 0 ? 120 : original === 1 ? 7 : 40,
-  const maxYOptions = [120, 7, 40];
-
-  // min: original === 0 ? 0 : original === 1 ? 1 : 0,
-  const minXOptions = [0, 1, 0];
-  // max: original === 0 ? 250 : original === 1 ? 10 : 100,
-  const maxXOptions = [250, 10, 100];
 
   const options = {
     showLines: false,
@@ -169,8 +138,10 @@ const KMeansStepExample: React.FC<KMeansStepExampleType> = ({
           ticks: {
             fontColor: '#394D73',
             beginAtZero: true,
-            min: minYOptions[original],
-            max: maxYOptions[original],
+            // eslint-disable-next-line
+            min: original === 0 ? 0 : original === 1 ? 1 : 0,
+            // eslint-disable-next-line
+            max: original === 0 ? 120 : original === 1 ? 7 : 40,
           },
         },
       ],
@@ -188,8 +159,10 @@ const KMeansStepExample: React.FC<KMeansStepExampleType> = ({
           ticks: {
             fontColor: '#394D73',
             beginAtZero: true,
-            min: minXOptions,
-            max: maxXOptions,
+            // eslint-disable-next-line
+            min: original === 0 ? 0 : original === 1 ? 1 : 0,
+            // eslint-disable-next-line
+            max: original === 0 ? 250 : original === 1 ? 10 : 100,
           },
         },
       ],
@@ -207,12 +180,6 @@ const KMeansStepExample: React.FC<KMeansStepExampleType> = ({
     },
   };
 
-  const datasetLabel = [
-    'Original Dataset',
-    'Iris Sepal Dataset',
-    'Iris Petal Dataset',
-  ];
-
   return (
     <div>
       <Scatter data={data} options={options} />
@@ -227,7 +194,7 @@ const KMeansStepExample: React.FC<KMeansStepExampleType> = ({
           </button>
           <div className="md:inline py-2">
             {/* eslint-disable-next-line */}
-            Step {r}/{gen.length - 1}
+            Step {r} / {gen.length - 1}
           </div>
           <button
             type="button"
@@ -240,11 +207,15 @@ const KMeansStepExample: React.FC<KMeansStepExampleType> = ({
         <div className="flex justify-around rounded bg-transparent">
           <button
             type="button"
-            onClick={changeO}
+            onClick={() => changeO()}
             className="rounded w-1/3 mx-auto px-1 py-2 bg-moduleNavy hover:text-moduleTeal outline-none"
           >
             {/* eslint-disable-next-line */}
-            Current: {datasetLabel[original]}
+            {original === 0
+              ? 'Current: Original Dataset'
+              : original === 1
+              ? 'Current: Iris Sepal Dataset'
+              : 'Current: Iris Petal Dataset'}
           </button>
         </div>
       </div>
