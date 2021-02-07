@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import {AddCircle, RemoveCircle} from '@material-ui/icons';
+import {RblattConfig, INIT_CONFIG} from '../rosenblatt/constants';
+
 
 export type NeuronInput = {
     val: number | null,
@@ -54,7 +56,7 @@ const MPNeuron = (props: {labelColor: string}) => {
     }
 
     const inputSum = inputs.reduce((prev, acc) => {
-        return prev + (acc.val && acc.weight ? acc.val * acc.weight : 0)
+        return (acc.val && acc.weight ? acc.val * acc.weight : 0) +  INIT_CONFIG.bias + prev
     }, 0);
     const output = func(inputSum);
 
@@ -62,10 +64,12 @@ const MPNeuron = (props: {labelColor: string}) => {
         const isOne = inpt.val === 1;
         return (
             <div className="flex items-center cursor-pointer">
-                {/* This following div is hidden by the opacity-0 tag in the className */}
-                <div 
+                {/* This following div is commented out since it makes the demo too complex to understand,
+                    leaving this in as breadcrumbs.
+                */}
+                {/* <div 
                     className="font-bold rounded-full w-12 h-12 bg-navy m-1
-                                flex items-center justify-center opacity-0"
+                                flex items-center justify-center "
                     style={{
                         backgroundColor: isOne ? INPT_CLR : 'white',
                         border: isOne ? 'none' : `2px solid ${INPT_CLR}`,
@@ -74,10 +78,9 @@ const MPNeuron = (props: {labelColor: string}) => {
                     onClick={() => flipInput(idx)}
                 >
                     {inpt.val}
-                </div>
+                </div> */}
                 {/* <div className="w-2 h-1 bg-navy" /> */}
                 <div className="m-1">
-                    {/* check this height is ok TODO */}
                     <input className="number-input w-20 h-10 border-2 border-pink-700"
                         type="number"
                         value={inpt.weight !== null ? inpt.weight : ''}
@@ -100,12 +103,13 @@ const MPNeuron = (props: {labelColor: string}) => {
                         className="font-bold rounded-full w-12 h-12 bg-pink-700 m-1
                                     flex items-center justify-center text-white"
                     >
-                        {0.1}
-                        {/* {props.config.bias.toFixed(1)} */}
+                        
+                        {INIT_CONFIG.bias.toFixed(1)}
                     </div>
-                </div>
+                </div> 
             </div>
-            <InputLines numInpts={inputs.length} />
+            {/*  +1 to account for the bias term */}
+            <InputLines numInpts={inputs.length + 1} />
             <div className="rounded-full w-20 h-20 bg-brightOrange 
                 flex items-center justify-center">
                 {inputSum}
