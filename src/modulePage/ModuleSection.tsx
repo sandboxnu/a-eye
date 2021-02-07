@@ -126,7 +126,7 @@ function getDemo(comp: string, scheme: ColorScheme) {
         case "RblattVectorsDemo":
             return <RblattVectorsDemo />
         case "MPNeuron":
-            return <MPNeuron />
+            return <MPNeuron  {...demoArgs} />
         case "RblattDemo":
             return <RosenBlattDemo {...demoArgs}/>
         default: return <div></div>

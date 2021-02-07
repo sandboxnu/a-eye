@@ -36,6 +36,7 @@ const RblattNeuron = (props: {input: RblattInput, config: RblattConfig, labelCol
 
     return (
         <div className="flex items-center m-4">
+            
             <div className="flex flex-col">
                 {makeInput(props.input.x, props.config.weightX, 'x')}
                 {makeInput(props.input.y, props.config.weightY, 'y')}
@@ -46,8 +47,8 @@ const RblattNeuron = (props: {input: RblattInput, config: RblattConfig, labelCol
                                     flex items-center justify-center text-white"
                     >
                         {props.config.bias.toFixed(1)}
+                    </div>
                 </div>
-            </div>
             </div>
             <InputLines numInpts={3} />
             <div className="rounded-full w-20 h-20 bg-white border-2 border-orange-500 

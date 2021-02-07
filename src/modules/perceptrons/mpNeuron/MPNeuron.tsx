@@ -10,12 +10,14 @@ export type NeuronInput = {
 // what labels should i do for each bubble?
 // how to make function piece obviously interactable
 // this can take a number => number func, use its tostring to render
-const MPNeuron = () => {
+const MPNeuron = (props: {labelColor: string}) => {
     // react draggable?
     const [inputs, setInputs] = useState<NeuronInput[]>(
-        [{ val: 0, weight: .5 },
-        { val: 1, weight: 1 },
-        { val: 0, weight: .2 }]
+        [{ val: 1, weight: -.5 },
+        { val: 1, weight: 1 }]
+        // this is becoming a bias, leaving it just in case as breadcrumbs
+        // { val: 1, weight: .2 }]
+        
     );
     const [func, setFunc] = useState(() => ((n: number) => 0));
     // need to recalc output when inputs change!
@@ -60,9 +62,10 @@ const MPNeuron = () => {
         const isOne = inpt.val === 1;
         return (
             <div className="flex items-center cursor-pointer">
-                <div
+                {/* This following div is hidden by the opacity-0 tag in the className */}
+                <div 
                     className="font-bold rounded-full w-12 h-12 bg-navy m-1
-                                flex items-center justify-center"
+                                flex items-center justify-center opacity-0"
                     style={{
                         backgroundColor: isOne ? INPT_CLR : 'white',
                         border: isOne ? 'none' : `2px solid ${INPT_CLR}`,
@@ -72,9 +75,10 @@ const MPNeuron = () => {
                 >
                     {inpt.val}
                 </div>
-                <div className="w-2 h-1 bg-navy" />
+                {/* <div className="w-2 h-1 bg-navy" /> */}
                 <div className="m-1">
-                    <input className="number-input w-16 border-2 border-pink-700"
+                    {/* check this height is ok TODO */}
+                    <input className="number-input w-20 h-10 border-2 border-pink-700"
                         type="number"
                         value={inpt.weight !== null ? inpt.weight : ''}
                         onChange={(e) => changeWeight(e, idx)}
@@ -89,6 +93,17 @@ const MPNeuron = () => {
         <div className="flex items-center">
             <div className="flex flex-col">
                 {inputs.map((val, idx) => makeInput(val, idx))}
+                
+                <div className="flex items-center self-end">
+                    <p className={props.labelColor}>bias</p>
+                    <div
+                        className="font-bold rounded-full w-12 h-12 bg-pink-700 m-1
+                                    flex items-center justify-center text-white"
+                    >
+                        {0.1}
+                        {/* {props.config.bias.toFixed(1)} */}
+                    </div>
+                </div>
             </div>
             <InputLines numInpts={inputs.length} />
             <div className="rounded-full w-20 h-20 bg-brightOrange 
@@ -108,11 +123,12 @@ const MPNeuron = () => {
                 {output}
             </div>
         </div>
-        <div>
+        {/* Removed for now since it makes the example too complex */}
+        {/* <div>
             <RemoveCircle className="icon-button" fontSize="large" onClick={removeInput}/>
             <p className="inline m-2 text-white">{inputs.length} inputs</p>
             <AddCircle className="icon-button" fontSize="large" onClick={addInput}/>
-        </div>
+        </div> */}
         </div>
     );
 }
