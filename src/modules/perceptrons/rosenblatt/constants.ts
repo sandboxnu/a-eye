@@ -18,8 +18,9 @@ const INIT_INPUTS: RblattInput[] = [
     { x: 0.5304606365159121, y: -3.109212730318259, z: 1 },
     { x: -4.485871021775546, y: -3.1598827470686774, z: 1 }
 ];
+const CLEARED_INPUTS: RblattInput[] = [];
 
 export type RblattInput = { x: number, y: number, z: 0 | 1 };
 export type RblattConfig = { weightX: number, weightY: number, bias: number, learningRate: number };
 
-export {INIT_CONFIG, INIT_INPUTS};
+export {INIT_CONFIG, INIT_INPUTS, CLEARED_INPUTS};

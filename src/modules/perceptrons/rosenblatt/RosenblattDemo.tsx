@@ -3,7 +3,7 @@ import RblattGraph from './RblattGraph';
 import RblattInputsTable from './RblattInputsTable';
 import RblattNeuron from './RblattNeuron';
 import distanceToLineSegment from 'distance-to-line-segment';
-import {RblattInput, RblattConfig, INIT_INPUTS, INIT_CONFIG} from './constants';
+import {RblattInput, RblattConfig, INIT_INPUTS, INIT_CONFIG, CLEARED_INPUTS} from './constants';
 
 const round = (x: number, length: number) => {
     return Math.round(x * (10 ** length)) / (10 ** length);
@@ -17,14 +17,8 @@ const RosenBlattDemo = (props: { labelColor: string }) => {
     const [binMisclass, setBinMisclass] = useState<number>(0);
     const [msError, setMSEror] = useState<number>(0);
     const [isReset, setReset] = useState(false);
+    const [isCleared, setCleared] = useState(false);
 
-    
-
-    useEffect(() => {
-        updateErrors(inputs, config);
-    }, []);
-
-    // 
     const updateErrors = (inputs: RblattInput[], config: RblattConfig) => {
         let binCount = 0;
         let msCount = 0
@@ -88,6 +82,10 @@ const RosenBlattDemo = (props: { labelColor: string }) => {
         setReset(true);
     }
 
+    const clearConfig = () => {
+        setCleared(true);
+    }
+
     useEffect(() => {
         if (!isReset) {
             setInputs(INIT_INPUTS);
@@ -95,8 +93,27 @@ const RosenBlattDemo = (props: { labelColor: string }) => {
             setCurrPoint(0);
             updateErrors(INIT_INPUTS, INIT_CONFIG);
         }
-    }, [isReset])
+    }, [isReset]);
 
+    type OperationButtonType = {
+        className?: string,
+        disabled?: boolean,
+        onClick?: () => void,
+        text: string,
+    }
+
+    const OperationButton: React.FC<OperationButtonType> = ({className, disabled, onClick, text}) => 
+        (<button className={`basic-button flex-shrink-0 ${className ? className : ''}`}
+                 disabled={true && disabled}
+                 onClick={onClick ? onClick : () => null}> {text} </button>);
+
+    /*
+       bugs:
+       - can't train with 0 points
+       - reset doesn't reset the lines
+       - removing points doesn't remove data
+       - replace whole diagram with 'add some points to start!'
+     */
     return (
         <div className="m-4">
             <div className="m-4 flex items-center justify-center">
@@ -104,7 +121,7 @@ const RosenBlattDemo = (props: { labelColor: string }) => {
                     <p className={`m-6 font-bold text-2xl ${props.labelColor}`}>
                         {`${config.weightX.toFixed(1)}x + ${config.weightY.toFixed(1)}y + ${config.bias.toFixed(1)} > 0`}
                     </p>
-                    <RblattNeuron input={inputs[currPoint]} config={config} labelColor={props.labelColor}/>
+                    {inputs.length === 0 ? <></> : <RblattNeuron input={inputs[currPoint]} config={config} labelColor={props.labelColor}/>}
                     <div className={`font-bold flex items-center justify-center m-4 ${props.labelColor}`}>
                         Learning rate:
                         <input type="range" min="-7" max="1" step="0.1" 
@@ -125,32 +142,32 @@ const RosenBlattDemo = (props: { labelColor: string }) => {
                     inputs={inputs} line={config}
                     highlighted={inputs[currPoint]}
                     onInputsChange={setInputs}
-                    isReset={isReset}
-                    setReset={setReset}
+                    reset={{isReset, setReset}}
+                    clear={{isCleared, setCleared}}
                 />
 
             </div>
-            <button className={`basic-button ${animInterval ? 'alt' : ''}`}
+        <div className='flex' >
+            <OperationButton
+                className={animInterval ? 'alt' : ''}
                 onClick={animateAll}
-            >
-                {animInterval ? 'Stop ■' : 'Animate ▶'}
-            </button>
-            <button className='basic-button' disabled={!!animInterval}
+                text={animInterval ? 'Stop ■' : 'Animate ▶'}
+            />
+            <OperationButton
+                disabled={!!animInterval || inputs.length === 0}
                 onClick={() => trainSingle(currPoint)}
-            >
-                Train Single Point
-            </button>
-            <button className='basic-button' disabled={!!animInterval}
+                text={"Train Single Point"}
+            />
+            <OperationButton
+                disabled={!!animInterval || inputs.length === 0}
                 onClick={trainAll}
-            >
-                Train All Points
-            </button>
-            <button className={`basic-button`}
-                onClick={resetConfig}
-            >
-                Reset
-            </button>
-            <RblattInputsTable labelColor={props.labelColor} data={inputs}/>
+                text={"Train All Points"}
+            />
+            <OperationButton onClick={resetConfig} text={"Reset"}/>
+            <OperationButton onClick={clearConfig} text={"Clear All"}/>
+
+            </div>
+            {inputs.length === 0 ? <></> : <RblattInputsTable labelColor={props.labelColor} data={inputs}/>}
         </div>
     );
 }
@@ -158,7 +175,9 @@ export default RosenBlattDemo;
 
 
 const EditingRblattGraph = (props: {inputs: RblattInput[], line: RblattConfig,  highlighted: RblattInput,
-                            onInputsChange: (inpts: React.SetStateAction<RblattInput[]>) => void, isReset:boolean, setReset:Function}) => 
+                            onInputsChange: (inpts: React.SetStateAction<RblattInput[]>) => void,
+                                    reset: {isReset:boolean, setReset:Function},
+                                    clear: {isCleared:boolean, setCleared:Function}}) => 
 {
     const [editingType, setEditingType] = useState<{val: 1 | 0 | null}>({val: 0});
     const [updated, setUpdated] = useState(false); // yes this is a hack to get it to rerender shhh do not look

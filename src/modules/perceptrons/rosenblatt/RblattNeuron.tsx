@@ -9,8 +9,10 @@ import {RblattConfig, RblattInput} from './constants';
 
 // a static version of the neuron demo, for the Rblatt demo
 const RblattNeuron = (props: {input: RblattInput, config: RblattConfig, labelColor: string}) => {
+    console.log('input in neuron', props, props.input);
 
-    const inputSum = props.input.x * props.config.weightX + props.input.y * props.config.weightY + props.config.bias;
+    const inputSum =
+        props.input.x * props.config.weightX + props.input.y * props.config.weightY + props.config.bias;
     const output = inputSum > 0 ? 1 : 0;
 
     const makeInput = (val: number, weight: number, label: string) => {
