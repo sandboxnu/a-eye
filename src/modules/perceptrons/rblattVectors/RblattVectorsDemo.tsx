@@ -7,7 +7,7 @@ const RblattVectorsDemo = () => {
     const [phase, setPhase] = useState(0);
     const [board, setBoard] = useState<any>(null);
     const [perpPoint, setPerpPoint] = useState<any>(null);
-    const [demoConfig, setDemoConfig] = useState<any>(translationConfig);
+    const [demoConfig, setDemoConfig] = useState<any>(rotationConfig);
     const [brdMsg, setBrdMsg] = useState<string>(demoConfig.phaseMessages[0]);
 
     useEffect(() => {
@@ -30,7 +30,7 @@ const RblattVectorsDemo = () => {
             { name: 'mainLine', withLabel: false, strokeColor: 'black', strokeWidth: 2, fixed: true });
         newBoard.create('inequality', [li], {name: 'ineq1', fillColor: COL_0});
         newBoard.create('inequality', [li], {name: 'ineq2', inverse: true, fillColor: COL_1 });
-    }, []);
+    }, [demoConfig]);
 
     // todo colors
     const goNext = () => {
@@ -150,6 +150,20 @@ const RblattVectorsDemo = () => {
 
     return (
         <div className="m-4">
+            <p>
+                Type of Update:
+            </p>
+            <span>
+                <button className='basic-button' onClick={() => {setDemoConfig(rotationConfig); setPhase(0);}} 
+                    disabled={JSON.stringify(demoConfig) === JSON.stringify(rotationConfig)}>
+                    Rotation
+                </button>
+                
+                <button className='basic-button' onClick={() => {setDemoConfig(translationConfig); setPhase(0);}}
+                    disabled={JSON.stringify(demoConfig) === JSON.stringify(translationConfig)}>
+                    Translation
+                </button>
+            </span>
             <div className="bg-white mx-auto" id={brdId} style={{ width: '500px', height: '500px' }} />
             <button className='basic-button' onClick={goPrev} disabled={phase === 0}>
                 Previous Step
