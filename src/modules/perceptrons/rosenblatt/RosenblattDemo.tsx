@@ -132,10 +132,7 @@ const RosenBlattDemo = (props: { labelColor: string }) => {
                         {config.learningRate}
                     </div>
                     <div className={props.labelColor}>
-                        <div>Binary Misclassification: {binMisclass}</div>
-                    </div>
-                    <div className={props.labelColor}>
-                        <div>Mean-Squared Error: {msError}</div>
+                        <div>Number of Misclassified Points: {binMisclass}</div>
                     </div>
                 </div>
                 <EditingRblattGraph
