@@ -89,6 +89,7 @@ const RblattGraph = (props: RblattGraphProps) => {
     }, [props.highlighted]);
 
     useEffect(() => {
+        // reset to INIT_INPUTS
         if(board && props.reset.isReset) {
             const [pointsToRemove, pointsToAdd] = getListInputs(props.inputs)
             for (let el in board.objects) {
@@ -106,6 +107,7 @@ const RblattGraph = (props: RblattGraphProps) => {
                 board.create('point', [x, y], { name: '', size: 1, color: z ? COL_1 : COL_0 }));
             props.reset.setReset(false);
         }
+        // Remove every point from the board
         else if(board && props.clear.isCleared) {
             const pointsToRemove = props.inputs;
             for (let el in board.objects) {
@@ -144,7 +146,7 @@ const RblattGraph = (props: RblattGraphProps) => {
             const z = props.editingType.val || 0;
             addPoint(coords.usrCoords[1], coords.usrCoords[2], z, board);
         } else {
-            removePoint(pointToDelete, coords.scrCoords[1], coords.scrCoords[2], board);
+            removePoint(pointToDelete, coords.usrCoords[1], coords.usrCoords[2], board);
         }
     }
 
@@ -163,7 +165,15 @@ const RblattGraph = (props: RblattGraphProps) => {
 
     const removePoint = (pointId: string, x: number, y: number, currBoard?: any) => {
         if (props.editingType.val === null) return;
-        props.onInputsChange(oldInpts => oldInpts.filter(inpt => inpt.x != x && inpt.y != y));
+        const bound = 0.15;
+        props.onInputsChange(oldInpts => {
+            const outpts = oldInpts.filter(inpt =>
+                inpt.x <= x + bound && 
+                inpt.x >= x - bound &&
+                inpt.y <= y + bound &&
+                inpt.y >= y - bound)
+            return outpts;
+        });
 
         // can't directly use state var for board bc of closures
         if (!currBoard) currBoard = board;
@@ -176,9 +186,6 @@ const RblattGraph = (props: RblattGraphProps) => {
 }
 
 export default RblattGraph;
-
-
-
 
 var getMouseCoords = function (board: any, e: MouseEvent, i?: number) {
     var cPos = board.getCoordsTopLeftCorner(e),

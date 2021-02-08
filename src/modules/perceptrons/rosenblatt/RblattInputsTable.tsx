@@ -5,7 +5,7 @@ const RblattInputsTable = (props: { data: RblattInput[], labelColor: string }) =
 
     return (
         <div className={`mx-auto overflow-y-scroll max-h-sm max-w-2xl ${props.labelColor}`}>
-            <table className="a-eye-table">
+            <table className="a-eye-table table-fixed">
                 <thead>
                     <tr>
                         <th> X </th>
@@ -16,7 +16,7 @@ const RblattInputsTable = (props: { data: RblattInput[], labelColor: string }) =
                 <tbody>
                     {props.data.map((inpt, idx) => (
                         <tr key={idx} className="datarow">
-                            <td > {inpt.x} </td>
+                            <td> {inpt.x} </td>
                             <td> {inpt.y} </td>
                             <td> 
                                 <div className={`font-bold text-white ${inpt.z ? 'bg-lightNavy' : 'bg-orange-500'}`}>

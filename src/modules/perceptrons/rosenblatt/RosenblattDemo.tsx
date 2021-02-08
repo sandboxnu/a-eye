@@ -109,19 +109,15 @@ const RosenBlattDemo = (props: { labelColor: string }) => {
 
     /*
        bugs:
-       - can't train with 0 points
-       - reset doesn't reset the lines
-       - removing points doesn't remove data
-       - replace whole diagram with 'add some points to start!'
+       - removing points doesn't remove data and adds multiples sometimes
      */
-    return (
-        <div className="m-4">
-            <div className="m-4 flex items-center justify-center">
-                <div className="flex flex-col items-center justify-center">
+
+    const RosenblattNeuronSupport = () => 
+                (<div className="flex flex-col items-center justify-center">
                     <p className={`m-6 font-bold text-2xl ${props.labelColor}`}>
                         {`${config.weightX.toFixed(1)}x + ${config.weightY.toFixed(1)}y + ${config.bias.toFixed(1)} > 0`}
                     </p>
-                    {inputs.length === 0 ? <></> : <RblattNeuron input={inputs[currPoint]} config={config} labelColor={props.labelColor}/>}
+                    <RblattNeuron input={inputs[currPoint]} config={config} labelColor={props.labelColor}/>
                     <div className={`font-bold flex items-center justify-center m-4 ${props.labelColor}`}>
                         Learning rate:
                         <input type="range" min="-7" max="1" step="0.1" 
@@ -137,7 +133,16 @@ const RosenBlattDemo = (props: { labelColor: string }) => {
                     <div className={props.labelColor}>
                         <div>Mean-Squared Error: {msError}</div>
                     </div>
-                </div>
+                </div>)
+        
+    return (
+        <div className="flex flex-col items-center">
+        <div className="flex flex-row items-center">
+            {inputs.length === 0 ? <div className={`font-bold text-xl ${props.labelColor}`}>
+                Add points to the demo to operate or click 'Reset' to start over.
+            </div>
+           : <RosenblattNeuronSupport/>}
+            <div className="m-4 flex items-center justify-center">
                 <EditingRblattGraph
                     inputs={inputs} line={config}
                     highlighted={inputs[currPoint]}
@@ -145,9 +150,9 @@ const RosenBlattDemo = (props: { labelColor: string }) => {
                     reset={{isReset, setReset}}
                     clear={{isCleared, setCleared}}
                 />
-
             </div>
-        <div className='flex' >
+        </div>
+        <div className='flex flex-row items-center'>
             <OperationButton
                 className={animInterval ? 'alt' : ''}
                 onClick={animateAll}
@@ -165,10 +170,9 @@ const RosenBlattDemo = (props: { labelColor: string }) => {
             />
             <OperationButton onClick={resetConfig} text={"Reset"}/>
             <OperationButton onClick={clearConfig} text={"Clear All"}/>
-
-            </div>
-            {inputs.length === 0 ? <></> : <RblattInputsTable labelColor={props.labelColor} data={inputs}/>}
         </div>
+        {inputs.length === 0 ? <></> : <RblattInputsTable labelColor={props.labelColor} data={inputs}/>}
+    </div>
     );
 }
 export default RosenBlattDemo;
