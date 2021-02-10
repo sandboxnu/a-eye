@@ -115,7 +115,7 @@ const RosenBlattDemo = (props: { labelColor: string }) => {
        - replace whole diagram with 'add some points to start!'
      */
     return (
-        <div className="m-4">
+        <div className="m-4 w-max">
             <div className="m-4 flex items-center justify-center">
                 <div className="flex flex-col items-center justify-center">
                     <p className={`m-6 font-bold text-2xl ${props.labelColor}`}>
@@ -144,24 +144,24 @@ const RosenBlattDemo = (props: { labelColor: string }) => {
                 />
 
             </div>
-        <div className='flex' >
-            <OperationButton
-                className={animInterval ? 'alt' : ''}
-                onClick={animateAll}
-                text={animInterval ? 'Stop ■' : 'Animate ▶'}
-            />
-            <OperationButton
-                disabled={!!animInterval || inputs.length === 0}
-                onClick={() => trainSingle(currPoint)}
-                text={"Train Single Point"}
-            />
-            <OperationButton
-                disabled={!!animInterval || inputs.length === 0}
-                onClick={trainAll}
-                text={"Train All Points"}
-            />
-            <OperationButton onClick={resetConfig} text={"Reset"}/>
-            <OperationButton onClick={clearConfig} text={"Clear All"}/>
+            <div className='' >
+                <OperationButton
+                    className={animInterval ? 'alt' : ''}
+                    onClick={animateAll}
+                    text={animInterval ? 'Stop ■' : 'Animate ▶'}
+                />
+                <OperationButton
+                    disabled={!!animInterval || inputs.length === 0}
+                    onClick={() => trainSingle(currPoint)}
+                    text={"Train Single Point"}
+                />
+                <OperationButton
+                    disabled={!!animInterval || inputs.length === 0}
+                    onClick={trainAll}
+                    text={"Train All Points"}
+                />
+                <OperationButton onClick={resetConfig} text={"Reset"}/>
+                <OperationButton onClick={clearConfig} text={"Clear All"}/>
 
             </div>
             {inputs.length === 0 ? <></> : <RblattInputsTable labelColor={props.labelColor} data={inputs}/>}
