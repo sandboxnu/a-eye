@@ -6,6 +6,8 @@ import cassiePic from '../media/aboutPage/cassiePic.png';
 import danPic from '../media/aboutPage/danPic.jpg';
 import irisPic from '../media/aboutPage/irisPic.jpg';
 import maxPic from '../media/aboutPage/maxPic.png';
+import jakePic from '../media/aboutPage/jakePic.jpeg';
+import stanPic from '../media/aboutPage/stanPic.png';
 
 const AboutPage = () => (
   <div className="relative inline-block w-full min-h-full bg-offwhite bg-about bg-no-repeat bg-scroll bg-bottom bg-stretchBottom">
@@ -25,6 +27,13 @@ const AboutPage = () => (
         title="Project Lead"
         linkedin="https://www.linkedin.com/in/krish-sharma/"
         email="sharma.kri@northeastern.edu"
+      />
+      <ProfileCard
+        image={maxPic}
+        name="Max Pinheiro"
+        title="Technical Lead"
+        linkedin="https://www.linkedin.com/in/max-pinheiro-4a5b11181/"
+        email="pinheiro.m@northeastern.edu"
       />
       <ProfileCard
         image={liliPic}
@@ -55,11 +64,18 @@ const AboutPage = () => (
         email="liu.i@northeastern.edu"
       />
       <ProfileCard
-        image={maxPic}
-        name="Max Pinheiro"
+        image={jakePic}
+        name="Jake Chvatal"
         title="Developer"
-        linkedin="https://www.linkedin.com/in/max-pinheiro-4a5b11181/"
-        email="pinheiro.m@northeastern.edu"
+        linkedin="https://linkedin.com/in/jacob-chvatal"
+        email="jacob@chvatal.com"
+      />
+      <ProfileCard
+        image={stanPic}
+        name="Stanley Wu"
+        title="Developer"
+        linkedin="https://www.linkedin.com/in/stanleykywu"
+        email="wu.sta@northeastern.edu"
       />
     </div>
   </div>
