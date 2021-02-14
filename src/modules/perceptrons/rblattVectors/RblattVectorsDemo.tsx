@@ -3,7 +3,7 @@ const JXG = require('jsxgraph');
 const equalArrays = (a1, a2) => (JSON.stringify(a1) === JSON.stringify(a2));
 
 const RblattVectorsDemo = () => {
-    const [brdId, setBrdId] = useState('board_' + Math.random().toString(36).substr(2, 9));
+    const brdId = 'board_1';  
     const [phase, setPhase] = useState(0);
     const [board, setBoard] = useState<any>(null);
     const [perpPoint, setPerpPoint] = useState<any>(null);
@@ -68,6 +68,7 @@ const RblattVectorsDemo = () => {
                     X: (v: number) => v === demoConfig.CURR_POINT[0],
                     Y: (v: number) => v === demoConfig.CURR_POINT[1]
                 }).setAttribute({size: 1});
+
                 board?.removeObject('d');
                 board?.removeObject('-d');
                 board?.removeObject('ineq1');
@@ -75,28 +76,16 @@ const RblattVectorsDemo = () => {
 
                 // translation demo: need to replace Wt, Wt+d, and classification line
                 if (!equalArrays(demoConfig.MAINLINE_INTERSECTION_I, demoConfig.MAINLINE_INTERSECTION_F)) {
-                    board?.removeObject('Wt');
                     board?.removeObject('Wt + d');
-                    board?.removeObject('intersect');
-                    board?.removeObject('mainLine');
-                    const perpPt = board?.create('point', demoConfig.NEW_PERP_POINT, { name: '', fixed: true, color: 'transparent'});
-                    setPerpPoint(perpPt);
-                    const perpArrow = board?.create('arrow', [demoConfig.MAINLINE_INTERSECTION_F, perpPoint],
-                        { strokeColor: 'black', strokeWidth: 2, fixed: true, name: 'Wt', withLabel:true, label: {position: 'top'} });
-                    const lineIntersect = board?.create('point', demoConfig.MAINLINE_INTERSECTION_F,
-                        { name: 'intersect', withLabel:false, fixed: true, color: 'gray'});
-                    board?.create('perpendicular', [perpArrow, lineIntersect],
-                        { name: 'mainLine',  withLabel:false, strokeColor: 'black', strokeWidth: 2, fixed: true });
+                    replaceLine(demoConfig.NEW_PERP_POINT, demoConfig.MAINLINE_INTERSECTION_F);
                 }
 
-                perpPoint.moveTo(demoConfig.NEW_PERP_POINT, 700, {callback: () => {
-                        board?.create('inequality', ['mainLine'], {name: 'ineq1', fillColor: COL_0});
-                        board?.create('inequality', ['mainLine'], {name: 'ineq2', inverse: true, fillColor: COL_1 });
-                    }});
+                shiftLine(demoConfig.NEW_PERP_POINT);
                 setPhase(4);
                 break;
         }
     }
+
 
     const goPrev = () => {
         setBrdMsg(demoConfig.phaseMessages[phase-1]);
@@ -125,36 +114,45 @@ const RblattVectorsDemo = () => {
 
                 // translation demo: need to replace Wt, Wt+d, and classification line
                 if (!equalArrays(demoConfig.MAINLINE_INTERSECTION_I, demoConfig.MAINLINE_INTERSECTION_F)) {
-                    board?.removeObject('Wt');
-                    board?.removeObject('intersect');
-                    board?.removeObject('mainLine');
-                    const perpPt = board?.create('point', demoConfig.INIT_PERP_POINT, { name: '', fixed: true, color: 'transparent'});
-                    setPerpPoint(perpPt);
-                    const perpArrow = board?.create('arrow', [demoConfig.MAINLINE_INTERSECTION_I, perpPoint],
-                        { strokeColor: 'black', strokeWidth: 2, fixed: true, name: 'Wt', withLabel:true, label: {position: 'top'} });
-                    const lineIntersect = board?.create('point', demoConfig.MAINLINE_INTERSECTION_I,
-                        { name: 'intersect', withLabel:false, fixed: true, color: 'gray'});
-                    board?.create('perpendicular', [perpArrow, lineIntersect],
-                        { name: 'mainLine',  withLabel:false, strokeColor: 'black', strokeWidth: 2, fixed: true });
+                    replaceLine(demoConfig.INIT_PERP_POINT, demoConfig.MAINLINE_INTERSECTION_I);
                 }
 
-                perpPoint.moveTo(demoConfig.INIT_PERP_POINT, 700, {callback: () => {
-                        board?.create('inequality', ['mainLine'], {name: 'ineq1', inverse: true, fillColor: COL_0});
-                        board?.create('inequality', ['mainLine'], {name: 'ineq2', fillColor: COL_1 });
-                        // only rotation demo has -d vector
-                        if (equalArrays(demoConfig.MAINLINE_INTERSECTION_I, demoConfig.MAINLINE_INTERSECTION_F)) {
-                            board?.create('arrow', [demoConfig.INIT_PERP_POINT, demoConfig.NEW_PERP_POINT],
-                                { strokeColor: 'black', strokeWidth: 2, fixed: true, dash: 2, name: '-d', withLabel:true, label: {position: 'top'}});
-                        } else { // only translation demo has (Wt + d) vector
-                            board?.create('arrow', [demoConfig.MAINLINE_INTERSECTION_I, demoConfig.NEW_PERP_POINT],
-                                { strokeColor: 'black', strokeWidth: 2, fixed: true, dash: 3, name: 'Wt + d', withLabel:true, label: {position: 'top'}});
-                        }
-                        board?.create('arrow', [demoConfig.MAINLINE_INTERSECTION_I, demoConfig.CURR_POINT],
+                // only rotation demo has -d vector
+                if (equalArrays(demoConfig.MAINLINE_INTERSECTION_I, demoConfig.MAINLINE_INTERSECTION_F)) {
+                    board?.create('arrow', [demoConfig.INIT_PERP_POINT, demoConfig.NEW_PERP_POINT],
+                        { strokeColor: 'black', strokeWidth: 2, fixed: true, dash: 2, name: '-d', withLabel:true, label: {position: 'top'}});
+                } else { // only translation demo has (Wt + d) vector
+                    board?.create('arrow', [demoConfig.MAINLINE_INTERSECTION_I, demoConfig.NEW_PERP_POINT],
+                        { strokeColor: 'black', strokeWidth: 2, fixed: true, dash: 3, name: 'Wt + d', withLabel:true, label: {position: 'top'}});
+                }
+                board?.create('arrow', [demoConfig.MAINLINE_INTERSECTION_I, demoConfig.CURR_POINT],
                             { strokeColor: 'black', strokeWidth: 2, fixed: true, dash: 2, name: 'd', withLabel:true, label: {position: 'top'}});
-                    }});
+
+                shiftLine(demoConfig.INIT_PERP_POINT);
                 setPhase(3);
                 break;
         }
+    }
+
+    const replaceLine = (pPoint, intersection) => {
+        board?.removeObject('Wt');
+        board?.removeObject('intersect');
+        board?.removeObject('mainLine');
+        const perpPt = board?.create('point', pPoint, { name: '', fixed: true, color: 'transparent'});
+        setPerpPoint(perpPt);
+        const perpArrow = board?.create('arrow', [intersection, perpPoint],
+            { strokeColor: 'black', strokeWidth: 2, fixed: true, name: 'Wt', withLabel:true, label: {position: 'top'} });
+        const lineIntersect = board?.create('point', intersection,
+            { name: 'intersect', withLabel:false, fixed: true, color: 'gray'});
+        board?.create('perpendicular', [perpArrow, lineIntersect],
+            { name: 'mainLine',  withLabel:false, strokeColor: 'black', strokeWidth: 2, fixed: true });
+    }
+
+    const shiftLine = (point) => {
+        perpPoint.moveTo(point, 700, {callback: () => {
+            board?.create('inequality', ['mainLine'], {name: 'ineq1', fillColor: COL_0});
+            board?.create('inequality', ['mainLine'], {name: 'ineq2', inverse: true, fillColor: COL_1 });
+        }});
     }
 
     const switchConfig = (type: string) => {
@@ -233,7 +231,7 @@ const translationConfig = {
     CURR_POINT: [4.66, 2.9],
     phaseMessages: [
         'The initial classification line is represented by its perpendicular vector Wt. With this line, all the points are classified correctly.',
-        'Now, we introduce a misclassified point; so the line needs to update to accomodate for the added point. In contrast to the rotation demo, the misclassified point is on the along Wt',
+        'Now, we introduce a misclassified point; so the line needs to update to accomodate for the added point. In contrast to the rotation demo, the misclassified point is on the along Wt.',
         'To do so, we calculate the distance d between the misclassified point and the vector\'s origin.',
         'Since d is parallel to Wt, we calculate the new vector differently by shifting the entire line by d; to do so, we instead add d to Wt.',
         'Finally, we update the classification line to be perpendicular to the new vector (Wt + d).']
