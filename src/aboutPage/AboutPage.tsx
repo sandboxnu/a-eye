@@ -7,7 +7,7 @@ import danPic from '../media/aboutPage/danPic.jpg';
 import irisPic from '../media/aboutPage/irisPic.jpg';
 import maxPic from '../media/aboutPage/maxPic.png';
 import jakePic from '../media/aboutPage/jakePic.jpeg';
-import stanPic from '../media/aboutPage/stanPic.png';
+import stanPic from '../media/aboutPage/stanPic.jpg';
 
 const AboutPage = () => (
   <div className="relative inline-block w-full min-h-full bg-offwhite bg-about bg-no-repeat bg-scroll bg-bottom bg-stretchBottom">
