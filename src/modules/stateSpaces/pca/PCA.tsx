@@ -62,7 +62,7 @@ export const RawDataTable = () => {
     })
     
     return (
-    <div className="container flex mx-auto my-4">
+    <div className="container mx-auto my-4">
         <div className="pca raw-data-table mx-auto">
             <table className="table-auto">
                 <thead>
@@ -86,7 +86,9 @@ export const RawDataTable = () => {
                 </tbody>
             </table>
         </div>
-        <button onClick={e => setIndexDataset((indexDataset+1) % datasets.length)}>Current: {datasetLabel[indexDataset]}</button>
+        <div className="axis-selector inline">
+            <button onClick={e => setIndexDataset((indexDataset+1) % datasets.length)}>Current: {datasetLabel[indexDataset]}</button>
+        </div>
     </div>);
 }
 
