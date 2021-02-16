@@ -1,6 +1,12 @@
 import React, { useState } from 'react';
 import { PCA } from 'ml-pca';
 import datasetIris from 'ml-dataset-iris';
+
+// import trainData from '../data/train.json';
+import trainDataIris from '../data/iris.json';
+// import trainDataIris2 from '../data/iris2.json';
+import titanicData from '../data/titanic.json';
+
 import { BasicScatter, DataSeriesMap, ColorMap } from '../common/BasicScatter';
 import './PCA.css';
 
@@ -25,9 +31,34 @@ export const PCADemo = ({labelColor, labelColorHex = ''}: PCAProps) => {
 }
 
 export const RawDataTable = () => {
+
+    const datasetLabel = [
+        "Original Dataset",
+        "Titanic Dataset",
+    ];
+
     const [showClass, setShowClass] = useState(false);
 
+    const [indexDataset, setIndexDataset] = useState(0);
 
+    const datasets = [trainDataIris, titanicData]
+
+    var currDataset:number[][] = []
+    var currClasses:string[][]= []
+    var columns:string[] = ["", ""].concat(Object.keys(datasets[indexDataset][0]).slice(0,-1))
+
+    
+    datasets[indexDataset].forEach((row) => {
+        
+        const keys:string[] = Object.keys(row).slice(0,-1)
+        const currRow:number[] = keys.map((rowKey) => row[rowKey]) 
+        currDataset.push(currRow);
+
+        const keys_class:string[] = Object.keys(row).slice(-1)
+        const classRow:string[] = keys_class.map((rowKey) => row[rowKey]) 
+        currClasses.push(classRow)
+    })
+    
     return (
     <div className="container flex mx-auto my-4">
         <div className="pca raw-data-table mx-auto">
@@ -43,16 +74,17 @@ export const RawDataTable = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {dataset.map((row: number[], idx: number) => {
+                    {currDataset.map((row: number[], idx: number) => {
                         return (
                             <tr key={idx} className="'datarow' text-white">
                                 {row.map((val: number, idx: number) => <td key={idx}>{val}</td>)}
-                                <td>{showClass && classes[idx]}</td>
+                                <td>{showClass && currClasses[idx]}</td>
                             </tr>);
                     })}
                 </tbody>
             </table>
         </div>
+        <button onClick={e => setIndexDataset((indexDataset+1) % datasets.length)}>Current: {datasetLabel[indexDataset]}</button>
     </div>);
 }
 

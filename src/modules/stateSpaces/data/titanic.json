@@ -2,7 +2,6 @@
   {
     "PassengerId": 1,
     "Survived": 0,
-    "Pclass": 3,
     "Name": "Braund, Mr. Owen Harris",
     "Sex": "male",
     "Age": 22,
@@ -11,7 +10,8 @@
     "Ticket": "A/5 21171",
     "Fare": 7.25,
     "Cabin": "",
-    "Embarked": "S"
+    "Embarked": "S",
+    "Pclass": 3
   },
   {
     "PassengerId": 2,

@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 
-import trainData from './train.json';
-import trainDataIris from './iris.json';
-import trainDataIris2 from './iris2.json';
+import trainData from '../data/train.json';
+import trainDataIris from '../data/iris.json';
+import trainDataIris2 from '../data/iris2.json';
 import {InputData, organiseData, KMeansResult, BubbleDataEntry, getClasses, processdata} from './utils';
 
 import { Scatter } from 'react-chartjs-2';
