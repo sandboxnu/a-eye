@@ -43,9 +43,11 @@ export const RawDataTable = () => {
 
     const datasets = [trainDataIris, titanicData]
 
+    // some of the elements are not numbers, theyre strings but typescript doesnt catch it
     var currDataset:number[][] = []
     var currClasses:string[][]= []
     var columns:string[] = ["", ""].concat(Object.keys(datasets[indexDataset][0]).slice(0,-1))
+    const target = Object.keys(datasets[indexDataset][0]).slice(-1)[0]
 
     
     datasets[indexDataset].forEach((row) => {
@@ -69,7 +71,7 @@ export const RawDataTable = () => {
                         <th className="cursor-pointer"
                             onClick={() => {setShowClass(!showClass)}}
                             title={showClass ? 'Hide Classes' : 'Display Classes'}>
-                            {showClass ? 'Class' : '►'}
+                            {showClass ? `Class: ${target}` : '►'}
                         </th>
                     </tr>
                 </thead>
