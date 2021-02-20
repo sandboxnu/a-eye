@@ -67,12 +67,10 @@ const RblattGraph = (props: RblattGraphProps) => {
     }, [props.highlighted]);
 
     useEffect(() => {
-        console.log('refreshing points', props.inputs);
         if(board) {
             props.inputs.forEach(({x, y}) => {
-                console.log(x, y);
                 for (let el in board.objects) {
-                    JXG.isPoint(board.objects[el]) && console.log( JXG.isPoint(board.objects[el]), board.objects[el].hasPoint(x, y), !isInitialInputPoint(x, y));
+                    // JXG.isPoint(board.objects[el]) && console.log( JXG.isPoint(board.objects[el]), board.objects[el].hasPoint(x, y), !isInitialInputPoint(x, y));
                     if (JXG.isPoint(board.objects[el]) && isInitialInputPoint(x, y)) {
                         board.removeObject(el); 
                         // removePoint(el, x, y);
@@ -83,7 +81,6 @@ const RblattGraph = (props: RblattGraphProps) => {
     }, [props]);
 
     const addPoint = (e: any) => {
-        console.log('adding or removing a point');
         if (props.editingType.val === null) return;
 
         let canCreate = true;
@@ -107,7 +104,6 @@ const RblattGraph = (props: RblattGraphProps) => {
             });
             // creating points here is *technically* going against controlled components
             // shhh do not look
-            console.log('creating point');
             const p = board.create('point', [coords.usrCoords[1], coords.usrCoords[2]],
                 { name: '', size: 1, color: props.editingType.val ? COL_1 : COL_0 });
         } else {
