@@ -31,20 +31,15 @@ export const PCADemo = ({labelColor, labelColorHex = ''}: PCAProps) => {
 }
 
 export const RawDataTable = () => {
-
     const datasetLabel = [
         "Original Dataset",
         "Titanic Dataset",
     ];
 
     const [showClass, setShowClass] = useState(false);
-
     const [indexDataset, setIndexDataset] = useState(0);
 
     const datasets = [trainDataIris, titanicData];
-
-
-
 
     // some of the elements are not numbers, theyre strings but typescript doesnt catch it
     var currDataset:number[][] = []
@@ -98,37 +93,6 @@ export const RawDataTable = () => {
 
 // Plot all samples in dataset, choose what 2 features to use as the axes
 export const SelectableAxisChart = (props: { columnSet: string[], initXIdx: number, initYIdx: number, labelColor: string, labelColorHex: string }) => {
-
-
-
-    const [xIdx, setXIdx] = useState(props.initXIdx);
-    const [yIdx, setYIdx] = useState(props.initYIdx);
-    const points: DataSeriesMap = {};
-    Object.entries(dataByClass).forEach(([dataClass, nums]) => {
-        points[dataClass] = nums.map(row => ({ x: row[xIdx], y: row[yIdx] }));
-    })
-
-    return (
-        <div className="pca raw-data-chart">
-            <div className="select-axis-menu yIdx">
-                <p className={`font-opensans font-bold italic ${props.labelColor}`}> Select Y Axis </p>
-                <AxisSelector selected={yIdx} onChange={setYIdx} columnSet={props.columnSet} />
-            </div>
-            <div className="raw-data-scatter">
-                <BasicScatter colorMap={colorMap} points={points} xLabel={props.columnSet[xIdx]} yLabel={props.columnSet[yIdx]} labelColorHex={props.labelColorHex} />
-            </div>
-            <div className="select-axis-menu xIdx">
-                <p className={`font-opensans font-bold italic ${props.labelColor}`}> Select X Axis</p>
-                <AxisSelector selected={xIdx} onChange={setXIdx} columnSet={props.columnSet} />
-            </div>
-        </div>);
-};
-
-const onlyUnique = (value, index, self) => self.indexOf(value) === index;
-
-
-export const StaticAxisChart = (props:{  labelColorHex: string }) => {
-// { xIdx: number, yIdx: number, columnSet: string[], classes: string[],
     const datasetLabel = [
         "Original Dataset",
         "Titanic Dataset",
@@ -141,7 +105,97 @@ export const StaticAxisChart = (props:{  labelColorHex: string }) => {
 
     const labelIndices = [
         [4, 5],
-        [6, 10],
+        [5, 8],
+    ]
+
+
+    const [indexDataset, setIndexDataset] = useState(0);
+    const datasets = [trainDataIris, titanicData]
+
+    // some of the elements are not numbers, theyre strings but typescript doesnt catch it
+    let currDataset:number[][] = []
+    let currClasses:string[] = []
+
+    const xLabelIndex = labelIndices[indexDataset][0];
+    const yLabelIndex = labelIndices[indexDataset][1];
+
+    const [xIdx, setXIdx] = useState(xLabelIndex);
+    const [yIdx, setYIdx] = useState(yLabelIndex);
+    
+    datasets[indexDataset].forEach((row) => {
+        const keys:string[] = Object.keys(row).slice(0,-1)
+        const currRow:number[] = keys.map((rowKey) => row[rowKey]) 
+        currDataset.push(currRow);
+
+        const keys_class:string[] = Object.keys(row).slice(-1)
+        const classRow:string[] = keys_class.map((rowKey) => row[rowKey]) 
+        currClasses.push(classRow[0])
+    })
+
+    var columns:string[] = ["", ""].concat(Object.keys(datasets[indexDataset][0]).slice(0,-1))
+    // .filter((col) => col !== "Name" && col !== "Sex" && col !== "PassengerId");
+    const uniqueCurrClasses = currClasses.filter(onlyUnique);
+
+    const prediction = new PCA(currDataset).predict(currDataset);
+
+    const colorMap: ColorMap = {};
+    const dataByClass: { [dataClass: string]: number[][] } = {};
+    uniqueCurrClasses.forEach((dataClass, i) => {
+        colorMap[dataClass] = COLORS[i];
+        dataByClass[dataClass] = [];
+        currDataset.forEach((row, idx) => {
+            if (dataClass === currClasses[idx]) {
+                dataByClass[dataClass].push([prediction.get(idx, 0), prediction.get(idx, 1)].concat(row));
+            }
+        });
+    });
+
+    const points: DataSeriesMap = {};
+    currClasses.forEach((dataClass) => {
+        points[dataClass] = dataByClass[dataClass].map(row => {
+            return ({ x: row[xIdx], y: row[yIdx] })});
+    });
+
+    return (
+        <>
+        <div className="pca raw-data-chart">
+            <div className="select-axis-menu yIdx">
+                <p className={`font-opensans font-bold italic ${props.labelColor}`}> Select Y Axis </p>
+                <AxisSelector selected={yIdx} onChange={setYIdx} columnSet={columns} />
+            </div>
+            <div className="raw-data-scatter">
+                <BasicScatter colorMap={colorMap} points={points} xLabel={columns[xIdx]} yLabel={columns[yIdx]} labelColorHex={props.labelColorHex} />
+            </div>
+            <div className="select-axis-menu xIdx">
+                <p className={`font-opensans font-bold italic ${props.labelColor}`}> Select X Axis</p>
+                <AxisSelector selected={xIdx} onChange={setXIdx} columnSet={columns} />
+            </div>
+        </div>
+
+            <div className="axis-selector inline">
+                <button onClick={e => setIndexDataset((indexDataset+1) % datasets.length)}>Current: {datasetLabel[indexDataset]}</button>
+            </div>
+            </>
+        );
+};
+
+const onlyUnique = (value, index, self) => self.indexOf(value) === index;
+
+
+export const StaticAxisChart = (props:{  labelColorHex: string }) => {
+    const datasetLabel = [
+        "Original Dataset",
+        "Titanic Dataset",
+    ];
+
+    const columnList = [ 
+        ["petalLength", "petalWidth"], 
+        ["Age", "Fare"],
+    ];
+
+    const labelIndices = [
+        [4, 5],
+        [5, 8],
     ]
 
     const [indexDataset, setIndexDataset] = useState(0);
@@ -174,11 +228,9 @@ export const StaticAxisChart = (props:{  labelColorHex: string }) => {
     const colorMap: ColorMap = {};
     const dataByClass: { [dataClass: string]: number[][] } = {};
     uniqueCurrClasses.forEach((dataClass, i) => {
-        // console.log(dataClass, i);
         colorMap[dataClass] = COLORS[i];
         dataByClass[dataClass] = [];
         currDataset.forEach((row, idx) => {
-            // console.log(row, idx);
             if (dataClass === currClasses[idx]) {
                 dataByClass[dataClass].push([prediction.get(idx, 0), prediction.get(idx, 1)].concat(row));
             }
@@ -186,13 +238,10 @@ export const StaticAxisChart = (props:{  labelColorHex: string }) => {
     });
 
     const points: DataSeriesMap = {};
-    console.log(dataByClass[currClasses[0]])
     currClasses.forEach((dataClass) => {
-        // array with each data point
         points[dataClass] = dataByClass[dataClass].map(row => {
             return ({ x: row[xLabelIndex], y: row[yLabelIndex] })});
     });
-    console.log(points)
 
     return (
         <div className="pca pca-chart">
