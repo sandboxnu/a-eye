@@ -1,6 +1,7 @@
 /* eslint-disable global-require */
 import React, { useEffect } from 'react';
 import './ImageSelector.css';
+import ImageUploader from './ImageUploader';
 
 const ALL_IMGS: { [name: string]: any } = {
   'three.png': require('../../../media/modules/computerVision/imageLibrary/three.png')
@@ -29,19 +30,21 @@ const ALL_IMGS: { [name: string]: any } = {
     .default,
 };
 
-const ImageSelector = (props: {
+export interface ImageSelectorProps {
   currImg: string;
   onSelect: (img: string, imgUrl: string) => any;
-}) => {
-  useEffect(() => props.onSelect(props.currImg, ALL_IMGS[props.currImg]), []);
+}
+
+const ImageSelector = ({ currImg, onSelect }: ImageSelectorProps) => {
+  useEffect(() => onSelect(currImg, ALL_IMGS[currImg]), []);
 
   const makeImg = (key: string) => (
     // eslint-disable-next-line
     <img
       key={key}
-      className={key === props.currImg ? 'selected' : ''}
+      className={key === currImg ? 'selected' : ''}
       src={ALL_IMGS[key]}
-      onClick={() => props.onSelect(key, ALL_IMGS[key])}
+      onClick={() => onSelect(key, ALL_IMGS[key])}
     />
   );
 
@@ -51,6 +54,7 @@ const ImageSelector = (props: {
       <div className="selection-window">
         {Object.keys(ALL_IMGS).map(key => ALL_IMGS[key] && makeImg(key))}
       </div>
+      <ImageUploader onSelect={onSelect} />
     </div>
   );
 };
