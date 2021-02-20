@@ -11,10 +11,15 @@ export interface TitanicData {
     PassengerId: number,
     Survived: number,
     PassengerClass: number,
+    Name: string,
+    Sex: string,
     Age: number,
     SibSp: number,
     Parch: number,
+    Ticket: string | number,
     Fare: number,
+    Cabin: string,
+    Embarked: string
 };
 // artificially added points (all datasets are converted into this format with two features)
 export interface AddedPoint {Distance_Feature:number, Speeding_Feature:number};

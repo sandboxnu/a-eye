@@ -105,9 +105,8 @@ export const SelectableAxisChart = (props: { columnSet: string[], initXIdx: numb
 
     const labelIndices = [
         [4, 5],
-        [5, 8],
+        [6, 10],
     ]
-
 
     const [indexDataset, setIndexDataset] = useState(0);
     const datasets = [trainDataIris, titanicData]
@@ -122,6 +121,8 @@ export const SelectableAxisChart = (props: { columnSet: string[], initXIdx: numb
     const [xIdx, setXIdx] = useState(xLabelIndex);
     const [yIdx, setYIdx] = useState(yLabelIndex);
     
+    var columns:string[] = ["", ""].concat(Object.keys(datasets[indexDataset][0]).slice(0,-1));
+
     datasets[indexDataset].forEach((row) => {
         const keys:string[] = Object.keys(row).slice(0,-1)
         const currRow:number[] = keys.map((rowKey) => row[rowKey]) 
@@ -132,7 +133,6 @@ export const SelectableAxisChart = (props: { columnSet: string[], initXIdx: numb
         currClasses.push(classRow[0])
     })
 
-    var columns:string[] = ["", ""].concat(Object.keys(datasets[indexDataset][0]).slice(0,-1))
     // .filter((col) => col !== "Name" && col !== "Sex" && col !== "PassengerId");
     const uniqueCurrClasses = currClasses.filter(onlyUnique);
 
@@ -195,7 +195,7 @@ export const StaticAxisChart = (props:{  labelColorHex: string }) => {
 
     const labelIndices = [
         [4, 5],
-        [5, 8],
+        [4, 7],
     ]
 
     const [indexDataset, setIndexDataset] = useState(0);
@@ -238,6 +238,7 @@ export const StaticAxisChart = (props:{  labelColorHex: string }) => {
     });
 
     const points: DataSeriesMap = {};
+    console.log(dataByClass);
     currClasses.forEach((dataClass) => {
         points[dataClass] = dataByClass[dataClass].map(row => {
             return ({ x: row[xLabelIndex], y: row[yLabelIndex] })});
@@ -295,5 +296,8 @@ datasetIris.getDistinctClasses().forEach((dataClass: string, i: number) => {
         }
     });
 })
+
+const titanicKeysToRemove = ["Name", "Sex", "Ticket", "Cabin", "Embarked"];
+titanicData.forEach((datapoint) => titanicKeysToRemove.forEach((key) => delete datapoint[key]));
 
 export default PCADemo;
