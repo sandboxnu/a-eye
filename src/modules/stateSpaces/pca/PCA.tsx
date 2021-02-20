@@ -23,7 +23,7 @@ export const PCADemo = ({labelColor, labelColorHex = ''}: PCAProps) => {
     return (
         <div className={`PCA-div ${labelColor}`}>
             <RawDataTable />
-            <StaticAxisChart xIdx={4} yIdx={5} columnSet={columns} classes={["versicolor", "setosa"]} labelColorHex={labelColorHex} />
+            <StaticAxisChart  labelColorHex={labelColorHex} />
             <SelectableAxisChart columnSet={columns} initXIdx={2} initYIdx={3} labelColor={"text-white"} labelColorHex={labelColorHex} />
             <SelectableAxisChart columnSet={pcaColumns} initXIdx={0} initYIdx={1} labelColor={"text-white"} labelColorHex={labelColorHex} />
         </div>
@@ -41,7 +41,10 @@ export const RawDataTable = () => {
 
     const [indexDataset, setIndexDataset] = useState(0);
 
-    const datasets = [trainDataIris, titanicData]
+    const datasets = [trainDataIris, titanicData];
+
+
+
 
     // some of the elements are not numbers, theyre strings but typescript doesnt catch it
     var currDataset:number[][] = []
@@ -95,6 +98,9 @@ export const RawDataTable = () => {
 
 // Plot all samples in dataset, choose what 2 features to use as the axes
 export const SelectableAxisChart = (props: { columnSet: string[], initXIdx: number, initYIdx: number, labelColor: string, labelColorHex: string }) => {
+
+
+
     const [xIdx, setXIdx] = useState(props.initXIdx);
     const [yIdx, setYIdx] = useState(props.initYIdx);
     const points: DataSeriesMap = {};
@@ -118,18 +124,89 @@ export const SelectableAxisChart = (props: { columnSet: string[], initXIdx: numb
         </div>);
 };
 
-export const StaticAxisChart = (props: { xIdx: number, yIdx: number, columnSet: string[], classes: string[], labelColorHex: string }) => {
+const onlyUnique = (value, index, self) => self.indexOf(value) === index;
+
+
+export const StaticAxisChart = (props:{  labelColorHex: string }) => {
+// { xIdx: number, yIdx: number, columnSet: string[], classes: string[],
+    const datasetLabel = [
+        "Original Dataset",
+        "Titanic Dataset",
+    ];
+
+    const columnList = [ 
+        ["petalLength", "petalWidth"], 
+        ["Age", "Fare"],
+    ];
+
+    const labelIndices = [
+        [4, 5],
+        [6, 10],
+    ]
+
+    const [indexDataset, setIndexDataset] = useState(0);
+    const datasets = [trainDataIris, titanicData]
+
+    // some of the elements are not numbers, theyre strings but typescript doesnt catch it
+    let currDataset:number[][] = []
+    let currClasses:string[] = []
+
+    const xLabel = columnList[indexDataset][0];
+    const yLabel = columnList[indexDataset][1];
+
+    const xLabelIndex = labelIndices[indexDataset][0];
+    const yLabelIndex = labelIndices[indexDataset][1];
+    
+    datasets[indexDataset].forEach((row) => {
+        const keys:string[] = Object.keys(row).slice(0,-1)
+        const currRow:number[] = keys.map((rowKey) => row[rowKey]) 
+        currDataset.push(currRow);
+
+        const keys_class:string[] = Object.keys(row).slice(-1)
+        const classRow:string[] = keys_class.map((rowKey) => row[rowKey]) 
+        currClasses.push(classRow[0])
+    })
+
+    const uniqueCurrClasses = currClasses.filter(onlyUnique);
+
+    const prediction = new PCA(currDataset).predict(currDataset);
+
+    const colorMap: ColorMap = {};
+    const dataByClass: { [dataClass: string]: number[][] } = {};
+    uniqueCurrClasses.forEach((dataClass, i) => {
+        // console.log(dataClass, i);
+        colorMap[dataClass] = COLORS[i];
+        dataByClass[dataClass] = [];
+        currDataset.forEach((row, idx) => {
+            // console.log(row, idx);
+            if (dataClass === currClasses[idx]) {
+                dataByClass[dataClass].push([prediction.get(idx, 0), prediction.get(idx, 1)].concat(row));
+            }
+        });
+    });
 
     const points: DataSeriesMap = {};
-    props.classes.forEach((dataClass) => {
-        console.log(dataClass);
-        points[dataClass] = dataByClass[dataClass].map(row => ({ x: row[props.xIdx], y: row[props.yIdx] }));
+    console.log(dataByClass[currClasses[0]])
+    currClasses.forEach((dataClass) => {
+        // array with each data point
+        points[dataClass] = dataByClass[dataClass].map(row => {
+            return ({ x: row[xLabelIndex], y: row[yLabelIndex] })});
     });
+    console.log(points)
 
     return (
         <div className="pca pca-chart">
             <div className="raw-data-scatter">
-                <BasicScatter colorMap={colorMap} points={points} xLabel={props.columnSet[props.xIdx]} yLabel={props.columnSet[props.yIdx]} labelColorHex={props.labelColorHex} />
+                <BasicScatter 
+                    colorMap={colorMap} 
+                    points={points} 
+                    xLabel={xLabel} 
+                    yLabel={yLabel} 
+                    labelColorHex={props.labelColorHex} 
+                />
+                <div className="axis-selector inline">
+                    <button onClick={e => setIndexDataset((indexDataset+1) % datasets.length)}>Current: {datasetLabel[indexDataset]}</button>
+                </div>
             </div>
         </div>);
 

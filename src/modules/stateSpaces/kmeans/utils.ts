@@ -10,7 +10,7 @@ export interface DataFormat3 { petalLength:number, petalWidth:number, species:st
 export interface TitanicData {
     PassengerId: number,
     Survived: number,
-    Pclass: number,
+    PassengerClass: number,
     Name: string,
     Sex: string,
     Age: number,
