@@ -8,6 +8,7 @@
     "@material-ui/core": "4.11.0",
     "@material-ui/icons": "4.9.1",
     "@material-ui/styles": "4.11.3",
+    "amplitude-js": "7.4.1",
     "autoprefixer": "10.0.2",
     "chart.js": "2.9.3",
     "chartjs-plugin-dragdata": "1.1.3",
