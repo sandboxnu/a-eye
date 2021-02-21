@@ -12,6 +12,7 @@ import {
   BubbleDataEntry,
   getClasses,
   processdata,
+  calculateError,
 } from './utils';
 
 type KMeansStepExampleType = {
@@ -120,6 +121,8 @@ const KMeansStepExample: React.FC<KMeansStepExampleType> = ({
     data.datasets.push(cluster[1]);
   });
 
+  const error: number = calculateError(gen[r]);
+
   const options = {
     showLines: false,
     tooltips: { enabled: false },
@@ -183,7 +186,11 @@ const KMeansStepExample: React.FC<KMeansStepExampleType> = ({
   return (
     <div>
       <Scatter data={data} options={options} />
-      <div className="text-moduleOffwhite m-3 -mt-2 space-x-2 justify-center space-y-3">
+      <div className="flex justify-center mb-6 text-moduleNavy">
+        {/* eslint-disable-next-line */}
+        Cluster Mean Squared Error: {error}
+      </div>
+      <div className="text-moduleOffwhite m-3 space-x-2 justify-center space-y-3">
         <div className="flex justify-around rounded w-1/4 mx-auto bg-moduleNavy">
           <button
             type="button"
