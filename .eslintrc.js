@@ -12,6 +12,7 @@ module.exports = {
         printWidth: 80,
         arrowParens: 'avoid',
         trailingComma: 'all',
+        endOfLine: 'auto',
       },
     ],
     // incompatible with prettier
