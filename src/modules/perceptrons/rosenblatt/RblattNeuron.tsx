@@ -9,7 +9,6 @@ import {RblattConfig, RblattInput} from './constants';
 
 // a static version of the neuron demo, for the Rblatt demo
 const RblattNeuron = (props: {input: RblattInput, config: RblattConfig, labelColor: string}) => {
-
     const inputSum = props.input.x * props.config.weightX + props.input.y * props.config.weightY + props.config.bias;
     const output = inputSum > 0 ? 1 : 0;
 
@@ -46,8 +45,8 @@ const RblattNeuron = (props: {input: RblattInput, config: RblattConfig, labelCol
                                     flex items-center justify-center text-white"
                     >
                         {props.config.bias.toFixed(1)}
+                    </div>
                 </div>
-            </div>
             </div>
             <InputLines numInpts={3} />
             <div className="rounded-full w-20 h-20 bg-white border-2 border-orange-500 

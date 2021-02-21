@@ -11,7 +11,7 @@ const ImageSelector = (props: { currImg: string, onSelect: (img: string, imgUrl:
             src={ALL_IMGS[key]}
             onClick={() => props.onSelect(key, ALL_IMGS[key])}
         />
-    );
+    )
 
     return (
         <div className='image-selector'>
@@ -29,18 +29,18 @@ const ImageSelector = (props: { currImg: string, onSelect: (img: string, imgUrl:
 
 
 const ALL_IMGS: { [name: string]: any } = {
-    'three.png': require('./imageLibrary/three.png'),
-    'diamond.png': require('./imageLibrary/diamond.png'),
-    'square.png': require('./imageLibrary/square.png'),
-    'circles.jpg': require('./imageLibrary/circles.jpg'),
-    'dogSilhouette.jpg': require('./imageLibrary/dogSilhouette.jpg'),
-    'purpleFlowers.jpeg': require('./imageLibrary/purpleFlowers.jpeg'),
-    'steps.png': require('./imageLibrary/steps.png'),
-    'tabbyCat.jpg': require('./imageLibrary/tabbyCat.jpg'),
-    'teddyBear.jpg': require('./imageLibrary/teddyBear.jpg'),
-    'zebra.jpg': require('./imageLibrary/zebra.jpg'),
-    'bwWoman.jpg': require('./imageLibrary/bwWoman.jpg'),
-    'bwMan.jpg': require('./imageLibrary/bwMan.jpg')
+    'three.png': require('../../../media/modules/computerVision/imageLibrary/three.png').default,
+    'diamond.png': require('../../../media/modules/computerVision/imageLibrary/diamond.png').default,
+    'square.png': require('../../../media/modules/computerVision/imageLibrary/square.png').default,
+    'circles.jpg': require('../../../media/modules/computerVision/imageLibrary/circles.jpg').default,
+    'dogSilhouette.jpg': require('../../../media/modules/computerVision/imageLibrary/dogSilhouette.jpg').default,
+    'purpleFlowers.jpeg': require('../../../media/modules/computerVision/imageLibrary/purpleFlowers.jpeg').default,
+    'steps.png': require('../../../media/modules/computerVision/imageLibrary/steps.png').default,
+    'tabbyCat.jpg': require('../../../media/modules/computerVision/imageLibrary/tabbyCat.jpg').default,
+    'teddyBear.jpg': require('../../../media/modules/computerVision/imageLibrary/teddyBear.jpg').default,
+    'zebra.jpg': require('../../../media/modules/computerVision/imageLibrary/zebra.jpg').default,
+    'bwWoman.jpg': require('../../../media/modules/computerVision/imageLibrary/bwWoman.jpg').default,
+    'bwMan.jpg': require('../../../media/modules/computerVision/imageLibrary/bwMan.jpg').default
 }
 
 export default ImageSelector;
