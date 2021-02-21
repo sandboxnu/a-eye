@@ -1,6 +1,6 @@
 import React from 'react';
 import ModuleDropdown from "./ModuleDropdown";
-import logo from './media/logo_blink.svg';
+import logo from './media/landingPage/logo_blink.svg';
 
 export default function Navbar() {
     return (

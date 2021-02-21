@@ -1,12 +1,16 @@
 import React from 'react';
-import background_img from '../media/background.jpeg';
-import landing_background from '../media/background_landing_page.svg';
+import background_img from '../media/landingPage/background.jpeg';
+import landing_background from '../media/landingPage/background_landing_page.svg';
 import descriptions from '../media/modules/module_descriptions.json';
 import ModuleIntro from "./ModuleIntro";
+import CSS from 'csstype';
 
-let top_style = {backgroundImage: `url(${background_img})`};
-let bot_style = {backgroundImage: `url(${landing_background})`};
+let top_style: CSS.Properties = {backgroundImage: `url(${background_img})`};
+let bot_style: CSS.Properties = {backgroundImage: `url(${landing_background})`};
 
+/**
+ * Renders the landing page.
+ */
 export default function LandingPage() {
   return (
       <div className="container w-screen">

@@ -2,22 +2,40 @@ import React, { useEffect, useState } from 'react';
 import { RblattInput, RblattConfig, INIT_CONFIG, INIT_INPUTS } from './constants';
 import JXG from 'jsxgraph';
 
-type RblattGraphProps = { 
-    inputs: RblattInput[], 
-    line: RblattConfig, 
-    highlighted: RblattInput,
-    editingType: {val:  0 | 1 | null}, 
-    onInputsChange: (inpts: React.SetStateAction<RblattInput[]>) => void
+type RblattGraphProps = {
+    inputs: RblattInput[],
+    line: RblattConfig,
+    highlighted?: RblattInput,
+    editingType: {val:  0 | 1 | null},
+    onInputsChange: (inpts: React.SetStateAction<RblattInput[]>) => void,
+    reset: {isReset:boolean, setReset:Function},
+    clear: {isCleared:boolean, setCleared:Function}
  }
 
 const isInitialInputPoint = (xCoord: number, yCoord: number) => {
+    let result = false
     INIT_INPUTS.forEach(({x: xInit, y: yInit}) => {
         if(xInit === xCoord && yInit === yCoord) {
-            return true;
+            result = true;
         }
     });
-    return false;
+    return result;
 };
+
+// returns all the points which are all not initial inputs, aka all the points that have been added
+const getListInputs = (inputs: RblattInput[]) => {
+    let toRemove:RblattInput[] = []
+    let toAdd:RblattInput[] = []
+    inputs.forEach((input: RblattInput) => {
+        const {x,y} = input;
+        if (!isInitialInputPoint(x, y)) {
+            toRemove.push(input);
+        } else {
+            toAdd.push(input);
+        }
+    })
+    return [toRemove, toAdd];
+}
 
 const RblattGraph = (props: RblattGraphProps) => {
     const [brdId, setBrdId] = useState('board_' + Math.random().toString(36).substr(2, 9));
@@ -31,8 +49,7 @@ const RblattGraph = (props: RblattGraphProps) => {
         setBoard(newBoard);
         props.inputs.forEach((inpt, idx) => {
             const color = inpt.z === 1 ? COL_1 : COL_0
-            const p = newBoard.create('point', [inpt.x, inpt.y], 
-                                      { name: '', size: 1, color, fixed: true });
+            const p = newBoard.create('point', [inpt.x, inpt.y], { name: '', size: 1, color, fixed: true });
         });
         const {aCoords, bCoords} = getLinePoints(props.line);
         const pA = newBoard.create('point', aCoords, { name: '', fixed: true, color: 'transparent'});
@@ -46,6 +63,7 @@ const RblattGraph = (props: RblattGraphProps) => {
 
     // register listeners after the state var has been set
     useEffect(() => { board && board.on('down', addPoint)}, [board]);
+    useEffect(() => { board && board.on('down', editPoint)}, [board]);
 
     useEffect(() => {
         const {aCoords, bCoords} = getLinePoints(props.line);
@@ -57,34 +75,57 @@ const RblattGraph = (props: RblattGraphProps) => {
     }, [props.line]);
 
     useEffect(() => {
-        board?.select({
-            elementClass: JXG.OBJECT_CLASS_POINT
-        }).setAttribute({size: 1});
-        board?.select({
-            Y: (v: number) => v === props.highlighted.y, 
-            X: (v: number) => v === props.highlighted.x
-        }).setAttribute({size: 4});
+        if(props.highlighted !== undefined) {
+            board?.select({
+                elementClass: JXG.OBJECT_CLASS_POINT
+            }).setAttribute({size: 1});
+            board?.select({
+                Y: (v: number) => v === props.highlighted!.y,
+                X: (v: number) => v === props.highlighted!.x
+            }).setAttribute({size: 4});
+        }
     }, [props.highlighted]);
 
     useEffect(() => {
-        if(board) {
-            props.inputs.forEach(({x, y}) => {
-                for (let el in board.objects) {
-                    // JXG.isPoint(board.objects[el]) && console.log( JXG.isPoint(board.objects[el]), board.objects[el].hasPoint(x, y), !isInitialInputPoint(x, y));
-                    if (JXG.isPoint(board.objects[el]) && isInitialInputPoint(x, y)) {
-                        board.removeObject(el); 
-                        // removePoint(el, x, y);
-                    }
+        if(board && props.reset.isReset) {
+            const [pointsToRemove, pointsToAdd] = getListInputs(props.inputs)
+            for (let el in board.objects) {
+                if (JXG.isPoint(board.objects[el])) {
+                    const [z, x, y] = board.objects[el].coords.usrCoords
+                    pointsToRemove.forEach((point) => {
+                        const {x: x1, y: y1} = point;
+                        if (x1 == x && y1 == y)  {
+                            removePoint(el, x, y);
+                        }
+                    })
                 }
-            })
+            }
+            INIT_INPUTS.forEach(({x, y, z}) => 
+                board.create('point', [x, y], { name: '', size: 1, color: z ? COL_1 : COL_0 }));
+            props.reset.setReset(false);
+        }
+        else if(board && props.clear.isCleared) {
+            const pointsToRemove = props.inputs;
+            for (let el in board.objects) {
+                if (JXG.isPoint(board.objects[el])) {
+                    const [z, x, y] = board.objects[el].coords.usrCoords
+                    pointsToRemove.forEach((point) => {
+                        const {x: x1, y: y1} = point;
+                        if (x1 == x && y1 == y)  {
+                            removePoint(el, x, y);
+                        }
+                    })
+                }
+            }
+            props.clear.setCleared(false);
         }
     }, [props]);
 
-    const addPoint = (e: any) => {
+    const editPoint = (e: any) => {
         if (props.editingType.val === null) return;
 
         let canCreate = true;
-        let i; 
+        let i;
         let pointToDelete;
         if (e[JXG.touchProperty]) {
             i = 0;
@@ -98,17 +139,24 @@ const RblattGraph = (props: RblattGraphProps) => {
             }
         }
         if (canCreate) {
-            props.onInputsChange(oldInpts => {
-                const z = props.editingType.val || 0;
-                return oldInpts.concat([{x: coords.usrCoords[1], y: coords.usrCoords[2], z }]);
-            });
-            // creating points here is *technically* going against controlled components
-            // shhh do not look
-            const p = board.create('point', [coords.usrCoords[1], coords.usrCoords[2]],
-                { name: '', size: 1, color: props.editingType.val ? COL_1 : COL_0 });
+            const z = props.editingType.val || 0;
+            addPoint(coords.usrCoords[1], coords.usrCoords[2], z, board);
         } else {
             removePoint(pointToDelete, coords.scrCoords[1], coords.scrCoords[2], board);
         }
+    }
+
+    const addPoint = (x: number, y: number, z: 0 | 1,  currBoard?: any) => {
+        props.onInputsChange(oldInpts => {
+            return oldInpts.concat([{x, y, z}]);
+        });
+
+        // can't directly use state var for board bc of closures
+        if (!currBoard) currBoard = board;
+        // creating points here is *technically* going against controlled components
+        // shhh do not look
+        board.create('point', [x, y],
+            { name: '', size: 1, color: z ? COL_1 : COL_0 });
     }
 
     const removePoint = (pointId: string, x: number, y: number, currBoard?: any) => {
@@ -117,7 +165,7 @@ const RblattGraph = (props: RblattGraphProps) => {
 
         // can't directly use state var for board bc of closures
         if (!currBoard) currBoard = board;
-        currBoard.removeObject(pointId); 
+        currBoard.removeObject(pointId);
     }
 
     return (
@@ -143,13 +191,12 @@ var getMouseCoords = function (board: any, e: MouseEvent, i?: number) {
 function getLinePoints(line: RblattConfig) {
     if (line.weightY === 0) {
         const x = line.bias / line.weightX;
-        return {aCoords: [x, 1], bCoords: [x, 2]} 
+        return {aCoords: [x, 1], bCoords: [x, 2]}
     } else {
         const func = (x: number) => (line.weightX * x + line.bias) / (- line.weightY);
-        return {aCoords: [1, func(1)], bCoords: [2, func(2)]} 
+        return {aCoords: [1, func(1)], bCoords: [2, func(2)]}
     }
 }
 
 const COL_0 = '#f15e2c';
 const COL_1 = '#394d73';
-

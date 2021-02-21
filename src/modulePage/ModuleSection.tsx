@@ -6,14 +6,37 @@ import HaarWaveletDemo from "../modules/computerVision/haarWavelet/HaarWaveletDe
 import { ImageSelectableDemo } from "../modules/computerVision/imageSelector/ImageSelectableDemo";
 import PCADemo from "../modules/stateSpaces/pca/PCA";
 import {RawDataTable, SelectableAxisChart, StaticAxisChart, AxisSelector, config as pcaConfig} from "../modules/stateSpaces/pca/PCA";
-import KMeans, {MyDemo, MyScatter2, config as kmeansConfig} from '../modules/stateSpaces/kmeans/kmeans';
+import KMeans, {KMeansStepExample, InteractiveClusteringExample} from '../modules/stateSpaces/kmeans';
+import blank from '../media/modules/blank.png';
+import animation1 from '../media/modules/computerVision/animation-1.gif';
+import animation2 from '../media/modules/computerVision/animation-2.gif';
+import animation3 from '../media/modules/computerVision/animation-3.gif';
+import {ModuleSubsection} from "./ModulePage";
 import RblattVectorsDemo from '../modules/perceptrons/rblattVectors/RblattVectorsDemo';
 import MPNeuron from "../modules/perceptrons/mpNeuron/MPNeuron";
 import RosenBlattDemo from "../modules/perceptrons/rosenblatt/RosenblattDemo";
 
 const lorem = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.';
 
-export default function ModuleSection(props) {
+interface ColorScheme {
+    "bgColor": string,
+    "titleColor": string,
+    "headingColor": string,
+    "bodyColor": string,
+    "labelColorHex": string
+}
+
+/**
+ * Renders a single section on the module page.
+ *
+ * @param props.title section title
+ * @param props.sections subsections of the section
+ * @param props.colorScheme configuration for the section's color scheme, see ColorScheme interface
+ * @param props.key section's identifier; usually the section title
+ * @param props.demoComp name of the React component used as a demo
+ */
+export default function ModuleSection(props:
+    {title: string, sections: ModuleSubsection[], colorScheme: string, key: string, demoComp: string}) {
     const scheme = props.colorScheme === 'dark' ? {
         "bgColor": "bg-moduleDarkBlue",
         "titleColor": "text-modulePaleBlue",
@@ -37,12 +60,12 @@ export default function ModuleSection(props) {
                         props.sections.map((section, index) => {
                             return (
                                 <div className={`flex flex-col md:flex-row mx-2 md:my-5 ${section.imgSrc === '/blank.png' && "my-10"} ${section.body ? "" : "hidden"}`} key={index}>
-                                    <img src={process.env.PUBLIC_URL + section.imgSrc} alt=""
+                                    <img src={GetImage(section.imgSrc)} alt=""
                                          className={`hidden ${index % 2 !== 0 && "md:flex"} ${section.imgSrc === '/blank.png' ? "hidden md:object-none" : "object-contain"} md:w-1/4 md:mr-16 md:-mt-12`}/>
                                     <div className="md:w-2/3 flex-col">
                                         <p className={`my-2 text-left text-lg font-medium font-mono ${scheme.bodyColor}`}>{section.body || lorem}</p>
                                     </div>
-                                    <img src={process.env.PUBLIC_URL + section.imgSrc} alt=""
+                                    <img src={GetImage(section.imgSrc)} alt=""
                                          className={`${index % 2 !== 0 && "md:hidden"} ${section.imgSrc === '/blank.png' ? "hidden md:object-none" : "object-contain"} md:w-1/4 md:mr-16 md:-mt-12`}/>
                                 </div>
                             );
@@ -57,7 +80,22 @@ export default function ModuleSection(props) {
     );
 }
 
-function getDemo(comp, scheme) {
+function GetImage(imgName: string) {
+    switch(imgName) {
+        case 'blank':
+            return blank;
+        case 'animation1':
+            return animation1;
+        case 'animation2':
+            return animation2;
+        case 'animation3':
+            return animation3;
+        default:
+            return;
+    }
+}
+
+function getDemo(comp: string, scheme: ColorScheme) {
     const demoArgs = {labelColor: scheme.titleColor}
 
     switch (comp) {
@@ -70,7 +108,7 @@ function getDemo(comp, scheme) {
         case "HaarWaveletDemo": 
             return <ImageSelectableDemo Demo={HaarWaveletDemo} initImg='bwWoman.jpg' demoProps={demoArgs}/>
         case "PCADemo":
-            return <PCADemo {...demoArgs}/>
+            return <PCADemo {...demoArgs} />
         case "RawDataTable":
             return <RawDataTable />
         case "StaticAxisChart":
@@ -80,15 +118,15 @@ function getDemo(comp, scheme) {
         case "PCASelectableAxisChart":
             return <SelectableAxisChart columnSet={pcaConfig.pcaColumns} initXIdx={0} initYIdx={1} labelColor={scheme.titleColor} labelColorHex={scheme.labelColorHex}/>
         case "InteractiveKMeans":
-            return <div><MyScatter2 clstrs ={kmeansConfig.ans1['clusters']} cntrds = {kmeansConfig.ans0['centroids']} hidden = {false} /></div>
+            return <div><InteractiveClusteringExample hidden = {false} /></div>
         case "StepKMeans":
-            return <div><MyDemo kmeans_gen={kmeansConfig.ans2} hidden = {false}/></div>
+            return <div><KMeansStepExample hidden = {false}/></div>
         case "KMeans":
             return <KMeans />
         case "RblattVectorsDemo":
             return <RblattVectorsDemo />
         case "MPNeuron":
-            return <MPNeuron />
+            return <MPNeuron  {...demoArgs} />
         case "RblattDemo":
             return <RosenBlattDemo {...demoArgs}/>
         default: return <div></div>

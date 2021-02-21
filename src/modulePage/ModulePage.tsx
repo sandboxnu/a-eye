@@ -1,12 +1,34 @@
 import React from "react";
+import {RouteComponentProps} from 'react-router';
 import ModuleSection from "./ModuleSection";
 import module8 from '../media/modules/module_8.json';
 import module9 from '../media/modules/module_9.json';
 import module10 from '../media/modules/module_10.json';
 import module11 from '../media/modules/module_11.json';
-const modules = {'computer-vision': module8, 'classification' : module9, 'perceptrons' : module10, 'neural-nets' : module11}
 
-export default function ModulePage(props) {
+export interface ModuleSubsection {
+    "title": string,
+    "body": string,
+    "imgSrc": string
+}
+interface ModuleSection {
+    "title": string,
+    "colorScheme": string,
+    "subsections": ModuleSubsection[],
+    "demoComp": string
+}
+interface Module {
+    "number": number,
+    "title": string,
+    "sections": ModuleSection[]
+}
+const modules: Record<string, Module> = {'computer-vision': module8, 'classification' : module9, 'perceptrons' : module10, 'neural-nets' : module11}
+
+/**
+ * Renders the entire module page.
+ * @param props.match.params.module name of the current module (route has path /modules/module)
+ */
+export default function ModulePage(props: RouteComponentProps<{module: string}>) {
     const module = modules[props.match.params.module];
     if (!module) {
         return (
@@ -18,10 +40,10 @@ export default function ModulePage(props) {
     }
     return (
         <div className="container w-screen">
-            <p className={`w-screen p-4 text-5xl font-bold font-opensans bg-modulePaleBlue text-moduleNavy`}>{module[props.match.params.module].title}</p>
+            <p className={`w-screen p-4 text-5xl font-bold font-opensans bg-modulePaleBlue text-moduleNavy`}>{module.title}</p>
             <ul>
                 {
-                    module[props.match.params.module].sections.map((section) =>    
+                    module.sections.map((section) =>
                         <ModuleSection title={section.title}
                                        sections={section.subsections}
                                        colorScheme={section.colorScheme}
