@@ -57,7 +57,6 @@ const InteractiveClusteringExample: React.FC<InteractiveClusteringExampleType> =
         setY1Idx(kmeansAnswers[nextDataset]['centroids'][0].centroid[1]);
         setX2Idx(kmeansAnswers[nextDataset]['centroids'][1].centroid[0]);
         setY2Idx(kmeansAnswers[nextDataset]['centroids'][1].centroid[1]);
-
         setO(nextDataset);
     }
 
@@ -159,7 +158,7 @@ const InteractiveClusteringExample: React.FC<InteractiveClusteringExampleType> =
 
     // index corresponds to the datasets as numbered above
     const yAxisMin: number[] = [0, 1, 0, 0];
-    const yAxisMax: number[] = [120, 7, 40, 100];
+    const yAxisMax: number[] = [120, 7, 40, 600];
     const xAxisMin: number[] = [0, 1, 0, 0];
     const xAxisMax: number[] = [250, 10, 100, 100];
 

@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import trainData from '../data/train.json';
 import trainDataIris from '../data/iris.json';
 import trainDataIris2 from '../data/iris2.json';
+import trainDataTitanic from '../data/titanic.json';
 import {InputData, organiseData, KMeansResult, BubbleDataEntry, getClasses, processdata} from './utils';
 
 import { Scatter } from 'react-chartjs-2';
@@ -13,12 +14,8 @@ type KMeansStepExampleType = {
     xLabel?: string,
     yLabel?: string,
     k?: number,
-    trainingData?: InputData[],
-    trainingDataIris?: InputData[],
-    trainingDataIris2?: InputData[],
-    centers?: number[][],
-    centersIris?: number[][],
-    centersIris2?: number[][],
+    trainingDatasets?: InputData[][],
+    centersList?: number[][][],
 };
 
 const KMeansStepExample:React.FC<KMeansStepExampleType> = ({
@@ -26,43 +23,39 @@ const KMeansStepExample:React.FC<KMeansStepExampleType> = ({
     xLabel = '',
     yLabel = '',
     k = 2,
-    trainingData = trainData,
-    trainingDataIris = trainDataIris,
-    trainingDataIris2 = trainDataIris2,
-    centers = [[50, 70], [50, 80]],
-    centersIris = [[2, 2], [7, 5]],
-    centersIris2 = [[20, 20], [40, 40]],
+    centersList = [
+        [[50, 70], [50, 80]],
+        [[2, 2], [7, 5]],
+        [[20, 20], [40, 40]],
+        [[10, 10], [20, 20]],
+    ],
+    trainingDatasets = [
+        trainData,
+        trainDataIris,
+        trainDataIris2,
+        trainDataTitanic
+    ],
 }) => {
-    const kmeansData:number[][] = organiseData(trainingData);
-    const kmeansIrisData:number[][] = organiseData(trainingDataIris);
+    let organizedDatasets: number[][][] = [];
+    for(const dataset of trainingDatasets) {
+        organizedDatasets.push(organiseData(dataset));
+    };
 
-    const ans2: KMeansResult[] = kmeans(kmeansData, k, { initialization: centers, withIterations: true }, );
-    const ans2iris = kmeans(kmeansIrisData, k, { initialization: centersIris, withIterations: true }, );
-
-    const kmeansIrisData2 = organiseData(trainingDataIris2);
-    const ans2iris2 = kmeans(kmeansIrisData2, k, { initialization: centersIris2, withIterations: true }, );
-
-    let gen_out: KMeansResult[] = [];
-    for (const element of ans2) {
-        gen_out.push(element);
-    }
-
-    let gen_outIris:KMeansResult[] = [];
-    for (const element of ans2iris) {
-        gen_outIris.push(element);
-    }
-
-    let gen_outIris2:KMeansResult[] = [];
-    for (const element of ans2iris2) {
-        gen_outIris2.push(element);
+    let kmeansAnswers: KMeansResult[][] = [];
+    for (let i = 0; i < trainingDatasets.length; ++i) {
+        kmeansAnswers.push(kmeans(organizedDatasets[i], k, { initialization: centersList[i], withIterations: true }, ));
     }
 
     const [original, setO]: [number, Function] = useState(0);
 
-    const gen = original === 0 ? gen_out : (original === 1 ? gen_outIris : gen_outIris2);
+    let gen: KMeansResult[] = [];
+    for (const elem of kmeansAnswers[original]) {
+        gen.push(elem);
+    }
+
     const [r, setR] = useState(0);
     const changeO = () => {
-        setO((original+1) % 3);
+        setO((original+1) % trainingDatasets.length);
         setR(0);
         return;
     }
@@ -70,7 +63,8 @@ const KMeansStepExample:React.FC<KMeansStepExampleType> = ({
     if (gen.length === 0) return <div></div>;
 
     let bubData:BubbleDataEntry[] = [];
-    let data3 = original === 0 ? organiseData(trainData) : (original === 1 ? organiseData(trainDataIris) : organiseData(trainDataIris2));
+    let data3 = organiseData(trainingDatasets[original]);
+
     let cntrdss = gen[r].centroids;
     let c2 = [cntrdss[0].centroid, cntrdss[1].centroid];
 
@@ -85,6 +79,12 @@ const KMeansStepExample:React.FC<KMeansStepExampleType> = ({
         data.datasets.push(cluster[1]);
     });
 
+    // index corresponds to the datasets as numbered above
+    const yAxisMin: number[] = [0, 1, 0, 0];
+    const yAxisMax: number[] = [120, 7, 40, 600];
+    const xAxisMin: number[] = [0, 1, 0, 0];
+    const xAxisMax: number[] = [250, 10, 100, 100];
+
     const options = {
         showLines: false,
         tooltips: {enabled: false},
@@ -95,8 +95,8 @@ const KMeansStepExample:React.FC<KMeansStepExampleType> = ({
                 ticks: {
                     fontColor: '#394D73',
                     beginAtZero: true,
-                    min: original === 0 ? 0 : (original === 1 ? 1 : 0),
-                    max: original === 0 ? 120 : (original === 1 ? 7 : 40),
+                    min: yAxisMin[original],
+                    max: yAxisMax[original],
                 }
             }],
             xAxes: [{
@@ -105,8 +105,8 @@ const KMeansStepExample:React.FC<KMeansStepExampleType> = ({
                 ticks: {
                     fontColor: '#394D73',
                     beginAtZero: true,
-                    min: original === 0 ? 0 : (original === 1 ? 1 : 0),
-                    max: original === 0 ? 250 : (original === 1 ? 10 : 100),
+                    min: xAxisMin[original],
+                    max: xAxisMax[original],
                 }
             }],
         },
@@ -122,6 +122,13 @@ const KMeansStepExample:React.FC<KMeansStepExampleType> = ({
             duration: 0
         }
     };
+
+    const datasetLabel = [
+        "Original Dataset",
+        "Iris Sepal Dataset",
+        "Iris Petal Dataset",
+        "Titanic Dataset",
+    ];
 
     return (
         <div>
@@ -141,7 +148,7 @@ const KMeansStepExample:React.FC<KMeansStepExampleType> = ({
                 <div className="flex justify-around rounded bg-transparent">
                     <button onClick={e => changeO()}
                             className="rounded w-1/3 mx-auto px-1 py-2 bg-moduleNavy hover:text-moduleTeal outline-none">
-                        {original === 0 ? "Current: Original Dataset" : (original === 1 ? "Current: Iris Sepal Dataset" : "Current: Iris Petal Dataset")}
+                        Current: {datasetLabel[original]}
                     </button>
                 </div>
             </div>
