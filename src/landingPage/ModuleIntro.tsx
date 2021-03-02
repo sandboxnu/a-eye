@@ -4,7 +4,7 @@ import mod9 from '../media/modules/mod9.png';
 import mod10 from '../media/modules/mod10.png';
 import mod11 from '../media/modules/mod11.png';
 
-function GetCoverImage(imgName: string) {
+function getCoverImage(imgName: string) {
   switch (imgName) {
     case 'mod8':
       return mod8;
@@ -15,6 +15,7 @@ function GetCoverImage(imgName: string) {
     case 'mod11':
       return mod11;
     default:
+      return undefined;
   }
 }
 
@@ -52,7 +53,7 @@ const ModuleIntro: React.FC<ModuleIntroType> = ({
     </h1>
     <div className="flex-col md:flex-row inline-flex justify-between m-8 mt-4">
       <img
-        src={GetCoverImage(imgSrc)}
+        src={getCoverImage(imgSrc)}
         className="md:w-1/4 ml-4 object-contain"
         alt="img"
       />
