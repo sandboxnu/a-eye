@@ -17,13 +17,9 @@ const MPNeuron = (props: { labelColor: string }) => {
     const [inputs, setInputs] = useState<NeuronInput[]>(
         [{ val: 1, weight: -.5 },
         { val: 1, weight: 1 }]
-        // this is becoming a bias, leaving it just in case as breadcrumbs
-        // { val: 1, weight: .2 }]
-
     );
     const [func, setFunc] = useState(() => ((n: number) => 0));
     // need to recalc output when inputs change!
-
     const flipInput = (idx: number) => {
         const newVal = inputs[idx].val === 1 ? 0 : 1;
         const newInputs = [...inputs];
@@ -93,20 +89,8 @@ const MPNeuron = (props: { labelColor: string }) => {
             <div className="flex items-center">
                 <div className="flex flex-col">
                     {inputs.map((val, idx) => makeInput(val, idx))}
-
-                    <div className="flex items-center self-end">
-                        <p className={props.labelColor}>bias</p>
-                        <div
-                            className="font-bold rounded-full w-12 h-12 bg-pink-700 m-1
-                                    flex items-center justify-center text-white"
-                        >
-
-                            {INIT_CONFIG.bias.toFixed(1)}
-                        </div>
-                    </div>
                 </div>
-                {/*  +1 to account for the bias term */}
-                <InputLines numInpts={inputs.length + 1} />
+                <InputLines numInpts={inputs.length} />
                 <div className="rounded-full w-20 h-20 bg-brightOrange 
                 flex items-center justify-center">
                     {inputSum}
@@ -124,12 +108,11 @@ const MPNeuron = (props: { labelColor: string }) => {
                     {output}
                 </div>
             </div>
-            {/* Removed for now since it makes the example too complex */}
-            {/* <div>
+            <div>
             <RemoveCircle className="icon-button" fontSize="large" onClick={removeInput}/>
             <p className="inline m-2 text-white">{inputs.length} inputs</p>
             <AddCircle className="icon-button" fontSize="large" onClick={addInput}/>
-        </div> */}
+        </div>
         </div>
     );
 }
