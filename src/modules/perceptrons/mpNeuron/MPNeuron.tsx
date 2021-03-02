@@ -19,13 +19,7 @@ const MPNeuron = (props: { labelColor: string }) => {
         { val: 1, weight: 1 }]
     );
     const [func, setFunc] = useState(() => ((n: number) => 0));
-    // need to recalc output when inputs change!
-    const flipInput = (idx: number) => {
-        const newVal = inputs[idx].val === 1 ? 0 : 1;
-        const newInputs = [...inputs];
-        newInputs[idx].val = newVal;
-        setInputs(newInputs);
-    }
+
     const changeWeight = (e: React.ChangeEvent<HTMLInputElement>, idx: number) => {
         const val = parseFloat(e.target.value);
         const newInputs = [...inputs];
@@ -37,6 +31,19 @@ const MPNeuron = (props: { labelColor: string }) => {
             setInputs(newInputs);
         }
     }
+
+    const changeVal = (e: React.ChangeEvent<HTMLInputElement>, idx: number) => {
+        const val = parseFloat(e.target.value);
+        const newInputs = [...inputs];
+        if (!isNaN(val)) {
+            newInputs[idx].val = val;
+            setInputs(newInputs);
+        } else if (e.target.value === '') {
+            newInputs[idx].val = null;
+            setInputs(newInputs);
+        }
+    }
+
     const onFuncChange = (func: (n: number) => number) => {
         setFunc(() => ((n: number) => func(n)));
     }
@@ -57,22 +64,16 @@ const MPNeuron = (props: { labelColor: string }) => {
     const output = func(inputSum);
 
     const makeInput = (inpt: NeuronInput, idx: number) => {
-        const isOne = inpt.val === 1;
         return (
             <div className="flex items-center cursor-pointer">
-                <div
-                    className="font-bold rounded-full w-12 h-12 bg-navy m-1
-                                flex items-center justify-center "
-                    style={{
-                        backgroundColor: isOne ? INPT_CLR : 'white',
-                        border: isOne ? 'none' : `2px solid ${INPT_CLR}`,
-                        color: isOne ? 'white' : 'black'
-                    }}
-                    onClick={() => flipInput(idx)}
-                >
-                    {inpt.val}
+                <div className="m-1">
+                    <input className="number-input w-20 h-10 border-2 border-pink-700"
+                        type="number"
+                        value={inpt.val !== null ? inpt.val : ''}
+                        onChange={(e) => changeVal(e, idx)}
+                  />
                 </div>
-                <div className="w-2 h-1 bg-navy" />
+                <div className="w-10 h-1 bg-navy" />
                 <div className="m-1">
                     <input className="number-input w-20 h-10 border-2 border-pink-700"
                         type="number"
