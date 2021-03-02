@@ -9,7 +9,8 @@
       "textColor": "text-darkblue",
       "margin": "mr-64",
       "imgSrc": "mod8",
-      "path": "computer-vision"
+      "path": "computer-vision",
+      "active": true
     },
     {
       "number": 9,
@@ -20,7 +21,8 @@
       "textColor": "text-white",
       "margin": "ml-64",
       "imgSrc": "mod9",
-      "path": "classification"
+      "path": "classification",
+      "active": true
     },
     {
       "number": 10,
@@ -31,7 +33,8 @@
       "textColor": "text-darkblue",
       "margin": "mr-64",
       "imgSrc": "mod10",
-      "path": "perceptrons"
+      "path": "perceptrons",
+      "active": false
     },
     {
       "number": 11,
@@ -42,7 +45,8 @@
       "textColor": "text-white",
       "margin": "ml-64",
       "imgSrc": "mod11",
-      "path": "neural-nets"
+      "path": "neural-nets",
+      "active": false
     }
   ]
 }

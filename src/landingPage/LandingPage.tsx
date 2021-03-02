@@ -40,7 +40,7 @@ export default function LandingPage() {
       >
         <ul className="list-none">
           {descriptions.modules.map(module => (
-            <a href={`/modules/${module.path}`}>
+            <a href={module.active ? `/modules/${module.path}` : './'}>
               <li className="flex justify-center my-48">
                 <ModuleIntro
                   title={module.title}
@@ -50,6 +50,7 @@ export default function LandingPage() {
                   textColor={module.textColor}
                   margin={module.margin}
                   imgSrc={module.imgSrc}
+                  active={module.active}
                 />
               </li>
             </a>

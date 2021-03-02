@@ -36,6 +36,7 @@ type ModuleIntroType = {
   textColor: string;
   margin: string;
   imgSrc: string;
+  active: boolean;
 };
 const ModuleIntro: React.FC<ModuleIntroType> = ({
   title,
@@ -44,6 +45,7 @@ const ModuleIntro: React.FC<ModuleIntroType> = ({
   textColor,
   margin,
   imgSrc,
+  active,
 }) => (
   <div
     className={`flex-col w-full md:w-2/3 mx-4 md:mx-0 py-6 shadow-module rounded-module ${bgColor} ${textColor} md:${margin}`}
@@ -51,6 +53,11 @@ const ModuleIntro: React.FC<ModuleIntroType> = ({
     <h1 className="text-3.5xl float-left italic font-bold font-opensans mt-5 ml-10">
       {title}
     </h1>
+    {!active && (
+      <h2 className="text-8l float-center italic font-bold font-opensans mt-5 ml-10">
+        Currently Unavailable
+      </h2>
+    )}
     <div className="flex-col md:flex-row inline-flex justify-between m-8 mt-4">
       <img
         src={getCoverImage(imgSrc)}
