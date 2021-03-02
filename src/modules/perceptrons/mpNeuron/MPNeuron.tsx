@@ -7,16 +7,37 @@ export type NeuronInput = {
     weight: number | null
 }
 
-const MPNeuron = (props: { labelColor: string }) => {
-    const [inputs, setInputs] = useState<NeuronInput[]>(
-        [{ val: 1, weight: -.5 },
-        { val: 1, weight: 1 }]
-    );
+export type MPNeuronType = {
+    labelColor:string,
+    canAddInputs?: boolean,
+    addBias?:boolean,
+    input?:{val:number, weight:number}[],
+    onAnsChange?: (inpts: React.SetStateAction<number>) => void,
+    connecting?:boolean
+}
+
+export const MPNeuron:React.FC<MPNeuronType> = ({
+    labelColor,
+    canAddInputs=true,
+    addBias=false,
+    input=[{ val: 1, weight: -.5 },
+        { val: 1, weight: 1 }],
+    onAnsChange= (()=>null),
+    connecting=false
+}) => {
+
+    const [inputs, setInputs] = useState<NeuronInput[]>(input);
     const [func, setFunc] = useState(() => ((n: number) => 0));
+
+    useEffect(()=>{
+        setInputs(input)
+    },
+    [input]
+     )
 
     const changeWeight = (e: React.ChangeEvent<HTMLInputElement>, idx: number) => {
         const val = parseFloat(e.target.value);
-        const newInputs = [...inputs];
+        const newInputs = JSON.parse(JSON.stringify((inputs)));
         if (!isNaN(val)) {
             newInputs[idx].weight = val;
             setInputs(newInputs);
@@ -28,7 +49,8 @@ const MPNeuron = (props: { labelColor: string }) => {
 
     const changeVal = (e: React.ChangeEvent<HTMLInputElement>, idx: number) => {
         const val = parseFloat(e.target.value);
-        const newInputs = [...inputs];
+        const newInputs = JSON.parse(JSON.stringify((inputs)));
+        // const newInputs = []
         if (!isNaN(val)) {
             newInputs[idx].val = val;
             setInputs(newInputs);
@@ -56,17 +78,18 @@ const MPNeuron = (props: { labelColor: string }) => {
         return (acc.val && acc.weight ? acc.val * acc.weight : 0) + INIT_CONFIG.bias + prev
     }, 0);
     const output = func(inputSum);
+    onAnsChange(output)
 
-    const makeInput = (inpt: NeuronInput, idx: number) => {
+    const makeInput = (inpt: NeuronInput, idx: number, connecting: boolean) => {
         return (
             <div className="flex items-center cursor-pointer">
-                <div className="m-1">
+                {!connecting && <div className="m-1">
                     <input className="number-input w-20 h-10 border-2 border-pink-700"
                         type="number"
                         value={inpt.val !== null ? inpt.val : ''}
                         onChange={(e) => changeVal(e, idx)}
                   />
-                </div>
+                </div> }
                 <div className="w-10 h-1 bg-navy" />
                 <div className="m-1">
                     <input className="number-input w-20 h-10 border-2 border-pink-700"
@@ -83,19 +106,21 @@ const MPNeuron = (props: { labelColor: string }) => {
         <div className="m-2 flex flex-col items-center justify-center">
             <div className="flex items-center">
                 <div className="flex flex-col">
-                    {inputs.map((val, idx) => makeInput(val, idx))}
-                    <div className="flex items-center self-end">
-                        <p className={props.labelColor}>bias</p>
+                    {inputs.map((val, idx) => makeInput(val, idx, connecting))}
+                    {addBias && <div className="flex items-center self-end">
+                        <p className={labelColor}>bias</p>
                         <div
                             className="font-bold rounded-full w-12 h-12 bg-pink-700 m-1
                                         flex items-center justify-center text-white"
                         >
                             {INIT_CONFIG.bias.toFixed(1)}
                         </div>
-                    </div>
+
+                    </div> }
                 </div>
-                <InputLines numInpts={inputs.length + 1} />
-                <div className="rounded-full w-20 h-20 bg-brightOrange
+                
+                <InputLines numInpts={(addBias ? 1 : 0) + inputs.length } />
+                <div className="rounded-full w-20 h-20 bg-brightOrange 
                 flex items-center justify-center">
                     {inputSum}
                 </div>
@@ -112,11 +137,12 @@ const MPNeuron = (props: { labelColor: string }) => {
                     {output}
                 </div>
             </div>
-            <div>
+            {canAddInputs && <div>
+
             <RemoveCircle className="icon-button" fontSize="large" onClick={removeInput}/>
             <p className="inline m-2 text-white">{inputs.length} inputs</p>
             <AddCircle className="icon-button" fontSize="large" onClick={addInput}/>
-        </div>
+                </div> }
         </div>
     );
 }
@@ -144,7 +170,7 @@ export const InputLines = (props: { numInpts: number }) => {
 // both > and < shown, highlight the one you want
 const ThresholdFunc = (props: { onFuncChange: ((func: (n: number) => number) => void) }) => {
     const [isGreater, setIsGreater] = useState(true);
-    const [threshold, setThreshold] = useState<number | null>(2);
+    const [threshold, setThreshold] = useState<number | null>(0);
 
     useEffect(() => {
         if (threshold === null) return;

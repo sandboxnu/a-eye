@@ -25,7 +25,19 @@
             "demoComp": "MPNeuron"
           },
           {
-            "title": "Linear Classification with a Perceptron",
+            "title": "The Perceptron",
+            "colorScheme": "dark",
+            "subsections": [
+              {
+                "title": "Subsection 1",
+                "body": "",
+                "imgSrc": "/blank.png"
+              }
+            ],
+            "demoComp": "MLPNeuron"
+          },
+          {
+            "title": "Perceptrons in Action",
             "colorScheme": "light",
             "subsections": [
                 {
