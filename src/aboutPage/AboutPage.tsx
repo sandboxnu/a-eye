@@ -8,6 +8,7 @@ import irisPic from '../media/aboutPage/irisPic.jpg';
 import maxPic from '../media/aboutPage/maxPic.png';
 import jakePic from '../media/aboutPage/jakePic.jpeg';
 import stanPic from '../media/aboutPage/stanPic.jpg';
+import angelaPic from '../media/aboutPage/angelaPic.jpg';
 
 const AboutPage = () => (
   <div className="relative inline-block w-full min-h-full bg-offwhite bg-about bg-no-repeat bg-scroll bg-bottom bg-stretchBottom">
@@ -76,6 +77,13 @@ const AboutPage = () => (
         title="Developer"
         linkedin="https://www.linkedin.com/in/stanleykywu"
         email="wu.sta@northeastern.edu"
+      />
+      <ProfileCard
+        image={angelaPic}
+        name="Angela Lin"
+        title="Designer"
+        linkedin="https://www.linkedin.com/in/angelalinzm"
+        email="lin.angel@northeastern.edu"
       />
     </div>
   </div>
