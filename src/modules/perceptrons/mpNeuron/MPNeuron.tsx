@@ -1,19 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { AddCircle, RemoveCircle } from '@material-ui/icons';
-import { RblattConfig, INIT_CONFIG } from '../rosenblatt/constants';
-
+import { INIT_CONFIG } from '../rosenblatt/constants';
 
 export type NeuronInput = {
     val: number | null,
     weight: number | null
 }
 
-// todo: pass in color for things that might not go well against bg
-// what labels should i do for each bubble?
-// how to make function piece obviously interactable
-// this can take a number => number func, use its tostring to render
 const MPNeuron = (props: { labelColor: string }) => {
-    // react draggable?
     const [inputs, setInputs] = useState<NeuronInput[]>(
         [{ val: 1, weight: -.5 },
         { val: 1, weight: 1 }]
@@ -90,9 +84,18 @@ const MPNeuron = (props: { labelColor: string }) => {
             <div className="flex items-center">
                 <div className="flex flex-col">
                     {inputs.map((val, idx) => makeInput(val, idx))}
+                    <div className="flex items-center self-end">
+                        <p className={props.labelColor}>bias</p>
+                        <div
+                            className="font-bold rounded-full w-12 h-12 bg-pink-700 m-1
+                                        flex items-center justify-center text-white"
+                        >
+                            {INIT_CONFIG.bias.toFixed(1)}
+                        </div>
+                    </div>
                 </div>
-                <InputLines numInpts={inputs.length} />
-                <div className="rounded-full w-20 h-20 bg-brightOrange 
+                <InputLines numInpts={inputs.length + 1} />
+                <div className="rounded-full w-20 h-20 bg-brightOrange
                 flex items-center justify-center">
                     {inputSum}
                 </div>
@@ -156,7 +159,7 @@ const ThresholdFunc = (props: { onFuncChange: ((func: (n: number) => number) => 
     }, [isGreater, threshold])
 
     return (
-        <div className="font-bold w-20 h-10 rounded-md border-2 border-orange-500 
+        <div className="font-bold w-20 h-10 rounded-md border-2 border-orange-500
                         flex items-center justify-center px-2 text-white">
             <div className="cursor-pointer"
                 onClick={() => setIsGreater(!isGreater)}

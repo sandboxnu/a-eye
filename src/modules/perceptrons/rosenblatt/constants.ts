@@ -1,5 +1,5 @@
 
-const INIT_CONFIG = { weightX: .7, weightY: -1, bias: 0 , learningRate: .1 };
+const INIT_CONFIG = { weightX: .7, weightY: -1, bias: 10, learningRate: .1 };
 const INIT_INPUTS: RblattInput[] = [
     { x: 2.101231155778894, y: 4.947319932998326, z: 0 },
     { x: 8.27, y: -3.94, z: 0 },
