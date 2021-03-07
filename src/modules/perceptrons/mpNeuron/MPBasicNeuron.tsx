@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { AddCircle, RemoveCircle } from '@material-ui/icons';
 import { RblattConfig, INIT_CONFIG } from '../rosenblatt/constants';
 
-import ThresholdFunc from './ThresholdFunc';
+import ControlledThresholdFunc from './ControlledThresholdFunc';
 
 export type NeuronInput = {
     val: number | null,
@@ -16,7 +16,11 @@ export type MPBasicNeuronType = {
     inputs: NeuronInput[],
     setInputs: (inpts: React.SetStateAction<NeuronInput[]>) => void,
     onAnsChange?: (inpts: React.SetStateAction<number>) => void,
-    connecting?: boolean
+    connecting?: boolean,
+    threshold,
+    setThreshold,
+    isGreater,
+    setIsGreater,
 }
 
 export const MPBasicNeuron: React.FC<MPBasicNeuronType> = ({
@@ -26,7 +30,11 @@ export const MPBasicNeuron: React.FC<MPBasicNeuronType> = ({
     onAnsChange = (() => null),
     connecting = false,
     inputs,
-    setInputs
+    setInputs,
+    threshold,
+    setThreshold,
+    isGreater,
+    setIsGreater,
 }) => {
     const [func, setFunc] = useState(() => ((n: number) => 0));
 
@@ -121,7 +129,13 @@ export const MPBasicNeuron: React.FC<MPBasicNeuronType> = ({
                     {inputSum}
                 </div>
                 <div className="w-2 h-1 bg-navy" />
-                <ThresholdFunc onFuncChange={onFuncChange} />
+                <ControlledThresholdFunc 
+                    threshold={threshold}
+                    setThreshold={setThreshold}
+                    isGreater={isGreater}
+                    setIsGreater={setIsGreater}
+                    onFuncChange={onFuncChange} 
+                    />
                 <div className="w-16 h-1 bg-navy" />
                 <div
                     className="rounded-full w-12 h-12 font-bold bg-moduleTeal flex items-center justify-center"

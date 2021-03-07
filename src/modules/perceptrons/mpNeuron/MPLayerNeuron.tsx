@@ -1,8 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { AddCircle, RemoveCircle } from '@material-ui/icons';
-import { RblattConfig, INIT_CONFIG } from '../rosenblatt/constants';
-
-import ThresholdFunc from './ThresholdFunc';
+import ControlledThresholdFunc from './ControlledThresholdFunc';
 
 const zip = (arr1: Array<any>, arr2: Array<any>) => {
     return arr1.map(function (e, i) {
@@ -35,6 +32,11 @@ export type MPLayerNeuronType = {
     inputs: number[],
     weights: number[],
     setWeights: (inpts: React.SetStateAction<number[]>) => void,
+    bias: number,
+    threshold: number,
+    setThreshold,
+    isGreater: boolean, 
+    setIsGreater, 
 }
 
 const MPLayerNeuron: React.FC<MPLayerNeuronType> = ({
@@ -43,6 +45,11 @@ const MPLayerNeuron: React.FC<MPLayerNeuronType> = ({
     inputs,
     weights,
     setWeights = (() => null),
+    bias,
+    threshold,
+    setThreshold,
+    isGreater, 
+    setIsGreater, 
 }) => {
     const [func, setFunc] = useState(() => ((n: number) => 0));
 
@@ -64,7 +71,7 @@ const MPLayerNeuron: React.FC<MPLayerNeuronType> = ({
 
     const inputSum = zip(inputs, weights).reduce((prev, acc) => {
         return (acc[0] && acc[1] ? acc[0] * acc[1] : 0) + prev
-    }, 0) + INIT_CONFIG.bias;
+    }, 0) + bias;
 
     const output = func(inputSum);
 
@@ -94,7 +101,7 @@ const MPLayerNeuron: React.FC<MPLayerNeuronType> = ({
                             className="font-bold rounded-full w-12 h-12 bg-pink-700 m-1
                                         flex items-center justify-center text-white"
                         >
-                            {INIT_CONFIG.bias.toFixed(1)}
+                            {bias}
                         </div>
                     </div>}
                 </div>
@@ -105,7 +112,13 @@ const MPLayerNeuron: React.FC<MPLayerNeuronType> = ({
                     {inputSum}
                 </div>
                 <div className="w-2 h-1 bg-navy" />
-                <ThresholdFunc onFuncChange={onFuncChange} />
+                <ControlledThresholdFunc
+                    threshold={threshold}
+                    setThreshold={setThreshold}
+                    isGreater={isGreater}
+                    setIsGreater={setIsGreater}
+                    onFuncChange={onFuncChange} 
+                    />
                 <div className="w-16 h-1 bg-navy" />
                 <div
                     className="rounded-full w-12 h-12 font-bold bg-moduleTeal flex items-center justify-center"
