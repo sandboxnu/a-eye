@@ -178,6 +178,7 @@ export const processdata = (
   }
 };
 
-export const calculateError = (results: KMeansResult): number =>
-  // eslint-disable-next-line
-  Math.round(100 * (results.centroids[0].error + results.centroids[1].error)) / 100;
+export const calculateError = (results: KMeansResult): number[] => [
+  Math.round(100 * results.centroids[0].error) / 100,
+  Math.round(100 * results.centroids[1].error) / 100,
+];

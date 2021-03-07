@@ -121,7 +121,7 @@ const KMeansStepExample: React.FC<KMeansStepExampleType> = ({
     data.datasets.push(cluster[1]);
   });
 
-  const error: number = calculateError(gen[r]);
+  const error: number[] = calculateError(gen[r]);
 
   const options = {
     showLines: false,
@@ -186,9 +186,15 @@ const KMeansStepExample: React.FC<KMeansStepExampleType> = ({
   return (
     <div>
       <Scatter data={data} options={options} />
-      <div className="flex justify-center mb-6 text-moduleNavy">
-        {/* eslint-disable-next-line */}
-        Cluster Mean Squared Error: {error}
+      <div className="flex justify-around mb-8">
+        <span className="text-moduleNavy">
+          {/* eslint-disable-next-line */}
+          Cluster 0 Mean Squared Error: {error[0]}
+        </span>
+        <span className="text-moduleNavy">
+          {/* eslint-disable-next-line */}
+          Cluster 1 Mean Squared Error: {error[1]}
+        </span>
       </div>
       <div className="text-moduleOffwhite m-3 space-x-2 justify-center space-y-3">
         <div className="flex justify-around rounded w-1/4 mx-auto bg-moduleNavy">
