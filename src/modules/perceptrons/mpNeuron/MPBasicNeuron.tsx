@@ -9,25 +9,25 @@ export type NeuronInput = {
     weight: number | null
 }
 
-export type MPNeuronType = {
+export type MPBasicNeuronType = {
     labelColor: string,
     canAddInputs?: boolean,
     addBias?: boolean,
-    input?: { val: number, weight: number }[],
+    inputs: NeuronInput[],
+    setInputs: (inpts: React.SetStateAction<NeuronInput[]>) => void,
     onAnsChange?: (inpts: React.SetStateAction<number>) => void,
     connecting?: boolean
 }
 
-export const MPNeuron: React.FC<MPNeuronType> = ({
+export const MPBasicNeuron: React.FC<MPBasicNeuronType> = ({
     labelColor,
     canAddInputs = true,
     addBias = false,
-    input = [{ val: 1, weight: -.5 },
-    { val: 1, weight: 1 }],
     onAnsChange = (() => null),
-    connecting = false
+    connecting = false,
+    inputs,
+    setInputs
 }) => {
-    const [inputs, setInputs] = useState<NeuronInput[]>(input);
     const [func, setFunc] = useState(() => ((n: number) => 0));
 
     const changeWeight = (e: React.ChangeEvent<HTMLInputElement>, idx: number) => {
@@ -108,6 +108,7 @@ export const MPNeuron: React.FC<MPNeuronType> = ({
                             className="font-bold rounded-full w-12 h-12 bg-pink-700 m-1
                                         flex items-center justify-center text-white"
                         >
+
                             {INIT_CONFIG.bias.toFixed(1)}
                         </div>
 
@@ -160,7 +161,8 @@ export const InputLines = (props: { numInpts: number }) => {
     );
 }
 
+
 const INPT_CLR = '#b92079';
 const OUTPT_CLR = '#0FD4C0';
 
-export default MPNeuron;
+export default MPBasicNeuron;
