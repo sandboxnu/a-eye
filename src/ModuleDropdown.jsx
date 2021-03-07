@@ -28,17 +28,19 @@ export default function ModuleDropdown() {
         onBlur={() => setDropdownHover(false)}
       >
         <br />
-        {descriptions.modules.map(module => (
-          <div className="py-1 mx-2 text-left">
-            <a
-              className="text-xs uppercase font-opensans font-bold text-white hover:text-moduleTeal"
-              href={`/modules/${module.path}`}
-              key={module.number.toString()}
-            >
-              {module.dropdownTitle}
-            </a>
-          </div>
-        ))}
+        {descriptions.modules
+          .filter(({ active }) => active)
+          .map(module => (
+            <div className="py-1 mx-2 text-left">
+              <a
+                className="text-xs uppercase font-opensans font-bold text-white hover:text-moduleTeal"
+                href={`/modules/${module.path}`}
+                key={module.number.toString()}
+              >
+                {module.dropdownTitle}
+              </a>
+            </div>
+          ))}
       </div>
     </div>
   );
