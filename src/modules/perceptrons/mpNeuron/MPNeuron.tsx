@@ -173,6 +173,25 @@ export const InputLines = (props: { numInpts: number }) => {
     );
 }
 
+export const InputLinesLayer = (props: { numInpts: number }) => {
+    const height = 56 * props.numInpts;
+    const centerY = height / 2;
+
+    return (
+        <div>
+            <svg width='125px' height={height} viewBox={`0 0 125 ${height}`} xmlns="http://www.w3.org/2000/svg">
+                {Array(props.numInpts).fill(null).map((_, idx) => (
+                    <line key={idx}
+                        x1="0" y1={idx * 56 * 2 + 28}
+                        x2="125" y2={centerY}
+                        strokeWidth="4px" stroke="#394D73"
+                    />
+                ))}
+            </svg>
+        </div>
+    );
+}
+
 export type MPLayerNeuronType = {
     labelColor: string,
     addBias?: boolean,
@@ -216,7 +235,7 @@ export const MPLayerNeuron: React.FC<MPLayerNeuronType> = ({
 
     const makeInput = (inpt: number, idx: number) => {
         return (
-            <div className="flex items-center cursor-pointer">
+            <div className="flex items-center cursor-pointer pb-2.5 pt-16">
                 <div className="w-10 h-1 bg-navy" />
                 <div className="m-1">
                     <input className="number-input w-20 h-10 border-2 border-pink-700"
@@ -232,7 +251,7 @@ export const MPLayerNeuron: React.FC<MPLayerNeuronType> = ({
     return (
         <div className="m-2 flex flex-col items-center justify-center">
             <div className="flex items-center">
-                <div className="flex flex-col">
+                <div className="flex flex-col h-36">
                     {weights.map((weight, index) => makeInput(weight, index))}
                     {addBias && <div className="flex items-center self-end">
                         <p className={labelColor}>bias</p>
@@ -240,13 +259,12 @@ export const MPLayerNeuron: React.FC<MPLayerNeuronType> = ({
                             className="font-bold rounded-full w-12 h-12 bg-pink-700 m-1
                                         flex items-center justify-center text-white"
                         >
-
                             {INIT_CONFIG.bias.toFixed(1)}
                         </div>
                     </div>}
                 </div>
 
-                <InputLines numInpts={(addBias ? 1 : 0) + inputs.length} />
+                <InputLinesLayer numInpts={(addBias ? 1 : 0) + inputs.length} />
                 <div className="rounded-full w-20 h-20 bg-brightOrange 
                 flex items-center justify-center">
                     {inputSum}
