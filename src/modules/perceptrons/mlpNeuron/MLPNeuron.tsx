@@ -27,10 +27,18 @@ const MLPNeuron = (props: { labelColor: string }) => {
 
     const [bias, setBias] = useState(10);
 
+    const resetWeights = (inputObj, newWeight: number) => {
+        const newInputs = JSON.parse(JSON.stringify((inputObj)));
+        newInputs.forEach((input) => {
+            input.weight = newWeight;
+        })
+        return newInputs;
+    }
+
     const resetDemo = () => {
         setWeights([10, 10]);
-        setInputs(inputs);
-        setInputs2(inputs2);
+        setInputs(resetWeights(inputs, defaultInput[0].weight));
+        setInputs2(resetWeights(inputs2, defaultInput[0].weight));
         setThreshold1(0);
         setIsGreater1(true);
         setThreshold2(0);
