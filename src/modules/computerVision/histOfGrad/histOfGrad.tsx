@@ -1,10 +1,10 @@
 const { Image } = require('image-js');
 const hog = require('hog-features');
-const img = require('../../../media/modules/computerVision/imageLibrary/purpleFlowers.jpeg')
+const flowers = require('../../../media/modules/computerVision/imageLibrary/purpleFlowers.jpeg')
   .default;
 
-function histogram() {
-  Image.load(img).then((image: any) => {
+async function histogramOfGradients(img: any): Promise<number[][][]> {
+  return Image.load(img).then((image: any) => {
     const options = {
       cellSize: 8,
       blockSize: 2,
@@ -31,8 +31,12 @@ function histogram() {
       }
       blockHistograms.push(row);
     }
-    console.log(blockHistograms);
+    return blockHistograms;
   });
+}
+
+function histogram() {
+  histogramOfGradients(flowers).then(result => console.log(result));
 }
 
 export default histogram;
