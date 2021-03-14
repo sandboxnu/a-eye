@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 const { Image } = require('image-js');
 const hog = require('hog-features');
 const flowers = require('../../../media/modules/computerVision/imageLibrary/purpleFlowers.jpeg')
@@ -12,9 +14,8 @@ async function histogramOfGradients(img: any): Promise<number[][][]> {
       bins: 9,
     };
     const descriptor = hog.extractHOG(image, options);
-    /* eslint-disable-next-line */
+    console.log(hog.gradients(image));
     const blockWidth = Math.floor((image.width / options.cellSize - options.blockSize) / options.blockStride) + 1;
-    /* eslint-disable-next-line */
     const blockHeight = Math.floor((image.height / options.cellSize - options.blockSize) / options.blockStride) + 1;
 
     const blockHistograms: number[][][] = [];
@@ -35,8 +36,35 @@ async function histogramOfGradients(img: any): Promise<number[][][]> {
   });
 }
 
+type Gradients = {
+  x: ImageData;
+  y: ImageData;
+  m: ImageData;
+};
+
+async function gradientImages(img: any): Promise<Gradients> {
+  return Image.load(img).then((image: any) => {
+    console.log(image);
+    const intensities: { x: number[][], y: number[][] } = hog.gradients(image);
+    const intensitiesX: number[] = intensities.x.flat();
+    const intensitiesY: number[] = intensities.y.flat();
+
+    let maxX = 0.0;
+    intensitiesX.forEach(x => {
+      console.log(typeof x);
+      maxX = Math.max(maxX, x)});
+    console.log(maxX);
+    return {
+      x: '',
+      y: '',
+      m: '',
+    }
+  });
+}
+
+
 function histogram() {
-  histogramOfGradients(flowers).then(result => console.log(result));
+  gradientImages(flowers).then(result => console.log(result));
 }
 
 export default histogram;
