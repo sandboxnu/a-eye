@@ -21,7 +21,6 @@
     "ml-kmeans": "5.0.0",
     "ml-pca": "4.0.1",
     "node-forge": "0.10.0",
-    "opencv": "7.0.0",
     "pixelmatch": "5.2.1",
     "python-bridge": "1.1.0",
     "randomcolor": "0.6.2",
