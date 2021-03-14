@@ -14,7 +14,6 @@ async function histogramOfGradients(img: any): Promise<number[][][]> {
       bins: 9,
     };
     const descriptor = hog.extractHOG(image, options);
-    console.log(hog.gradients(image));
     const blockWidth = Math.floor((image.width / options.cellSize - options.blockSize) / options.blockStride) + 1;
     const blockHeight = Math.floor((image.height / options.cellSize - options.blockSize) / options.blockStride) + 1;
 
@@ -42,26 +41,34 @@ type Gradients = {
   m: ImageData;
 };
 
+const map = (x: number, min1: number, max1: number, min2: number, max2: number): number => (x - min1) * (max2 - min2) / (max1 - min1) + min2;
+
 async function gradientImages(img: any): Promise<Gradients> {
   return Image.load(img).then((image: any) => {
-    console.log(image);
+
     const intensities: { x: number[][], y: number[][] } = hog.gradients(image);
     const intensitiesX: number[] = intensities.x.flat();
     const intensitiesY: number[] = intensities.y.flat();
+    const intensitiesM = intensitiesX.map((num, idx) => Math.sqrt(Math.pow(num, 2) + Math.pow(intensitiesY[idx], 2)));
 
-    let maxX = 0.0;
-    intensitiesX.forEach(x => {
-      console.log(typeof x);
-      maxX = Math.max(maxX, x)});
-    console.log(maxX);
+    let maxX = 0, maxY = 0, maxM = 0, minX = 0, minY = 0, minM = 0;
+    intensitiesX.forEach(x => {if (!isNaN(x)) {maxX = Math.max(maxX, x); minX = Math.min(minX, x);}});
+    intensitiesY.forEach(y => {if (!isNaN(y)) {maxY = Math.max(maxY, y); minY = Math.min(minY, y);}});
+    intensitiesM.forEach(m => {if (!isNaN(m)) {maxM = Math.max(maxM, m); minM = Math.min(minM, m);}});
+
+    const valToRGB = (val: number): number[] => [val, val, val, 1];
+
+    const imageX: Uint8ClampedArray = new Uint8ClampedArray(intensitiesX.map(x => valToRGB(map(x, minX, maxX, 0, 255))).flat());
+    const imageY: Uint8ClampedArray = new Uint8ClampedArray(intensitiesY.map(y => valToRGB(map(y, minY, maxY, 0, 255))).flat());
+    const imageM: Uint8ClampedArray = new Uint8ClampedArray(intensitiesM.map(m => valToRGB(map(m, minM, maxM, 0, 255))).flat());
+
     return {
-      x: '',
-      y: '',
-      m: '',
+      x: new ImageData(imageX, image.width, image.height),
+      y: new ImageData(imageY, image.width, image.height),
+      m: new ImageData(imageM, image.width, image.height),
     }
   });
 }
-
 
 function histogram() {
   gradientImages(flowers).then(result => console.log(result));
