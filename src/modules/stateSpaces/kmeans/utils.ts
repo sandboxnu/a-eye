@@ -5,7 +5,7 @@ import { squaredEuclidean } from 'ml-distance-euclidean';
 // types for each of the four datasets
 export type KMeansResult = {
   clusters: [];
-  centroids: { centroid: number[] }[];
+  centroids: { centroid: number[]; error: number }[];
   converged: [];
   iterations: number;
 };
@@ -177,3 +177,8 @@ export const processdata = (
     });
   }
 };
+
+export const calculateError = (results: KMeansResult): number[] => [
+  Math.round(100 * results.centroids[0].error) / 100,
+  Math.round(100 * results.centroids[1].error) / 100,
+];
