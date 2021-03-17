@@ -5,7 +5,7 @@ const hog = require('hog-features');
 const flowers = require('../../../media/modules/computerVision/imageLibrary/purpleFlowers.jpeg')
   .default;
 
-async function histogramOfGradients(img: any): Promise<number[][][]> {
+async function histogramAggregate(img: any): Promise<number[][][]> {
   return Image.load(img).then((image: any) => {
     const options = {
       cellSize: 8,
@@ -14,6 +14,26 @@ async function histogramOfGradients(img: any): Promise<number[][][]> {
       bins: 9,
     };
     const descriptor = hog.extractHOG(image, options);
+    const histogram: number[] = new Array(options.bins).fill(0);
+
+    descriptor.forEach((val: number, idx: number) => {
+      histogram[idx % options.bins] += val;
+    });
+
+    return histogram;
+  });
+}
+
+async function histogramBlocks(img: any): Promise<number[][][]> {
+  return Image.load(img).then((image: any) => {
+    const options = {
+      cellSize: 8,
+      blockSize: 2,
+      blockStride: 1,
+      bins: 9,
+    };
+    const descriptor = hog.extractHOG(image, options);
+
     const blockWidth = Math.floor((image.width / options.cellSize - options.blockSize) / options.blockStride) + 1;
     const blockHeight = Math.floor((image.height / options.cellSize - options.blockSize) / options.blockStride) + 1;
 
@@ -71,7 +91,9 @@ async function gradientImages(img: any): Promise<Gradients> {
 }
 
 function histogram() {
-  gradientImages(flowers).then(result => console.log(result));
+  histogramAggregate(flowers).then(result => console.log(result));
 }
 
+// todo: what are we doing the 'v' image, clarify what g_x and g_y are
+// todo: do we want to add interactive feature to show gradient for a clicked block on the image?
 export default histogram;
