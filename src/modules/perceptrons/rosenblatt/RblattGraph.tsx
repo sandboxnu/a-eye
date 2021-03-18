@@ -4,7 +4,7 @@ import JXG from 'jsxgraph';
 
 type RblattGraphProps = {
     inputs: RblattInput[],
-    line: RblattConfig,
+    line?: RblattConfig,
     highlighted?: RblattInput,
     editingType: {val:  0 | 1 | null},
     onInputsChange: (inpts: React.SetStateAction<RblattInput[]>) => void,
@@ -51,14 +51,16 @@ const RblattGraph = (props: RblattGraphProps) => {
             const color = inpt.z === 1 ? COL_1 : COL_0
             const p = newBoard.create('point', [inpt.x, inpt.y], { name: '', size: 1, color, fixed: true });
         });
-        const {aCoords, bCoords} = getLinePoints(props.line);
-        const pA = newBoard.create('point', aCoords, { name: '', fixed: true, color: 'transparent'});
-        const pB = newBoard.create('point', bCoords, { name: '', fixed: true, color: 'transparent'});
-        const li = newBoard.create('line', [pA, pB], { strokeColor: 'black', strokeWidth: 2, fixed: true });
-        newBoard.create('inequality', [li], {fillColor: COL_0});
-        newBoard.create('inequality', [li], { inverse: true, fillColor: COL_1 });
-        setPointA(pA);
-        setPointB(pB);
+        if (props.line) {
+            const {aCoords, bCoords} = getLinePoints(props.line);
+            const pA = newBoard.create('point', aCoords, { name: '', fixed: true, color: 'transparent'});
+            const pB = newBoard.create('point', bCoords, { name: '', fixed: true, color: 'transparent'});
+            const li = newBoard.create('line', [pA, pB], { strokeColor: 'black', strokeWidth: 2, fixed: true });
+            newBoard.create('inequality', [li], {fillColor: COL_0});
+            newBoard.create('inequality', [li], { inverse: true, fillColor: COL_1 });
+            setPointA(pA);
+            setPointB(pB);
+        }
     }, []);
 
     // register listeners after the state var has been set
@@ -66,12 +68,14 @@ const RblattGraph = (props: RblattGraphProps) => {
     useEffect(() => { board && board.on('down', editPoint)}, [board]);
 
     useEffect(() => {
-        const {aCoords, bCoords} = getLinePoints(props.line);
-        pointA?.moveTo(aCoords, 700);
-        pointB?.moveTo(bCoords, 700);
-        board?.removeObject('prevLine');
-        board?.create('line', [[pointA?.X(), pointA?.Y()], [pointB?.X(), pointB?.Y()]],
-                        {name: 'prevLine', color: 'rgba(0, 0, 0, 0.2)'});
+        if (props.line) {
+            const {aCoords, bCoords} = getLinePoints(props.line);
+            pointA?.moveTo(aCoords, 700);
+            pointB?.moveTo(bCoords, 700);
+            board?.removeObject('prevLine');
+            board?.create('line', [[pointA?.X(), pointA?.Y()], [pointB?.X(), pointB?.Y()]],
+                            {name: 'prevLine', color: 'rgba(0, 0, 0, 0.2)'});
+        }
     }, [props.line]);
 
     useEffect(() => {

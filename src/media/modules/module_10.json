@@ -37,6 +37,18 @@
             "demoComp": "MLPNeuron"
           },
           {
+            "title": "The Perceptron2",
+            "colorScheme": "dark",
+            "subsections": [
+              {
+                "title": "Subsection 1",
+                "body": "",
+                "imgSrc": "/blank.png"
+              }
+            ],
+            "demoComp": "MLPDemo"
+          },
+          {
             "title": "Perceptrons in Action",
             "colorScheme": "light",
             "subsections": [
