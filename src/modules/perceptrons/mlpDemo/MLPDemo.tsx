@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 // import MPBasicNeuron, { NeuronInput } from '../mpNeuron/MPBasicNeuron';
 // import MPLayerNeuron from '../mpNeuron/MPLayerNeuron';
-import MLPNeuron from '../mlpNeuron/MLPNeuron';
+import MLPGraphNeuron from '../mlpNeuron/MLPGraphNeuron';
 import {RblattInput, RblattConfig, INIT_INPUTS, INIT_CONFIG, CLEARED_INPUTS} from '../rosenblatt/constants';
 import EditingRblattGraph from '../rosenblatt/EditingRblattGraph';
 
@@ -23,15 +23,15 @@ const MLPDemo = (props: { labelColor: string }) => {
 
     return(
         <div>
-            <MLPNeuron labelColor={props.labelColor}/>
-
+            <MLPGraphNeuron labelColor={props.labelColor} inputCoordinates={inputs[currPoint]}/>
             <EditingRblattGraph
-                    inputs={inputs} line={config}
-                    highlighted={inputs[currPoint]}
-                    onInputsChange={setInputs}
-                    reset={{isReset, setReset}}
-                    clear={{isCleared, setCleared}}
-                />
+                inputs={inputs} 
+                line={config}
+                highlighted={inputs[currPoint]}
+                onInputsChange={setInputs}
+                reset={{isReset, setReset}}
+                clear={{isCleared, setCleared}}
+            />
 
             {/* if you want to remove adding points a feature, change EditingRblattGraph to RblattGraph 
             <RblattGraph {...props} editingType={editingType}  /> */}
