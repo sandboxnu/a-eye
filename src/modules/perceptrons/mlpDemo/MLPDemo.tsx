@@ -14,8 +14,10 @@ const MLPDemo = (props: { labelColor: string }) => {
     const [isReset, setReset] = useState(false);
     const [isCleared, setCleared] = useState(false);
 
+    console.log(currPoint);
     const goPrev = () => {
-        setCurrPoint((currPoint - 1) % inputs.length)
+        let next = currPoint === 0 ? inputs.length - 1 : currPoint - 1;
+        setCurrPoint(next);
     }
     const goNext = () => {
         setCurrPoint((currPoint + 1) % inputs.length)
