@@ -5,14 +5,25 @@ import MLPGraphNeuron from '../mlpNeuron/MLPGraphNeuron';
 import {RblattInput, RblattConfig, INIT_INPUTS, INIT_CONFIG, CLEARED_INPUTS} from '../rosenblatt/constants';
 import EditingRblattGraph from '../rosenblatt/EditingRblattGraph';
 
+import { neuronInputConfig } from './constants';
 
 const MLPDemo = (props: { labelColor: string }) => {
-    
     const [inputs, setInputs] = useState<RblattInput[]>(INIT_INPUTS);
     const [config, setConfig] = useState<RblattConfig>(INIT_CONFIG);
     const [currPoint, setCurrPoint] = useState<number>(0);
     const [isReset, setReset] = useState(false);
     const [isCleared, setCleared] = useState(false);
+
+    const [neuronState, setNeuronState] = useState(neuronInputConfig);
+
+
+    const changeNeuronValue = (layer: number, neuron: number, key: string, value: any) => {
+        const newState = JSON.parse(JSON.stringify(neuronState));
+        newState[layer][neuron][key] = value;
+        setNeuronState(newState);
+    }
+
+    const updateNeuron1Inputs = (inputs) => changeNeuronValue(0, 0, 'inputs', inputs)
 
     console.log(currPoint);
     const goPrev = () => {
@@ -23,12 +34,17 @@ const MLPDemo = (props: { labelColor: string }) => {
         setCurrPoint((currPoint + 1) % inputs.length)
     }
 
+    // 1. correct points based on number
+    // 2. triple or quadruple the points - see background more 'naturally'
+
     return(
         <div>
-            <MLPGraphNeuron labelColor={props.labelColor} inputCoordinates={inputs[currPoint]}/>
+            <MLPGraphNeuron 
+                labelColor={props.labelColor} 
+                inputCoordinates={inputs[currPoint]}
+            />
             <EditingRblattGraph
                 inputs={inputs} 
-                line={config}
                 highlighted={inputs[currPoint]}
                 onInputsChange={setInputs}
                 reset={{isReset, setReset}}
