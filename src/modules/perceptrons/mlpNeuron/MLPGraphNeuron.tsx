@@ -3,62 +3,98 @@ import MPBasicNeuron, { NeuronInput } from '../mpNeuron/MPBasicNeuron';
 import MPLayerNeuron from '../mpNeuron/MPLayerNeuron';
 
 import {RblattInput} from '../rosenblatt/constants'
+import {NeuronConfig} from '../mlpDemo/constants';
 
 // inputCoordinates is array of two elements
-const MLPGraphNeuron = (props: { labelColor: string, inputCoordinates: RblattInput}) => {
+const MLPGraphNeuron = (props: { 
+    labelColor: string,
+    inputCoordinates: RblattInput,
+    neuronState: NeuronConfig,
+    changeNeuronValue
+}) => {
+
+    const {
+        labelColor,
+        inputCoordinates,
+        neuronState,
+        changeNeuronValue,
+    } = props;
+
     const initialWeights = [-.5, 1];
-    const DEFAULT_BIAS = 10;
+    // const DEFAULT_BIAS = 10;
 
-    const [answer1, setAns1] = useState(0);
-    const [answer2, setAns2] = useState(0);
+    // const [answer1, setAns1] = useState(0);
+    // const [answer2, setAns2] = useState(0);
 
-    const [weights, setWeights] = useState<number[]>(initialWeights);
-    const [weights1, setWeights1] = useState<number[]>([initialWeights[0]]);
-    const [weights2, setWeights2] = useState<number[]>([initialWeights[1]]);
+    // const [weights, setWeights] = useState<number[]>(initialWeights);
+    // const [weights1, setWeights1] = useState<number[]>([initialWeights[0]]);
+    // const [weights2, setWeights2] = useState<number[]>([initialWeights[1]]);
 
-    // const [inputs, setInputs] = useState<NeuronInput[]>(defaultInput);
-    // const [inputs2, setInputs2] = useState<NeuronInput[]>(defaultInput);
+    // // const [inputs, setInputs] = useState<NeuronInput[]>(defaultInput);
+    // // const [inputs2, setInputs2] = useState<NeuronInput[]>(defaultInput);
 
-    const [threshold1, setThreshold1] = useState(0);
-    const [isGreater1, setIsGreater1] = useState(true);
+    // const [threshold1, setThreshold1] = useState(0);
+    // const [isGreater1, setIsGreater1] = useState(true);
 
-    const [threshold2, setThreshold2] = useState(0);
-    const [isGreater2, setIsGreater2] = useState(true);
+    // const [threshold2, setThreshold2] = useState(0);
+    // const [isGreater2, setIsGreater2] = useState(true);
 
-    const [thresholdLayer, setThresholdLayer] = useState(0);
-    const [isGreaterLayer, setIsGreaterLayer] = useState(true);
+    // const [thresholdLayer, setThresholdLayer] = useState(0);
+    // const [isGreaterLayer, setIsGreaterLayer] = useState(true);
 
-    const [bias, setBias] = useState(10);
+    // const [bias, setBias] = useState(10);
 
-    const resetDemo = () => {
-        setWeights([10, 10]);
-        setWeights1([10]);
-        setWeights2([10]);
-        setThreshold1(0);
-        setIsGreater1(true);
-        setThreshold2(0);
-        setIsGreater2(true);
-        setThresholdLayer(0);
-        setIsGreaterLayer(true);
-    }
+    // const resetDemo = () => {
+    //     setWeights([10, 10]);
+    //     setWeights1([10]);
+    //     setWeights2([10]);
+    //     setThreshold1(0);
+    //     setIsGreater1(true);
+    //     setThreshold2(0);
+    //     setIsGreater2(true);
+    //     setThresholdLayer(0);
+    //     setIsGreaterLayer(true);
+    // }
 
+    // const setBias = bias => changeNeuronValue(1, 0, 'bias', bias);
     const setAnd = () => {
         // reset all weights
         // reset threshold
         // keep inputs
-        resetDemo();
-        setBias(-15);
-    }
-
+        // resetDemo();
+        // setBias(-15);
+    };
     const setOr = () => {
-        resetDemo();
-        setBias(-5);
+    //     resetDemo();
+    //     setBias(-5);
     }
 
     return (
         <div>
             <div className="m-2 flex items-center">
-                <div>
+                {neuronState.map((layer, layerNum) => 
+                    <div id="layer">
+                        {layer.map(({inputs, weights, bias, thresholdDir, thresholdVal}, neuronNum) => 
+                            <MPLayerNeuron
+                                labelColor={labelColor}
+                                addBias={true}
+                                bias={bias}
+                                threshold={thresholdVal}
+                                setThreshold={threshold => 
+                                    changeNeuronValue(layerNum, neuronNum, 'thresholdVal', threshold)}
+                                isGreater={thresholdDir}
+                                setIsGreater={isGreater => 
+                                    changeNeuronValue(layerNum, neuronNum, 'thresholdDir', isGreater)}
+                                inputs={inputs}
+                                weights={weights}
+                                setWeights={weights => 
+                                    changeNeuronValue(layerNum, neuronNum, 'weights', weights)}
+                                showInput={layerNum === 0}
+                            />
+                        )} 
+                    </div>
+                )}
+                {/* <div>
                     <MPLayerNeuron
                         threshold={threshold1}
                         setThreshold={setThreshold1}
@@ -101,7 +137,7 @@ const MLPGraphNeuron = (props: { labelColor: string, inputCoordinates: RblattInp
                         setWeights={setWeights} 
                         bias={bias} 
                        />
-                </div>
+                </div> */}
             </div>
             <div>
                 <button className="bg-white" onClick={setAnd}>

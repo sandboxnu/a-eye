@@ -16,14 +16,11 @@ const MLPDemo = (props: { labelColor: string }) => {
 
     const [neuronState, setNeuronState] = useState(neuronInputConfig);
 
-
     const changeNeuronValue = (layer: number, neuron: number, key: string, value: any) => {
         const newState = JSON.parse(JSON.stringify(neuronState));
         newState[layer][neuron][key] = value;
         setNeuronState(newState);
     }
-
-    const updateNeuron1Inputs = (inputs) => changeNeuronValue(0, 0, 'inputs', inputs)
 
     console.log(currPoint);
     const goPrev = () => {
@@ -41,6 +38,8 @@ const MLPDemo = (props: { labelColor: string }) => {
         <div>
             <MLPGraphNeuron 
                 labelColor={props.labelColor} 
+                neuronState={neuronState}
+                changeNeuronValue={changeNeuronValue}
                 inputCoordinates={inputs[currPoint]}
             />
             <EditingRblattGraph
