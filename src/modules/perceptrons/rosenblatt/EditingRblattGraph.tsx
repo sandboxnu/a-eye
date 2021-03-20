@@ -17,8 +17,7 @@ type EditingRblattGraphProps = {
 //     clear: {isCleared:boolean, setCleared:Function}}) 
     
     
-const EditingRblattGraph = (props: EditingRblattGraphProps) =>
-{
+const EditingRblattGraph = (props: EditingRblattGraphProps) => {
     const [editingType, setEditingType] = useState<{val: 1 | 0 | null}>({val: 0});
     const [updated, setUpdated] = useState(false); // yes this is a hack to get it to rerender shhh do not look
 

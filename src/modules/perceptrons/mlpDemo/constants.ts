@@ -1,7 +1,6 @@
-const neuronInputConfig = [
+const neuronInputConfig: NeuronConfig = [
     [
         {
-            inputs: [1],
             weights: [-0.5],
             bias: 10,
             thresholdDir: true,
@@ -9,7 +8,6 @@ const neuronInputConfig = [
             output: 0,
         },
         {
-            inputs: [1],
             weights: [1],
             bias: 10,
             thresholdDir: true,
@@ -19,19 +17,19 @@ const neuronInputConfig = [
     ],
     [
         {
-            inputs: [1, 1],
             weights: [-0.5, 1],
             bias: 10,
+            output: 123123,
             thresholdDir: true,
             thresholdVal: 0,
         },
     ]
 ]
 
-export type NeuronConfig= {
-    inputs: number[],
+export type NeuronConfig = {
     weights: number[],
     bias: number,
+    output: number,
     thresholdDir: boolean, 
     thresholdVal: number}[][]
 

@@ -55,6 +55,8 @@ const MPLayerNeuron: React.FC<MPLayerNeuronType> = ({
     setOutput = (() => null),
     showInput = false,
 }) => {
+
+    console.log('inputs to the neuron', inputs);
     const [func, setFunc] = useState(() => ((n: number) => 0));
 
     const changeWeight = (e: React.ChangeEvent<HTMLInputElement>, idx: number) => {
