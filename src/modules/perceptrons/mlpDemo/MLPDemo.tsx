@@ -8,8 +8,12 @@ import EditingRblattGraph from '../rosenblatt/EditingRblattGraph';
 import { neuronInputConfig, NeuronConfig} from './constants';
 
 const MLPDemo = (props: { labelColor: string }) => {
+    // PROBLEMS: 
+    // - JSXGraph not updating the point colors
+    // - constant values are too negative to show variety in graph
+    // - state not changing when resetting
+
     const [inputs, setInputs] = useState<RblattInput[]>(INIT_INPUTS);
-    const [config, setConfig] = useState<RblattConfig>(INIT_CONFIG);
     const [currPoint, setCurrPoint] = useState<number>(0);
     const [isReset, setReset] = useState(false);
     const [isCleared, setCleared] = useState(false);
