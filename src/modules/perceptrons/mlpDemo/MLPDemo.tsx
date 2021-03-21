@@ -7,41 +7,40 @@ import EditingRblattGraph from '../rosenblatt/EditingRblattGraph';
 
 import { neuronInputConfig, NeuronConfig} from './constants';
 
-const MLPDemo = (props: { labelColor: string }) => {
-    // PROBLEMS: 
-    // - JSXGraph not updating the point colors
-    // - constant values are too negative to show variety in graph
-    // - state not changing when resetting
 
+// Get the last nested value of an array
+const getLastValue = (arr) => {
+    let a = arr;
+    while(Array.isArray(a)) {
+        a = a[a.length - 1];
+    }
+
+    return a;
+}
+
+// make a deep copy of a javascript object
+const deepcopy = (obj) => JSON.parse(JSON.stringify(obj));
+
+    // - JSXGraph not updating the point colors
+const MLPDemo = (props: { labelColor: string }) => {
     const [inputs, setInputs] = useState<RblattInput[]>(INIT_INPUTS);
     const [currPoint, setCurrPoint] = useState<number>(0);
     const [isReset, setReset] = useState(false);
     const [isCleared, setCleared] = useState(false);
-    const [outputs, setOutputs] = useState([[0,0],[0]])
-
     const [neuronState, setNeuronState] = useState<NeuronConfig>(neuronInputConfig);
 
+    // update a neuron value to a new one!!
     const changeNeuronValue = (layer: number, neuron: number, key: string, value: any) => {
-        console.log(`changing key ${layer} ${neuron} ${key} to value ${value}`)
-        
         setNeuronState((oldState => {  
-            const newState = JSON.parse(JSON.stringify(oldState));
+            const newState = deepcopy(oldState);
             newState[layer][neuron][key] = value;
             return newState
         } ));
     }
 
-    const changeOutput = (layer: number, neuron: number, key: string, value: any) => {
-        const newOutput = JSON.parse(JSON.stringify(outputs));;
-        newOutput[layer][neuron] = value;
-        console.log(newOutput)
-        setOutputs(newOutput);
-    }
-
-
-
-    const calculatePointColor = (inputs, inputConfig) => {
-        let curResults = JSON.parse(JSON.stringify(inputs));
+    const getNeuronOutputs = (inputs, inputConfig) => {
+        let allResults :number[][][] = [deepcopy(inputs).map((num => [num]))];
+        let curResults = deepcopy(inputs);
         inputConfig.forEach((layer, i) => {
             let layerResults: number[] = [];
             layer.forEach(({weights, bias, thresholdDir, thresholdVal}, j) => {
@@ -59,29 +58,36 @@ const MLPDemo = (props: { labelColor: string }) => {
                 layerResults.push(thresholdFunction(result + bias)); 
             })
             curResults = layerResults;
+            allResults.push(layerResults.map((num => [num])));
         })
-        console.log(curResults);
-        return curResults;
+        return allResults;
     }
 
-    const correctPointColorInputs = inputs.map(({x, y}) => {return {x, y, z: calculatePointColor([x, y], neuronState)}});
-
+    // reset neuron to default state
     const resetNeuronState = () => {
-        setNeuronState(nState => [...neuronInputConfig]);
+        setNeuronState(_ => [...neuronInputConfig]);
     };
-    // 
 
-    console.log(currPoint);
+    // go to the previous iteration of the graph
     const goPrev = () => {
         let next = currPoint === 0 ? inputs.length - 1 : currPoint - 1;
         setCurrPoint(next);
     }
+
+    // go to the next iteration of the graph
     const goNext = () => {
         setCurrPoint((currPoint + 1) % inputs.length)
     }
 
-    // 1. correct points based on number
-    // 2. triple or quadruple the points - see background more 'naturally'
+    // get the point color of the final neuron 
+    const calculatePointColor = (inputs, inputConfig) => {
+        return getLastValue(getNeuronOutputs(inputs, inputConfig));
+    }
+
+    const formattedInputs = (({x, y}) => [x, y])(inputs[currPoint]);
+    const outputs = getNeuronOutputs(formattedInputs, neuronState);
+    console.log('all results with outputs', outputs);
+    const correctPointColorInputs = inputs.map(({x, y}) => {return {x, y, z: calculatePointColor([x, y], neuronState)}});
 
     return(
         <div>
@@ -90,9 +96,7 @@ const MLPDemo = (props: { labelColor: string }) => {
                 neuronState={neuronState}
                 changeNeuronValue={changeNeuronValue}
                 resetNeuronState={resetNeuronState}
-                inputCoordinates={(({x, y}) => [x, y])(inputs[currPoint])}
-                output={outputs}
-                changeOutput={changeOutput}
+                intermediateValues={outputs}
             />
             <EditingRblattGraph
                 inputs={correctPointColorInputs} 
@@ -101,16 +105,12 @@ const MLPDemo = (props: { labelColor: string }) => {
                 reset={{isReset, setReset}}
                 clear={{isCleared, setCleared}}
             />
-
-            {/* if you want to remove adding points a feature, change EditingRblattGraph to RblattGraph 
-            <RblattGraph {...props} editingType={editingType}  /> */}
             <button className='basic-button' onClick={goPrev} disabled={false}>
                 Previous Step
             </button>
             <button className='basic-button' onClick={goNext} disabled={false}>
                 Next Step
             </button>
-
         </div>
     )
 }

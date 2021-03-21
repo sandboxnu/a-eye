@@ -38,7 +38,8 @@ export type MPLayerNeuronType = {
     isGreater: boolean, 
     setIsGreater, 
     setOutput?: (inpts: React.SetStateAction<number>) => void,
-    showInput?: boolean
+    showInput?: boolean,
+    noutput?: number
 }
 
 const MPLayerNeuron: React.FC<MPLayerNeuronType> = ({
@@ -53,7 +54,8 @@ const MPLayerNeuron: React.FC<MPLayerNeuronType> = ({
     isGreater, 
     setIsGreater, 
     setOutput = (() => null),
-    showInput = false
+    showInput = false,
+    noutput = 'none',
 }) => {
 
     console.log('inputs to the neuron', inputs);
@@ -79,8 +81,7 @@ const MPLayerNeuron: React.FC<MPLayerNeuronType> = ({
         return (acc[0] && acc[1] ? acc[0] * acc[1] : 0) + prev
     }, 0) + bias;
 
-    const output = func(inputSum);
-    // setOutput(output);
+    const output = noutput === 'none' ?  func(inputSum) : noutput;
 
     const makeInput = (inpt: number, weight: number, idx: number) => {
         return (

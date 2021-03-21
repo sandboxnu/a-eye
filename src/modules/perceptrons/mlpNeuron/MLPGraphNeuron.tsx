@@ -6,30 +6,25 @@ import {RblattInput} from '../rosenblatt/constants'
 import {NeuronConfig} from '../mlpDemo/constants';
 
 type MLPGraphNeuronType = {
-
-};
-// inputCoordinates is array of two elements
-const MLPGraphNeuron = (props: { 
     labelColor: string,
-    inputCoordinates: number[],
     neuronState: NeuronConfig,
     changeNeuronValue,
     resetNeuronState,
-    output,
-    changeOutput
-}) => {
-    const {
+    // [...layers, [... neurons, [.. inputs for each neuron (all rows but first one are outputs, so this is just one element for them.)]]]
+    intermediateValues: number[][][],
+};
+
+const MLPGraphNeuron: React.FC<MLPGraphNeuronType> = ({ 
         labelColor,
-        inputCoordinates,
         neuronState,
         changeNeuronValue,
         resetNeuronState,
-        output,
-        changeOutput
-    } = props;
+        intermediateValues
+}) => {
 
     // hardcoded for two layers and one neuron on second layer
     const setBias = bias => changeNeuronValue(1, 0, 'bias', bias);
+
     const setAnd = () => {
         // reset all weights
         // reset threshold
@@ -42,11 +37,14 @@ const MLPGraphNeuron = (props: {
         setBias(-5);
     }
 
-    const getInputs = (layerNum, neuronNumber) => {
-        // NOTE: not generalized for neurons that take more than one input
-        if(layerNum === 0) return [inputCoordinates[neuronNumber]];
+    // get the inputs to a neuron on a specific layer
+    const getInputs = (layerNum, neuronNum) => {
+        return intermediateValues[layerNum][neuronNum];
+    }
 
-        return neuronState[layerNum - 1].map(({output}) => output);
+    // get the outputs to the current neuron layer
+    const getOutput = (layerNum, neuronNum) => {
+        return intermediateValues[layerNum + 1][neuronNum][0];
     }
 
     return (
@@ -71,56 +69,11 @@ const MLPGraphNeuron = (props: {
                                 setWeights={weights => 
                                     changeNeuronValue(layerNum, neuronNum, 'weights', weights)}
                                 showInput={layerNum === 0}
-                                setOutput = {output => 
-                                    changeOutput(layerNum, neuronNum, 'output', output)}
+                                noutput={getOutput(layerNum, neuronNum)}
                             />
                         )} 
                     </div>
                 )}
-                {/* <div>
-                    <MPLayerNeuron
-                        threshold={threshold1}
-                        setThreshold={setThreshold1}
-                        isGreater={isGreater1}
-                        setIsGreater={setIsGreater1}
-                        labelColor={props.labelColor} 
-                        addBias={true} 
-                        inputs={[props.inputCoordinates.x]} 
-                        weights={weights1} 
-                        setWeights={setWeights1} 
-                        bias={DEFAULT_BIAS} 
-                        setOutput={setAns1}
-                        showInput={true}
-                       />
-                    <MPLayerNeuron
-                        threshold={threshold2}
-                        setThreshold={setThreshold2}
-                        isGreater={isGreater2}
-                        setIsGreater={setIsGreater2}
-                        labelColor={props.labelColor} 
-                        addBias={true} 
-                        inputs={[props.inputCoordinates.y]} 
-                        weights={weights2} 
-                        setWeights={setWeights2} 
-                        bias={DEFAULT_BIAS} 
-                        setOutput={setAns2}
-                        showInput={true}
-                    />
-                </div>
-                <div className="">
-                    <MPLayerNeuron
-                        threshold={thresholdLayer}
-                        setThreshold={setThresholdLayer}
-                        isGreater={isGreaterLayer}
-                        setIsGreater={setIsGreaterLayer}
-                        labelColor={props.labelColor} 
-                        addBias={true} 
-                        inputs={[answer1, answer2]} 
-                        weights={weights} 
-                        setWeights={setWeights} 
-                        bias={bias} 
-                       />
-                </div> */}
             </div>
             <div>
                 <button className="basic-button" onClick={setAnd}>
