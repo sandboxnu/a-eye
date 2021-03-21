@@ -5,7 +5,7 @@ const hog = require('hog-features');
 const flowers = require('../../../media/modules/computerVision/imageLibrary/purpleFlowers.jpeg')
   .default;
 
-async function histogramAggregate(img: any): Promise<number[][][]> {
+export async function histogramAggregate(img: any): Promise<number[][][]> {
   return Image.load(img).then((image: any) => {
     const options = {
       cellSize: 8,
@@ -24,7 +24,7 @@ async function histogramAggregate(img: any): Promise<number[][][]> {
   });
 }
 
-async function histogramBlocks(img: any): Promise<number[][][]> {
+export async function histogramBlocks(img: any): Promise<number[][][]> {
   return Image.load(img).then((image: any) => {
     const options = {
       cellSize: 8,
@@ -55,7 +55,7 @@ async function histogramBlocks(img: any): Promise<number[][][]> {
   });
 }
 
-type Gradients = {
+export type GradientsType = {
   x: ImageData;
   y: ImageData;
   a: number[][];
@@ -64,7 +64,7 @@ type Gradients = {
 
 const map = (x: number, min1: number, max1: number, min2: number, max2: number): number => (x - min1) * (max2 - min2) / (max1 - min1) + min2;
 
-async function gradientImages(img: any): Promise<Gradients> {
+export async function gradientImages(img: any): Promise<GradientsType> {
   return Image.load(img).then((image: any) => {
     const intensities: { x: number[][], y: number[][] } = hog.gradients(image);
     const intensitiesX: number[] = intensities.x.flat();
@@ -77,7 +77,7 @@ async function gradientImages(img: any): Promise<Gradients> {
     intensitiesY.forEach(y => {if (!isNaN(y)) {maxY = Math.max(maxY, y); minY = Math.min(minY, y);}});
     intensitiesV.forEach(v => {if (!isNaN(v)) {maxV = Math.max(maxV, v); minV = Math.min(minV, v);}});
 
-    const valToRGB = (val: number): number[] => [val, val, val, 1];
+    const valToRGB = (val: number): number[] => [val, val, val, 255];
 
     const imageX: Uint8ClampedArray = new Uint8ClampedArray(intensitiesX.map(x => valToRGB(map(x, minX, maxX, 0, 255))).flat());
     const imageY: Uint8ClampedArray = new Uint8ClampedArray(intensitiesY.map(y => valToRGB(map(y, minY, maxY, 0, 255))).flat());
@@ -97,10 +97,6 @@ async function gradientImages(img: any): Promise<Gradients> {
   });
 }
 
-function histogram() {
-  gradientImages(flowers).then(result => console.log(result));
-}
 
 // todo: what are we doing the 'v' image, clarify what g_x and g_y are
-// todo: do we want to add interactive feature to show gradient for a clicked block on the image?
-export default histogram;
+// todo: do we want to add interactive feature to show gradient for a clicked block on the imag

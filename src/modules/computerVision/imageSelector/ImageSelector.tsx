@@ -2,7 +2,7 @@
 import React, { useEffect } from 'react';
 import './ImageSelector.css';
 
-const ALL_IMGS: { [name: string]: any } = {
+export const ALL_IMGS: { [name: string]: any } = {
   'three.png': require('../../../media/modules/computerVision/imageLibrary/three.png')
     .default,
   'diamond.png': require('../../../media/modules/computerVision/imageLibrary/diamond.png')

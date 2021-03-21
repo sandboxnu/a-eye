@@ -15,6 +15,7 @@ import KMeans, {
   KMeansStepExample,
   InteractiveClusteringExample,
 } from '../modules/stateSpaces/kmeans';
+import HistOfGradDemo from '../modules/computerVision/histOfGrad/HistOfGradDemo';
 import blank from '../media/modules/blank.png';
 import animation1 from '../media/modules/computerVision/animation-1.gif';
 import animation2 from '../media/modules/computerVision/animation-2.gif';
@@ -84,6 +85,14 @@ function getDemo(comp: string, scheme: ColorScheme) {
         <ImageSelectableDemo
           Demo={HaarWaveletDemo}
           initImg="bwWoman.jpg"
+          demoProps={demoArgs}
+        />
+      );
+    case 'HistOfGradDemo':
+      return (
+        <ImageSelectableDemo
+          Demo={HistOfGradDemo}
+          initImg="purpleFlowers.jpeg"
           demoProps={demoArgs}
         />
       );

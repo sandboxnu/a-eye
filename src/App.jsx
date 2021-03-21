@@ -9,7 +9,6 @@ import './index.css';
 import AboutPage from './aboutPage/AboutPage';
 import LandingPage from './landingPage/LandingPage';
 import ModulePage from './modulePage/ModulePage';
-import histogram from './modules/computerVision/histOfGrad/histOfGrad';
 
 // change colors as needed
 const THEME = createMuiTheme({
@@ -24,7 +23,6 @@ const THEME = createMuiTheme({
 });
 
 function App() {
-  histogram();
   return (
     <BrowserRouter>
       <div className="App" id="app">
