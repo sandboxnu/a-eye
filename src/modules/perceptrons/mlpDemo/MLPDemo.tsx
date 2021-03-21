@@ -17,15 +17,28 @@ const MLPDemo = (props: { labelColor: string }) => {
     const [currPoint, setCurrPoint] = useState<number>(0);
     const [isReset, setReset] = useState(false);
     const [isCleared, setCleared] = useState(false);
+    const [outputs, setOutputs] = useState([[0,0],[0]])
 
     const [neuronState, setNeuronState] = useState<NeuronConfig>(neuronInputConfig);
 
     const changeNeuronValue = (layer: number, neuron: number, key: string, value: any) => {
         console.log(`changing key ${layer} ${neuron} ${key} to value ${value}`)
-        const newState = JSON.parse(JSON.stringify(neuronState));
-        newState[layer][neuron][key] = value;
-        setNeuronState(newState);
+        
+        setNeuronState((oldState => {  
+            const newState = JSON.parse(JSON.stringify(oldState));
+            newState[layer][neuron][key] = value;
+            return newState
+        } ));
     }
+
+    const changeOutput = (layer: number, neuron: number, key: string, value: any) => {
+        const newOutput = JSON.parse(JSON.stringify(outputs));;
+        newOutput[layer][neuron] = value;
+        console.log(newOutput)
+        setOutputs(newOutput);
+    }
+
+
 
     const calculatePointColor = (inputs, inputConfig) => {
         let curResults = JSON.parse(JSON.stringify(inputs));
@@ -54,15 +67,9 @@ const MLPDemo = (props: { labelColor: string }) => {
     const correctPointColorInputs = inputs.map(({x, y}) => {return {x, y, z: calculatePointColor([x, y], neuronState)}});
 
     const resetNeuronState = () => {
-        console.log('resetting neuron state');
-        neuronState.forEach((layer, i) => {
-            layer.forEach((neuron, j) => {
-                Object.keys(neuronInputConfig[i][j]).forEach(key => 
-                    changeNeuronValue(i, j, key, neuronInputConfig[i][j][key]))
-            })
-        })
+        setNeuronState(nState => [...neuronInputConfig]);
     };
-    // setNeuronState(nState => [...nState, ...neuronInputConfig]);
+    // 
 
     console.log(currPoint);
     const goPrev = () => {
@@ -84,6 +91,8 @@ const MLPDemo = (props: { labelColor: string }) => {
                 changeNeuronValue={changeNeuronValue}
                 resetNeuronState={resetNeuronState}
                 inputCoordinates={(({x, y}) => [x, y])(inputs[currPoint])}
+                output={outputs}
+                changeOutput={changeOutput}
             />
             <EditingRblattGraph
                 inputs={correctPointColorInputs} 

@@ -12,7 +12,7 @@ const neuronInputConfig: NeuronConfig = [
             bias: 10,
             thresholdDir: true,
             thresholdVal: 0,
-            output: 0,
+            output: 1,
         },
     ],
     [

@@ -14,14 +14,18 @@ const MLPGraphNeuron = (props: {
     inputCoordinates: number[],
     neuronState: NeuronConfig,
     changeNeuronValue,
-    resetNeuronState
+    resetNeuronState,
+    output,
+    changeOutput
 }) => {
     const {
         labelColor,
         inputCoordinates,
         neuronState,
         changeNeuronValue,
-        resetNeuronState
+        resetNeuronState,
+        output,
+        changeOutput
     } = props;
 
     // hardcoded for two layers and one neuron on second layer
@@ -52,6 +56,7 @@ const MLPGraphNeuron = (props: {
                     <div id="layer">
                         {layer.map(({weights, bias, thresholdDir, thresholdVal}, neuronNum) => 
                             <MPLayerNeuron
+                                key={`LayerNeuron ${layerNum} ${neuronNum}` }
                                 labelColor={labelColor}
                                 addBias={true}
                                 bias={bias}
@@ -66,6 +71,8 @@ const MLPGraphNeuron = (props: {
                                 setWeights={weights => 
                                     changeNeuronValue(layerNum, neuronNum, 'weights', weights)}
                                 showInput={layerNum === 0}
+                                setOutput = {output => 
+                                    changeOutput(layerNum, neuronNum, 'output', output)}
                             />
                         )} 
                     </div>
@@ -116,11 +123,11 @@ const MLPGraphNeuron = (props: {
                 </div> */}
             </div>
             <div>
-                <button className="bg-white" onClick={setAnd}>
+                <button className="basic-button" onClick={setAnd}>
                     Set to And
                 </button>
                 <br/>
-                <button className="bg-white" onClick={setOr}>
+                <button className="basic-button" onClick={setOr}>
                     Set to Or
                 </button>
             </div>
