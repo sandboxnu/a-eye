@@ -34,12 +34,12 @@ const MLPDemo = (props: { labelColor: string }) => {
         setNeuronState((oldState => {  
             const newState = deepcopy(oldState);
             newState[layer][neuron][key] = value;
-            return newState
+            return newState;
         } ));
     }
 
     const getNeuronOutputs = (inputs, inputConfig) => {
-        let allResults :number[][][] = [deepcopy(inputs).map((num => [num]))];
+        const allResults :number[][][] = [deepcopy(inputs).map((num => [num]))];
         let curResults = deepcopy(inputs);
         inputConfig.forEach((layer, i) => {
             let layerResults: number[] = [];
@@ -70,7 +70,7 @@ const MLPDemo = (props: { labelColor: string }) => {
 
     // go to the previous iteration of the graph
     const goPrev = () => {
-        let next = currPoint === 0 ? inputs.length - 1 : currPoint - 1;
+        const next = currPoint === 0 ? inputs.length - 1 : currPoint - 1;
         setCurrPoint(next);
     }
 
@@ -86,7 +86,6 @@ const MLPDemo = (props: { labelColor: string }) => {
 
     const formattedInputs = (({x, y}) => [x, y])(inputs[currPoint]);
     const outputs = getNeuronOutputs(formattedInputs, neuronState);
-    console.log('all results with outputs', outputs);
     const correctPointColorInputs = inputs.map(({x, y}) => {return {x, y, z: calculatePointColor([x, y], neuronState)}});
 
     return(
