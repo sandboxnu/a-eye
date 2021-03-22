@@ -57,6 +57,7 @@ const MLPDemo = (props: { labelColor: string }) => {
                      
                 layerResults.push(thresholdFunction(result + bias)); 
             })
+            layerResults.reverse();
             curResults = layerResults;
             allResults.push(layerResults.map((num => [num])));
         })

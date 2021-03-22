@@ -57,7 +57,6 @@ const MPLayerNeuron: React.FC<MPLayerNeuronType> = ({
     showInput = false,
     noutput = 'none',
 }) => {
-
     console.log('inputs to the neuron', inputs);
     const [func, setFunc] = useState(() => ((n: number) => 0));
 
