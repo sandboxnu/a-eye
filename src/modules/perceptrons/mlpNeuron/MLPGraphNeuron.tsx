@@ -38,8 +38,9 @@ const MLPGraphNeuron: React.FC<MLPGraphNeuronType> = ({
     }
 
     // get the inputs to a neuron on a specific layer
+    // assume numinputs is equal for all layers
     const getInputs = (layerNum, neuronNum, numInputs) => {
-        return intermediateValues[layerNum].concat().map(([a]) => a).slice(0, numInputs);
+        return intermediateValues[layerNum].concat().map(([a]) => a).slice(numInputs * neuronNum, numInputs * (neuronNum + 1));
     }
 
     // get the outputs to the current neuron layer
