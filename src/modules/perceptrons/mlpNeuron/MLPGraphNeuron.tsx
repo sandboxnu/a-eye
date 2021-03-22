@@ -38,8 +38,8 @@ const MLPGraphNeuron: React.FC<MLPGraphNeuronType> = ({
     }
 
     // get the inputs to a neuron on a specific layer
-    const getInputs = (layerNum, neuronNum) => {
-        return intermediateValues[layerNum][neuronNum];
+    const getInputs = (layerNum, neuronNum, numInputs) => {
+        return intermediateValues[layerNum].concat().map(([a]) => a).slice(0, numInputs);
     }
 
     // get the outputs to the current neuron layer
@@ -64,7 +64,7 @@ const MLPGraphNeuron: React.FC<MLPGraphNeuronType> = ({
                                 isGreater={thresholdDir}
                                 setIsGreater={isGreater => 
                                     changeNeuronValue(layerNum, neuronNum, 'thresholdDir', isGreater)}
-                                inputs={getInputs(layerNum, neuronNum)}
+                                inputs={getInputs(layerNum, neuronNum, weights.length)}
                                 weights={weights}
                                 setWeights={weights => 
                                     changeNeuronValue(layerNum, neuronNum, 'weights', weights)}
