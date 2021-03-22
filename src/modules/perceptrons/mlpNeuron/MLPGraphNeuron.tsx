@@ -7,9 +7,9 @@ import {NeuronConfig} from '../mlpDemo/constants';
 
 type MLPGraphNeuronType = {
     labelColor: string,
-    neuronState: NeuronConfig,
-    changeNeuronValue,
-    resetNeuronState,
+    neuronState: NeuronConfig[][],
+    changeNeuronValue: Function,
+    resetNeuronState: Function,
     // [...layers, [... neurons, [.. inputs for each neuron (all rows but first one are outputs, so this is just one element for them.)]]]
     intermediateValues: number[][][],
 };
@@ -21,7 +21,6 @@ const MLPGraphNeuron: React.FC<MLPGraphNeuronType> = ({
         resetNeuronState,
         intermediateValues
 }) => {
-
     // hardcoded for two layers and one neuron on second layer
     const setBias = bias => changeNeuronValue(1, 0, 'bias', bias);
 
@@ -48,8 +47,6 @@ const MLPGraphNeuron: React.FC<MLPGraphNeuronType> = ({
         return intermediateValues[layerNum + 1][neuronNum][0];
     }
 
-    console.log(intermediateValues);
-
     return (
         <div>
             <div className="m-2 flex items-center">
@@ -62,10 +59,10 @@ const MLPGraphNeuron: React.FC<MLPGraphNeuronType> = ({
                                 addBias={true}
                                 bias={bias}
                                 threshold={thresholdVal}
-                                setThreshold={threshold => 
+                                setThreshold={(threshold: number) => 
                                     changeNeuronValue(layerNum, neuronNum, 'thresholdVal', threshold)}
                                 isGreater={thresholdDir}
-                                setIsGreater={isGreater => 
+                                setIsGreater={(isGreater: boolean) => 
                                     changeNeuronValue(layerNum, neuronNum, 'thresholdDir', isGreater)}
                                 inputs={getInputs(layerNum, neuronNum, weights.length)}
                                 weights={weights}
@@ -78,7 +75,7 @@ const MLPGraphNeuron: React.FC<MLPGraphNeuronType> = ({
                     </div>
                 )}
             </div>
-            <div>
+            <div className="flex flex-row">
                 <button className="basic-button" onClick={setAnd}>
                     Set to And
                 </button>

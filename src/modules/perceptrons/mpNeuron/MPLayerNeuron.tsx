@@ -36,7 +36,7 @@ export type MPLayerNeuronType = {
     threshold: number,
     setThreshold,
     isGreater: boolean, 
-    setIsGreater, 
+    setIsGreater,
     setOutput?: (inpts: React.SetStateAction<number>) => void,
     showInput?: boolean,
     noutput?: number
@@ -55,9 +55,10 @@ const MPLayerNeuron: React.FC<MPLayerNeuronType> = ({
     setIsGreater, 
     setOutput = (() => null),
     showInput = false,
+    // zero is falsy so we check against a non-zero value ;_;
     noutput = 'none',
 }) => {
-    console.log('inputs to the neuron', inputs);
+
     const [func, setFunc] = useState(() => ((n: number) => 0));
 
     const changeWeight = (e: React.ChangeEvent<HTMLInputElement>, idx: number) => {

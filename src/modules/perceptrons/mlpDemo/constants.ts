@@ -1,4 +1,4 @@
-const neuronInputConfig: NeuronConfig = [
+const neuronInputConfig: NeuronConfig[][] = [
     [
         {
             weights: [-0.5],
@@ -31,6 +31,7 @@ export type NeuronConfig = {
     bias: number,
     output: number,
     thresholdDir: boolean, 
-    thresholdVal: number}[][]
+    thresholdVal: number
+};
 
 export {neuronInputConfig};

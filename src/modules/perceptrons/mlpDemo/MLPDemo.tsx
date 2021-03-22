@@ -27,7 +27,7 @@ const MLPDemo = (props: { labelColor: string }) => {
     const [currPoint, setCurrPoint] = useState<number>(0);
     const [isReset, setReset] = useState(false);
     const [isCleared, setCleared] = useState(false);
-    const [neuronState, setNeuronState] = useState<NeuronConfig>(neuronInputConfig);
+    const [neuronState, setNeuronState] = useState<NeuronConfig[][]>(neuronInputConfig);
 
     // update a neuron value to a new one!!
     const changeNeuronValue = (layer: number, neuron: number, key: string, value: any) => {
@@ -41,22 +41,19 @@ const MLPDemo = (props: { labelColor: string }) => {
     const getNeuronOutputs = (inputs, inputConfig) => {
         const allResults :number[][][] = [deepcopy(inputs).map((num => [num]))];
         let curResults = deepcopy(inputs);
-        inputConfig.forEach((layer, i) => {
-            let layerResults: number[] = [];
-            layer.forEach(({weights, bias, thresholdDir, thresholdVal}, j) => {
-                const thresholdFunction = thresholdDir 
-                    ? (a) => (a > thresholdVal ? 1 : 0) 
-                    : (a) => (a < thresholdVal ? 1 : 0);
+        inputConfig.forEach((layer: NeuronConfig[], i: number) => {
+            const layerResults: number[] = layer.map(({weights, bias, thresholdDir, thresholdVal}, j: number) => {
+                const thresholdFunc = thresholdDir 
+                    ? (a: number) => (a > thresholdVal ? 1 : 0) 
+                    : (a: number) => (a < thresholdVal ? 1 : 0);
 
-                let result = 0;
-                weights.forEach(weight => {
+                const result = weights.reduce((acc: number, weight: number) => {
                         const input = curResults.pop();
-                        result += weight * input;
-                    }
-                ) 
+                        return weight * input + acc;
+                    }, 0) + bias; 
                      
-                layerResults.push(thresholdFunction(result + bias)); 
-            })
+                return thresholdFunc(result);
+            });
             layerResults.reverse();
             curResults = layerResults;
             allResults.push(layerResults.map((num => [num])));
