@@ -8,7 +8,9 @@ type EditingRblattGraphProps = {
     highlighted?: RblattInput,
     onInputsChange: (inpts: React.SetStateAction<RblattInput[]>) => void,
     reset: {isReset:boolean, setReset:Function},
-    clear: {isCleared:boolean, setCleared:Function}
+    clear: {isCleared:boolean, setCleared:Function},
+    allowSelectingPointColor?: boolean,
+    calculatePointColor?: (RblattInput) => 0 | 1,
  }
 
 // const EditingRblattGraph = (props: {inputs: RblattInput[], line: RblattConfig,  highlighted: RblattInput,
@@ -31,6 +33,7 @@ const EditingRblattGraph = (props: EditingRblattGraphProps) => {
         <div className="flex flex-col items-center justify-center">
             <RblattGraph {...props} editingType={editingType}  />
             <div className="flex items-center justify-center">
+                {props.allowSelectingPointColor && <>
                 <p className="text-modulePaleBlue">Select Point Color:</p>
                 <button className={`basic-button alt py-1 px-2 bg-orange-500 border-4 ${editingType.val === 0 ? 'border-orange-800' : 'border-transparent'} `}
                         onClick={() => {
@@ -48,6 +51,7 @@ const EditingRblattGraph = (props: EditingRblattGraphProps) => {
                 >
                     Blue
                 </button>
+                </>}
             </div>
         </div>);
 }

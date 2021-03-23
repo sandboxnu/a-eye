@@ -9,7 +9,9 @@ type RblattGraphProps = {
     editingType: {val:  0 | 1 | null},
     onInputsChange: (inpts: React.SetStateAction<RblattInput[]>) => void,
     reset: {isReset:boolean, setReset:Function},
-    clear: {isCleared:boolean, setCleared:Function}
+    clear: {isCleared:boolean, setCleared:Function},
+    calculatePointColor?: (RblattInput) => 0 | 1,
+    // allowSelectingPointColor: boolean
  }
 
 const isInitialInputPoint = (xCoord: number, yCoord: number) => {
@@ -64,7 +66,6 @@ const RblattGraph = (props: RblattGraphProps) => {
     }, []);
 
     // register listeners after the state var has been set
-    useEffect(() => { board && board.on('down', addPoint)}, [board]);
     useEffect(() => { board && board.on('down', editPoint)}, [board]);
 
     useEffect(() => {
@@ -143,14 +144,18 @@ const RblattGraph = (props: RblattGraphProps) => {
             }
         }
         if (canCreate) {
-            const z = props.editingType.val || 0;
-            addPoint(coords.usrCoords[1], coords.usrCoords[2], z, board);
+            const x = coords.usrCoords[1];
+            const y = coords.usrCoords[2];
+            const z = props.calculatePointColor ? props.calculatePointColor({x, y}) 
+                : props.editingType.val || 0;
+            addPoint(x, y, z, board);
         } else {
             removePoint(pointToDelete, coords.scrCoords[1], coords.scrCoords[2], board);
         }
     }
 
     const addPoint = (x: number, y: number, z: 0 | 1,  currBoard?: any) => {
+        console.log(x, y, z, currBoard);
         props.onInputsChange(oldInpts => {
             return oldInpts.concat([{x, y, z}]);
         });

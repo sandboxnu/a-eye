@@ -57,7 +57,6 @@ const MLPDemo = (props: { labelColor: string }) => {
             curResults = layerResults;
             allResults.push(layerResults.map((num => [num])));
         })
-        console.log(allResults);
         return allResults;
     }
 
@@ -101,6 +100,8 @@ const MLPDemo = (props: { labelColor: string }) => {
                 onInputsChange={setInputs}
                 reset={{isReset, setReset}}
                 clear={{isCleared, setCleared}}
+                allowSelectingPointColor={false}
+                calculatePointColor={(({x, y}) => calculatePointColor([x, y], neuronState))}
             />
             <button className='basic-button' onClick={goPrev} disabled={false}>
                 Previous Step
