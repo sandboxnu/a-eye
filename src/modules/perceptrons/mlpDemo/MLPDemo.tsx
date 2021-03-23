@@ -48,13 +48,12 @@ const MLPDemo = (props: { labelColor: string }) => {
                     : (a: number) => (a < thresholdVal ? 1 : 0);
 
                 const result = weights.reduce((acc: number, weight: number) => {
-                        const input = curResults.pop();
+                        const input = curResults.splice(0,1)[0];
                         return weight * input + acc;
                     }, 0) + bias; 
                      
                 return thresholdFunc(result);
             });
-            // layerResults.reverse();
             curResults = layerResults;
             allResults.push(layerResults.map((num => [num])));
         })
