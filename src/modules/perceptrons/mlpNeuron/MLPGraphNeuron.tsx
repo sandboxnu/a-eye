@@ -52,7 +52,7 @@ const MLPGraphNeuron: React.FC<MLPGraphNeuronType> = ({
             <div className="m-2 flex items-center">
                 {neuronState.map((layer, layerNum) => 
                     <div id="layer">
-                        {layer.map(({weights, bias, thresholdDir, thresholdVal}, neuronNum) => 
+                        {layer.map(({weights, bias, greaterThan, thresholdVal}, neuronNum) => 
                             <MPLayerNeuron
                                 key={`LayerNeuron ${layerNum} ${neuronNum}` }
                                 labelColor={labelColor}
@@ -61,7 +61,7 @@ const MLPGraphNeuron: React.FC<MLPGraphNeuronType> = ({
                                 threshold={thresholdVal}
                                 setThreshold={(threshold: number) => 
                                     changeNeuronValue(layerNum, neuronNum, 'thresholdVal', threshold)}
-                                isGreater={thresholdDir}
+                                isGreater={greaterThan}
                                 setIsGreater={(isGreater: boolean) => 
                                     changeNeuronValue(layerNum, neuronNum, 'thresholdDir', isGreater)}
                                 inputs={getInputs(layerNum, neuronNum, weights.length)}

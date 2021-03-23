@@ -42,8 +42,8 @@ const MLPDemo = (props: { labelColor: string }) => {
         const allResults :number[][][] = [deepcopy(inputs).map((num => [num]))];
         let curResults = deepcopy(inputs);
         inputConfig.forEach((layer: NeuronConfig[], i: number) => {
-            const layerResults: number[] = layer.map(({weights, bias, thresholdDir, thresholdVal}, j: number) => {
-                const thresholdFunc = thresholdDir 
+            const layerResults: number[] = layer.map(({weights, bias, greaterThan, thresholdVal}, j: number) => {
+                const thresholdFunc = greaterThan 
                     ? (a: number) => (a > thresholdVal ? 1 : 0) 
                     : (a: number) => (a < thresholdVal ? 1 : 0);
 
@@ -54,10 +54,11 @@ const MLPDemo = (props: { labelColor: string }) => {
                      
                 return thresholdFunc(result);
             });
-            layerResults.reverse();
+            // layerResults.reverse();
             curResults = layerResults;
             allResults.push(layerResults.map((num => [num])));
         })
+        console.log(allResults);
         return allResults;
     }
 
