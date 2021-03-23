@@ -11,7 +11,6 @@ type RblattGraphProps = {
     reset: {isReset:boolean, setReset:Function},
     clear: {isCleared:boolean, setCleared:Function},
     calculatePointColor?: (RblattInput) => 0 | 1,
-    // allowSelectingPointColor: boolean
  }
 
 const isInitialInputPoint = (xCoord: number, yCoord: number) => {
@@ -105,8 +104,10 @@ const RblattGraph = (props: RblattGraphProps) => {
                     })
                 }
             }
-            INIT_INPUTS.forEach(({x, y, z}) => 
-                board.create('point', [x, y], { name: '', size: 1, color: z ? COL_1 : COL_0 }));
+            INIT_INPUTS.forEach(({x, y, z}) => {
+                const newColor = props.calculatePointColor ? props.calculatePointColor({x, y}) : z;
+                board.create('point', [x, y], { name: '', size: 1, color: newColor ? COL_1 : COL_0 });
+            });
             props.reset.setReset(false);
         }
         else if(board && props.clear.isCleared) {
@@ -155,7 +156,6 @@ const RblattGraph = (props: RblattGraphProps) => {
     }
 
     const addPoint = (x: number, y: number, z: 0 | 1,  currBoard?: any) => {
-        console.log(x, y, z, currBoard);
         props.onInputsChange(oldInpts => {
             return oldInpts.concat([{x, y, z}]);
         });

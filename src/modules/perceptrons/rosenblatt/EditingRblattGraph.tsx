@@ -1,6 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import RblattGraph from './RblattGraph';
 import {RblattInput, RblattConfig, INIT_INPUTS, INIT_CONFIG, CLEARED_INPUTS} from './constants';
+import { NeuronInput } from '../mpNeuron/MPBasicNeuron';
+
+import { NeuronConfig } from '../mlpDemo/constants';
 
 type EditingRblattGraphProps = {
     inputs: RblattInput[],
@@ -10,7 +13,8 @@ type EditingRblattGraphProps = {
     reset: {isReset:boolean, setReset:Function},
     clear: {isCleared:boolean, setCleared:Function},
     allowSelectingPointColor?: boolean,
-    calculatePointColor?: (RblattInput) => 0 | 1,
+    calculatePointColor?: (RblattInput, NeuronConfig) => 0 | 1,
+    neuronState?: NeuronConfig[][],
  }
 
 // const EditingRblattGraph = (props: {inputs: RblattInput[], line: RblattConfig,  highlighted: RblattInput,
@@ -19,21 +23,34 @@ type EditingRblattGraphProps = {
 //     clear: {isCleared:boolean, setCleared:Function}}) 
     
     
-const EditingRblattGraph = (props: EditingRblattGraphProps) => {
+const EditingRblattGraph: React.FC<EditingRblattGraphProps> = ({
+    inputs,
+    onInputsChange,
+    reset,
+    clear,
+    line = undefined,
+    highlighted = undefined,
+    allowSelectingPointColor = true,
+    calculatePointColor = undefined,
+    neuronState = undefined,
+}) => {
     const [editingType, setEditingType] = useState<{val: 1 | 0 | null}>({val: 0});
     const [updated, setUpdated] = useState(false); // yes this is a hack to get it to rerender shhh do not look
 
-    // useEffect(() => {
-    //     setUpdated(!updated);
-        
-    // }, [props.inputs])   
-
-
     return (
         <div className="flex flex-col items-center justify-center">
-            <RblattGraph {...props} editingType={editingType}  />
+            <RblattGraph 
+                inputs={inputs}
+                onInputsChange={onInputsChange}
+                reset={reset}
+                clear={clear}
+                line={line}
+                highlighted={highlighted}
+                calculatePointColor={(calculatePointColor && (({x, y}) => calculatePointColor([x, y], neuronState)))}
+                editingType={editingType}  
+               />
             <div className="flex items-center justify-center">
-                {props.allowSelectingPointColor && <>
+                {allowSelectingPointColor && <>
                 <p className="text-modulePaleBlue">Select Point Color:</p>
                 <button className={`basic-button alt py-1 px-2 bg-orange-500 border-4 ${editingType.val === 0 ? 'border-orange-800' : 'border-transparent'} `}
                         onClick={() => {

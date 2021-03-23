@@ -5,7 +5,7 @@ import MLPGraphNeuron from '../mlpNeuron/MLPGraphNeuron';
 import {RblattInput, RblattConfig, INIT_INPUTS, INIT_CONFIG, CLEARED_INPUTS} from '../rosenblatt/constants';
 import EditingRblattGraph from '../rosenblatt/EditingRblattGraph';
 
-import { neuronInputConfig, NeuronConfig} from './constants';
+import { neuronInputConfig, NeuronConfig } from './constants';
 
 
 // Get the last nested value of an array
@@ -36,6 +36,7 @@ const MLPDemo = (props: { labelColor: string }) => {
             newState[layer][neuron][key] = value;
             return newState;
         } ));
+        setReset(true);
     }
 
     const getNeuronOutputs = (inputs, inputConfig) => {
@@ -101,7 +102,8 @@ const MLPDemo = (props: { labelColor: string }) => {
                 reset={{isReset, setReset}}
                 clear={{isCleared, setCleared}}
                 allowSelectingPointColor={false}
-                calculatePointColor={(({x, y}) => calculatePointColor([x, y], neuronState))}
+                calculatePointColor={(({x, y}, nState) => calculatePointColor([x, y], nState))}
+                neuronState={neuronState}
             />
             <button className='basic-button' onClick={goPrev} disabled={false}>
                 Previous Step
