@@ -12,6 +12,7 @@ type EditingRblattGraphProps = {
     onInputsChange: (inpts: React.SetStateAction<RblattInput[]>) => void,
     reset: {isReset:boolean, setReset:Function},
     clear: {isCleared:boolean, setCleared:Function},
+    changedWeight?: {isChanged:boolean, setChanged:Function},
     allowSelectingPointColor?: boolean,
     calculatePointColor?: (RblattInput, NeuronConfig) => 0 | 1,
     neuronState?: NeuronConfig[][],
@@ -28,6 +29,7 @@ const EditingRblattGraph: React.FC<EditingRblattGraphProps> = ({
     onInputsChange,
     reset,
     clear,
+    changedWeight = undefined,
     line = undefined,
     highlighted = undefined,
     allowSelectingPointColor = true,
@@ -44,10 +46,12 @@ const EditingRblattGraph: React.FC<EditingRblattGraphProps> = ({
                 onInputsChange={onInputsChange}
                 reset={reset}
                 clear={clear}
+                changedWeight={changedWeight}
                 line={line}
                 highlighted={highlighted}
-                calculatePointColor={(calculatePointColor && (({x, y}) => calculatePointColor([x, y], neuronState)))}
+                calculatePointColor={calculatePointColor}
                 editingType={editingType}  
+                neuronState={neuronState}
                />
             <div className="flex items-center justify-center">
                 {allowSelectingPointColor && <>

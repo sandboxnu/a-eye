@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { RblattInput, RblattConfig, INIT_CONFIG, INIT_INPUTS } from './constants';
 import JXG from 'jsxgraph';
 
@@ -10,7 +10,9 @@ type RblattGraphProps = {
     onInputsChange: (inpts: React.SetStateAction<RblattInput[]>) => void,
     reset: {isReset:boolean, setReset:Function},
     clear: {isCleared:boolean, setCleared:Function},
-    calculatePointColor?: (RblattInput) => 0 | 1,
+    changedWeight?: { isChanged: boolean, setChanged: Function},
+    calculatePointColor?: (RblattInput, any) => 0 | 1,
+    neuronState?: any,
  }
 
 const isInitialInputPoint = (xCoord: number, yCoord: number) => {
@@ -105,10 +107,30 @@ const RblattGraph = (props: RblattGraphProps) => {
                 }
             }
             INIT_INPUTS.forEach(({x, y, z}) => {
-                const newColor = props.calculatePointColor ? props.calculatePointColor({x, y}) : z;
+                const newColor = props.calculatePointColor ? props.calculatePointColor({x, y}, props.neuronState) : z;
                 board.create('point', [x, y], { name: '', size: 1, color: newColor ? COL_1 : COL_0 });
             });
             props.reset.setReset(false);
+        }
+        else if(board && props.changedWeight && props.changedWeight.isChanged) {
+            // const [pointsToRemove, pointsToAdd] = getListInputs(props.inputs)
+            const pointsToRemove = props.inputs;
+            for (let el in board.objects) {
+                if (JXG.isPoint(board.objects[el])) {
+                    const [z, x, y] = board.objects[el].coords.usrCoords
+                    pointsToRemove.forEach((point) => {
+                        const {x: x1, y: y1} = point;
+                        if (x1 == x && y1 == y)  {
+                            removePoint(el, x, y, true);
+                        }
+                    })
+                }
+            }
+            props.inputs.forEach(({x, y, z}) => {
+                const newColor = props.calculatePointColor ? props.calculatePointColor({x, y}, props.neuronState) : z;
+                board.create('point', [x, y], { name: '', size: 1, color: newColor ? COL_1 : COL_0 });
+            });
+            props.changedWeight.setChanged(false);
         }
         else if(board && props.clear.isCleared) {
             const pointsToRemove = props.inputs;
@@ -127,7 +149,7 @@ const RblattGraph = (props: RblattGraphProps) => {
         }
     }, [props]);
 
-    const editPoint = (e: any) => {
+    const editPoint = useCallback((e: any) => {
         if (props.editingType.val === null) return;
 
         let canCreate = true;
@@ -147,13 +169,13 @@ const RblattGraph = (props: RblattGraphProps) => {
         if (canCreate) {
             const x = coords.usrCoords[1];
             const y = coords.usrCoords[2];
-            const z = props.calculatePointColor ? props.calculatePointColor({x, y}) 
+            const z = props.calculatePointColor ? props.calculatePointColor({x, y}, props.neuronState) 
                 : props.editingType.val || 0;
             addPoint(x, y, z, board);
         } else {
-            removePoint(pointToDelete, coords.scrCoords[1], coords.scrCoords[2], board);
+            removePoint(pointToDelete, coords.scrCoords[1], coords.scrCoords[2], false, board);
         }
-    }
+    }, [props.neuronState, board]);
 
     const addPoint = (x: number, y: number, z: 0 | 1,  currBoard?: any) => {
         props.onInputsChange(oldInpts => {
@@ -168,9 +190,11 @@ const RblattGraph = (props: RblattGraphProps) => {
             { name: '', size: 1, color: z ? COL_1 : COL_0 });
     }
 
-    const removePoint = (pointId: string, x: number, y: number, currBoard?: any) => {
+    const removePoint = (pointId: string, x: number, y: number, dontRemoveFromInputs?: boolean | undefined, currBoard?: any) => {
         if (props.editingType.val === null) return;
-        props.onInputsChange(oldInpts => oldInpts.filter(inpt => inpt.x != x && inpt.y != y));
+        if(!dontRemoveFromInputs) {
+            props.onInputsChange(oldInpts => oldInpts.filter(inpt => inpt.x != x && inpt.y != y));
+        }
 
         // can't directly use state var for board bc of closures
         if (!currBoard) currBoard = board;

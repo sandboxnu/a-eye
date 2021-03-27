@@ -34,6 +34,7 @@ const MLPDemo = (props: { labelColor: string }) => {
     const [currPoint, setCurrPoint] = useState<number>(0);
     const [isReset, setReset] = useState(false);
     const [isCleared, setCleared] = useState(false);
+    const [isChanged, setChanged] = useState(false);
     const [neuronState, setNeuronState] = useState<NeuronConfig[][]>(neuronInputConfig);
 
     // update a neuron value to a new one!!
@@ -43,7 +44,7 @@ const MLPDemo = (props: { labelColor: string }) => {
             newState[layer][neuron][key] = value;
             return newState;
         } ));
-        setReset(true);
+        setChanged(true);
     }
 
     const getNeuronOutputs = (inputs, inputConfig) => {
@@ -89,6 +90,8 @@ const MLPDemo = (props: { labelColor: string }) => {
         return getLastValue(getNeuronOutputs(inputs, inputConfig));
     }
 
+    console.log(inputs, currPoint, inputs[currPoint]);
+
     const formattedInputs = (({x, y}) => [x, y])(inputs[currPoint]);
     const outputs = getNeuronOutputs(formattedInputs, neuronState);
     const correctPointColorInputs = inputs.map(({x, y}) => {return {x, y, z: calculatePointColor([x, y], neuronState)}});
@@ -108,6 +111,8 @@ const MLPDemo = (props: { labelColor: string }) => {
                 onInputsChange={setInputs}
                 reset={{isReset, setReset}}
                 clear={{isCleared, setCleared}}
+                changedWeight={{isChanged, setChanged}}
+                
                 allowSelectingPointColor={false}
                 calculatePointColor={(({x, y}, nState) => calculatePointColor([x, y], nState))}
                 neuronState={neuronState}
