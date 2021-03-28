@@ -188,6 +188,9 @@ const RblattGraph = (props: RblattGraphProps) => {
         // shhh do not look
         board.create('point', [x, y],
             { name: '', size: 1, color: z ? COL_1 : COL_0 });
+
+        // console.log(props.clear)
+        props.changedWeight?.setChanged && props.changedWeight?.setChanged(true);
     }
 
     const removePoint = (pointId: string, x: number, y: number, dontRemoveFromInputs?: boolean | undefined, currBoard?: any) => {
