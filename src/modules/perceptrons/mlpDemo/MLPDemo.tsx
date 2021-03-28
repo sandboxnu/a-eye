@@ -7,14 +7,6 @@ import EditingRblattGraph from '../rosenblatt/EditingRblattGraph';
 
 import { neuronInputConfig, NeuronConfig } from './constants';
 
-
-/*
- * TODO:
- * - create new points with the correct colors
- * - allow for resetting the graph to its original state 
- *   (define a new constant for starting graph input values and use it in some cases)
-*/
-
 // Get the last nested value of an array
 const getLastValue = (arr) => {
     let a = arr;
@@ -90,7 +82,6 @@ const MLPDemo = (props: { labelColor: string }) => {
         return getLastValue(getNeuronOutputs(inputs, inputConfig));
     }
 
-    console.log(inputs, currPoint, inputs[currPoint]);
 
     const formattedInputs = (({x, y}) => [x, y])(inputs[currPoint]);
     const outputs = getNeuronOutputs(formattedInputs, neuronState);

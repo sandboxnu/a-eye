@@ -63,7 +63,7 @@ const MLPGraphNeuron: React.FC<MLPGraphNeuronType> = ({
                                     changeNeuronValue(layerNum, neuronNum, 'thresholdVal', threshold)}
                                 isGreater={greaterThan}
                                 setIsGreater={(isGreater: boolean) => 
-                                    changeNeuronValue(layerNum, neuronNum, 'thresholdDir', isGreater)}
+                                    changeNeuronValue(layerNum, neuronNum, 'greaterThan', isGreater)}
                                 inputs={getInputs(layerNum, neuronNum, weights.length)}
                                 weights={weights}
                                 setWeights={weights => 
