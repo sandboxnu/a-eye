@@ -51,7 +51,7 @@ export async function histogramBlocks(img: any): Promise<number[][][]> {
       }
       blockHistograms.push(row);
     }
-    console.log(blockHistograms)
+    console.log('block histograms: ', blockHistograms);
     return blockHistograms;
   });
 }
@@ -72,7 +72,6 @@ export async function gradientImages(img: any): Promise<GradientsType> {
     const intensitiesY: number[] = intensities.y.flat();
     const intensitiesV: number[] = intensitiesX.map((num, idx) => Math.sqrt(Math.pow(num, 2) + Math.pow(intensitiesY[idx], 2)));
     const intensitiesA: number[] = intensitiesX.map((x, idx) => ((Math.atan(intensitiesY[idx] / x) * (180.0 / Math.PI)) + 180) % 180);
-    console.log(intensitiesA);
 
     let maxX = 0, maxY = 0, maxV = 0, minX = 0, minY = 0, minV = 0;
     intensitiesX.forEach(x => {if (!isNaN(x)) {maxX = Math.max(maxX, x); minX = Math.min(minX, x);}});

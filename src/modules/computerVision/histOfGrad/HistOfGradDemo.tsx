@@ -33,6 +33,9 @@ const HistOfGradDemo: React.FC<HistOfGradDemoType> = ({
         imgElem.onload = () => {
             setImgHeight(imgElem.height);
             setImgWidth(imgElem.width);
+            canvasXElem.getContext('2d')?.fillRect(0, 0, canvasXElem.width, canvasXElem.height);
+            canvasYElem.getContext('2d')?.fillRect(0, 0, canvasXElem.width, canvasXElem.height);
+            canvasVElem.getContext('2d')?.fillRect(0, 0, canvasXElem.width, canvasXElem.height);
         };
     })
 
@@ -41,6 +44,8 @@ const HistOfGradDemo: React.FC<HistOfGradDemoType> = ({
         const canvasYElem = canvasY.current;
         const canvasVElem = canvasV.current;
 
+        histogramBlocks(imgUrl);
+
         gradientImages(imgUrl).then((gradients: GradientsType) => {
             // @ts-ignore
             displayGradients(canvasXElem, canvasYElem, canvasVElem, gradients);
@@ -48,20 +53,16 @@ const HistOfGradDemo: React.FC<HistOfGradDemoType> = ({
 
         const canvasHistElem = canvasHist.current;
         histogramAggregate(imgUrl).then((histogram: number[]) => {
-            console.log(histogram)
+            console.log(histogram);
 
             const bins = histogram.length;
-            const labels: number[] = [];
-            function binDirection(element: number, index: number, array: number[]) {
-                labels.push((180 / bins) * index);
-            }
-            histogram.forEach(binDirection);
-            labels.push(180)
+            const labels: string[] = [];
+            for (let i = 0; i <= histogram.length; i++) labels.push(((180 / bins) * i).toString())
             console.log(labels);
             const chart =  new Chart(canvasHistElem?.getContext('2d'), {
                 type: 'bar',
                 data: {
-                  labels: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+                  labels,
                   datasets: [{
                     label: 'Aggregated Histogram',
                     data: histogram,
@@ -69,18 +70,19 @@ const HistOfGradDemo: React.FC<HistOfGradDemoType> = ({
                   }]
                 },
                 options: {
+                    responsive: true,
                   scales: {
                     xAxes: [{
                       display: false,
-                      barPercentage: 1.3,
+                      barPercentage: 1.0,
                       ticks: {
-                        max: 8,
+                        max: 10,
                       }
                     }, {
                       display: true,
                       ticks: {
                         autoSkip: false,
-                        max: 9,
+                        max: 10,
                       }
                     }],
                     yAxes: [{
@@ -103,27 +105,32 @@ const HistOfGradDemo: React.FC<HistOfGradDemoType> = ({
     return (
         <div>
             <img ref={imgRef} src={imgUrl} alt="input" className="mx-auto" />
-            <button onClick={() => applyImage(imgUrl)}>Apply Gradients</button>
+            <button onClick={() => applyImage(imgUrl)} className={`btn ${labelColor}`}>Apply Gradients</button>
+            <br/>
+            <p className={labelColor}>Horizontal Sobel</p>
             <canvas
                 className="crisp-pixels mx-auto"
                 ref={canvasX}
                 width={imgWidth}
                 height={imgHeight}
             />
+            <p className={labelColor}>Vertical Sobel</p>
             <canvas
                 className="crisp-pixels mx-auto"
                 ref={canvasY}
                 width={imgWidth}
                 height={imgHeight}
             />
+            <p className={labelColor}>Combined Sobel</p>
             <canvas
                 className="crisp-pixels mx-auto"
                 ref={canvasV}
                 width={imgWidth}
                 height={imgHeight}
             />
+            <p className={labelColor}>Aggregated Histogram</p>
             <canvas
-                className="crisp-pixels mx-auto"
+                className="crisp-pixels mx-auto max-w-screen-md"
                 ref={canvasHist}
                 width={imgWidth}
                 height={imgHeight}
