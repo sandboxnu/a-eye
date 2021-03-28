@@ -16,6 +16,7 @@
     "gaussian-convolution-kernel": "1.0.0",
     "hog-features": "1.0.0",
     "image-js": "0.31.4",
+    "mathjs": "^9.3.0",
     "ml-dataset-iris": "1.1.1",
     "ml-distance-euclidean": "2.0.0",
     "ml-kmeans": "5.0.0",

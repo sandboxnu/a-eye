@@ -2,7 +2,6 @@
 
 var Chart = require('chart.js');
 import React, {useLayoutEffect, useRef, useState} from 'react';
-import {ALL_IMGS} from '../imageSelector/ImageSelector';
 import {histogramAggregate, histogramBlocks, gradientImages, GradientsType, BlocksType, map} from './histOfGrad';
 
 type HistOfGradDemoType = {
@@ -48,14 +47,14 @@ const HistOfGradDemo: React.FC<HistOfGradDemoType> = ({
             displayGradients(canvasX.current, canvasY.current, canvasV.current, gradients);
         });
 
-        histogramAggregate(imgUrl).then((histogram: number[]) => {
-            // @ts-ignore
-            displayHistogram(canvasHist.current, histogram);
-        });
-
         histogramBlocks(imgUrl).then((blocks: BlocksType) => {
             // @ts-ignore
             displayNeedlePlot(canvasNdlPlt.current, blocks);
+        });
+
+        histogramAggregate(imgUrl).then((histogram: number[]) => {
+            // @ts-ignore
+            displayHistogram(canvasHist.current, histogram);
         });
     }
 
@@ -68,21 +67,16 @@ const HistOfGradDemo: React.FC<HistOfGradDemoType> = ({
     const displayNeedlePlot = (canvasNdlPlt: HTMLCanvasElement, blocks: BlocksType): void => {
         const histograms: number[][][] = blocks.histogram;
         const magnitudes: number[][] = blocks.blockMagnitudes;
-        console.log(magnitudes);
         let maxV = 0, minV = 10, maxH = 0, minH = 10;
         magnitudes.flat().forEach(v => {if (!isNaN(v)) {maxV = Math.max(maxV, v); minV = Math.min(minV, v);}});
         histograms.flat().flat().forEach(h => {if (!isNaN(h)) {maxH = Math.max(maxH, h); minH = Math.min(minH, h);}});
-        console.log(minV, maxV);
-        console.log(minH, maxH);
-
         for (let row = 0; row < histograms.length; row++) {
             for (let col = 0; col < histograms[0].length; col++) {
                 const histogram: number[] = histograms[row][col];
-                const opacity: number = map(magnitudes[row][col], minV, maxV, 0, 255);
-                //console.log(`(${row}, ${col}): ${opacity}`);
+                const opacity: number = map(magnitudes[row][col], minV, maxV, 25, 255);
                 for (let idx = 0; idx < histogram.length; idx++) {
                     const lengthPct: number = map(histogram[idx], minH, maxH, 0, 1);
-                    drawNeedle(canvasNdlPlt, row, col, canvasNdlPlt.width / histograms.length, idx * 20, lengthPct, opacity);
+                    drawNeedle(canvasNdlPlt, row, col, canvasNdlPlt.width / histograms[0].length, idx * 20, lengthPct, opacity);
                 }
 
             }
@@ -92,15 +86,14 @@ const HistOfGradDemo: React.FC<HistOfGradDemoType> = ({
 
     const drawNeedle = (cnv: HTMLCanvasElement, blockRow: number, blockCol: number, blockSize: number, angleDeg: number, lengthPct: number, opacity: number): void => {
         const length: number = lengthPct * blockSize;
-        console.log(lengthPct, length / blockSize);
         const pt1 = {x: blockSize / 2 + (length / 2) * Math.cos(angleDeg * (Math.PI / 180)), y: blockSize / 2 + ( length / 2) * -1 * Math.sin(angleDeg * (Math.PI / 180))};
         const pt2 = {x: blockSize / 2 + (length / 2) * -1 * Math.cos(angleDeg * (Math.PI / 180)), y: blockSize / 2 + ( length / 2) * Math.sin(angleDeg * (Math.PI / 180))};
-        const blockPos = {x: blockRow * blockSize, y: blockCol * blockSize};
+        const blockPos = {x: blockCol * blockSize, y: blockRow * blockSize};
         const context = cnv.getContext('2d');
         if (!context || !(context instanceof CanvasRenderingContext2D)) throw new Error('Failed to get 2D context');
         const ctx: CanvasRenderingContext2D = context;
 
-        ctx.strokeStyle = `rgba(255, 255, 255, ${opacity})`;
+        ctx.strokeStyle = `rgba(${opacity}, ${opacity}, ${opacity}, ${opacity / 255})`;
         ctx.beginPath();
         ctx.moveTo(blockPos.x + pt1.x, blockPos.y + pt1.y);
         ctx.lineTo(blockPos.x + pt2.x, blockPos.y + pt2.y);
@@ -112,7 +105,6 @@ const HistOfGradDemo: React.FC<HistOfGradDemoType> = ({
         const bins = histogram.length;
         const labels: string[] = [];
         for (let i = 0; i <= histogram.length; i++) labels.push(((180 / bins) * i).toString())
-        console.log(labels);
         const chart =  new Chart(cnvHist?.getContext('2d'), {
             type: 'bar',
             data: {
