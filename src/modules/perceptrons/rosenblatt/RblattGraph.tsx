@@ -44,28 +44,32 @@ const AirbnbGraph = withTooltip<DotsProps, PointsRange>(({
   width = 1000,
   height = 1000,
 }: DotsProps & WithTooltipProvidedProps<PointsRange>) => {
-  if (width < 10) return null;
+  // if (width < 10) return null;
   const points = inputs.map(({ x, y, z }) => [x, y, z]); // TODO remove in favor of better point UX
 
   const svgRef = useRef<SVGSVGElement>(null);
-  const xScale = useMemo(
-    () =>
-      scaleLinear<number>({
-        domain: [1.3, 2.2],
-        range: [0, width],
-        clamp: true,
-      }),
-    [width],
-  );
-  const yScale = useMemo(
-    () =>
-      scaleLinear<number>({
-        domain: [0.75, 1.6],
-        range: [height, 0],
-        clamp: true,
-      }),
-    [height],
-  );
+  // const xScale = useMemo(
+  //   () =>
+  //     scaleLinear<number>({
+  //       domain: [1.3, 2.2],
+  //       range: [0, width],
+  //       clamp: true,
+  //     }),
+  //   [width],
+  // );
+  // const yScale = useMemo(
+  //   () =>
+  //     scaleLinear<number>({
+  //       domain: [0.75, 1.6],
+  //       range: [height, 0],
+  //       clamp: true,
+  //     }),
+  //   [height],
+  // );
+
+  const xScale = useCallback((a) => (a + 10) * 50, [width]);
+  const yScale = useCallback((a) => (a + 10) * 50, [height]);
+
 
   const voronoiLayout = useMemo(
     () =>
@@ -115,7 +119,7 @@ const AirbnbGraph = withTooltip<DotsProps, PointsRange>(({
         <rect
           width={width}
           height={height}
-          rx={14}
+          // rx={14}
           fill="url(#dots-pink)"
           onMouseMove={handleMouseMove}
           onMouseLeave={handleMouseLeave}
@@ -123,16 +127,19 @@ const AirbnbGraph = withTooltip<DotsProps, PointsRange>(({
           onTouchEnd={handleMouseLeave}
         />
         <Group pointerEvents="none">
-          {points.map((point, i) => (
+          {points.map((point, i) => {
+            console.log(point);
+            return (
             <Circle
               key={`point-${x(point)}-${i}`}
               className="dot"
               cx={xScale(x(point))}
               cy={yScale(y(point))}
               r={i % 3 === 0 ? 2 : 3}
-              fill={tooltipData === point ? 'white' : '#f6c431'}
+// tooltipData === point
+              fill={point[2] === 1 ? 'red' : 'green'}
             />
-          ))}
+            )})}
         </Group>
       </svg>
       {tooltipOpen && tooltipData && tooltipLeft != null && tooltipTop != null && (
