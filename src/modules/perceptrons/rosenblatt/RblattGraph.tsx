@@ -24,9 +24,13 @@ export type DotsProps = {
   height?: number;
   inputs: any;
   line: any;
+  clickPoint?: any;
   showControls?: boolean;
 };
 
+// -10, 10 -> 0, 1000
+// 0, 20
+// 0, 20 * 50 = 1000
 const x = (d: PointsRange) => d[0];
 const y = (d: PointsRange) => d[1];
 
@@ -44,32 +48,14 @@ const AirbnbGraph = withTooltip<DotsProps, PointsRange>(({
   width = 1000,
   height = 1000,
 }: DotsProps & WithTooltipProvidedProps<PointsRange>) => {
-  // if (width < 10) return null;
   const points = inputs.map(({ x, y, z }) => [x, y, z]); // TODO remove in favor of better point UX
 
   const svgRef = useRef<SVGSVGElement>(null);
-  // const xScale = useMemo(
-  //   () =>
-  //     scaleLinear<number>({
-  //       domain: [1.3, 2.2],
-  //       range: [0, width],
-  //       clamp: true,
-  //     }),
-  //   [width],
-  // );
-  // const yScale = useMemo(
-  //   () =>
-  //     scaleLinear<number>({
-  //       domain: [0.75, 1.6],
-  //       range: [height, 0],
-  //       clamp: true,
-  //     }),
-  //   [height],
-  // );
+  const xScale = useCallback((a) => (a + 10) * (width / 20), [width]);
+  const yScale = useCallback((a) => (a + 10) * (height / 20), [height]);
 
-  const xScale = useCallback((a) => (a + 10) * 50, [width]);
-  const yScale = useCallback((a) => (a + 10) * 50, [height]);
-
+  const revXScale = useCallback((a) => (a * (2 / width)) - 10, [width]);
+  const revYScale = useCallback((a) => (a * (2 / height)) - 10, [height]);
 
   const voronoiLayout = useMemo(
     () =>
@@ -96,7 +82,7 @@ const AirbnbGraph = withTooltip<DotsProps, PointsRange>(({
       if (closest) {
         showTooltip({
           tooltipLeft: xScale(x(closest.data)),
-          tooltipTop: yScale(x(closest.data)),
+          tooltipTop: yScale(y(closest.data)),
           tooltipData: closest.data,
         });
       }
@@ -119,7 +105,6 @@ const AirbnbGraph = withTooltip<DotsProps, PointsRange>(({
         <rect
           width={width}
           height={height}
-          // rx={14}
           fill="url(#dots-pink)"
           onMouseMove={handleMouseMove}
           onMouseLeave={handleMouseLeave}
@@ -127,19 +112,24 @@ const AirbnbGraph = withTooltip<DotsProps, PointsRange>(({
           onTouchEnd={handleMouseLeave}
         />
         <Group pointerEvents="none">
-          {points.map((point, i) => {
-            console.log(point);
-            return (
+          {points.map((point, i) => (
             <Circle
               key={`point-${x(point)}-${i}`}
               className="dot"
               cx={xScale(x(point))}
               cy={yScale(y(point))}
               r={i % 3 === 0 ? 2 : 3}
-// tooltipData === point
-              fill={point[2] === 1 ? 'red' : 'green'}
+              fill={(() => {
+                if(tooltipData === point) {
+                  return "white"; // hovering over point
+                } else if(point[2] === 1) {
+                  return "red"; // blue point?
+                } else if(point[2] === 0) {
+                  return 'green'; // red point?
+                }
+              })()}
             />
-            )})}
+            ))}
         </Group>
       </svg>
       {tooltipOpen && tooltipData && tooltipLeft != null && tooltipTop != null && (
@@ -208,246 +198,10 @@ const RblattGraph = (props: {
   calculatePointColor;
   neuronState;
 }) => {
-  const [brdId, setBrdId] = useState(
-    "board_" + Math.random().toString(36).substr(2, 9)
-  );
-  const [board, setBoard] = useState<any>(null);
-  const [pointA, setPointA] = useState<any>(null); // 2 points to define the line
-  const [pointB, setPointB] = useState<any>(null);
-
-  // creates the board when the component loads
-  useEffect(() => {
-    const newBoard = JXG.JSXGraph.initBoard(brdId, {
-      boundingbox: [-10, 10, 10, -10],
-      axis: true,
-    });
-    setBoard(newBoard);
-    props.inputs.forEach((inpt, idx) => {
-      const color = inpt.z === 1 ? COL_1 : COL_0;
-      const p = newBoard.create("point", [inpt.x, inpt.y], {
-        name: "",
-        size: 1,
-        color,
-        fixed: true,
-      });
-    });
-    if (props.line) {
-      const { aCoords, bCoords } = getLinePoints(props.line);
-      const pA = newBoard.create("point", aCoords, {
-        name: "",
-        fixed: true,
-        color: "transparent",
-      });
-      const pB = newBoard.create("point", bCoords, {
-        name: "",
-        fixed: true,
-        color: "transparent",
-      });
-      const li = newBoard.create("line", [pA, pB], {
-        strokeColor: "black",
-        strokeWidth: 2,
-        fixed: true,
-      });
-      newBoard.create("inequality", [li], { fillColor: COL_0 });
-      newBoard.create("inequality", [li], { inverse: true, fillColor: COL_1 });
-      setPointA(pA);
-      setPointB(pB);
-    }
-  }, []);
-
-  // register listeners after the state var has been set
-  useEffect(() => {
-    board && board.on("down", editPoint);
-  }, [board]);
-
-  useEffect(() => {
-    if (props.line) {
-      const { aCoords, bCoords } = getLinePoints(props.line);
-      pointA?.moveTo(aCoords, 700);
-      pointB?.moveTo(bCoords, 700);
-      board?.removeObject("prevLine");
-      board?.create(
-        "line",
-        [
-          [pointA?.X(), pointA?.Y()],
-          [pointB?.X(), pointB?.Y()],
-        ],
-        { name: "prevLine", color: "rgba(0, 0, 0, 0.2)" }
-      );
-    }
-  }, [props.line]);
-
-  useEffect(() => {
-    if (props.highlighted !== undefined) {
-      board
-        ?.select({
-          elementClass: JXG.OBJECT_CLASS_POINT,
-        })
-        .setAttribute({ size: 1 });
-      board
-        ?.select({
-          Y: (v: number) => v === props.highlighted!.y,
-          X: (v: number) => v === props.highlighted!.x,
-        })
-        .setAttribute({ size: 4 });
-    }
-  }, [props.highlighted]);
-
-  useEffect(() => {
-    if (board && props.reset.isReset) {
-      const [pointsToRemove, pointsToAdd] = getListInputs(props.inputs);
-      for (let el in board.objects) {
-        if (JXG.isPoint(board.objects[el])) {
-          const [z, x, y] = board.objects[el].coords.usrCoords;
-          pointsToRemove.forEach((point) => {
-            const { x: x1, y: y1 } = point;
-            if (x1 == x && y1 == y) {
-              removePoint(el, x, y);
-            }
-          });
-        }
-      }
-      INIT_INPUTS.forEach(({ x, y, z }) => {
-        const newColor = props.calculatePointColor
-          ? props.calculatePointColor({ x, y }, props.neuronState)
-          : z;
-        board.create("point", [x, y], {
-          name: "",
-          size: 1,
-          color: newColor ? COL_1 : COL_0,
-        });
-      });
-      props.reset.setReset(false);
-    } else if (board && props.changedWeight && props.changedWeight.isChanged) {
-      // const [pointsToRemove, pointsToAdd] = getListInputs(props.inputs)
-      const pointsToRemove = props.inputs;
-      for (let el in board.objects) {
-        if (JXG.isPoint(board.objects[el])) {
-          const [z, x, y] = board.objects[el].coords.usrCoords;
-          pointsToRemove.forEach((point) => {
-            const { x: x1, y: y1 } = point;
-            if (x1 == x && y1 == y) {
-              removePoint(el, x, y, true);
-            }
-          });
-        }
-      }
-      props.inputs.forEach(({ x, y, z }) => {
-        const newColor = props.calculatePointColor
-          ? props.calculatePointColor({ x, y }, props.neuronState)
-          : z;
-        board.create("point", [x, y], {
-          name: "",
-          size: 1,
-          color: newColor ? COL_1 : COL_0,
-        });
-      });
-      props.changedWeight.setChanged(false);
-    } else if (board && props.clear.isCleared) {
-      const pointsToRemove = props.inputs;
-      for (let el in board.objects) {
-        if (JXG.isPoint(board.objects[el])) {
-          const [z, x, y] = board.objects[el].coords.usrCoords;
-          pointsToRemove.forEach((point) => {
-            const { x: x1, y: y1 } = point;
-            if (x1 == x && y1 == y) {
-              removePoint(el, x, y);
-            }
-          });
-        }
-      }
-      props.clear.setCleared(false);
-    }
-  }, [props]);
-
-  const editPoint = useCallback(
-    (e: any) => {
-      if (props.editingType.val === null) return;
-
-      let canCreate = true;
-      let i;
-      let pointToDelete;
-      if (e[JXG.touchProperty]) {
-        i = 0;
-      }
-      const coords = getMouseCoords(board, e, i);
-      for (let el in board.objects) {
-        if (
-          JXG.isPoint(board.objects[el]) &&
-          board.objects[el].hasPoint(coords.scrCoords[1], coords.scrCoords[2])
-        ) {
-          canCreate = false;
-          pointToDelete = el;
-          break;
-        }
-      }
-      if (canCreate) {
-        const x = coords.usrCoords[1];
-        const y = coords.usrCoords[2];
-        const z = props.calculatePointColor
-          ? props.calculatePointColor({ x, y }, props.neuronState)
-          : props.editingType.val || 0;
-        addPoint(x, y, z, board);
-      } else {
-        removePoint(
-          pointToDelete,
-          coords.scrCoords[1],
-          coords.scrCoords[2],
-          false,
-          board
-        );
-      }
-    },
-    [props.neuronState, board]
-  );
-
-  const addPoint = (x: number, y: number, z: 0 | 1, currBoard?: any) => {
-    props.onInputsChange((oldInpts) => {
-      return oldInpts.concat([{ x, y, z }]);
-    });
-
-    // can't directly use state var for board bc of closures
-    if (!currBoard) currBoard = board;
-    // creating points here is *technically* going against controlled components
-    // shhh do not look
-    board.create("point", [x, y], {
-      name: "",
-      size: 1,
-      color: z ? COL_1 : COL_0,
-    });
-  };
-
-  const removePoint = (
-    pointId: string,
-    x: number,
-    y: number,
-    dontRemoveFromInputs?: boolean | undefined,
-    currBoard?: any
-  ) => {
-    if (props.editingType.val === null) return;
-    if (!dontRemoveFromInputs) {
-      props.onInputsChange((oldInpts) =>
-        oldInpts.filter((inpt) => inpt.x != x && inpt.y != y)
-      );
-    }
-
-    // can't directly use state var for board bc of closures
-    if (!currBoard) currBoard = board;
-    currBoard.removeObject(pointId);
-  };
-
   return (<>
   <AirbnbGraph inputs={props.inputs} line={props.line} />
-  <div id={brdId} style={{display: "none"}}/>
   </>);
 
-  /* return (
-   *   <div
-   *     className="bg-white"
-   *     id={brdId}
-   *     style={{ width: "500px", height: "500px" }}
-   *   />
-   * ); */
 };
 
 export default RblattGraph;
