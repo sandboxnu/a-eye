@@ -35,6 +35,7 @@ const MLPDemo = (props: { labelColor: string }) => {
     }, [setNeuronState]);
 
     const getNeuronOutputs = useCallback((inputs) => {
+    
         const allResults :number[][][] = [deepcopy(inputs).map((num => [num]))];
         let curResults = deepcopy(inputs);
         neuronState.forEach((layer: NeuronConfig[], i: number) => {
@@ -79,16 +80,16 @@ const MLPDemo = (props: { labelColor: string }) => {
     const handleClick = useCallback((clickedX, clickedY) => {
         setInputs(inp => {
             // TODO: Make sure that this bounding box is lenient enough!
-            const BOUND = 0.01;
-            console.log(clickedX, clickedY);
+            const BOUND = 0.1;
 
-            const newInputs = inp.filter(([x, y]) => 
-                clickedX - BOUND <= x && 
+            let newInputs = inp.filter(([x, y]) =>  {
+                return !(clickedX - BOUND <= x && 
                 x <= clickedX + BOUND && 
                 clickedY - BOUND <= y && 
-                y <= clickedY + BOUND);
+                y <= clickedY + BOUND)  });
 
             // If the length changed, then we removed one, so we didn't add one! Otherwise, we know we added one.
+            
             return newInputs.length === inp.length ? 
                 newInputs.concat([[clickedX, clickedY, calculatePointColor(clickedX, clickedY)]]) : newInputs;
         })

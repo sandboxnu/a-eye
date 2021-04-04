@@ -56,14 +56,14 @@ const RblattGraph = withTooltip<DotsProps, PointsRange>(({
   height = 1000,
 }: DotsProps & WithTooltipProvidedProps<PointsRange>) => {
   const graphId = useMemo(() => `graph-${Math.random()}`, []);
-  const points = inputs.map(({ x, y, z }) => [x, y, z]); // TODO remove in favor of better point UX
+  const points = inputs
 
   const svgRef = useRef<SVGSVGElement>(null);
   const xScale = useCallback((a) => (a + 10) * (width / 20), [width]);
-  const yScale = useCallback((a) => 1000- ((a + 10) * (height / 20)) , [height]);
+  const yScale = useCallback((a) => 1000 - ((a + 10) * (height / 20)) , [height]);
 
-  const revXScale = useCallback((a) => (a * (2 / width)) - 10, [width]);
-  const revYScale = useCallback((a) => (a * (2 / height)) - 10, [height]);
+  const revXScale = useCallback((a) => (a * (20 / width)) - 10, [width]);
+  const revYScale = useCallback((a) => -((a * (20 / height)) - 10) , [height]);
 
   //////////////////////////////
   const x_Scale = scaleLinear<number>({
@@ -86,12 +86,6 @@ const RblattGraph = withTooltip<DotsProps, PointsRange>(({
     nice: true,
   });
 
-  console.log(points)
-  // console.log( ...points.map(x => x[0] ) )
-  console.log(Math.min(...points.map(x => x[0] ) ))
-  console.log(Math.max(...points.map(x => x[1] ) ))
-  //////////////////////////////
-
   const voronoiLayout = useMemo(
     () =>
       voronoi<PointsRange>({
@@ -111,10 +105,9 @@ const RblattGraph = withTooltip<DotsProps, PointsRange>(({
 
       // find the nearest polygon to the current mouse position
       const point = localPoint(svgRef.current, event);
-      console.log(point)
       if (!point) return;
-      const neighborRadius = 100;
-      const closest = voronoiLayout.find(point.x, 1000-point.y, neighborRadius);
+      const neighborRadius = 50;
+      const closest = voronoiLayout.find(point.x, point.y, neighborRadius);
       if (closest) {
         showTooltip({
           tooltipLeft: xScale(x(closest.data)),
@@ -136,10 +129,11 @@ const RblattGraph = withTooltip<DotsProps, PointsRange>(({
     // I'm sure there's a way to do this with a ref as well, but I'm not sure how
     const elem = document.getElementById(graphId)?.getBoundingClientRect();
     if(!elem) return;
-    console.log(e.clientX, e.clientY);
-    console.log(elem.left, elem.top);
+    // console.log(e.clientX, e.clientY);
+    // console.log(elem.left, elem.top);
     const xClicked = revXScale(e.clientX - elem.left);
     const yClicked = revYScale(e.clientY - elem.top);
+    console.log(e.clientY - elem.top)
     handleClick(xClicked, yClicked, editingType);
   }, [handleClick, revXScale, revYScale, graphId, editingType]);
 
@@ -153,6 +147,8 @@ const RblattGraph = withTooltip<DotsProps, PointsRange>(({
   y_Scale.range([yMax, 0]);
 
   const background = '#FFC0CB';
+
+  console.log(highlighted, points)  
 
   return (
     <div>
@@ -176,14 +172,13 @@ const RblattGraph = withTooltip<DotsProps, PointsRange>(({
           <AxisBottom top={xMax/2} scale={x_Scale} hideZero={true} numTicks={10}/>
           <AxisLeft left={xMax/2} scale={y_Scale} hideZero={true} numTicks={10} />
 
-          {points.map((point, i) => (
+          {points.length > 0 && points.map((point, i) => (
             <Circle
               key={`point-${x(point)}-${i}`}
               className="dot"
               cx={xScale(x(point))}
               cy={yScale(y(point))}
-              // r={i % 3 === 0 ? 2 : 3}
-              r={3}
+              r={highlighted[0] == point[0] && highlighted[1] == point[1] ? 5 : 3}
               fill={(() => {
                 if (tooltipData === point) {
                   return "white"; // hovering over point
