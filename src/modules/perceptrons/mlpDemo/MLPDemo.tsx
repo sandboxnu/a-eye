@@ -7,8 +7,8 @@ import EditingRblattGraph from '../rosenblatt/EditingRblattGraph';
 
 import { neuronInputConfig, NeuronConfig } from './constants';
 
-// Get the last nested value of an array
-const getLastValue = (arr) => {
+// Get the last nested value of an array.
+const getLastValue = (arr: any[]) => {
     let a = arr;
     while(Array.isArray(a)) {
         a = a[a.length - 1];
@@ -17,32 +17,27 @@ const getLastValue = (arr) => {
     return a;
 }
 
-// make a deep copy of a javascript object
-const deepcopy = (obj) => JSON.parse(JSON.stringify(obj));
+// Make a deep copy of an object.
+const deepcopy = (obj: {}) => JSON.parse(JSON.stringify(obj));
 
-    // - JSXGraph not updating the point colors
 const MLPDemo = (props: { labelColor: string }) => {
     const [inputs, setInputs] = useState<RblattInput[]>(INIT_INPUTS);
     const [currPoint, setCurrPoint] = useState<number>(0);
-    const [isReset, setReset] = useState(false);
-    const [isCleared, setCleared] = useState(false);
-    const [isChanged, setChanged] = useState(false);
     const [neuronState, setNeuronState] = useState<NeuronConfig[][]>(neuronInputConfig);
 
-    // update a neuron value to a new one!!
+    // Update a neuron value to a new one!
     const changeNeuronValue = useCallback((layer: number, neuron: number, key: string, value: any) => {
         setNeuronState((oldState => {  
             const newState = deepcopy(oldState);
             newState[layer][neuron][key] = value;
             return newState;
-        } ));
-        setChanged(true);
+        }));
     }, []);
 
-    const getNeuronOutputs = useCallback((inputs, inputConfig) => {
+    const getNeuronOutputs = useCallback((inputs) => {
         const allResults :number[][][] = [deepcopy(inputs).map((num => [num]))];
         let curResults = deepcopy(inputs);
-        inputConfig.forEach((layer: NeuronConfig[], i: number) => {
+        neuronState.forEach((layer: NeuronConfig[], i: number) => {
             const layerResults: number[] = layer.map(({weights, bias, greaterThan, thresholdVal}, j: number) => {
                 const thresholdFunc = greaterThan 
                     ? (a: number) => (a > thresholdVal ? 1 : 0) 
@@ -59,44 +54,50 @@ const MLPDemo = (props: { labelColor: string }) => {
             allResults.push(layerResults.map((num => [num])));
         })
         return allResults;
-    }, []);
+    }, [neuronState]);
 
     // reset neuron to default state
-    const resetNeuronState = () => {
+    const resetNeuronState = useCallback(() => {
         setNeuronState(_ => [...neuronInputConfig]);
-    };
+    }, [setNeuronState]);
 
     // go to the previous iteration of the graph
-    const goPrev = () => {
-        const next = currPoint === 0 ? inputs.length - 1 : currPoint - 1;
-        setCurrPoint(next);
-    }
+    const goPrev = useCallback(() => {
+        setCurrPoint(cp => cp === 0 ? inputs.length - 1 : cp - 1);
+    }, [setCurrPoint, inputs]);
 
     // go to the next iteration of the graph
-    const goNext = () => {
-        setCurrPoint((currPoint + 1) % inputs.length)
-    }
+    const goNext = useCallback(() => {
+        setCurrPoint(cp => (cp + 1) % inputs.length)
+    }, [setCurrPoint, inputs]);
 
     // get the point color of the final neuron 
-    const calculatePointColor = (inputs, inputConfig) => {
-        return getLastValue(getNeuronOutputs(inputs, inputConfig));
-    }
+    const calculatePointColor = useCallback((clickedX, clickedY) => {
+        return getLastValue(getNeuronOutputs([clickedX, clickedY]));
+    }, [getNeuronOutputs]);
 
     const handleClick = useCallback((clickedX, clickedY) => {
         setInputs(inp => {
+            // TODO: Make sure that this bounding box is lenient enough!
+            const BOUND = 0.01;
             console.log(clickedX, clickedY);
-            // TODO: should use a bounding box rather than an exact number
-            const newInputs = inp.filter(({x, y}) => x !== clickedX && y !== clickedY);
-            if(newInputs.length === inp.length) {
-                return newInputs.concat([{x: clickedX, y: clickedY, z: 0}]) // TODO: Fix Z
-            }
-            return newInputs;
+
+            const newInputs = inp.filter(({x, y}) => 
+                clickedX - BOUND <= x && 
+                x <= clickedX + BOUND && 
+                clickedY - BOUND <= y && 
+                y <= clickedY + BOUND);
+
+            // If the length changed, then we removed one, so we didn't add one! Otherwise, we know we added one.
+            return newInputs.length === inp.length ? 
+                newInputs.concat([{x: clickedX, y: clickedY, z: calculatePointColor(clickedX, clickedY)}]) : newInputs;
         })
-    }, [setInputs]);
+    }, [setInputs, calculatePointColor]);
 
     const formattedInputs = (({x, y}) => [x, y])(inputs[currPoint]);
-    const outputs = getNeuronOutputs(formattedInputs, neuronState);
-    const correctPointColorInputs = inputs.map(({x, y}) => {return {x, y, z: calculatePointColor([x, y], neuronState)}});
+    const outputs = getNeuronOutputs(formattedInputs);
+    // This should be unnecessary, as the point colors are all known whenever adding a point
+    const correctPointColorInputs = inputs.map(({x, y}) => {return {x, y, z: calculatePointColor(x, y)}});
 
     return(
         <div>
@@ -110,13 +111,7 @@ const MLPDemo = (props: { labelColor: string }) => {
             <EditingRblattGraph
                 inputs={correctPointColorInputs} 
                 highlighted={inputs[currPoint]}
-                onInputsChange={setInputs}
-                reset={{isReset, setReset}}
-                clear={{isCleared, setCleared}}
-                changedWeight={{isChanged, setChanged}}
                 allowSelectingPointColor={false}
-                calculatePointColor={(({x, y}, nState) => calculatePointColor([x, y], nState))}
-                neuronState={neuronState}
                 handleClick={handleClick}
             />
             <button className='basic-button' onClick={goPrev} disabled={false}>

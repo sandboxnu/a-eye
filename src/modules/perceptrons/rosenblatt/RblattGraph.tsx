@@ -9,33 +9,36 @@ import {
 
 import { Group } from '@visx/group';
 import { Circle } from '@visx/shape';
-import { GradientPinkRed } from '@visx/gradient';
 import { voronoi } from '@visx/voronoi';
 import { PointsRange, } from '@visx/mock-data/lib/generators/genRandomNormalPoints';
 import { withTooltip, Tooltip } from '@visx/tooltip';
 import { WithTooltipProvidedProps } from '@visx/tooltip/lib/enhancers/withTooltip';
 import { localPoint } from '@visx/event';
 
+const COL_0 = "#f15e2c";
+const COL_1 = "#394d73";
+
 export type DotsProps = {
   width?: number;
   height?: number;
   inputs: any;
   line: any;
-  handleClick: any,
+  handleClick: any;
   showControls?: boolean;
+  highlighted;
+  editingType;
 };
 
-// -10, 10 -> 0, 1000
-// 0, 20
-// 0, 20 * 50 = 1000
 const x = (d: PointsRange) => d[0];
 const y = (d: PointsRange) => d[1];
 
 let tooltipTimeout: number;
 
-const AirbnbGraph = withTooltip<DotsProps, PointsRange>(({
+const RblattGraph = withTooltip<DotsProps, PointsRange>(({
   inputs,
   line,
+  highlighted,
+  editingType,
   handleClick,
   hideTooltip,
   showTooltip,
@@ -96,27 +99,25 @@ const AirbnbGraph = withTooltip<DotsProps, PointsRange>(({
   }, [hideTooltip]);
 
   const editGraph = useCallback((e) => {
-    // I'm sure there's a way to do this with a ref as well, 
-    // but I'm not sure how
+    // I'm sure there's a way to do this with a ref as well, but I'm not sure how
     const elem = document.getElementById(graphId)?.getBoundingClientRect();
     if(!elem) return;
     console.log(e.clientX, e.clientY);
     console.log(elem.left, elem.top);
     const xClicked = revXScale(e.clientX - elem.left);
     const yClicked = revYScale(e.clientY - elem.top);
-    handleClick(xClicked, yClicked);
-  }, [handleClick, revXScale, revYScale, graphId]);
+    handleClick(xClicked, yClicked, editingType);
+  }, [handleClick, revXScale, revYScale, graphId, editingType]);
 
   return (
     <div>
       <svg width={width} height={height} ref={svgRef}>
-        <GradientPinkRed id="dots-pink" />
         {/** capture all mouse events with a rect */}
         <rect
           id={graphId}
           width={width}
           height={height}
-          fill="url(#dots-pink)"
+          // fill="url(#dots-pink)"
           onMouseMove={handleMouseMove}
           onMouseLeave={handleMouseLeave}
           onTouchMove={handleMouseMove}
@@ -135,9 +136,9 @@ const AirbnbGraph = withTooltip<DotsProps, PointsRange>(({
                 if (tooltipData === point) {
                   return "white"; // hovering over point
                 } else if (point[2] === 1) {
-                  return "red"; // blue point?
+                  return COL_1;
                 } else if (point[2] === 0) {
-                  return 'green'; // red point?
+                  return COL_0;
                 }
               })()}
             />
@@ -158,26 +159,4 @@ const AirbnbGraph = withTooltip<DotsProps, PointsRange>(({
   );
 });
 
-const RblattGraph = (props: {
-  inputs;
-  line;
-  highlighted;
-  editingType;
-  onInputsChange;
-  reset;
-  clear;
-  changedWeight;
-  calculatePointColor;
-  neuronState;
-  handleClick;
-}) => {
-  return (<>
-    <AirbnbGraph inputs={props.inputs} line={props.line} handleClick={props.handleClick} />
-  </>);
-
-};
-
 export default RblattGraph;
-
-const COL_0 = "#f15e2c";
-const COL_1 = "#394d73";
