@@ -8,12 +8,16 @@ import {
 } from "./constants";
 
 import { Group } from '@visx/group';
-import { Circle } from '@visx/shape';
+import { Circle, Line } from '@visx/shape';
 import { voronoi } from '@visx/voronoi';
 import { PointsRange, } from '@visx/mock-data/lib/generators/genRandomNormalPoints';
 import { withTooltip, Tooltip } from '@visx/tooltip';
 import { WithTooltipProvidedProps } from '@visx/tooltip/lib/enhancers/withTooltip';
 import { localPoint } from '@visx/event';
+import { GridRows, GridColumns } from '@visx/grid';
+import { scaleLinear } from '@visx/scale';
+import { AxisLeft, AxisBottom } from '@visx/axis';
+
 
 const COL_0 = "#f15e2c";
 const COL_1 = "#394d73";
@@ -33,6 +37,8 @@ const x = (d: PointsRange) => d[0];
 const y = (d: PointsRange) => d[1];
 
 let tooltipTimeout: number;
+
+const defaultMargin = { top:  0, right: 0, bottom: 0, left: 0 };
 
 const RblattGraph = withTooltip<DotsProps, PointsRange>(({
   inputs,
@@ -58,6 +64,23 @@ const RblattGraph = withTooltip<DotsProps, PointsRange>(({
 
   const revXScale = useCallback((a) => (a * (2 / width)) - 10, [width]);
   const revYScale = useCallback((a) => (a * (2 / height)) - 10, [height]);
+
+  //////////////////////////////
+  const x_Scale = scaleLinear<number>({
+    domain: [
+      // Math.min(...points.map(x => Math.min(x))),
+      // Math.max(...points.map(y => Math.max(y))),
+      -10,
+      10
+    ],
+    nice: true,
+  });
+
+  console.log(points)
+  // console.log( ...points.map(x => x[0] ) )
+  console.log(Math.min(...points.map(x => x[0] ) ))
+  console.log(Math.max(...points.map(x => x[1] ) ))
+  //////////////////////////////
 
   const voronoiLayout = useMemo(
     () =>
@@ -109,6 +132,17 @@ const RblattGraph = withTooltip<DotsProps, PointsRange>(({
     handleClick(xClicked, yClicked, editingType);
   }, [handleClick, revXScale, revYScale, graphId, editingType]);
 
+
+  
+  // bounds
+  const xMax = width - defaultMargin.left - defaultMargin.right;
+  const yMax = height - defaultMargin.top - defaultMargin.bottom;
+
+  x_Scale.range([0, xMax]);
+  // temperatureScale.range([yMax, 0]);
+
+  const background = '#FFC0CB';
+
   return (
     <div>
       <svg width={width} height={height} ref={svgRef}>
@@ -117,7 +151,7 @@ const RblattGraph = withTooltip<DotsProps, PointsRange>(({
           id={graphId}
           width={width}
           height={height}
-          // fill="url(#dots-pink)"
+          fill={background}
           onMouseMove={handleMouseMove}
           onMouseLeave={handleMouseLeave}
           onTouchMove={handleMouseMove}
@@ -125,6 +159,12 @@ const RblattGraph = withTooltip<DotsProps, PointsRange>(({
           onClick={editGraph}
         />
         <Group pointerEvents="none">
+          <GridRows scale={x_Scale} width={xMax} height={yMax} stroke="#e0e0e0" />
+          <GridColumns scale={x_Scale} width={xMax} height={yMax} stroke="#e0e0e0" />
+          {/* <Line fill="#e0e0e0" /> */}
+          <AxisBottom top={xMax/2} scale={x_Scale} numTicks={10} labelOffset={100}/>
+          <AxisLeft left={xMax/2} scale={x_Scale} numTicks={10} />
+
           {points.map((point, i) => (
             <Circle
               key={`point-${x(point)}-${i}`}
