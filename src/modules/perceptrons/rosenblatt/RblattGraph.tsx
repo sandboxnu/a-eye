@@ -60,13 +60,23 @@ const RblattGraph = withTooltip<DotsProps, PointsRange>(({
 
   const svgRef = useRef<SVGSVGElement>(null);
   const xScale = useCallback((a) => (a + 10) * (width / 20), [width]);
-  const yScale = useCallback((a) => (a + 10) * (height / 20), [height]);
+  const yScale = useCallback((a) => 1000- ((a + 10) * (height / 20)) , [height]);
 
   const revXScale = useCallback((a) => (a * (2 / width)) - 10, [width]);
   const revYScale = useCallback((a) => (a * (2 / height)) - 10, [height]);
 
   //////////////////////////////
   const x_Scale = scaleLinear<number>({
+    domain: [
+      // Math.min(...points.map(x => Math.min(x))),
+      // Math.max(...points.map(y => Math.max(y))),
+      -10,
+      10
+    ],
+    nice: true,
+  });
+
+  const y_Scale = scaleLinear<number>({
     domain: [
       // Math.min(...points.map(x => Math.min(x))),
       // Math.max(...points.map(y => Math.max(y))),
@@ -101,9 +111,10 @@ const RblattGraph = withTooltip<DotsProps, PointsRange>(({
 
       // find the nearest polygon to the current mouse position
       const point = localPoint(svgRef.current, event);
+      console.log(point)
       if (!point) return;
       const neighborRadius = 100;
-      const closest = voronoiLayout.find(point.x, point.y, neighborRadius);
+      const closest = voronoiLayout.find(point.x, 1000-point.y, neighborRadius);
       if (closest) {
         showTooltip({
           tooltipLeft: xScale(x(closest.data)),
@@ -139,7 +150,7 @@ const RblattGraph = withTooltip<DotsProps, PointsRange>(({
   const yMax = height - defaultMargin.top - defaultMargin.bottom;
 
   x_Scale.range([0, xMax]);
-  // temperatureScale.range([yMax, 0]);
+  y_Scale.range([yMax, 0]);
 
   const background = '#FFC0CB';
 
@@ -159,19 +170,20 @@ const RblattGraph = withTooltip<DotsProps, PointsRange>(({
           onClick={editGraph}
         />
         <Group pointerEvents="none">
-          <GridRows scale={x_Scale} width={xMax} height={yMax} stroke="#e0e0e0" />
+          <GridRows scale={x_Scale} width={xMax} height={yMax}  stroke="#e0e0e0" />
           <GridColumns scale={x_Scale} width={xMax} height={yMax} stroke="#e0e0e0" />
           {/* <Line fill="#e0e0e0" /> */}
-          <AxisBottom top={xMax/2} scale={x_Scale} numTicks={10}/>
-          <AxisLeft left={xMax/2} scale={x_Scale} numTicks={10} />
+          <AxisBottom top={xMax/2} scale={x_Scale} hideZero={true} numTicks={10}/>
+          <AxisLeft left={xMax/2} scale={y_Scale} hideZero={true} numTicks={10} />
 
           {points.map((point, i) => (
             <Circle
               key={`point-${x(point)}-${i}`}
               className="dot"
               cx={xScale(x(point))}
-              cy={yScale(-y(point))}
-              r={i % 3 === 0 ? 2 : 3}
+              cy={yScale(y(point))}
+              // r={i % 3 === 0 ? 2 : 3}
+              r={3}
               fill={(() => {
                 if (tooltipData === point) {
                   return "white"; // hovering over point
@@ -188,10 +200,10 @@ const RblattGraph = withTooltip<DotsProps, PointsRange>(({
       {tooltipOpen && tooltipData && tooltipLeft != null && tooltipTop != null && (
         <Tooltip left={tooltipLeft + 10} top={tooltipTop + 10}>
           <div>
-            <strong>x:</strong> {x(tooltipData)}
+            <strong>x:</strong> {x(tooltipData).toFixed(2)}
           </div>
           <div>
-            <strong>y:</strong> {-y(tooltipData)}
+            <strong>y:</strong> {y(tooltipData).toFixed(2)}
           </div>
         </Tooltip>
       )}
