@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 // import MPBasicNeuron, { NeuronInput } from '../mpNeuron/MPBasicNeuron';
 // import MPLayerNeuron from '../mpNeuron/MPLayerNeuron';
 import MLPGraphNeuron from '../mlpNeuron/MLPGraphNeuron';
@@ -30,16 +30,16 @@ const MLPDemo = (props: { labelColor: string }) => {
     const [neuronState, setNeuronState] = useState<NeuronConfig[][]>(neuronInputConfig);
 
     // update a neuron value to a new one!!
-    const changeNeuronValue = (layer: number, neuron: number, key: string, value: any) => {
+    const changeNeuronValue = useCallback((layer: number, neuron: number, key: string, value: any) => {
         setNeuronState((oldState => {  
             const newState = deepcopy(oldState);
             newState[layer][neuron][key] = value;
             return newState;
         } ));
         setChanged(true);
-    }
+    }, []);
 
-    const getNeuronOutputs = (inputs, inputConfig) => {
+    const getNeuronOutputs = useCallback((inputs, inputConfig) => {
         const allResults :number[][][] = [deepcopy(inputs).map((num => [num]))];
         let curResults = deepcopy(inputs);
         inputConfig.forEach((layer: NeuronConfig[], i: number) => {
@@ -59,7 +59,7 @@ const MLPDemo = (props: { labelColor: string }) => {
             allResults.push(layerResults.map((num => [num])));
         })
         return allResults;
-    }
+    }, []);
 
     // reset neuron to default state
     const resetNeuronState = () => {
@@ -82,6 +82,17 @@ const MLPDemo = (props: { labelColor: string }) => {
         return getLastValue(getNeuronOutputs(inputs, inputConfig));
     }
 
+    const handleClick = useCallback((clickedX, clickedY) => {
+        setInputs(inp => {
+            console.log(clickedX, clickedY);
+            // TODO: should use a bounding box rather than an exact number
+            const newInputs = inp.filter(({x, y}) => x !== clickedX && y !== clickedY);
+            if(newInputs.length === inp.length) {
+                return newInputs.concat([{x: clickedX, y: clickedY, z: 0}]) // TODO: Fix Z
+            }
+            return newInputs;
+        })
+    }, [setInputs]);
 
     const formattedInputs = (({x, y}) => [x, y])(inputs[currPoint]);
     const outputs = getNeuronOutputs(formattedInputs, neuronState);
@@ -103,10 +114,10 @@ const MLPDemo = (props: { labelColor: string }) => {
                 reset={{isReset, setReset}}
                 clear={{isCleared, setCleared}}
                 changedWeight={{isChanged, setChanged}}
-                
                 allowSelectingPointColor={false}
                 calculatePointColor={(({x, y}, nState) => calculatePointColor([x, y], nState))}
                 neuronState={neuronState}
+                handleClick={handleClick}
             />
             <button className='basic-button' onClick={goPrev} disabled={false}>
                 Previous Step

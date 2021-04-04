@@ -1,20 +1,17 @@
 import React, { useEffect, useState, useCallback, useMemo, useRef } from "react";
+import { findDOMNode } from "react-dom";
 import {
   RblattInput,
   RblattConfig,
   INIT_CONFIG,
   INIT_INPUTS,
 } from "./constants";
-import JXG from "jsxgraph";
 
 import { Group } from '@visx/group';
 import { Circle } from '@visx/shape';
 import { GradientPinkRed } from '@visx/gradient';
-import { scaleLinear } from '@visx/scale';
 import { voronoi } from '@visx/voronoi';
-import genRandomNormalPoints, {
-  PointsRange,
-} from '@visx/mock-data/lib/generators/genRandomNormalPoints';
+import { PointsRange, } from '@visx/mock-data/lib/generators/genRandomNormalPoints';
 import { withTooltip, Tooltip } from '@visx/tooltip';
 import { WithTooltipProvidedProps } from '@visx/tooltip/lib/enhancers/withTooltip';
 import { localPoint } from '@visx/event';
@@ -24,7 +21,7 @@ export type DotsProps = {
   height?: number;
   inputs: any;
   line: any;
-  clickPoint?: any;
+  handleClick: any,
   showControls?: boolean;
 };
 
@@ -39,6 +36,7 @@ let tooltipTimeout: number;
 const AirbnbGraph = withTooltip<DotsProps, PointsRange>(({
   inputs,
   line,
+  handleClick,
   hideTooltip,
   showTooltip,
   tooltipOpen,
@@ -48,6 +46,7 @@ const AirbnbGraph = withTooltip<DotsProps, PointsRange>(({
   width = 1000,
   height = 1000,
 }: DotsProps & WithTooltipProvidedProps<PointsRange>) => {
+  const graphId = useMemo(() => `graph-${Math.random()}`, []);
   const points = inputs.map(({ x, y, z }) => [x, y, z]); // TODO remove in favor of better point UX
 
   const svgRef = useRef<SVGSVGElement>(null);
@@ -78,7 +77,7 @@ const AirbnbGraph = withTooltip<DotsProps, PointsRange>(({
       const point = localPoint(svgRef.current, event);
       if (!point) return;
       const neighborRadius = 100;
-      const closest = voronoiLayout.find( point.x, point.y, neighborRadius);
+      const closest = voronoiLayout.find(point.x, point.y, neighborRadius);
       if (closest) {
         showTooltip({
           tooltipLeft: xScale(x(closest.data)),
@@ -96,6 +95,17 @@ const AirbnbGraph = withTooltip<DotsProps, PointsRange>(({
     }, 300);
   }, [hideTooltip]);
 
+  const editGraph = useCallback((e) => {
+    // I'm sure there's a way to do this with a ref as well, 
+    // but I'm not sure how
+    const elem = document.getElementById(graphId)?.getBoundingClientRect();
+    if(!elem) return;
+    console.log(e.clientX, e.clientY);
+    console.log(elem.left, elem.top);
+    const xClicked = revXScale(e.clientX - elem.left);
+    const yClicked = revYScale(e.clientY - elem.top);
+    handleClick(xClicked, yClicked);
+  }, [handleClick, revXScale, revYScale, graphId]);
 
   return (
     <div>
@@ -103,6 +113,7 @@ const AirbnbGraph = withTooltip<DotsProps, PointsRange>(({
         <GradientPinkRed id="dots-pink" />
         {/** capture all mouse events with a rect */}
         <rect
+          id={graphId}
           width={width}
           height={height}
           fill="url(#dots-pink)"
@@ -110,6 +121,7 @@ const AirbnbGraph = withTooltip<DotsProps, PointsRange>(({
           onMouseLeave={handleMouseLeave}
           onTouchMove={handleMouseMove}
           onTouchEnd={handleMouseLeave}
+          onClick={editGraph}
         />
         <Group pointerEvents="none">
           {points.map((point, i) => (
@@ -120,16 +132,16 @@ const AirbnbGraph = withTooltip<DotsProps, PointsRange>(({
               cy={yScale(y(point))}
               r={i % 3 === 0 ? 2 : 3}
               fill={(() => {
-                if(tooltipData === point) {
+                if (tooltipData === point) {
                   return "white"; // hovering over point
-                } else if(point[2] === 1) {
+                } else if (point[2] === 1) {
                   return "red"; // blue point?
-                } else if(point[2] === 0) {
+                } else if (point[2] === 0) {
                   return 'green'; // red point?
                 }
               })()}
             />
-            ))}
+          ))}
         </Group>
       </svg>
       {tooltipOpen && tooltipData && tooltipLeft != null && tooltipTop != null && (
@@ -146,46 +158,6 @@ const AirbnbGraph = withTooltip<DotsProps, PointsRange>(({
   );
 });
 
-/* old stuff */
-
-type RblattGraphProps = {
-  inputs: RblattInput[];
-  line?: RblattConfig;
-  highlighted?: RblattInput;
-  editingType: { val: 0 | 1 | null };
-  onInputsChange: (inpts: React.SetStateAction<RblattInput[]>) => void;
-  reset: { isReset: boolean; setReset: Function };
-  clear: { isCleared: boolean; setCleared: Function };
-  changedWeight?: { isChanged: boolean; setChanged: Function };
-  calculatePointColor?: (RblattInput, any) => 0 | 1;
-  neuronState?: any;
-};
-
-const isInitialInputPoint = (xCoord: number, yCoord: number) => {
-  let result = false;
-  INIT_INPUTS.forEach(({ x: xInit, y: yInit }) => {
-    if (xInit === xCoord && yInit === yCoord) {
-      result = true;
-    }
-  });
-  return result;
-};
-
-// returns all the points which are all not initial inputs, aka all the points that have been added
-const getListInputs = (inputs: RblattInput[]) => {
-  let toRemove: RblattInput[] = [];
-  let toAdd: RblattInput[] = [];
-  inputs.forEach((input: RblattInput) => {
-    const { x, y } = input;
-    if (!isInitialInputPoint(x, y)) {
-      toRemove.push(input);
-    } else {
-      toAdd.push(input);
-    }
-  });
-  return [toRemove, toAdd];
-};
-
 const RblattGraph = (props: {
   inputs;
   line;
@@ -197,34 +169,15 @@ const RblattGraph = (props: {
   changedWeight;
   calculatePointColor;
   neuronState;
+  handleClick;
 }) => {
   return (<>
-  <AirbnbGraph inputs={props.inputs} line={props.line} />
+    <AirbnbGraph inputs={props.inputs} line={props.line} handleClick={props.handleClick} />
   </>);
 
 };
 
 export default RblattGraph;
-
-var getMouseCoords = function (board: any, e: MouseEvent, i?: number) {
-  var cPos = board.getCoordsTopLeftCorner(e),
-    absPos = JXG.getPosition(e, i),
-    dx = absPos[0] - cPos[0],
-    dy = absPos[1] - cPos[1];
-
-  return new JXG.Coords(JXG.COORDS_BY_SCREEN, [dx, dy], board);
-};
-
-// todo test if this is correct when switching between normal/ vertical line
-function getLinePoints(line: RblattConfig) {
-  if (line.weightY === 0) {
-    const x = line.bias / line.weightX;
-    return { aCoords: [x, 1], bCoords: [x, 2] };
-  } else {
-    const func = (x: number) => (line.weightX * x + line.bias) / -line.weightY;
-    return { aCoords: [1, func(1)], bCoords: [2, func(2)] };
-  }
-}
 
 const COL_0 = "#f15e2c";
 const COL_1 = "#394d73";

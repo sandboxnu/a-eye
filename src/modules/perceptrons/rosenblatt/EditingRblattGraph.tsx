@@ -16,6 +16,7 @@ type EditingRblattGraphProps = {
     allowSelectingPointColor?: boolean,
     calculatePointColor?: (RblattInput, NeuronConfig) => 0 | 1,
     neuronState?: NeuronConfig[][],
+    handleClick?: any,
  }
 
 // const EditingRblattGraph = (props: {inputs: RblattInput[], line: RblattConfig,  highlighted: RblattInput,
@@ -35,6 +36,7 @@ const EditingRblattGraph: React.FC<EditingRblattGraphProps> = ({
     allowSelectingPointColor = true,
     calculatePointColor = undefined,
     neuronState = undefined,
+    handleClick,
 }) => {
     const [editingType, setEditingType] = useState<{val: 1 | 0 | null}>({val: 0});
     const [updated, setUpdated] = useState(false); // yes this is a hack to get it to rerender shhh do not look
@@ -52,6 +54,7 @@ const EditingRblattGraph: React.FC<EditingRblattGraphProps> = ({
                 calculatePointColor={calculatePointColor}
                 editingType={editingType}  
                 neuronState={neuronState}
+                handleClick={handleClick}
                />
             <div className="flex items-center justify-center">
                 {allowSelectingPointColor && <>

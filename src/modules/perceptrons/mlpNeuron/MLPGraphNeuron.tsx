@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import MPBasicNeuron, { NeuronInput } from '../mpNeuron/MPBasicNeuron';
 import MPLayerNeuron from '../mpNeuron/MPLayerNeuron';
 
@@ -19,33 +19,33 @@ const MLPGraphNeuron: React.FC<MLPGraphNeuronType> = ({
         neuronState,
         changeNeuronValue,
         resetNeuronState,
-        intermediateValues
+        intermediateValues,
 }) => {
     // hardcoded for two layers and one neuron on second layer
-    const setBias = bias => changeNeuronValue(1, 0, 'bias', bias);
+    const setBias = useCallback(bias => changeNeuronValue(1, 0, 'bias', bias), [changeNeuronValue]);
 
-    const setAnd = () => {
+    const setAnd = useCallback(() => {
         // reset all weights
         // reset threshold
         // keep inputs
         resetNeuronState();
         setBias(-15);
-    };
-    const setOr = () => {
+    }, [resetNeuronState, setBias]);
+    const setOr = useCallback(() => {
         resetNeuronState();
         setBias(-5);
-    }
+    }, [resetNeuronState, setBias]);
 
     // get the inputs to a neuron on a specific layer
     // assume numinputs is equal for all neurons on the layer
-    const getInputs = (layerNum, neuronNum, numInputs) => {
+    const getInputs = useCallback((layerNum, neuronNum, numInputs) => {
         return intermediateValues[layerNum].concat().map(([a]) => a).slice(numInputs * neuronNum, numInputs * (neuronNum + 1));
-    }
+    }, [intermediateValues])
 
     // get the outputs to the current neuron layer
-    const getOutput = (layerNum, neuronNum) => {
+    const getOutput = useCallback((layerNum, neuronNum) => {
         return intermediateValues[layerNum + 1][neuronNum][0];
-    }
+    }, [intermediateValues]);
 
     return (
         <div>
