@@ -21,14 +21,14 @@ const RosenBlattDemo = (props: { labelColor: string }) => {
     const updateErrors = useCallback((inputs: RblattInput[], config: RblattConfig) => {
         let binCount = 0;
         let msCount = 0
-        inputs.forEach(inpt => {
-            const sum = inpt.x * config.weightX + inpt.y * config.weightY + config.bias;
+        inputs.forEach(([x, y, z]) => {
+            const sum = x * config.weightX + y * config.weightY + config.bias;
             const predicted = sum > 0 ? 1 : 0;
-            const error = inpt.z - predicted;
+            const error = z - predicted;
 
             const x1 = 0, y1 = config.bias / - config.weightY;
             const x2 = config.bias / - config.weightX, y2 = 0;
-            const msq = distanceToLineSegment.squared(x1, y1, x2, y2, inpt.x, inpt.y);
+            const msq = distanceToLineSegment.squared(x1, y1, x2, y2, x, y);
 
             if (error !== 0) {
                 binCount++;
@@ -85,7 +85,7 @@ const RosenBlattDemo = (props: { labelColor: string }) => {
     }, [setInputs, setConfig, setCurrPoint, updateErrors]);
 
     const clearConfig = useCallback(() => {
-        setInputs([{x: 0, y: 0, z: 0}]); // TODO: make this 0 points!
+        setInputs([[ 0, 0, 0]]); // TODO: make this 0 points!
         setConfig(INIT_CONFIG);
         setCurrPoint(0);
         updateErrors([], INIT_CONFIG);
@@ -115,9 +115,9 @@ const RosenBlattDemo = (props: { labelColor: string }) => {
         setInputs(inp => {
             console.log(clickedX, clickedY);
             // TODO: should use a bounding box rather than an exact number
-            const newInputs = inp.filter(({x, y}) => x !== clickedX && y !== clickedY);
+            const newInputs = inp.filter(([x, y]) => x !== clickedX && y !== clickedY);
             if(newInputs.length === inp.length) {
-                return newInputs.concat([{x: clickedX, y: clickedY, z: color ? color : 0}]) // TODO: Fix Z
+                return newInputs.concat([[clickedX, clickedY, color ? color : 0]])  // TODO: Fix Z
             }
             return newInputs;
         })
@@ -182,12 +182,13 @@ export default RosenBlattDemo;
 
 // ooooohh the sexy sexy math
 function trainRblatt(inpt: RblattInput, config: RblattConfig) {
-    const sum = inpt.x * config.weightX + inpt.y * config.weightY + config.bias;
+    const [ x, y, z] = inpt;
+    const sum = x * config.weightX + y * config.weightY + config.bias;
     const predicted = sum > 0 ? 1 : 0;
-    const error = inpt.z - predicted;
+    const error = z - predicted;
     if (error !== 0) {
-        const newWeightX = config.weightX + config.learningRate * error * inpt.x;
-        const newWeightY = config.weightY + config.learningRate * error * inpt.y;
+        const newWeightX = config.weightX + config.learningRate * error * x;
+        const newWeightY = config.weightY + config.learningRate * error * y;
         const newBias = config.bias + config.learningRate * error;
         return { ...config, bias: newBias, weightX: newWeightX, weightY: newWeightY, error };
     } else {

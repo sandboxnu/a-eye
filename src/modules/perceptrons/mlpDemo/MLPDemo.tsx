@@ -32,7 +32,7 @@ const MLPDemo = (props: { labelColor: string }) => {
             newState[layer][neuron][key] = value;
             return newState;
         }));
-    }, []);
+    }, [setNeuronState]);
 
     const getNeuronOutputs = useCallback((inputs) => {
         const allResults :number[][][] = [deepcopy(inputs).map((num => [num]))];
@@ -82,7 +82,7 @@ const MLPDemo = (props: { labelColor: string }) => {
             const BOUND = 0.01;
             console.log(clickedX, clickedY);
 
-            const newInputs = inp.filter(({x, y}) => 
+            const newInputs = inp.filter(([x, y]) => 
                 clickedX - BOUND <= x && 
                 x <= clickedX + BOUND && 
                 clickedY - BOUND <= y && 
@@ -90,14 +90,15 @@ const MLPDemo = (props: { labelColor: string }) => {
 
             // If the length changed, then we removed one, so we didn't add one! Otherwise, we know we added one.
             return newInputs.length === inp.length ? 
-                newInputs.concat([{x: clickedX, y: clickedY, z: calculatePointColor(clickedX, clickedY)}]) : newInputs;
+                newInputs.concat([[clickedX, clickedY, calculatePointColor(clickedX, clickedY)]]) : newInputs;
         })
     }, [setInputs, calculatePointColor]);
 
-    const formattedInputs = (({x, y}) => [x, y])(inputs[currPoint]);
+    const formattedInputs: RblattInput = inputs[currPoint];
     const outputs = getNeuronOutputs(formattedInputs);
-    // This should be unnecessary, as the point colors are all known whenever adding a point
-    const correctPointColorInputs = inputs.map(({x, y}) => {return {x, y, z: calculatePointColor(x, y)}});
+
+    // TODO: This should be set in state rather than calculated on every render
+    const correctPointColorInputs: RblattInput[] = inputs.map(([x, y]) => [x, y, calculatePointColor(x, y)]);
 
     return(
         <div>

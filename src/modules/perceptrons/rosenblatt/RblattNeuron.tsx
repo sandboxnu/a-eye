@@ -6,15 +6,22 @@ import {RblattConfig, RblattInput} from './constants';
 // actually that doesnt work bc the output color changes based on the updated config
 // so you never see any error predictions
 
+type RblattNeuronType = {
+    input: RblattInput,
+    config: RblattConfig,
+    labelColor: string,
+}
 
 // a static version of the neuron demo, for the Rblatt demo
-const RblattNeuron = (props: {input: RblattInput, config: RblattConfig, labelColor: string}) => {
-    const inputSum = props.input.x * props.config.weightX + props.input.y * props.config.weightY + props.config.bias;
+const RblattNeuron: React.FC<RblattNeuronType> = ({input, config, labelColor}) => {
+    const [x, y, z] = input;
+
+    const inputSum = x * config.weightX + y * config.weightY + config.bias;
     const output = inputSum > 0 ? 1 : 0;
 
     const makeInput = (val: number, weight: number, label: string) => {
         return (
-            <div className={`flex items-center ${props.labelColor}`}>
+            <div className={`flex items-center ${labelColor}`}>
                 {label}
                 <div
                     className="text-black font-bold rounded-full w-12 h-12 m-1 border-2 border-pink-700 bg-white
@@ -36,15 +43,15 @@ const RblattNeuron = (props: {input: RblattInput, config: RblattConfig, labelCol
     return (
         <div className="flex items-center m-4">
             <div className="flex flex-col">
-                {makeInput(props.input.x, props.config.weightX, 'x')}
-                {makeInput(props.input.y, props.config.weightY, 'y')}
+                {makeInput(x, config.weightX, 'x')}
+                {makeInput(y, config.weightY, 'y')}
                 <div className="flex items-center self-end">
-                    <p className={props.labelColor}>bias</p>
+                    <p className={labelColor}>bias</p>
                     <div
                         className="font-bold rounded-full w-12 h-12 bg-pink-700 m-1
                                     flex items-center justify-center text-white"
                     >
-                        {props.config.bias.toFixed(1)}
+                        {config.bias.toFixed(1)}
                     </div>
                 </div>
             </div>
@@ -54,7 +61,7 @@ const RblattNeuron = (props: {input: RblattInput, config: RblattConfig, labelCol
                 {inputSum.toFixed(1)}
             </div>
             <div className="w-2 h-1 bg-navy" />
-            <div className={`w-20 h-10 rounded-md border-2 border-orange-500 flex items-center justify-center px-2 ${props.labelColor}`}>
+            <div className={`w-20 h-10 rounded-md border-2 border-orange-500 flex items-center justify-center px-2 ${labelColor}`}>
                 {'> 0'}
             </div>
             <div className="w-16 h-1 bg-navy" />
