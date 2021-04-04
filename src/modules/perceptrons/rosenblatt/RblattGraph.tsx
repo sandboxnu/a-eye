@@ -162,7 +162,7 @@ const RblattGraph = withTooltip<DotsProps, PointsRange>(({
           <GridRows scale={x_Scale} width={xMax} height={yMax} stroke="#e0e0e0" />
           <GridColumns scale={x_Scale} width={xMax} height={yMax} stroke="#e0e0e0" />
           {/* <Line fill="#e0e0e0" /> */}
-          <AxisBottom top={xMax/2} scale={x_Scale} numTicks={10} labelOffset={100}/>
+          <AxisBottom top={xMax/2} scale={x_Scale} numTicks={10}/>
           <AxisLeft left={xMax/2} scale={x_Scale} numTicks={10} />
 
           {points.map((point, i) => (
@@ -170,7 +170,7 @@ const RblattGraph = withTooltip<DotsProps, PointsRange>(({
               key={`point-${x(point)}-${i}`}
               className="dot"
               cx={xScale(x(point))}
-              cy={yScale(y(point))}
+              cy={yScale(-y(point))}
               r={i % 3 === 0 ? 2 : 3}
               fill={(() => {
                 if (tooltipData === point) {
@@ -191,7 +191,7 @@ const RblattGraph = withTooltip<DotsProps, PointsRange>(({
             <strong>x:</strong> {x(tooltipData)}
           </div>
           <div>
-            <strong>y:</strong> {y(tooltipData)}
+            <strong>y:</strong> {-y(tooltipData)}
           </div>
         </Tooltip>
       )}
