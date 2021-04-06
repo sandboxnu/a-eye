@@ -3,6 +3,8 @@
 var Chart = require('chart.js');
 import React, {useLayoutEffect, useRef, useState} from 'react';
 import {histogramAggregate, histogramBlocks, gradientImages, GradientsType, BlocksType, map} from './histOfGrad';
+import sobelImg from '../../../media/modules/computerVision/sobelOperators.png';
+import needleImg from '../../../media/modules/computerVision/needleExample.png';
 
 type HistOfGradDemoType = {
     labelColor: string;
@@ -43,7 +45,10 @@ const SobelTab: React.FC<HogTabType> = ({
   
   return (
     <div className="flex justify-evenly">
-        <div className="my-auto">
+        <div className="my-auto mx-3">
+            <img src={sobelImg} alt="img" />
+        </div>
+        <div className="my-auto mx-3">
             <p className={labelColor}>Horizontal Sobel</p>
             <canvas
                 className="crisp-pixels mx-auto"
@@ -52,7 +57,7 @@ const SobelTab: React.FC<HogTabType> = ({
                 height={height}
             />
         </div>
-        <div className="my-auto">
+        <div className="my-auto mx-3">
             <p className={labelColor}>Vertical Sobel</p>
             <canvas
                 className="crisp-pixels mx-auto"
@@ -134,7 +139,7 @@ const CombinedSobelTab: React.FC<HogTabType> = ({
   
   return (
     <div className="flex justify-evenly">
-      <div className="my-auto">
+      <div className="my-auto mx-3">
         <p className={labelColor}>Horizontal Sobel</p>
         <canvas
             className="crisp-pixels mx-auto"
@@ -150,13 +155,13 @@ const CombinedSobelTab: React.FC<HogTabType> = ({
             height={height}
         />
       </div>
-      <div className="my-auto">
+      <div className="my-auto mx-3">
         <p className={labelColor}>Needle Plot</p>
         <canvas
             className="crisp-pixels mx-auto"
             ref={canvasNdlPlt}
-            width={width * 1.5}
-            height={height * 1.5}
+            width={width * 1.25}
+            height={height * 1.25}
         />
       </div>
     </div>
@@ -230,7 +235,7 @@ const SobelNeedleTab: React.FC<HogTabType> = (
 
     return (
         <div className="flex justify-evenly">
-            <div className="my-auto">
+            <div className="my-auto mx-3">
                 <p className={labelColor}>Combined Sobel</p>
                 <canvas
                     className="crisp-pixels mx-auto"
@@ -239,7 +244,7 @@ const SobelNeedleTab: React.FC<HogTabType> = (
                     height={height}
                 />
             </div>
-            <div className="my-auto">
+            <div className="my-auto mx-3">
                 <p className={labelColor}>Needle Plot</p>
                 <canvas
                     className="crisp-pixels mx-auto max-w-screen-md"
@@ -361,7 +366,7 @@ const NeedleHistogramTab: React.FC<HogTabType> = ({
   
   return (
     <div className="flex justify-evenly">
-      <div className="my-auto">
+      <div className="my-auto mx-3">
         <p className={labelColor}>Needle Plot</p>
         <canvas
             className="crisp-pixels mx-auto max-w-screen-md"
@@ -370,7 +375,11 @@ const NeedleHistogramTab: React.FC<HogTabType> = ({
             height={height}
         />
       </div>
-      <div className="my-auto">
+      <div className="my-auto mx-3">
+        <img src={needleImg} alt="img" />
+        <p className={labelColor}>We take this needle, find the bin the angle belongs in, and add the needle's magnitude to the bin.</p>
+      </div>
+      <div className="my-auto mx-3">
         <p className={labelColor}>Aggregated Histogram</p>
         <canvas
             className="crisp-pixels mx-auto max-w-screen-md"
@@ -404,7 +413,7 @@ const HistOfGradDemo: React.FC<HistOfGradDemoType> = ({
     })
 
     return (
-        <div>
+        <div className="my-3">
           <img ref={imgRef} src={imgUrl} alt="image" className="hidden"></img>
           <div>
             <button className="basic-button" onClick={() => setTab(0)}>1</button>
@@ -414,8 +423,8 @@ const HistOfGradDemo: React.FC<HistOfGradDemoType> = ({
           </div>
             {tab === 0 && <SobelTab labelColor={labelColor} imgUrl={imgUrl} width={imgWidth} height={imgHeight} />}
             {tab === 1 && <CombinedSobelTab labelColor={labelColor} imgUrl={imgUrl} width={imgWidth} height={imgHeight} />}
-            {tab === 2 && <SobelNeedleTab labelColor={labelColor} imgUrl={imgUrl} width={imgWidth * 1.5} height={imgHeight * 1.5} />}
-            {tab === 3 && <NeedleHistogramTab labelColor={labelColor} imgUrl={imgUrl} width={imgWidth * 1.5} height={imgHeight * 1.5} />}
+            {tab === 2 && <SobelNeedleTab labelColor={labelColor} imgUrl={imgUrl} width={imgWidth * 1.25} height={imgHeight * 1.25} />}
+            {tab === 3 && <NeedleHistogramTab labelColor={labelColor} imgUrl={imgUrl} width={imgWidth} height={imgHeight} />}
         </div>
     );
 }
