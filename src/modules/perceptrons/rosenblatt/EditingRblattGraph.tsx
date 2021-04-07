@@ -6,6 +6,7 @@ import { NeuronConfig } from '../mlpDemo/constants';
 type EditingRblattGraphProps = {
     inputs: RblattInput[],
     line?: RblattConfig,
+    lines?: {x?: number | undefined, y?: number | undefined}[],
     highlighted?: RblattInput,
     allowSelectingPointColor?: boolean,
     calculatePointColor?: (x:RblattInput, y:NeuronConfig) => 0 | 1,
@@ -15,6 +16,7 @@ type EditingRblattGraphProps = {
 const EditingRblattGraph: React.FC<EditingRblattGraphProps> = ({
     inputs,
     line = undefined,
+    lines = undefined,
     highlighted = undefined,
     allowSelectingPointColor = true,
     handleClick,
@@ -26,6 +28,7 @@ const EditingRblattGraph: React.FC<EditingRblattGraphProps> = ({
             <RblattGraph
                 inputs={inputs}
                 line={line}
+                lines={lines}
                 highlighted={highlighted}
                 editingType={editingType}
                 handleClick={handleClick}

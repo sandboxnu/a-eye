@@ -117,6 +117,10 @@ const MLPDemo = (props: { labelColor: string }) => {
     // TODO: This should be set in state rather than calculated on every render
     const correctPointColorInputs: RblattInput[] = inputs.map(([x, y]) => [x, y, calculatePointColor(x, y)]);
 
+
+    const lines = [ {x: neuronState[0][0].thresholdVal / neuronState[0][0].weights[0] - neuronState[0][0].bias}
+    , {y: neuronState[0][1].thresholdVal / neuronState[0][1].weights[0] - neuronState[0][1].bias}]
+
     return(
         <div>
             <MLPGraphNeuron 
@@ -131,7 +135,7 @@ const MLPDemo = (props: { labelColor: string }) => {
                 highlighted={inputs[currPoint]}
                 allowSelectingPointColor={false}
                 handleClick={handleClick}
-                // line={thresholds}
+                lines={lines}
             />
             <button className='basic-button' onClick={goPrev} disabled={false}>
                 Previous Step

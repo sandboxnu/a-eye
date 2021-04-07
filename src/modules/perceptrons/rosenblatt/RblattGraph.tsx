@@ -2,7 +2,7 @@ import React, { useCallback, useMemo, useRef } from "react";
 import { RblattInput } from "./constants";
 
 import { Group } from '@visx/group';
-import { Circle } from '@visx/shape';
+import { Circle, Line } from '@visx/shape';
 import { voronoi } from '@visx/voronoi';
 import { withTooltip, Tooltip } from '@visx/tooltip';
 import { WithTooltipProvidedProps } from '@visx/tooltip/lib/enhancers/withTooltip';
@@ -23,6 +23,7 @@ export type GraphProps = {
   range?: number,
   inputs: any;
   line: any;
+  lines?: {x?: number | undefined, y?: number | undefined}[],
   handleClick: any;
   showControls?: boolean;
   highlighted: RblattInput | undefined;
@@ -52,6 +53,7 @@ const RblattGraph = withTooltip<GraphProps, RblattInput>(({
   tooltipData,
   tooltipLeft,
   tooltipTop,
+  lines,
   width = 1000,
   height = 1000,
   domain = 10,
@@ -150,6 +152,14 @@ const RblattGraph = withTooltip<GraphProps, RblattInput>(({
           onClick={editGraph}
         />
         <Group pointerEvents="none">
+          {lines && lines.map(({x, y}) => (
+            <Line key={`line-${y}-${y}`}
+                  // assume that y is defined if x is not
+                  from={x ? {x: xScale(x), y: yScale(-domain)} : {x: xScale(-range), y:yScale(y)}}
+                  to={x ? {x: xScale(x), y: yScale(domain)} : {x: xScale(range), y: yScale(y)}}
+            />
+          )
+          )}
           <GridRows scale={x_Scale} width={xMax} height={yMax} stroke="#e0e0e0" />
           <GridColumns scale={x_Scale} width={xMax} height={yMax} stroke="#e0e0e0" />
           <AxisBottom top={xMax / 2} scale={x_Scale} hideZero={true} numTicks={domain} />
