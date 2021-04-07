@@ -17,6 +17,14 @@ const getLastValue = (arr: any[]) => {
     return a;
 }
 
+const removeFirst = (arr: any[], cond): [any[], any] => arr.reduce(
+    ([rst, foundElem], elem) =>
+        cond(elem) && !foundElem ?
+        [rst, elem] :
+        [rst.concat([elem]), foundElem], [[], null]);
+
+
+
 // Make a deep copy of an object.
 const deepcopy = (obj: {}) => JSON.parse(JSON.stringify(obj));
 
@@ -24,6 +32,8 @@ const MLPDemo = (props: { labelColor: string }) => {
     const [inputs, setInputs] = useState<RblattInput[]>(INIT_INPUTS);
     const [currPoint, setCurrPoint] = useState<number>(0);
     const [neuronState, setNeuronState] = useState<NeuronConfig[][]>(neuronInputConfig);
+    
+    const thresholds = [neuronState[0][0].thresholdVal, neuronState[0][1].thresholdVal]
 
     // Update a neuron value to a new one!
     const changeNeuronValue = useCallback((layer: number, neuron: number, key: string, value: any) => {
@@ -79,8 +89,7 @@ const MLPDemo = (props: { labelColor: string }) => {
 
     const handleClick = useCallback((clickedX, clickedY) => {
         setInputs(inp => {
-            // TODO: Make sure that this bounding box is lenient enough!
-            const BOUND = 0.1;
+            const BOUND = 0.025;
 
             let newInputs = inp.filter(([x, y]) =>  {
                 return !(clickedX - BOUND <= x && 
@@ -88,8 +97,16 @@ const MLPDemo = (props: { labelColor: string }) => {
                 clickedY - BOUND <= y && 
                 y <= clickedY + BOUND)  });
 
+            // if you are accidentally removing two points at once and want to only remove one, use this 
+
+            // let [newInputs] = removeFirst(inp, ([x, y]) =>  {
+            //     return !(clickedX - BOUND <= x && 
+            //     x <= clickedX + BOUND && 
+            //     clickedY - BOUND <= y && 
+            //     y <= clickedY + BOUND)  })
+
             // If the length changed, then we removed one, so we didn't add one! Otherwise, we know we added one.
-            
+            if (newInputs.length == 0) return inp
             return newInputs.length === inp.length ? 
                 newInputs.concat([[clickedX, clickedY, calculatePointColor(clickedX, clickedY)]]) : newInputs;
         })
@@ -115,6 +132,7 @@ const MLPDemo = (props: { labelColor: string }) => {
                 highlighted={inputs[currPoint]}
                 allowSelectingPointColor={false}
                 handleClick={handleClick}
+                // line={thresholds}
             />
             <button className='basic-button' onClick={goPrev} disabled={false}>
                 Previous Step

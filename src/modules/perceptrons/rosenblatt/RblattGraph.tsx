@@ -55,6 +55,7 @@ const RblattGraph = withTooltip<DotsProps, PointsRange>(({
   width = 1000,
   height = 1000,
 }: DotsProps & WithTooltipProvidedProps<PointsRange>) => {
+  console.log(line)
   const graphId = useMemo(() => `graph-${Math.random()}`, []);
   const points = inputs
 
@@ -148,8 +149,6 @@ const RblattGraph = withTooltip<DotsProps, PointsRange>(({
 
   const background = '#FFC0CB';
 
-  console.log(highlighted, points)  
-
   return (
     <div>
       <svg width={width} height={height} ref={svgRef}>
@@ -168,7 +167,7 @@ const RblattGraph = withTooltip<DotsProps, PointsRange>(({
         <Group pointerEvents="none">
           <GridRows scale={x_Scale} width={xMax} height={yMax}  stroke="#e0e0e0" />
           <GridColumns scale={x_Scale} width={xMax} height={yMax} stroke="#e0e0e0" />
-          {/* <Line fill="#e0e0e0" /> */}
+          {/* <Line fill="#e0e0e0" to /> */}
           <AxisBottom top={xMax/2} scale={x_Scale} hideZero={true} numTicks={10}/>
           <AxisLeft left={xMax/2} scale={y_Scale} hideZero={true} numTicks={10} />
 
@@ -200,6 +199,11 @@ const RblattGraph = withTooltip<DotsProps, PointsRange>(({
           <div>
             <strong>y:</strong> {y(tooltipData).toFixed(2)}
           </div>
+          {points.length == 1 &&
+            <div>
+              <strong>Last Point! Can't remove it!</strong>
+            </div>
+          }
         </Tooltip>
       )}
     </div>

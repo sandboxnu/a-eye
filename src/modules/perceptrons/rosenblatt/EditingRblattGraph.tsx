@@ -21,7 +21,7 @@ const EditingRblattGraph: React.FC<EditingRblattGraphProps> = ({
     allowSelectingPointColor = true,
     handleClick,
 }) => {
-    const [editingType, setEditingType] = useState<{ val: 1 | 0 | null }>({ val: 0 });
+    const [editingType, setEditingType] = useState< 1 | 0 >(0);
 
     return (
         <div className="flex flex-col items-center justify-center">
@@ -35,13 +35,13 @@ const EditingRblattGraph: React.FC<EditingRblattGraphProps> = ({
             <div className="flex items-center justify-center">
                 {allowSelectingPointColor && <>
                     <p className="text-modulePaleBlue">Select Point Color:</p>
-                    <button className={`basic-button alt py-1 px-2 bg-orange-500 border-4 ${editingType.val === 0 ? 'border-orange-800' : 'border-transparent'} `}
-                        onClick={() => editingType.val === 0 ? setEditingType(et => { et.val = null; return et }) : setEditingType(et => { et.val = 0; return et })}
+                    <button className={`basic-button alt py-1 px-2 bg-orange-500 border-4 ${editingType === 0 ? 'border-orange-800' : 'border-transparent'} `}
+                        onClick={() => setEditingType(et => (et==0 ? 1 : 0))}
                     >
                         Orange
                 </button>
-                    <button className={`basic-button py-1 px-2 bg-lightNavy border-4 ${editingType.val === 1 ? 'border-blue-900' : 'border-transparent'}`}
-                        onClick={() => editingType.val === 1 ? setEditingType(et => { et.val = null; return et }) : setEditingType(et => { et.val = 1; return et })}
+                    <button className={`basic-button py-1 px-2 bg-lightNavy border-4 ${editingType === 1 ? 'border-blue-900' : 'border-transparent'}`}
+                        onClick={() => setEditingType(et => (et==0 ? 1 : 0))}
                     >
                         Blue
                 </button>

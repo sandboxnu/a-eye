@@ -115,7 +115,15 @@ const RosenBlattDemo = (props: { labelColor: string }) => {
         setInputs(inp => {
             console.log(clickedX, clickedY);
             // TODO: should use a bounding box rather than an exact number
-            const newInputs = inp.filter(([x, y]) => x !== clickedX && y !== clickedY);
+            const BOUND = 0.1;
+
+            let newInputs = inp.filter(([x, y]) =>  {
+                return !(clickedX - BOUND <= x && 
+                x <= clickedX + BOUND && 
+                clickedY - BOUND <= y && 
+                y <= clickedY + BOUND)  });
+
+                
             if(newInputs.length === inp.length) {
                 return newInputs.concat([[clickedX, clickedY, color ? color : 0]])  // TODO: Fix Z
             }

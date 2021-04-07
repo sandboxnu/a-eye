@@ -3,6 +3,8 @@ import { RblattInput } from './constants';
 
 const RblattInputsTable = (props: { data: RblattInput[], labelColor: string }) => {
 
+
+    console.log(props.data)
     return (
         <div className={`mx-auto overflow-y-scroll max-h-sm max-w-2xl ${props.labelColor}`}>
             <table className="a-eye-table">
