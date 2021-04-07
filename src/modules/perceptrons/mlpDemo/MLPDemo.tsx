@@ -1,8 +1,6 @@
-import React, { useEffect, useState, useCallback } from 'react';
-// import MPBasicNeuron, { NeuronInput } from '../mpNeuron/MPBasicNeuron';
-// import MPLayerNeuron from '../mpNeuron/MPLayerNeuron';
+import React, { useState, useCallback } from 'react';
 import MLPGraphNeuron from '../mlpNeuron/MLPGraphNeuron';
-import {RblattInput, RblattConfig, INIT_INPUTS, INIT_CONFIG, CLEARED_INPUTS} from '../rosenblatt/constants';
+import {RblattInput, INIT_INPUTS } from '../rosenblatt/constants';
 import EditingRblattGraph from '../rosenblatt/EditingRblattGraph';
 
 import { neuronInputConfig, NeuronConfig } from './constants';
@@ -39,6 +37,7 @@ const MLPDemo = (props: { labelColor: string }) => {
     const changeNeuronValue = useCallback((layer: number, neuron: number, key: string, value: any) => {
         setNeuronState((oldState => {  
             const newState = deepcopy(oldState);
+            (console.log(key, value));
             newState[layer][neuron][key] = value;
             return newState;
         }));

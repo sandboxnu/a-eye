@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { AddCircle, RemoveCircle } from '@material-ui/icons';
-import { RblattConfig, INIT_CONFIG } from '../rosenblatt/constants';
 
 // outlines
 // both > and < shown, highlight the one you want
@@ -18,6 +16,7 @@ const ThresholdFunc = (props: { onFuncChange: ((func: (n: number) => number) => 
             }
         };
         props.onFuncChange(func);
+        /* eslint-disable-next-line */
     }, [isGreater, threshold])
 
     return (

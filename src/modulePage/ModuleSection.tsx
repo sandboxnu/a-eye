@@ -5,7 +5,7 @@ import DiffOfGaussianDemo from "../modules/computerVision/diffofgaussian/DiffOfG
 import HaarWaveletDemo from "../modules/computerVision/haarWavelet/HaarWaveletDemo";
 import { ImageSelectableDemo } from "../modules/computerVision/imageSelector/ImageSelectableDemo";
 import PCADemo from "../modules/stateSpaces/pca/PCA";
-import {RawDataTable, SelectableAxisChart, StaticAxisChart, AxisSelector, config as pcaConfig} from "../modules/stateSpaces/pca/PCA";
+import {RawDataTable, SelectableAxisChart, StaticAxisChart, config as pcaConfig} from "../modules/stateSpaces/pca/PCA";
 import KMeans, {KMeansStepExample, InteractiveClusteringExample} from '../modules/stateSpaces/kmeans';
 import blank from '../media/modules/blank.png';
 import animation1 from '../media/modules/computerVision/animation-1.gif';

@@ -1,6 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import { AddCircle, RemoveCircle } from '@material-ui/icons';
-import { RblattConfig, INIT_CONFIG } from '../rosenblatt/constants';
+import React from 'react';
 
 // outlines
 // both > and < shown, highlight the one you want
@@ -9,21 +7,9 @@ type ThresholdFuncType = {
     setThreshold,
     isGreater: boolean, 
     setIsGreater, 
-    onFuncChange: ((func: (n: number) => number) => void)
 };
-const ControlledThresholdFunc: React.FC<ThresholdFuncType> = ({threshold, setThreshold, isGreater, setIsGreater, onFuncChange}) => {
-    useEffect(() => {
-        if (threshold === null) return;
-        const func = (n: number) => {
-            if (isGreater) {
-                return n > threshold ? 1 : 0;
-            } else {
-                return n < threshold ? 1 : 0;
-            }
-        };
-        onFuncChange(func);
-    }, [isGreater, threshold])
-
+const ControlledThresholdFunc: React.FC<ThresholdFuncType> = ({threshold, setThreshold, isGreater, setIsGreater}) => {
+    console.log(isGreater);
     return (
         <div className="font-bold w-20 h-10 rounded-md border-2 border-orange-500 
                         flex items-center justify-center px-2 text-white">

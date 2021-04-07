@@ -11,7 +11,7 @@ export interface ModuleSubsection {
     "body": string,
     "imgSrc": string
 }
-interface ModuleSection {
+interface ModuleSectionType {
     "title": string,
     "colorScheme": string,
     "subsections": ModuleSubsection[],
@@ -20,7 +20,7 @@ interface ModuleSection {
 interface Module {
     "number": number,
     "title": string,
-    "sections": ModuleSection[]
+    "sections": ModuleSectionType[]
 }
 const modules: Record<string, Module> = {'computer-vision': module8, 'classification' : module9, 'perceptrons' : module10, 'neural-nets' : module11}
 

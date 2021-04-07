@@ -1,10 +1,9 @@
-import React, { useEffect, useState, useCallback } from 'react';
-import RblattGraph from './RblattGraph';
+import React, { useState, useCallback } from 'react';
 import EditingRblattGraph from './EditingRblattGraph';
 import RblattInputsTable from './RblattInputsTable';
 import RblattNeuron from './RblattNeuron';
 import distanceToLineSegment from 'distance-to-line-segment';
-import { RblattInput, RblattConfig, INIT_INPUTS, INIT_CONFIG, CLEARED_INPUTS } from './constants';
+import { RblattInput, RblattConfig, INIT_INPUTS, INIT_CONFIG } from './constants';
 
 const round = (x: number, length: number) => {
     return Math.round(x * (10 ** length)) / (10 ** length);
@@ -160,7 +159,6 @@ const RosenBlattDemo = (props: { labelColor: string }) => {
                     highlighted={inputs[currPoint]} 
                     handleClick={handleClick}
                 />
-
             </div>
             <div className='' >
                 <OperationButton
@@ -182,7 +180,7 @@ const RosenBlattDemo = (props: { labelColor: string }) => {
                 <OperationButton onClick={clearConfig} text={"Clear All"} />
 
             </div>
-            {inputs.length === 0 ? <></> : <RblattInputsTable labelColor={props.labelColor} data={inputs} />}
+            {inputs.length !== 0 ?? <RblattInputsTable labelColor={props.labelColor} data={inputs} />}
         </div>
     );
 }

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import ControlledThresholdFunc from './ControlledThresholdFunc';
 
 const zip = (arr1: Array<any>, arr2: Array<any>) => {
@@ -34,9 +34,9 @@ export type MPLayerNeuronType = {
     setWeights: (inpts: React.SetStateAction<number[]>) => void,
     bias: number,
     threshold: number,
-    setThreshold,
+    setThreshold: (inpts: number) => void,
     isGreater: boolean, 
-    setIsGreater,
+    setIsGreater: (inpts: boolean) => void,
     setOutput?: (inpts: React.SetStateAction<number>) => void,
     showInput?: boolean,
     noutput?: number
@@ -58,9 +58,6 @@ const MPLayerNeuron: React.FC<MPLayerNeuronType> = ({
     // zero is falsy so we check against a non-zero value ;_;
     noutput = 'none',
 }) => {
-
-    const [func, setFunc] = useState(() => ((n: number) => 0));
-
     const changeWeight = (e: React.ChangeEvent<HTMLInputElement>, idx: number) => {
         const val = parseFloat(e.target.value);
         const newInputs = JSON.parse(JSON.stringify((weights)));
@@ -73,9 +70,13 @@ const MPLayerNeuron: React.FC<MPLayerNeuronType> = ({
         }
     }
 
-    const onFuncChange = (func: (n: number) => number) => {
-        setFunc(() => ((n: number) => func(n)));
-    }
+    const func = (n: number) => {
+        if (isGreater) {
+            return n > threshold ? 1 : 0;
+        } else {
+            return n < threshold ? 1 : 0;
+        }
+    };
 
     const inputSum = zip(inputs, weights).reduce((prev, acc) => {
         return (acc[0] && acc[1] ? acc[0] * acc[1] : 0) + prev
@@ -83,9 +84,8 @@ const MPLayerNeuron: React.FC<MPLayerNeuronType> = ({
 
     const output = noutput === 'none' ?  func(inputSum) : noutput;
 
-    const makeInput = (inpt: number, weight: number, idx: number) => {
-        return (
-            <div className="flex items-center cursor-pointer pb-2.5 pt-16">
+    const Input = ({inpt, weight, idx}) => (
+            <div className="flex items-center cursor-pointer pb-2.5 pt-16" key={idx}>
                 {showInput && 
                     <div
                         className="rounded-full w-12 h-12 font-bold bg-moduleTeal flex items-center justify-center"
@@ -107,13 +107,12 @@ const MPLayerNeuron: React.FC<MPLayerNeuronType> = ({
                 </div>
             </div>
         );
-    }
 
     return (
         <div className="m-2 flex flex-col items-center justify-center">
             <div className="flex items-center">
                 <div className="flex flex-col h-36">
-                    {zip(inputs, weights).map(([input, weight], index) => makeInput(input, weight, index))}
+                    {zip(inputs, weights).map(([input, weight], index) => <Input inpt={input} weight={weight} idx={index} key={index}/>)}
                     {addBias && <div className="flex items-center self-end">
                         <p className={labelColor}>bias</p>
                         <div
@@ -136,7 +135,6 @@ const MPLayerNeuron: React.FC<MPLayerNeuronType> = ({
                     setThreshold={setThreshold}
                     isGreater={isGreater}
                     setIsGreater={setIsGreater}
-                    onFuncChange={onFuncChange} 
                     />
                 <div className="w-16 h-1 bg-navy" />
                 <div
@@ -153,7 +151,7 @@ const MPLayerNeuron: React.FC<MPLayerNeuronType> = ({
     );
 }
 
-const INPT_CLR = '#b92079';
+// const INPT_CLR = '#b92079';
 const OUTPT_CLR = '#0FD4C0';
 
 export default MPLayerNeuron;

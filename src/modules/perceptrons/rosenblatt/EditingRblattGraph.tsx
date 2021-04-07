@@ -1,8 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import RblattGraph from './RblattGraph';
-import { RblattInput, RblattConfig, INIT_INPUTS, INIT_CONFIG, CLEARED_INPUTS } from './constants';
-import { NeuronInput } from '../mpNeuron/MPBasicNeuron';
-
+import { RblattInput, RblattConfig } from './constants';
 import { NeuronConfig } from '../mlpDemo/constants';
 
 type EditingRblattGraphProps = {
@@ -10,7 +8,7 @@ type EditingRblattGraphProps = {
     line?: RblattConfig,
     highlighted?: RblattInput,
     allowSelectingPointColor?: boolean,
-    calculatePointColor?: (RblattInput, NeuronConfig) => 0 | 1,
+    calculatePointColor?: (x:RblattInput, y:NeuronConfig) => 0 | 1,
     handleClick?: any,
 }
 
@@ -21,7 +19,7 @@ const EditingRblattGraph: React.FC<EditingRblattGraphProps> = ({
     allowSelectingPointColor = true,
     handleClick,
 }) => {
-    const [editingType, setEditingType] = useState< 1 | 0 >(0);
+    const [editingType, setEditingType] = useState<1|0>(0);
 
     return (
         <div className="flex flex-col items-center justify-center">
@@ -36,12 +34,12 @@ const EditingRblattGraph: React.FC<EditingRblattGraphProps> = ({
                 {allowSelectingPointColor && <>
                     <p className="text-modulePaleBlue">Select Point Color:</p>
                     <button className={`basic-button alt py-1 px-2 bg-orange-500 border-4 ${editingType === 0 ? 'border-orange-800' : 'border-transparent'} `}
-                        onClick={() => setEditingType(et => (et==0 ? 1 : 0))}
+                        onClick={() => setEditingType(et => et === 1 ? 0 : 1)}
                     >
                         Orange
                 </button>
                     <button className={`basic-button py-1 px-2 bg-lightNavy border-4 ${editingType === 1 ? 'border-blue-900' : 'border-transparent'}`}
-                        onClick={() => setEditingType(et => (et==0 ? 1 : 0))}
+                        onClick={() => setEditingType(et => et === 1 ? 0 : 1)}
                     >
                         Blue
                 </button>

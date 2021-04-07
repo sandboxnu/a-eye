@@ -1,8 +1,6 @@
-import React, { useEffect, useState, useCallback } from 'react';
-import MPBasicNeuron, { NeuronInput } from '../mpNeuron/MPBasicNeuron';
+import React, { useCallback } from 'react';
 import MPLayerNeuron from '../mpNeuron/MPLayerNeuron';
 
-import {RblattInput} from '../rosenblatt/constants'
 import {NeuronConfig} from '../mlpDemo/constants';
 
 type MLPGraphNeuronType = {
@@ -51,7 +49,7 @@ const MLPGraphNeuron: React.FC<MLPGraphNeuronType> = ({
         <div>
             <div className="m-2 flex items-center">
                 {neuronState.map((layer, layerNum) => 
-                    <div id="layer">
+                    <div id="layer" key={layerNum}>
                         {layer.map(({weights, bias, greaterThan, thresholdVal}, neuronNum) => 
                             <MPLayerNeuron
                                 key={`LayerNeuron ${layerNum} ${neuronNum}` }
@@ -63,7 +61,7 @@ const MLPGraphNeuron: React.FC<MLPGraphNeuronType> = ({
                                     changeNeuronValue(layerNum, neuronNum, 'thresholdVal', threshold)}
                                 isGreater={greaterThan}
                                 setIsGreater={(isGreater: boolean) => 
-                                    changeNeuronValue(layerNum, neuronNum, 'greaterThan', isGreater)}
+                                    changeNeuronValue(layerNum, neuronNum, 'isGreater', isGreater)}
                                 inputs={getInputs(layerNum, neuronNum, weights.length)}
                                 weights={weights}
                                 setWeights={weights => 

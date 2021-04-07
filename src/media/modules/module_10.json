@@ -25,7 +25,7 @@
             "demoComp": "MPNeuron"
           },
           {
-            "title": "The Perceptron",
+            "title": "The Perceptron2",
             "colorScheme": "dark",
             "subsections": [
               {
@@ -37,7 +37,7 @@
             "demoComp": "MLPNeuron"
           },
           {
-            "title": "The Perceptron2",
+            "title": "The Perceptron3",
             "colorScheme": "dark",
             "subsections": [
               {
@@ -66,7 +66,7 @@
             "demoComp": "RblattVectorsDemo"
           },
           {
-            "title": "Perceptrons in Action",
+            "title": "Perceptrons in Action2",
             "colorScheme": "dark",
             "subsections": [
               {

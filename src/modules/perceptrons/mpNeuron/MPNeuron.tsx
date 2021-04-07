@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { AddCircle, RemoveCircle } from '@material-ui/icons';
-import { RblattConfig, INIT_CONFIG } from '../rosenblatt/constants';
+import { INIT_CONFIG } from '../rosenblatt/constants';
 
 import ThresholdFunc from './ThresholdFunc';
 
@@ -75,8 +75,7 @@ export const MPNeuron: React.FC<MPNeuronType> = ({
     const output = func(inputSum);
     onAnsChange(output);
 
-    const makeInput = (inpt: NeuronInput, idx: number, connecting: boolean) => {
-        return (
+    const Input = ({inpt, idx, connecting}) => (
             <div className="flex items-center cursor-pointer">
                 {!connecting && <div className="m-1">
                     <input className="number-input w-20 h-10 border-2 border-pink-700"
@@ -95,13 +94,19 @@ export const MPNeuron: React.FC<MPNeuronType> = ({
                 </div>
             </div>
         );
-    }
 
     return (
         <div className="m-2 flex flex-col items-center justify-center">
             <div className="flex items-center">
                 <div className="flex flex-col">
-                    {inputs.map((val, idx) => makeInput(val, idx, connecting))}
+                    {inputs.map((val, idx) => 
+                    <Input
+                        inpt={val}
+                        idx={idx}
+                        connecting={connecting}
+                        key={idx}
+                    />
+                    )}
                     {addBias && <div className="flex items-center self-end">
                         <p className={labelColor}>bias</p>
                         <div
@@ -160,7 +165,7 @@ export const InputLines = (props: { numInpts: number }) => {
     );
 }
 
-const INPT_CLR = '#b92079';
+// const INPT_CLR = '#b92079';
 const OUTPT_CLR = '#0FD4C0';
 
 export default MPNeuron;

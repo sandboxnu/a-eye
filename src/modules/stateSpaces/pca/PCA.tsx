@@ -98,11 +98,6 @@ export const SelectableAxisChart = (props: { columnSet: string[], initXIdx: numb
         "Titanic Dataset",
     ];
 
-    const columnList = [ 
-        ["petalLength", "petalWidth"], 
-        ["Age", "Fare"],
-    ];
-
     const labelIndices = [
         [4, 5],
         [6, 10],

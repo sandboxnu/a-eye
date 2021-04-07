@@ -110,8 +110,8 @@ function oneDHaarTransform(pixRow: number[]) {
             tempHaar[i] = sum;
             tempHaar[i + halfLen] = diff
     }
-    for (var i = 0; i < pixRow.length; i++) {
-        pixRow[i] = tempHaar[i];
+    for (var j = 0; j < pixRow.length; j++) {
+        pixRow[j] = tempHaar[j];
     }
 };
 

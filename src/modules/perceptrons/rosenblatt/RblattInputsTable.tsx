@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { RblattInput } from './constants';
 
 const RblattInputsTable = (props: { data: RblattInput[], labelColor: string }) => {
@@ -18,7 +18,7 @@ const RblattInputsTable = (props: { data: RblattInput[], labelColor: string }) =
                 <tbody>
                     {props.data.map(([x, y, z], idx) => (
                         <tr key={idx} className="datarow">
-                            <td > {x} </td>
+                            <td> {x} </td>
                             <td> {y} </td>
                             <td> 
                                 <div className={`font-bold text-white ${z ? 'bg-lightNavy' : 'bg-orange-500'}`}>

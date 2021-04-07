@@ -2,10 +2,6 @@ import React from 'react';
 import {InputLines} from '../mpNeuron/MPNeuron';
 import {RblattConfig, RblattInput} from './constants';
 
-// todo: make output colors match orange/blue
-// actually that doesnt work bc the output color changes based on the updated config
-// so you never see any error predictions
-
 type RblattNeuronType = {
     input: RblattInput,
     config: RblattConfig,
@@ -14,7 +10,7 @@ type RblattNeuronType = {
 
 // a static version of the neuron demo, for the Rblatt demo
 const RblattNeuron: React.FC<RblattNeuronType> = ({input, config, labelColor}) => {
-    const [x, y, z] = input;
+    const [x, y] = input;
 
     const inputSum = x * config.weightX + y * config.weightY + config.bias;
     const output = inputSum > 0 ? 1 : 0;

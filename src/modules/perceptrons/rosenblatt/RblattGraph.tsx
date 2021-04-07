@@ -1,16 +1,9 @@
-import React, { useEffect, useState, useCallback, useMemo, useRef } from "react";
-import { findDOMNode } from "react-dom";
-import {
-  RblattInput,
-  RblattConfig,
-  INIT_CONFIG,
-  INIT_INPUTS,
-} from "./constants";
+import React, { useCallback, useMemo, useRef } from "react";
+import { RblattInput } from "./constants";
 
 import { Group } from '@visx/group';
-import { Circle, Line } from '@visx/shape';
+import { Circle } from '@visx/shape';
 import { voronoi } from '@visx/voronoi';
-import { PointsRange, } from '@visx/mock-data/lib/generators/genRandomNormalPoints';
 import { withTooltip, Tooltip } from '@visx/tooltip';
 import { WithTooltipProvidedProps } from '@visx/tooltip/lib/enhancers/withTooltip';
 import { localPoint } from '@visx/event';
@@ -18,30 +11,37 @@ import { GridRows, GridColumns } from '@visx/grid';
 import { scaleLinear } from '@visx/scale';
 import { AxisLeft, AxisBottom } from '@visx/axis';
 
-
+const COL_HOVER = "white";
 const COL_0 = "#f15e2c";
 const COL_1 = "#394d73";
+const background = '#FFC0CB';
 
-export type DotsProps = {
+export type GraphProps = {
   width?: number;
   height?: number;
+  domain?: number,
+  range?: number,
   inputs: any;
   line: any;
   handleClick: any;
   showControls?: boolean;
-  highlighted;
-  editingType;
+  highlighted: RblattInput | undefined;
+  editingType: 0 | 1;
 };
 
-const x = (d: PointsRange) => d[0];
-const y = (d: PointsRange) => d[1];
+const x = (d: RblattInput) => d[0];
+const y = (d: RblattInput) => d[1];
+const color = (d: RblattInput) => d[2] ? COL_1 : COL_0;
+
+const SELECTED_DOT_SIZE = 5;
+const DOT_SIZE = 3;
 
 let tooltipTimeout: number;
 
-const defaultMargin = { top:  0, right: 0, bottom: 0, left: 0 };
+const defaultMargin = { top: 0, right: 0, bottom: 0, left: 0 };
 
-const RblattGraph = withTooltip<DotsProps, PointsRange>(({
-  inputs,
+const RblattGraph = withTooltip<GraphProps, RblattInput>(({
+  inputs: points,
   line,
   highlighted,
   editingType,
@@ -54,42 +54,24 @@ const RblattGraph = withTooltip<DotsProps, PointsRange>(({
   tooltipTop,
   width = 1000,
   height = 1000,
-}: DotsProps & WithTooltipProvidedProps<PointsRange>) => {
-  console.log(line)
+  domain = 10,
+  range = 10,
+}: GraphProps & WithTooltipProvidedProps<RblattInput>) => {
+  // memoized so that it retains the same id while displayed
   const graphId = useMemo(() => `graph-${Math.random()}`, []);
-  const points = inputs
-
   const svgRef = useRef<SVGSVGElement>(null);
-  const xScale = useCallback((a) => (a + 10) * (width / 20), [width]);
-  const yScale = useCallback((a) => 1000 - ((a + 10) * (height / 20)) , [height]);
+  
+  // convert from a value of our point system to one on the graph system
+  const xScale = useCallback((a) => (a + domain) * (width / (2 * domain)), [width, domain]);
+  const yScale = useCallback((a) => height - ((a + range) * (height / (2 * range))), [height, range]);
 
-  const revXScale = useCallback((a) => (a * (20 / width)) - 10, [width]);
-  const revYScale = useCallback((a) => -((a * (20 / height)) - 10) , [height]);
-
-  //////////////////////////////
-  const x_Scale = scaleLinear<number>({
-    domain: [
-      // Math.min(...points.map(x => Math.min(x))),
-      // Math.max(...points.map(y => Math.max(y))),
-      -10,
-      10
-    ],
-    nice: true,
-  });
-
-  const y_Scale = scaleLinear<number>({
-    domain: [
-      // Math.min(...points.map(x => Math.min(x))),
-      // Math.max(...points.map(y => Math.max(y))),
-      -10,
-      10
-    ],
-    nice: true,
-  });
+  // convert from a value on the graph system to one of our point system
+  const revXScale = useCallback((a) => (a * ((2 * domain) / width)) - domain, [width, domain]);
+  const revYScale = useCallback((a) => -((a * ((2 * range) / height)) - range), [height, range]);
 
   const voronoiLayout = useMemo(
     () =>
-      voronoi<PointsRange>({
+      voronoi<RblattInput>({
         x: d => xScale(x(d)) ?? 0,
         y: d => yScale(y(d)) ?? 0,
         width,
@@ -127,32 +109,35 @@ const RblattGraph = withTooltip<DotsProps, PointsRange>(({
   }, [hideTooltip]);
 
   const editGraph = useCallback((e) => {
-    // I'm sure there's a way to do this with a ref as well, but I'm not sure how
+    // TODO: There should be a way to do this with the ref as well
     const elem = document.getElementById(graphId)?.getBoundingClientRect();
-    if(!elem) return;
-    // console.log(e.clientX, e.clientY);
-    // console.log(elem.left, elem.top);
+    if (!elem) return;
     const xClicked = revXScale(e.clientX - elem.left);
     const yClicked = revYScale(e.clientY - elem.top);
-    console.log(e.clientY - elem.top)
     handleClick(xClicked, yClicked, editingType);
   }, [handleClick, revXScale, revYScale, graphId, editingType]);
 
 
-  
   // bounds
+  const x_Scale = scaleLinear<number>({
+    domain: [-domain, domain],
+    nice: true,
+  });
+
+  const y_Scale = scaleLinear<number>({
+    domain: [-range, range],
+    nice: true,
+  });
+
   const xMax = width - defaultMargin.left - defaultMargin.right;
   const yMax = height - defaultMargin.top - defaultMargin.bottom;
 
   x_Scale.range([0, xMax]);
   y_Scale.range([yMax, 0]);
 
-  const background = '#FFC0CB';
-
   return (
     <div>
       <svg width={width} height={height} ref={svgRef}>
-        {/** capture all mouse events with a rect */}
         <rect
           id={graphId}
           width={width}
@@ -165,28 +150,21 @@ const RblattGraph = withTooltip<DotsProps, PointsRange>(({
           onClick={editGraph}
         />
         <Group pointerEvents="none">
-          <GridRows scale={x_Scale} width={xMax} height={yMax}  stroke="#e0e0e0" />
+          <GridRows scale={x_Scale} width={xMax} height={yMax} stroke="#e0e0e0" />
           <GridColumns scale={x_Scale} width={xMax} height={yMax} stroke="#e0e0e0" />
-          {/* <Line fill="#e0e0e0" to /> */}
-          <AxisBottom top={xMax/2} scale={x_Scale} hideZero={true} numTicks={10}/>
-          <AxisLeft left={xMax/2} scale={y_Scale} hideZero={true} numTicks={10} />
-
-          {points.length > 0 && points.map((point, i) => (
+          <AxisBottom top={xMax / 2} scale={x_Scale} hideZero={true} numTicks={domain} />
+          <AxisLeft left={xMax / 2} scale={y_Scale} hideZero={true} numTicks={range} />
+          {points.length > 0 && points.map((point: RblattInput, i: number) => (
             <Circle
               key={`point-${x(point)}-${i}`}
               className="dot"
               cx={xScale(x(point))}
               cy={yScale(y(point))}
-              r={highlighted[0] == point[0] && highlighted[1] == point[1] ? 5 : 3}
-              fill={(() => {
-                if (tooltipData === point) {
-                  return "white"; // hovering over point
-                } else if (point[2] === 1) {
-                  return COL_1;
-                } else if (point[2] === 0) {
-                  return COL_0;
-                }
-              })()}
+              r={highlighted &&
+                 x(highlighted) === x(point) && 
+                 y(highlighted) === y(point) ? 
+                 SELECTED_DOT_SIZE : DOT_SIZE}
+              fill={tooltipData === point ? COL_HOVER : color(point)}
             />
           ))}
         </Group>
@@ -199,7 +177,7 @@ const RblattGraph = withTooltip<DotsProps, PointsRange>(({
           <div>
             <strong>y:</strong> {y(tooltipData).toFixed(2)}
           </div>
-          {points.length == 1 &&
+          {points.length === 1 &&
             <div>
               <strong>Last Point! Can't remove it!</strong>
             </div>

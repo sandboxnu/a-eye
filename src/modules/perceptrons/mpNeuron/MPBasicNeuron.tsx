@@ -1,8 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { AddCircle, RemoveCircle } from '@material-ui/icons';
-import { RblattConfig, INIT_CONFIG } from '../rosenblatt/constants';
+import { INIT_CONFIG } from '../rosenblatt/constants';
 
 import ControlledThresholdFunc from './ControlledThresholdFunc';
+
+// const INPT_CLR = '#b92079';
+const OUTPT_CLR = '#0FD4C0';
 
 export type NeuronInput = {
     val: number | null,
@@ -23,6 +26,8 @@ export type MPBasicNeuronType = {
     setIsGreater,
 }
 
+ type InputType = {inpt: NeuronInput; idx: number; connecting: boolean};
+
 export const MPBasicNeuron: React.FC<MPBasicNeuronType> = ({
     labelColor,
     canAddInputs = true,
@@ -36,7 +41,7 @@ export const MPBasicNeuron: React.FC<MPBasicNeuronType> = ({
     isGreater,
     setIsGreater,
 }) => {
-    const [func, setFunc] = useState(() => ((n: number) => 0));
+    // const [func, setFunc] = useState(() => ((n: number) => 0));
 
     const changeWeight = (e: React.ChangeEvent<HTMLInputElement>, idx: number) => {
         const val = parseFloat(e.target.value);
@@ -62,9 +67,10 @@ export const MPBasicNeuron: React.FC<MPBasicNeuronType> = ({
         }
     }
 
-    const onFuncChange = (func: (n: number) => number) => {
-        setFunc(() => ((n: number) => func(n)));
-    }
+    // const onFuncChange = (func: (n: number) => number) => {
+    //     setFunc(() => ((n: number) => func(n)));
+    // };
+
     const removeInput = () => {
         const newInputs = [...inputs];
         newInputs.pop();
@@ -80,12 +86,20 @@ export const MPBasicNeuron: React.FC<MPBasicNeuronType> = ({
         return (acc.val && acc.weight ? acc.val * acc.weight : 0) + prev
     }, 0) + INIT_CONFIG.bias;
 
+    const func = (n: number) => {
+        if (isGreater) {
+            return n > threshold ? 1 : 0;
+        } else {
+            return n < threshold ? 1 : 0;
+        }
+    };
+
     const output = func(inputSum);
     onAnsChange(output);
 
-    const makeInput = (inpt: NeuronInput, idx: number, connecting: boolean) => {
+    const Input: React.FC<InputType> = ({inpt, idx, connecting}) => {
         return (
-            <div className="flex items-center cursor-pointer">
+            <div className="flex items-center cursor-pointer" key={idx}>
                 {!connecting && <div className="m-1">
                     <input className="number-input w-20 h-10 border-2 border-pink-700"
                         type="number"
@@ -109,7 +123,7 @@ export const MPBasicNeuron: React.FC<MPBasicNeuronType> = ({
         <div className="m-2 flex flex-col items-center justify-center">
             <div className="flex items-center">
                 <div className="flex flex-col">
-                    {inputs.map((val, idx) => makeInput(val, idx, connecting))}
+                    {inputs.map((val, idx) => <Input inpt={val} idx={idx} connecting={connecting}/>)}
                     {addBias && <div className="flex items-center self-end">
                         <p className={labelColor}>bias</p>
                         <div
@@ -134,7 +148,6 @@ export const MPBasicNeuron: React.FC<MPBasicNeuronType> = ({
                     setThreshold={setThreshold}
                     isGreater={isGreater}
                     setIsGreater={setIsGreater}
-                    onFuncChange={onFuncChange} 
                     />
                 <div className="w-16 h-1 bg-navy" />
                 <div
@@ -175,8 +188,5 @@ export const InputLines = (props: { numInpts: number }) => {
     );
 }
 
-
-const INPT_CLR = '#b92079';
-const OUTPT_CLR = '#0FD4C0';
 
 export default MPBasicNeuron;
