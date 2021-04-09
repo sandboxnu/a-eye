@@ -117,9 +117,16 @@ const MLPDemo = (props: { labelColor: string }) => {
     // TODO: This should be set in state rather than calculated on every render
     const correctPointColorInputs: RblattInput[] = inputs.map(([x, y]) => [x, y, calculatePointColor(x, y)]);
 
+    const xthresh = neuronState[0][0].thresholdVal
+    const xweight = neuronState[0][0].weights[0]
+    const xbias = neuronState[0][0].bias
 
-    const lines = [ {x: neuronState[0][0].thresholdVal / neuronState[0][0].weights[0] - neuronState[0][0].bias}
-    , {y: neuronState[0][1].thresholdVal / neuronState[0][1].weights[0] - neuronState[0][1].bias}]
+    const ythresh = neuronState[0][1].thresholdVal
+    const yweight = neuronState[0][1].weights[0]
+    const ybias = neuronState[0][1].bias 
+
+    const lines = [ {x: xthresh / (xweight == 0 ? 1 : xweight) - xbias , 
+                     y: ythresh / (yweight == 0 ? 1 : yweight) - ybias}]
 
     return(
         <div>

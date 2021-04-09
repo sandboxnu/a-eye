@@ -2,7 +2,7 @@ import React, { useCallback, useMemo, useRef } from "react";
 import { RblattInput } from "./constants";
 
 import { Group } from '@visx/group';
-import { Circle, Line } from '@visx/shape';
+import { Circle, Line, Polygon} from '@visx/shape';
 import { voronoi } from '@visx/voronoi';
 import { withTooltip, Tooltip } from '@visx/tooltip';
 import { WithTooltipProvidedProps } from '@visx/tooltip/lib/enhancers/withTooltip';
@@ -23,7 +23,7 @@ export type GraphProps = {
   range?: number,
   inputs: any;
   line: any;
-  lines?: {x?: number | undefined, y?: number | undefined}[],
+  lines?: {x: number, y: number}[],
   handleClick: any;
   showControls?: boolean;
   highlighted: RblattInput | undefined;
@@ -137,6 +137,30 @@ const RblattGraph = withTooltip<GraphProps, RblattInput>(({
   x_Scale.range([0, xMax]);
   y_Scale.range([yMax, 0]);
 
+// const x = d => xScale(getX(d));
+// const y = d => yScale(getY(d));
+
+  // only cares about the first 2 items in the array
+  const BackGroundPoly = (props: {topleft:number[], botright:number[], shading:string}) => {
+
+    const pointsString = `${props.topleft[0]}, ${props.topleft[1]}
+                        ${props.topleft[0]}, ${props.botright[1]}
+                        ${props.botright[0]}, ${props.botright[1]}
+                        ${props.botright[0]}, ${props.topleft[1]}`;
+
+    return(
+      <polygon
+      // className={"fill-opacticy-40"} 
+      fill-opacity="20%" 
+      fill={props.shading}
+      points={pointsString}
+        />
+    )
+  }
+
+  const intersection = lines && [xScale(x([lines[0].x, lines[0].y,0])),yScale(y([lines[0].x, lines[0].y,0]))];
+  console.log(lines)
+  console.log(intersection)
   return (
     <div>
       <svg width={width} height={height} ref={svgRef}>
@@ -152,14 +176,63 @@ const RblattGraph = withTooltip<GraphProps, RblattInput>(({
           onClick={editGraph}
         />
         <Group pointerEvents="none">
-          {lines && lines.map(({x, y}) => (
-            <Line key={`line-${y}-${y}`}
+          {/* {lines && lines.map(({x, y}) => (
+
+
+            <Line //key={`line-${y}-${y}`}
                   // assume that y is defined if x is not
-                  from={x ? {x: xScale(x), y: yScale(-domain)} : {x: xScale(-range), y:yScale(y)}}
-                  to={x ? {x: xScale(x), y: yScale(domain)} : {x: xScale(range), y: yScale(y)}}
+                  // from={x ? {x: xScale(x), y: yScale(-domain)} : {x: xScale(-range), y:yScale(y)}}
+                  // to={x ? {x: xScale(x), y: yScale(domain)} : {x: xScale(range), y: yScale(y)}}
+
+                  from={{x:0,y:0}}
+                  to={{x:5,y:5}}
+                  fill={"#000000"}
             />
           )
-          )}
+          )} */}
+
+          {/* <Polygon
+            sides={4}
+            center= {{x:500, y:400}}
+            children={(args: {points: [[200, 100],[250,190],[160,210]] })}
+
+            
+            size={35}
+            rotate={45}
+            className={"opacity-50"}
+          /> */}
+          { lines && 
+            <>
+              <BackGroundPoly
+                  topleft={[xScale(x([-10,10,0])),yScale(y([-10,10,0]))]}
+                  botright={intersection!}
+                  shading={"blue"}
+              />
+
+              <BackGroundPoly
+                  topleft={[xScale(x([10,10,0])),yScale(y([10,10,0]))]}
+                  botright={intersection!}
+                  shading={"red"}
+              />
+
+              <BackGroundPoly
+                  topleft={[xScale(x([10,-10,0])),yScale(y([10,-10,0]))]}
+                  botright={intersection!}
+                  shading={"orange"}
+              />
+
+              <BackGroundPoly
+                  topleft={[xScale(x([-10,-10,0])),yScale(y([-10,-10,0]))]}
+                  botright={intersection!}
+                  shading={"green"}
+              />  
+            </>  
+          }
+          
+
+
+
+
           <GridRows scale={x_Scale} width={xMax} height={yMax} stroke="#e0e0e0" />
           <GridColumns scale={x_Scale} width={xMax} height={yMax} stroke="#e0e0e0" />
           <AxisBottom top={xMax / 2} scale={x_Scale} hideZero={true} numTicks={domain} />
@@ -177,6 +250,15 @@ const RblattGraph = withTooltip<GraphProps, RblattInput>(({
               fill={tooltipData === point ? COL_HOVER : color(point)}
             />
           ))}
+          <Line //key={`line-${y}-${y}`}
+                  // assume that y is defined if x is not
+                  // from={x ? {x: xScale(x), y: yScale(-domain)} : {x: xScale(-range), y:yScale(y)}}
+                  // to={x ? {x: xScale(x), y: yScale(domain)} : {x: xScale(range), y: yScale(y)}}
+                  className={'reallyweirdclassnamew-5'}
+                  from={{x:0,y:0}}
+                  to={{x:600,y:500}}
+                  fill={"#000000"}
+            />  
         </Group>
       </svg>
       {tooltipOpen && tooltipData && tooltipLeft != null && tooltipTop != null && (

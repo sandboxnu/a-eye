@@ -6,7 +6,7 @@ import { NeuronConfig } from '../mlpDemo/constants';
 type EditingRblattGraphProps = {
     inputs: RblattInput[],
     line?: RblattConfig,
-    lines?: {x?: number | undefined, y?: number | undefined}[],
+    lines?: {x: number, y: number}[],
     highlighted?: RblattInput,
     allowSelectingPointColor?: boolean,
     calculatePointColor?: (x:RblattInput, y:NeuronConfig) => 0 | 1,
