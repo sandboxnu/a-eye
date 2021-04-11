@@ -365,10 +365,9 @@ const HistOfGradDemo: React.FC<HistOfGradDemoType> = ({
         <div className="border-2 border-navy pb-3 my-4">
           <img ref={imgRef} src={imgUrl} alt="image" className="hidden" />
           <div className="text-navy mb-3">
-            <button className={`border-b-2 border-r-2 border-navy w-1/4 ${tab === 0 && 'bg-teal-a-eye'}`} onClick={() => setTab(0)}>1</button>
-            <button className={`border-b-2 border-r-2 border-navy w-1/4 ${tab === 1 && 'bg-teal-a-eye'}`} onClick={() => setTab(1)}>2</button>
-            <button className={`border-b-2 border-r-2 border-navy w-1/4 ${tab === 2 && 'bg-teal-a-eye'}`} onClick={() => setTab(2)}>3</button>
-            <button className={`border-b-2 border-navy w-1/4 ${tab === 3 && 'bg-teal-a-eye'}`} onClick={() => setTab(3)}>4</button>
+            {([1, 2, 3, 4]).map((t, idx) => (
+              <div className={`inline-flex border-b-2 ${idx < 3 && 'border-r-2'} border-navy cursor-pointer w-1/4 ${tab === idx && 'bg-teal-a-eye'}`} onClick={() => setTab(idx)}><p className="mx-auto">{t}</p></div>
+            ))}
           </div>
             {tab === 0 && (gradients && blocks && histogram) && <SobelTab labelColor={labelColor} width={imgWidth} height={imgHeight} gradients={gradients} blocks={blocks} histogram={histogram} /> }
             {tab === 1 && (gradients && blocks && histogram) && <CombinedSobelTab labelColor={labelColor} width={imgWidth} height={imgHeight} gradients={gradients} blocks={blocks} histogram={histogram} /> }
