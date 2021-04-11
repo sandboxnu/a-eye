@@ -28,6 +28,8 @@ const ALL_IMGS: { [name: string]: any } = {
     .default,
   'bwMan.jpg': require('../../../media/modules/computerVision/imageLibrary/bwMan.jpg')
     .default,
+  'stopSign.jpeg': require('../../../media/modules/computerVision/imageLibrary/stopSign.jpeg')
+    .default,
 };
 
 export interface ImageSelectorProps {

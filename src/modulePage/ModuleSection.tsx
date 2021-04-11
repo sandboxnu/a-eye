@@ -92,7 +92,7 @@ function getDemo(comp: string, scheme: ColorScheme) {
       return (
         <ImageSelectableDemo
           Demo={HistOfGradDemo}
-          initImg="purpleFlowers.jpeg"
+          initImg="stopSign.jpeg"
           demoProps={demoArgs}
         />
       );
