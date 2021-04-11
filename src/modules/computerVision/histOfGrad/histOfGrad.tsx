@@ -4,29 +4,35 @@ const { Image } = require('image-js');
 const math = require('mathjs');
 const hog = require('hog-features');
 
-const normal = {
+export const denseConfig = {
   cellSize: 8,
   blockSize: 2,
   blockStride: 1,
   bins: 18,
 };
-const lightSparse = {
-  cellSize: 10,
-  blockSize: 4,
-  blockStride: 2,
-  bins: 9,
-};
-const mediumSparse = {
+export const mediumConfig = {
   cellSize: 12,
   blockSize: 4,
   blockStride: 2,
   bins: 18,
 };
-const options = normal;
+export const sparseConfig = {
+  cellSize: 12,
+  blockSize: 6,
+  blockStride: 3,
+  bins: 18,
+};
+
+export type hogConfig = {
+  cellSize: number;
+  blockSize: number;
+  blockStride: number;
+  bins: number;
+}
 
 export const map = (x: number, min1: number, max1: number, min2: number, max2: number): number => (x - min1) * (max2 - min2) / (max1 - min1) + min2;
 
-export async function histogramAggregate(img: any): Promise<number[]> {
+export async function histogramAggregate(img: any, options: hogConfig): Promise<number[]> {
   return Image.load(img).then((image: any) => {
 
     const descriptor = hog.extractHOG(image, options);
@@ -45,7 +51,7 @@ export type BlocksType = {
   blockMagnitudes: number[][];
 };
 
-export async function histogramBlocks(img: any): Promise<BlocksType> {
+export async function histogramBlocks(img: any, options: hogConfig): Promise<BlocksType> {
   return Image.load(img).then((image: any) => {
     const sparseBlocks = {
       cellSize: 16,

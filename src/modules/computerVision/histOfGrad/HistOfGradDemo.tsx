@@ -2,7 +2,7 @@
 
 var Chart = require('chart.js');
 import React, {useLayoutEffect, useRef, useState} from 'react';
-import {histogramAggregate, histogramBlocks, gradientImages, GradientsType, BlocksType, map} from './histOfGrad';
+import {histogramAggregate, histogramBlocks, gradientImages, GradientsType, BlocksType, map, denseConfig, mediumConfig, sparseConfig, hogConfig} from './histOfGrad';
 import sobelImg from '../../../media/modules/computerVision/sobelOperators.png';
 import needleImg from '../../../media/modules/computerVision/needleExample.png';
 
@@ -11,13 +11,18 @@ type HistOfGradDemoType = {
     imgUrl: string;
 }
 
+type hogConfigType = 'dense' | 'medium' | 'sparse';
+type orientationConfigType = 'all' | 'horizontal' | 'vertical' | 'diagonal';
+
 type HogTabType = {
   labelColor: string;
   width: number;
   height: number;
-  gradients: GradientsType,
-  blocks: BlocksType
-  histogram: number[]
+  gradients: GradientsType;
+  blocks: BlocksType;
+  histogram: number[];
+  setHogConfig: (type: hogConfigType) => void;
+  hogConfig: hogConfigType;
 }
 
 const SobelTab: React.FC<HogTabType> = ({
@@ -25,8 +30,6 @@ const SobelTab: React.FC<HogTabType> = ({
   width,
   height,
   gradients,
-  blocks,
-  histogram
 }) => {
   const canvasX = useRef<HTMLCanvasElement>(null);
   const canvasY = useRef<HTMLCanvasElement>(null);
@@ -73,12 +76,13 @@ const CombinedSobelTab: React.FC<HogTabType> = ({
     height,
     gradients,
     blocks,
-    histogram
+    setHogConfig,
+    hogConfig,
 }) => {
   const canvasX = useRef<HTMLCanvasElement>(null);
   const canvasY = useRef<HTMLCanvasElement>(null);
   const canvasNdlPlt = useRef<HTMLCanvasElement>(null);
-  const [orientation, setOrientation] = useState<'all' | 'horizontal' | 'vertical' | 'diagonal'>('all');
+  const [orientation, setOrientation] = useState<orientationConfigType>('all');
 
   useLayoutEffect(() => {
     const canvasXElem = canvasX.current;
@@ -112,6 +116,11 @@ const CombinedSobelTab: React.FC<HogTabType> = ({
       </div>
       <div className="my-auto mx-3">
         <p className={labelColor}>Needle Plot</p>
+          <div className="axis-selector inline">
+              <button className={hogConfig === 'dense' ? 'selected' : ''} onClick={() => setHogConfig('dense')}>Dense</button>
+              <button className={hogConfig === 'medium' ? 'selected' : ''} onClick={() => setHogConfig('medium')}>Medium</button>
+              <button className={hogConfig === 'sparse' ? 'selected' : ''} onClick={() => setHogConfig('sparse')}>Sparse</button>
+          </div>
         <canvas
             className="crisp-pixels mx-auto"
             ref={canvasNdlPlt}
@@ -136,11 +145,12 @@ const SobelNeedleTab: React.FC<HogTabType> = ({
   height,
   gradients,
   blocks,
-  histogram
+  setHogConfig,
+  hogConfig,
 }) => {
     const canvasV = useRef<HTMLCanvasElement>(null);
     const canvasNdlPlt = useRef<HTMLCanvasElement>(null);
-    const [orientation, setOrientation] = useState<'all' | 'horizontal' | 'vertical' | 'diagonal'>('all');
+    const [orientation, setOrientation] = useState<orientationConfigType>('all');
 
     useLayoutEffect(() => {
         const canvasVElem = canvasV.current;
@@ -166,6 +176,11 @@ const SobelNeedleTab: React.FC<HogTabType> = ({
             </div>
             <div className="my-auto mx-3">
                 <p className={labelColor}>Needle Plot</p>
+                <div className="axis-selector inline">
+                    <button className={hogConfig === 'dense' ? 'selected' : ''} onClick={() => setHogConfig('dense')}>Dense</button>
+                    <button className={hogConfig === 'medium' ? 'selected' : ''} onClick={() => setHogConfig('medium')}>Medium</button>
+                    <button className={hogConfig === 'sparse' ? 'selected' : ''} onClick={() => setHogConfig('sparse')}>Sparse</button>
+                </div>
                 <canvas
                     className="crisp-pixels mx-auto max-w-screen-md"
                     ref={canvasNdlPlt}
@@ -187,13 +202,14 @@ const NeedleHistogramTab: React.FC<HogTabType> = ({
   labelColor,
   width,
   height,
-  gradients,
   blocks,
-  histogram
+  histogram,
+  setHogConfig,
+  hogConfig,
 }) => {
   const canvasHist = useRef<HTMLCanvasElement>(null);
   const canvasNdlPlt = useRef<HTMLCanvasElement>(null);
-  const [orientation, setOrientation] = useState<'all' | 'horizontal' | 'vertical' | 'diagonal'>('all');
+  const [orientation, setOrientation] = useState<orientationConfigType>('all');
 
   useLayoutEffect(() => {
     const canvasHistElem = canvasHist.current;
@@ -201,7 +217,7 @@ const NeedleHistogramTab: React.FC<HogTabType> = ({
     if (!(canvasHistElem && canvasNdlPltElem)) return;
 
     // @ts-ignore
-    displayHistogram(canvasHist.current, histogram);
+    displayHistogram(canvasHist.current, histogram, orientation);
     // @ts-ignore
     displayNeedlePlot(canvasNdlPlt.current, blocks, orientation);
   })
@@ -210,6 +226,11 @@ const NeedleHistogramTab: React.FC<HogTabType> = ({
     <div className="flex justify-evenly">
       <div className="my-auto mx-3">
         <p className={labelColor}>Needle Plot</p>
+          <div className="axis-selector inline">
+              <button className={hogConfig === 'dense' ? 'selected' : ''} onClick={() => setHogConfig('dense')}>Dense</button>
+              <button className={hogConfig === 'medium' ? 'selected' : ''} onClick={() => setHogConfig('medium')}>Medium</button>
+              <button className={hogConfig === 'sparse' ? 'selected' : ''} onClick={() => setHogConfig('sparse')}>Sparse</button>
+          </div>
         <canvas
             className="crisp-pixels mx-auto max-w-screen-md"
             ref={canvasNdlPlt}
@@ -247,7 +268,7 @@ const displayGradients = (cnvX: HTMLCanvasElement, cnvY: HTMLCanvasElement, cnvV
     if (cnvV) createImageBitmap(gradients.v).then((img) => cnvV.getContext('2d')?.drawImage(img, 0, 0, cnvV.width, cnvV.height));
 }
 
-const displayNeedlePlot = (canvasNdlPlt: HTMLCanvasElement, blocks: BlocksType, direction: 'all' | 'horizontal' | 'vertical' | 'diagonal'): void => {
+const displayNeedlePlot = (canvasNdlPlt: HTMLCanvasElement, blocks: BlocksType, orientation: orientationConfigType): void => {
     canvasNdlPlt.getContext('2d')?.fillRect(0, 0, canvasNdlPlt.width, canvasNdlPlt.height);
     const histograms: number[][][] = blocks.histogram;
     const magnitudes: number[][] = blocks.blockMagnitudes;
@@ -260,11 +281,22 @@ const displayNeedlePlot = (canvasNdlPlt: HTMLCanvasElement, blocks: BlocksType, 
             const opacity: number = map(magnitudes[row][col], minV, maxV, 25, 255);
             for (let idx = 0; idx < needles.length; idx++) {
                 const angle: number = (idx) * (180 / needles.length);
-                if (!(((direction === 'all') || (direction === 'horizontal' && (angle + 180) % 180 <= 10) || (direction === 'vertical' && Math.abs(90 - angle) <= 10)) || (direction === 'diagonal' && (Math.abs(45 - angle) <= 15 || Math.abs(135 - angle) <= 15)))) continue;
+                if (!angleInOrientation(orientation, angle)) continue;
                 const lengthPct: number = map(needles[idx], minH, maxH, 0, 1);
                 drawNeedle(canvasNdlPlt, row, col, canvasNdlPlt.width / histograms[0].length, angle, lengthPct, opacity);
             }
         }
+    }
+}
+
+// returns true if the angle is part of the orientation config
+const angleInOrientation = (orientation: orientationConfigType, angleDeg: number): boolean => {
+    switch(orientation) {
+        case "all": return true;
+        case "horizontal": return (angleDeg + 180) % 180 <= 10;
+        case "vertical": return Math.abs(90 - angleDeg) <= 10;
+        case "diagonal": return Math.abs(45 - angleDeg) <= 15 || Math.abs(135 - angleDeg) <= 15;
+        default: return false;
     }
 }
 
@@ -284,17 +316,18 @@ const drawNeedle = (cnv: HTMLCanvasElement, blockRow: number, blockCol: number, 
     ctx.stroke();
 }
 
-const displayHistogram = (cnvHist: HTMLCanvasElement, histogram: number[]): void => {
+const displayHistogram = (cnvHist: HTMLCanvasElement, histogram: number[], orientation: orientationConfigType): void => {
     const bins = histogram.length;
+    const filteredHistogram = histogram.map((h, i) => angleInOrientation(orientation, (i) * (180 / histogram.length)) ? h : 0);
     const labels: string[] = [];
-    for (let i = 0; i <= histogram.length; i++) labels.push(((180 / bins) * i).toString())
+    histogram.forEach((h, i) => labels.push(((180 / bins) * i).toString()));
     const chart =  new Chart(cnvHist?.getContext('2d'), {
         type: 'bar',
         data: {
             labels,
             datasets: [{
                 label: 'Aggregated Histogram',
-                data: histogram,
+                data: filteredHistogram,
                 backgroundColor: 'green',
             }]
         },
@@ -321,6 +354,12 @@ const displayHistogram = (cnvHist: HTMLCanvasElement, histogram: number[]): void
                         labelString: 'Total Magnitude'
                     }
                 }]
+            },
+            legend: {
+                display: false
+            },
+            tooltips: {
+                enabled: false,
             }
         }
     });
@@ -337,21 +376,25 @@ const HistOfGradDemo: React.FC<HistOfGradDemoType> = ({
     const [gradients, setGradients] = useState<GradientsType>();
     const [blocks, setBlocks] = useState<BlocksType>();
     const [histogram, setHistogram] = useState<number[]>();
+    const [hogConfig, setHogConfig] = useState<hogConfigType>('dense');
+    const configs: {[type: string]: hogConfig} = {'dense': denseConfig, 'medium': mediumConfig, 'sparse': sparseConfig};
 
     const img = useRef('');
+    const config = useRef('');
 
     useLayoutEffect(() => {
       // reset to tab 0 when changing images
-      if (img.current !== imgUrl) {
-        setTab(0);
+      if ((img.current !== imgUrl) || (config.current !== hogConfig)) {
+        if (img.current !== imgUrl) setTab(0);
           // calculate HoG features
-          Promise.all([gradientImages(imgUrl), histogramBlocks(imgUrl), histogramAggregate(imgUrl)]).then(features => {
+          Promise.all([gradientImages(imgUrl), histogramBlocks(imgUrl, configs[hogConfig]), histogramAggregate(imgUrl, configs[hogConfig])]).then(features => {
               setGradients(features[0]);
               setBlocks(features[1]);
               setHistogram(features[2]);
           });
       }
       img.current = imgUrl;
+      config.current = hogConfig;
 
       const imgElem = imgRef.current;
       if (!imgElem) return;
@@ -361,6 +404,8 @@ const HistOfGradDemo: React.FC<HistOfGradDemoType> = ({
       };
     })
 
+    const setBlockSparse = (type: hogConfigType): void => setHogConfig(type);
+
     return (
         <div className="border-2 border-navy pb-3 my-4">
           <img ref={imgRef} src={imgUrl} alt="image" className="hidden" />
@@ -369,10 +414,10 @@ const HistOfGradDemo: React.FC<HistOfGradDemoType> = ({
               <div className={`inline-flex border-b-2 ${idx < 3 && 'border-r-2'} border-navy cursor-pointer w-1/4 ${tab === idx && 'bg-teal-a-eye'}`} onClick={() => setTab(idx)}><p className="mx-auto">{t}</p></div>
             ))}
           </div>
-            {tab === 0 && (gradients && blocks && histogram) && <SobelTab labelColor={labelColor} width={imgWidth} height={imgHeight} gradients={gradients} blocks={blocks} histogram={histogram} /> }
-            {tab === 1 && (gradients && blocks && histogram) && <CombinedSobelTab labelColor={labelColor} width={imgWidth} height={imgHeight} gradients={gradients} blocks={blocks} histogram={histogram} /> }
-            {tab === 2 && (gradients && blocks && histogram) && <SobelNeedleTab labelColor={labelColor} width={imgWidth * 1.25} height={imgHeight * 1.25} gradients={gradients} blocks={blocks} histogram={histogram} /> }
-            {tab === 3 && (gradients && blocks && histogram) && <NeedleHistogramTab labelColor={labelColor} width={imgWidth} height={imgHeight} gradients={gradients} blocks={blocks} histogram={histogram} /> }
+            {tab === 0 && (gradients && blocks && histogram) && <SobelTab labelColor={labelColor} width={imgWidth} height={imgHeight} gradients={gradients} blocks={blocks} histogram={histogram} setHogConfig={setHogConfig} hogConfig={hogConfig}/> }
+            {tab === 1 && (gradients && blocks && histogram) && <CombinedSobelTab labelColor={labelColor} width={imgWidth} height={imgHeight} gradients={gradients} blocks={blocks} histogram={histogram} setHogConfig={setHogConfig} hogConfig={hogConfig}/> }
+            {tab === 2 && (gradients && blocks && histogram) && <SobelNeedleTab labelColor={labelColor} width={imgWidth * 1.25} height={imgHeight * 1.25} gradients={gradients} blocks={blocks} histogram={histogram} setHogConfig={setHogConfig} hogConfig={hogConfig}/> }
+            {tab === 3 && (gradients && blocks && histogram) && <NeedleHistogramTab labelColor={labelColor} width={imgWidth} height={imgHeight} gradients={gradients} blocks={blocks} histogram={histogram} setHogConfig={setHogConfig} hogConfig={hogConfig}/> }
         </div>
     );
 }
