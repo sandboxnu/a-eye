@@ -3,14 +3,12 @@
 const { Image } = require('image-js');
 const math = require('mathjs');
 const hog = require('hog-features');
-const flowers = require('../../../media/modules/computerVision/imageLibrary/purpleFlowers.jpeg')
-  .default;
 
 const normal = {
   cellSize: 8,
   blockSize: 2,
   blockStride: 1,
-  bins: 9,
+  bins: 18,
 };
 const lightSparse = {
   cellSize: 10,

@@ -1,5 +1,3 @@
-import './kmeans.css';
-
 import { squaredEuclidean } from 'ml-distance-euclidean';
 
 // types for each of the four datasets

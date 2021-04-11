@@ -78,6 +78,7 @@ const CombinedSobelTab: React.FC<HogTabType> = ({
   const canvasX = useRef<HTMLCanvasElement>(null);
   const canvasY = useRef<HTMLCanvasElement>(null);
   const canvasNdlPlt = useRef<HTMLCanvasElement>(null);
+  const [orientation, setOrientation] = useState<'all' | 'horizontal' | 'vertical' | 'diagonal'>('all');
 
   useLayoutEffect(() => {
     const canvasXElem = canvasX.current;
@@ -86,7 +87,7 @@ const CombinedSobelTab: React.FC<HogTabType> = ({
     if (!(canvasXElem && canvasYElem && canvasNdlPltElem)) return;
 
     // @ts-ignore
-    displayNeedlePlot(canvasNdlPlt.current, blocks);
+    displayNeedlePlot(canvasNdlPlt.current, blocks, orientation);
     // @ts-ignore
     displayGradients(canvasX.current, canvasY.current, null, gradients);
   })
@@ -117,6 +118,13 @@ const CombinedSobelTab: React.FC<HogTabType> = ({
             width={width * 1.5}
             height={height * 1.5}
         />
+        <div className="axis-selector inline">
+            <button className={orientation === 'all' ? 'selected' : ''} onClick={() => setOrientation('all')}>All Orientations</button>
+            <button className={orientation === 'horizontal' ? 'selected' : ''} onClick={() => setOrientation('horizontal')}>Horizontal</button>
+            <button className={orientation === 'vertical' ? 'selected' : ''} onClick={() => setOrientation('vertical')}>Vertical</button>
+            <button className={orientation === 'diagonal' ? 'selected' : ''} onClick={() => setOrientation('diagonal')}>Diagonal</button>
+        </div>
+
       </div>
     </div>
   )
@@ -132,6 +140,7 @@ const SobelNeedleTab: React.FC<HogTabType> = ({
 }) => {
     const canvasV = useRef<HTMLCanvasElement>(null);
     const canvasNdlPlt = useRef<HTMLCanvasElement>(null);
+    const [orientation, setOrientation] = useState<'all' | 'horizontal' | 'vertical' | 'diagonal'>('all');
 
     useLayoutEffect(() => {
         const canvasVElem = canvasV.current;
@@ -139,7 +148,7 @@ const SobelNeedleTab: React.FC<HogTabType> = ({
         if (!(canvasVElem && canvasNdlPltElem)) return;
 
         // @ts-ignore
-        displayNeedlePlot(canvasNdlPlt.current, blocks);
+        displayNeedlePlot(canvasNdlPlt.current, blocks, orientation);
         // @ts-ignore
         displayGradients(null, null, canvasV.current, gradients);
     })
@@ -163,6 +172,12 @@ const SobelNeedleTab: React.FC<HogTabType> = ({
                     width={width}
                     height={height}
                 />
+                <div className="axis-selector inline">
+                    <button className={orientation === 'all' ? 'selected' : ''} onClick={() => setOrientation('all')}>All Orientations</button>
+                    <button className={orientation === 'horizontal' ? 'selected' : ''} onClick={() => setOrientation('horizontal')}>Horizontal</button>
+                    <button className={orientation === 'vertical' ? 'selected' : ''} onClick={() => setOrientation('vertical')}>Vertical</button>
+                    <button className={orientation === 'diagonal' ? 'selected' : ''} onClick={() => setOrientation('diagonal')}>Diagonal</button>
+                </div>
             </div>
         </div>
     )
@@ -178,6 +193,7 @@ const NeedleHistogramTab: React.FC<HogTabType> = ({
 }) => {
   const canvasHist = useRef<HTMLCanvasElement>(null);
   const canvasNdlPlt = useRef<HTMLCanvasElement>(null);
+  const [orientation, setOrientation] = useState<'all' | 'horizontal' | 'vertical' | 'diagonal'>('all');
 
   useLayoutEffect(() => {
     const canvasHistElem = canvasHist.current;
@@ -187,7 +203,7 @@ const NeedleHistogramTab: React.FC<HogTabType> = ({
     // @ts-ignore
     displayHistogram(canvasHist.current, histogram);
     // @ts-ignore
-    displayNeedlePlot(canvasNdlPlt.current, blocks);
+    displayNeedlePlot(canvasNdlPlt.current, blocks, orientation);
   })
   
   return (
@@ -200,6 +216,12 @@ const NeedleHistogramTab: React.FC<HogTabType> = ({
             width={width}
             height={height}
         />
+        <div className="axis-selector inline">
+            <button className={orientation === 'all' ? 'selected' : ''} onClick={() => setOrientation('all')}>All Orientations</button>
+            <button className={orientation === 'horizontal' ? 'selected' : ''} onClick={() => setOrientation('horizontal')}>Horizontal</button>
+            <button className={orientation === 'vertical' ? 'selected' : ''} onClick={() => setOrientation('vertical')}>Vertical</button>
+            <button className={orientation === 'diagonal' ? 'selected' : ''} onClick={() => setOrientation('diagonal')}>Diagonal</button>
+        </div>
       </div>
       <div className="my-auto mx-3">
         <img src={needleImg} alt="img" />
@@ -225,7 +247,7 @@ const displayGradients = (cnvX: HTMLCanvasElement, cnvY: HTMLCanvasElement, cnvV
     if (cnvV) createImageBitmap(gradients.v).then((img) => cnvV.getContext('2d')?.drawImage(img, 0, 0, cnvV.width, cnvV.height));
 }
 
-const displayNeedlePlot = (canvasNdlPlt: HTMLCanvasElement, blocks: BlocksType): void => {
+const displayNeedlePlot = (canvasNdlPlt: HTMLCanvasElement, blocks: BlocksType, direction: 'all' | 'horizontal' | 'vertical' | 'diagonal'): void => {
     canvasNdlPlt.getContext('2d')?.fillRect(0, 0, canvasNdlPlt.width, canvasNdlPlt.height);
     const histograms: number[][][] = blocks.histogram;
     const magnitudes: number[][] = blocks.blockMagnitudes;
@@ -234,11 +256,13 @@ const displayNeedlePlot = (canvasNdlPlt: HTMLCanvasElement, blocks: BlocksType):
     histograms.flat().flat().forEach(h => {if (!isNaN(h)) {maxH = Math.max(maxH, h); minH = Math.min(minH, h);}});
     for (let row = 0; row < histograms.length; row++) {
         for (let col = 0; col < histograms[0].length; col++) {
-            const histogram: number[] = histograms[row][col];
+            const needles: number[] = histograms[row][col];
             const opacity: number = map(magnitudes[row][col], minV, maxV, 25, 255);
-            for (let idx = 0; idx < histogram.length; idx++) {
-                const lengthPct: number = map(histogram[idx], minH, maxH, 0, 1);
-                drawNeedle(canvasNdlPlt, row, col, canvasNdlPlt.width / histograms[0].length, idx * 20, lengthPct, opacity);
+            for (let idx = 0; idx < needles.length; idx++) {
+                const angle: number = (idx) * (180 / needles.length);
+                if (!(((direction === 'all') || (direction === 'horizontal' && (angle + 180) % 180 <= 10) || (direction === 'vertical' && Math.abs(90 - angle) <= 10)) || (direction === 'diagonal' && (Math.abs(45 - angle) <= 15 || Math.abs(135 - angle) <= 15)))) continue;
+                const lengthPct: number = map(needles[idx], minH, maxH, 0, 1);
+                drawNeedle(canvasNdlPlt, row, col, canvasNdlPlt.width / histograms[0].length, angle, lengthPct, opacity);
             }
         }
     }
