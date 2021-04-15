@@ -1,74 +1,113 @@
-import React from 'react';
-import {InputLines} from '../mpNeuron/MPNeuron';
-import {RblattConfig, RblattInput} from './constants';
+import React from "react";
+import { RblattConfig, RblattInput } from "./constants";
+
+export const InputLines = (props: { numInpts: number }) => {
+  const height = 56 * props.numInpts;
+  const centerY = height / 2;
+
+  return (
+    <div>
+      <svg
+        width="125px"
+        height={height}
+        viewBox={`0 0 125 ${height}`}
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        {Array(props.numInpts)
+          .fill(null)
+          .map((_, idx) => (
+            <line
+              key={idx}
+              x1="0"
+              y1={idx * 56 + 28}
+              x2="125"
+              y2={centerY}
+              strokeWidth="4px"
+              stroke="#394D73"
+            />
+          ))}
+      </svg>
+    </div>
+  );
+};
 
 type RblattNeuronType = {
-    input: RblattInput,
-    config: RblattConfig,
-    labelColor: string,
-}
+  input: RblattInput;
+  config: RblattConfig;
+  labelColor: string;
+};
 
 // a static version of the neuron demo, for the Rblatt demo
-const RblattNeuron: React.FC<RblattNeuronType> = ({input, config, labelColor}) => {
-    const [x, y] = input;
+const RblattNeuron: React.FC<RblattNeuronType> = ({
+  input,
+  config,
+  labelColor,
+}) => {
+  const [x, y] = input;
 
-    const inputSum = x * config.weightX + y * config.weightY + config.bias;
-    const output = inputSum > 0 ? 1 : 0;
+  const inputSum = x * config.weightX + y * config.weightY + config.bias;
+  const output = inputSum > 0 ? 1 : 0;
 
-    const makeInput = (val: number, weight: number, label: string) => {
-        return (
-            <div className={`flex items-center ${labelColor}`}>
-                {label}
-                <div
-                    className="text-black font-bold rounded-full w-12 h-12 m-1 border-2 border-pink-700 bg-white
-                                flex items-center justify-center"
-                >
-                    {val.toFixed(1)}
-                </div>
-                <div className="w-2 h-1 bg-navy" />
-                <div className="m-1">
-                    <input className="number-input w-16 border-none bg-pink-700 font-bold text-white py-1"
-                        type="number" readOnly={true}
-                        value={weight.toFixed(1)}
-                    />
-                </div>
-            </div>
-        );
-    }
-
+  const makeInput = (val: number, weight: number, label: string) => {
     return (
-        <div className="flex items-center m-4">
-            <div className="flex flex-col">
-                {makeInput(x, config.weightX, 'x')}
-                {makeInput(y, config.weightY, 'y')}
-                <div className="flex items-center self-end">
-                    <p className={labelColor}>bias</p>
-                    <div
-                        className="font-bold rounded-full w-12 h-12 bg-pink-700 m-1
-                                    flex items-center justify-center text-white"
-                    >
-                        {config.bias.toFixed(1)}
-                    </div>
-                </div>
-            </div>
-            <InputLines numInpts={3} />
-            <div className="rounded-full w-20 h-20 bg-white border-2 border-orange-500 
-                flex items-center justify-center">
-                {inputSum.toFixed(1)}
-            </div>
-            <div className="w-2 h-1 bg-navy" />
-            <div className={`w-20 h-10 rounded-md border-2 border-orange-500 flex items-center justify-center px-2 ${labelColor}`}>
-                {'> 0'}
-            </div>
-            <div className="w-16 h-1 bg-navy" />
-            <div
-                className="rounded-full w-12 h-12 font-bold border-2 border-moduleTeal bg-white 
-                        flex items-center justify-center"
-            >
-                {output}
-            </div>
+      <div className={`flex items-center ${labelColor}`}>
+        {label}
+        <div
+          className="text-black font-bold rounded-full w-12 h-12 m-1 border-2 border-pink-700 bg-white
+                                flex items-center justify-center"
+        >
+          {val.toFixed(1)}
         </div>
+        <div className="w-2 h-1 bg-navy" />
+        <div className="m-1">
+          <input
+            className="number-input w-16 border-none bg-pink-700 font-bold text-white py-1"
+            type="number"
+            readOnly={true}
+            value={weight.toFixed(1)}
+          />
+        </div>
+      </div>
     );
-}
+  };
+
+  return (
+    <div className="flex items-center m-4">
+      <div className="flex flex-col">
+        {makeInput(x, config.weightX, "x")}
+        {makeInput(y, config.weightY, "y")}
+        <div className="flex items-center self-end">
+          <p className={labelColor}>bias</p>
+          <div
+            className="font-bold rounded-full w-12 h-12 bg-pink-700 m-1
+                                    flex items-center justify-center text-white"
+          >
+            {config.bias.toFixed(1)}
+          </div>
+        </div>
+      </div>
+      <InputLines numInpts={3} />
+      <div
+        className="rounded-full w-20 h-20 bg-white border-2 border-orange-500
+                flex items-center justify-center"
+      >
+        {inputSum.toFixed(1)}
+      </div>
+      <div className="w-2 h-1 bg-navy" />
+      <div
+        className={`w-20 h-10 rounded-md border-2 border-orange-500 flex items-center justify-center px-2 ${labelColor}`}
+      >
+        {"> 0"}
+      </div>
+      <div className="w-16 h-1 bg-navy" />
+      <div
+        className="rounded-full w-12 h-12 font-bold border-2 border-moduleTeal bg-white
+                        flex items-center justify-center"
+      >
+        {output}
+      </div>
+    </div>
+  );
+};
 
 export default RblattNeuron;

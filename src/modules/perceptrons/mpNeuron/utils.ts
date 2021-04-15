@@ -13,4 +13,10 @@ const calculateThreshold = (
   }
 };
 
-export { zip, calculateThreshold };
+const calculateInputSum = (inputs, weights, bias) =>
+  zip(inputs, weights).reduce(
+    (prev, [input, weight]) => (input && weight ? input * weight : 0) + prev,
+    bias
+  );
+
+export { zip, calculateThreshold, calculateInputSum };
