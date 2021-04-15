@@ -2,6 +2,7 @@ import React, { useState, useMemo, useCallback } from "react";
 import MPBasicNeuron, { NeuronInput } from "../mpNeuron/MPBasicNeuron";
 import MPLayerNeuron from "../mpNeuron/MPLayerNeuron";
 
+import { zip, calculateThreshold } from "../mpNeuron/utils";
 import { INIT_CONFIG } from "../rosenblatt/constants";
 
 const defaultInput = [{ val: 1, weight: 10 }];
@@ -10,25 +11,46 @@ const defaultWeights = [10, 10];
 const defaultThreshold = 0;
 const NUM_NEURONS_FIRST_LAYER = 2;
 
-const resetWeights = (inputObj, newWeight: number) =>
-  inputObj.map(({ val, weight }) => ({ val, weight: newWeight }));
+type NeuronLayer = {
+  inputs: number[];
+  weights: number[];
+  threshold: number;
+  isGreater: boolean;
+  bias?: number;
+};
 
 const applyThreshold = (n: number, threshold: number, isGreater: boolean) =>
   isGreater ? (n > threshold ? 1 : 0) : n < threshold ? 1 : 0;
 
-const getInputSum = ({ inputs }) =>
-  inputs.reduce(
-    (prev, acc) => (acc.val && acc.weight ? acc.val * acc.weight : 0) + prev,
+const getInputSum = ({ inputs, weights, bias }: NeuronLayer) =>
+  zip(inputs, weights).reduce(
+    (prev, [input, weight]) => (input && weight ? input * weight : 0) + prev,
     0
-  ) + INIT_CONFIG.bias;
+  ) + (bias ? bias : INIT_CONFIG.bias);
 
-const getOutputs = (nstate, layer) => nstate.map(({ output }) => output);
+const getOutputs = (nlayer) => nlayer.map(({ output }) => output);
 
-const getInitialInputs = (num) =>
-  Array(num).fill({ inputs: defaultInput, threshold: 0, isGreater: true });
+const getInitialInputs = (num): NeuronLayer[][] => [
+  Array(num).fill({
+    inputs: [1],
+    weights: [10],
+    threshold: 0,
+    isGreater: true,
+    bias: 10,
+  }),
+  [
+    {
+      inputs: [],
+      weights: initialWeights,
+      threshold: 0,
+      isGreater: true,
+      bias: INIT_CONFIG.bias,
+    },
+  ],
+];
 
-const getOutput = ({ inputs, threshold, isGreater }) =>
-  applyThreshold(getInputSum({ inputs }), threshold, isGreater);
+const getOutput = (neuron) =>
+  applyThreshold(getInputSum(neuron), neuron.threshold, neuron.isGreater);
 
 const MLPNeuron = (props: { labelColor: string }) => {
   const [neuronState, setNeuronState] = useState(
@@ -36,33 +58,57 @@ const MLPNeuron = (props: { labelColor: string }) => {
   );
 
   const setAttr = useCallback(
-    (neuronNum, attr, value) =>
+    (neuronLayerNum, neuronNum, attr, value) =>
       setNeuronState((neuronState) =>
-        neuronState.map((neuronValues, i) =>
-          neuronNum === i ? { ...neuronValues, [attr]: value } : neuronValues
+        neuronState.map((neuronLayer, i) =>
+          neuronLayer.map((neuronValues, j) =>
+            neuronLayerNum === i && neuronNum === j
+              ? {
+                  ...neuronValues,
+                  [attr]:
+                    typeof value === "function"
+                      ? value(neuronValues[attr])
+                      : value,
+                }
+              : neuronValues
+          )
         )
       ),
     [setNeuronState]
   );
 
-  const [thresholdLayer, setThresholdLayer] = useState(0);
-  const [isGreaterLayer, setIsGreaterLayer] = useState(true);
-  const [weights, setWeights] = useState<number[]>(initialWeights);
-  const [bias, setBias] = useState(10);
+  const setBias = (val) => setAttr(1, 0, "bias", val);
 
-  const finalNeuronState = neuronState.map((neuron) => ({
-    ...neuron,
-    inputSum: getInputSum(neuron),
-    output: getOutput(neuron),
-  }));
+  console.log(neuronState);
+
+  const finalNeuronState = (() => {
+    let lastLayer;
+    return neuronState.map((neuronLayer, layerNum) => {
+      const res = neuronLayer.map((neuron) => {
+        const finalNeuron =
+          layerNum === 0
+            ? neuron
+            : {
+                ...neuron,
+                inputs: getOutputs(lastLayer),
+              };
+        return {
+          ...finalNeuron,
+          inputSum: getInputSum(neuron),
+          output: getOutput(neuron),
+        };
+      });
+      lastLayer = res;
+      return res;
+    });
+  })();
 
   console.log(finalNeuronState);
 
-  const resetDemo = useCallback(() => {
-    setNeuronState(() => getInitialInputs(NUM_NEURONS_FIRST_LAYER));
-    setThresholdLayer(defaultThreshold);
-    setIsGreaterLayer(true);
-  }, [setNeuronState, setThresholdLayer, setIsGreaterLayer]);
+  const resetDemo = useCallback(
+    () => setNeuronState(() => getInitialInputs(NUM_NEURONS_FIRST_LAYER)),
+    [setNeuronState]
+  );
 
   const setAnd = useCallback(() => {
     resetDemo();
@@ -77,39 +123,42 @@ const MLPNeuron = (props: { labelColor: string }) => {
   return (
     <div>
       <div className="m-2 flex items-center">
-        <div>
-          {finalNeuronState.map(
-            ({ inputs, threshold, isGreater, inputSum, output }, i) => (
-              <MPBasicNeuron
-                labelColor={props.labelColor}
-                canAddInputs={false}
-                addBias={true}
-                threshold={threshold}
-                setThreshold={(th) => setAttr(i, "threshold", th)}
-                isGreater={isGreater}
-                setIsGreater={(ig) => setAttr(i, "isGreater", ig)}
-                inputs={inputs}
-                setInputs={(ip) => setAttr(i, "inputs", ip)}
-                inputSum={inputSum}
-                output={output}
-              />
-            )
-          )}
-        </div>
-        <div>
-          <MPLayerNeuron
-            threshold={thresholdLayer}
-            setThreshold={setThresholdLayer}
-            isGreater={isGreaterLayer}
-            setIsGreater={setIsGreaterLayer}
-            labelColor={props.labelColor}
-            addBias={true}
-            inputs={getOutputs(finalNeuronState, 1)}
-            weights={weights}
-            setWeights={setWeights}
-            bias={bias}
-          />
-        </div>
+        {finalNeuronState.map((neuronLayer, i) => (
+          <div key={`neuronLayer-${i}`}>
+            {neuronLayer.map(
+              (
+                {
+                  inputs,
+                  weights,
+                  threshold,
+                  isGreater,
+                  inputSum,
+                  output,
+                  bias,
+                },
+                j
+              ) => (
+                <MPBasicNeuron
+                  key={`neuron-${i}-${j}`}
+                  labelColor={props.labelColor}
+                  canAddInputs={false}
+                  hideInputs={i !== 0}
+                  weights={weights}
+                  setWeights={(we) => setAttr(i, j, "weights", we)}
+                  threshold={threshold}
+                  setThreshold={(th) => setAttr(i, j, "threshold", th)}
+                  isGreater={isGreater}
+                  setIsGreater={(ig) => setAttr(i, j, "isGreater", ig)}
+                  inputs={inputs}
+                  setInputs={(ip) => setAttr(i, j, "inputs", ip)}
+                  inputSum={inputSum}
+                  output={output}
+                  bias={bias}
+                />
+              )
+            )}
+          </div>
+        ))}
       </div>
       <div>
         <button className="bg-white" onClick={setAnd}>
