@@ -1,6 +1,8 @@
 import React, { useCallback, useMemo, useRef } from "react";
 import { RblattInput } from "./constants";
 
+import { zip } from "../mpNeuron/utils";
+
 import { Group } from "@visx/group";
 import { Circle } from "@visx/shape";
 import { voronoi } from "@visx/voronoi";
@@ -12,8 +14,11 @@ import { scaleLinear } from "@visx/scale";
 import { AxisLeft, AxisBottom } from "@visx/axis";
 
 const COL_HOVER = "white";
-const COL_0 = "#f15e2c";
-const COL_1 = "#394d73";
+const COLORS = {
+  0: "#f15e2c",
+  1: "#394d73",
+};
+
 const background = "#FFC0CB";
 
 export type GraphProps = {
@@ -28,11 +33,12 @@ export type GraphProps = {
   showControls?: boolean;
   highlighted: RblattInput | undefined;
   editingType: 0 | 1;
+  squareColors?: (0 | 1)[];
 };
 
 const x = (d: RblattInput) => d[0];
 const y = (d: RblattInput) => d[1];
-const color = (d: RblattInput) => (d[2] ? COL_1 : COL_0);
+const color = (d: RblattInput) => COLORS[d[2]];
 
 const SELECTED_DOT_SIZE = 5;
 const DOT_SIZE = 3;
@@ -40,6 +46,30 @@ const DOT_SIZE = 3;
 let tooltipTimeout: number;
 
 const defaultMargin = { top: 0, right: 0, bottom: 0, left: 0 };
+
+// only cares about the first 2 items in the array
+const BackgroundPoly = ({
+  topLeft,
+  botRight,
+  shading,
+}: {
+  topLeft: number[];
+  botRight: number[];
+  shading: 0 | 1;
+}) => {
+  const backgroundColor = COLORS[shading];
+  const topRight = [topLeft[0], botRight[1]];
+  const botLeft = [botRight[0], topLeft[1]];
+  const points = [topLeft, topRight, botRight, botLeft];
+
+  return (
+    <polygon
+      fillOpacity="20%"
+      fill={backgroundColor}
+      points={points.join(" ")}
+    />
+  );
+};
 
 const RblattGraph = withTooltip<GraphProps, RblattInput>(
   ({
@@ -59,8 +89,8 @@ const RblattGraph = withTooltip<GraphProps, RblattInput>(
     height = 1000,
     domain = 10,
     range = 10,
+    squareColors,
   }: GraphProps & WithTooltipProvidedProps<RblattInput>) => {
-    // memoized so that it retains the same id while displayed
     const graphId = useMemo(() => `graph-${Math.random()}`, []);
     const svgRef = useRef<SVGSVGElement>(null);
 
@@ -84,15 +114,19 @@ const RblattGraph = withTooltip<GraphProps, RblattInput>(
       [height, range]
     );
 
+    //
+    const scaleX = useCallback((pt) => xScale(x(pt)), [xScale]);
+    const scaleY = useCallback((pt) => yScale(y(pt)), [yScale]);
+
     const voronoiLayout = useMemo(
       () =>
         voronoi<RblattInput>({
-          x: (d) => xScale(x(d)) ?? 0,
-          y: (d) => yScale(y(d)) ?? 0,
+          x: (d) => scaleX(d) ?? 0,
+          y: (d) => scaleY(d) ?? 0,
           width,
           height,
         })(points),
-      [width, height, xScale, yScale, points]
+      [width, height, points, scaleX, scaleY]
     );
 
     // event handlers
@@ -108,13 +142,13 @@ const RblattGraph = withTooltip<GraphProps, RblattInput>(
         const closest = voronoiLayout.find(point.x, point.y, neighborRadius);
         if (closest) {
           showTooltip({
-            tooltipLeft: xScale(x(closest.data)),
-            tooltipTop: yScale(y(closest.data)),
+            tooltipLeft: scaleX(closest.data),
+            tooltipTop: scaleY(closest.data),
             tooltipData: closest.data,
           });
         }
       },
-      [xScale, yScale, showTooltip, voronoiLayout]
+      [scaleX, scaleY, showTooltip, voronoiLayout]
     );
 
     const handleMouseLeave = useCallback(() => {
@@ -152,34 +186,17 @@ const RblattGraph = withTooltip<GraphProps, RblattInput>(
     x_Scale.range([0, xMax]);
     y_Scale.range([yMax, 0]);
 
-    // const x = d => xScale(getX(d));
-    // const y = d => yScale(getY(d));
+    const convertPoint = ({ x: xc, y: yc }) => [xScale(xc), yScale(yc)];
 
-    // only cares about the first 2 items in the array
-    const BackGroundPoly = (props: {
-      topleft: number[];
-      botright: number[];
-      shading: string;
-    }) => {
-      const pointsString = `${props.topleft[0]}, ${props.topleft[1]}
-                        ${props.topleft[0]}, ${props.botright[1]}
-                        ${props.botright[0]}, ${props.botright[1]}
-                        ${props.botright[0]}, ${props.topleft[1]}`;
+    const intersection = lines && convertPoint(lines[0]);
 
-      return (
-        <polygon
-          // className={"fill-opacticy-40"}
-          fillOpacity="20%"
-          fill={props.shading}
-          points={pointsString}
-        />
-      );
-    };
-
-    const intersection = lines && [
-      xScale(x([lines[0].x, lines[0].y, 0])),
-      yScale(y([lines[0].x, lines[0].y, 0])),
+    const permuteDimensions = (x) => [
+      [-x, x],
+      [x, x],
+      [x, -x],
+      [-x, -x],
     ];
+
     return (
       <div>
         <svg width={width} height={height} ref={svgRef}>
@@ -195,34 +212,18 @@ const RblattGraph = withTooltip<GraphProps, RblattInput>(
             onClick={editGraph}
           />
           <Group pointerEvents="none">
-            {lines && (
-              <>
-                <BackGroundPoly
-                  topleft={[xScale(x([-10, 10, 0])), yScale(y([-10, 10, 0]))]}
-                  botright={intersection!}
-                  shading={"blue"}
+            {lines &&
+              squareColors &&
+              zip(
+                permuteDimensions(10),
+                squareColors
+              ).map(([[i, j], curColor]) => (
+                <BackgroundPoly
+                  topLeft={[xScale(i), yScale(j)]}
+                  botRight={intersection!}
+                  shading={curColor}
                 />
-
-                <BackGroundPoly
-                  topleft={[xScale(x([10, 10, 0])), yScale(y([10, 10, 0]))]}
-                  botright={intersection!}
-                  shading={"red"}
-                />
-
-                <BackGroundPoly
-                  topleft={[xScale(x([10, -10, 0])), yScale(y([10, -10, 0]))]}
-                  botright={intersection!}
-                  shading={"orange"}
-                />
-
-                <BackGroundPoly
-                  topleft={[xScale(x([-10, -10, 0])), yScale(y([-10, -10, 0]))]}
-                  botright={intersection!}
-                  shading={"green"}
-                />
-              </>
-            )}
-
+              ))}
             <GridRows
               scale={x_Scale}
               width={xMax}
@@ -252,8 +253,8 @@ const RblattGraph = withTooltip<GraphProps, RblattInput>(
                 <Circle
                   key={`point-${x(point)}-${i}`}
                   className="dot"
-                  cx={xScale(x(point))}
-                  cy={yScale(y(point))}
+                  cx={scaleX(point)}
+                  cy={scaleY(point)}
                   r={
                     highlighted &&
                     x(highlighted) === x(point) &&

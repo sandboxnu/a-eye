@@ -11,6 +11,7 @@ type EditingRblattGraphProps = {
   allowSelectingPointColor?: boolean;
   calculatePointColor?: (x: RblattInput, y: NeuronConfig) => 0 | 1;
   handleClick?: any;
+  squareColors?: (0 | 1)[];
 };
 
 const EditingRblattGraph: React.FC<EditingRblattGraphProps> = ({
@@ -20,6 +21,7 @@ const EditingRblattGraph: React.FC<EditingRblattGraphProps> = ({
   highlighted = undefined,
   allowSelectingPointColor = true,
   handleClick,
+  squareColors,
 }) => {
   const [editingType, setEditingType] = useState<1 | 0>(0);
 
@@ -32,6 +34,7 @@ const EditingRblattGraph: React.FC<EditingRblattGraphProps> = ({
         highlighted={highlighted}
         editingType={editingType}
         handleClick={handleClick}
+        squareColors={squareColors}
       />
       <div className="flex items-center justify-center">
         {allowSelectingPointColor && (

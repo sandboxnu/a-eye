@@ -85,6 +85,20 @@ const MLPDemo = (props: { labelColor: string }) => {
     ];
   })();
 
+  const squareColors = (() => {
+    const { x, y } = lines[0];
+    return [
+      // top left
+      calculatePointColor(x - 1, y + 1),
+      // top right
+      calculatePointColor(x + 1, y + 1),
+      // bottom right
+      calculatePointColor(x + 1, y - 1),
+      // bottom left
+      calculatePointColor(x - 1, y - 1),
+    ];
+  })();
+
   return (
     <div>
       <MLPGraphNetwork
@@ -100,6 +114,7 @@ const MLPDemo = (props: { labelColor: string }) => {
         allowSelectingPointColor={false}
         handleClick={handleClick}
         lines={lines}
+        squareColors={squareColors}
       />
       <button className="basic-button" onClick={goPrev} disabled={false}>
         Previous Step
