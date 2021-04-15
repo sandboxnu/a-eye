@@ -19,7 +19,7 @@ export type MPBasicNeuronType = {
   canAddInputs?: boolean;
   hideInputs?: boolean;
   inputs: number[];
-  setInputs;
+  setInputs?: any;
   weights: number[];
   setWeights;
   connecting?: boolean;
@@ -28,13 +28,11 @@ export type MPBasicNeuronType = {
   isGreater;
   setIsGreater;
   showInput?: boolean;
-  inputSum: number;
+  inputSum?: number;
   output: number;
   bias?: number;
   canChangeInputs?: boolean;
 };
-
-type InputType = { inpt: NeuronInput; idx: number; connecting: boolean };
 
 export const MPBasicNeuron: React.FC<MPBasicNeuronType> = ({
   labelColor,
@@ -43,14 +41,14 @@ export const MPBasicNeuron: React.FC<MPBasicNeuronType> = ({
   hideInputs = false,
   canChangeInputs = true,
   inputs,
-  setInputs,
+  setInputs = () => {},
   weights,
   setWeights,
   threshold,
   setThreshold,
   isGreater,
   setIsGreater,
-  inputSum,
+  inputSum = undefined,
   output,
   bias,
 }) => {
@@ -68,6 +66,12 @@ export const MPBasicNeuron: React.FC<MPBasicNeuronType> = ({
     },
     [inputs, setInputs]
   );
+
+  const finalInputSum = inputSum
+    ? inputSum
+    : zip(inputs, weights).reduce((prev, acc) => {
+        return (acc[0] && acc[1] ? acc[0] * acc[1] : 0) + prev;
+      }, 0) + (bias ? bias : 0);
 
   const changeWeight = (e, idx) => {
     const val = parseFloat(e.target.value);
@@ -155,12 +159,14 @@ export const MPBasicNeuron: React.FC<MPBasicNeuronType> = ({
           numInpts={(bias ? 1 : 0) + inputs.length}
           transformY={hideInputs ? 2 : 1}
         />
-        <div
-          className="rounded-full w-20 h-20 bg-brightOrange
+        {finalInputSum && (
+          <div
+            className="rounded-full w-20 h-20 bg-brightOrange
                 flex items-center justify-center"
-        >
-          {inputSum}
-        </div>
+          >
+            {finalInputSum.toFixed(2)}
+          </div>
+        )}
         <div className="w-2 h-1 bg-navy" />
         <ControlledThresholdFunc
           threshold={threshold}

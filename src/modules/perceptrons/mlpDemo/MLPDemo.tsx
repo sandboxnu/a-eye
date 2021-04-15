@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from "react";
-import MLPGraphNeuron from "../mlpNeuron/MLPGraphNeuron";
+import MLPGraphNetwork from "../mlpNeuron/MLPGraphNetwork";
 import { RblattInput, INIT_INPUTS } from "../rosenblatt/constants";
 import EditingRblattGraph from "../rosenblatt/EditingRblattGraph";
 
@@ -15,6 +15,7 @@ const getLastValue = (arr: any[]) => {
   return a;
 };
 
+// Remove the first element for which the predicate holds true.
 const removeFirst = (arr: any[], cond): [any[], any] =>
   arr.reduce(
     ([rst, foundElem], elem) =>
@@ -74,7 +75,7 @@ const MLPDemo = (props: { labelColor: string }) => {
 
   // reset neuron to default state
   const resetNeuronState = useCallback(() => {
-    setNeuronState((_) => [...neuronInputConfig]);
+    setNeuronState((_) => neuronInputConfig);
   }, [setNeuronState]);
 
   // go to the previous iteration of the graph
@@ -98,23 +99,16 @@ const MLPDemo = (props: { labelColor: string }) => {
   const handleClick = useCallback(
     (clickedX, clickedY) => {
       setInputs((inp) => {
-        const BOUND = 0.025;
+        const BOUND = 0.05;
 
-        let newInputs = inp.filter(([x, y]) => {
-          return !(
+        let [newInputs] = removeFirst(inp, ([x, y]) => {
+          return (
             clickedX - BOUND <= x &&
             x <= clickedX + BOUND &&
             clickedY - BOUND <= y &&
             y <= clickedY + BOUND
           );
         });
-        // if you are accidentally removing two points at once and want to only remove one, use this
-
-        // let [newInputs] = removeFirst(inp, ([x, y]) =>  {
-        //     return !(clickedX - BOUND <= x &&
-        //     x <= clickedX + BOUND &&
-        //     clickedY - BOUND <= y &&
-        //     y <= clickedY + BOUND)  })
 
         // If the length changed, then we removed one, so we didn't add one! Otherwise, we know we added one.
         if (newInputs.length === 0) return inp;
@@ -128,9 +122,6 @@ const MLPDemo = (props: { labelColor: string }) => {
     [setInputs, calculatePointColor]
   );
 
-  const formattedInputs: RblattInput = inputs[currPoint];
-  const outputs = getNeuronOutputs(formattedInputs);
-
   // TODO: This should be set in state rather than calculated on every render
   const correctPointColorInputs: RblattInput[] = inputs.map(([x, y]) => [
     x,
@@ -138,29 +129,30 @@ const MLPDemo = (props: { labelColor: string }) => {
     calculatePointColor(x, y),
   ]);
 
-  const xthresh = neuronState[0][0].thresholdVal;
-  const xweight = neuronState[0][0].weights[0];
-  const xbias = neuronState[0][0].bias;
+  const lines = (() => {
+    const getCoord = ({ thresholdVal, weights, bias }) => {
+      const weight = weights[0];
+      return thresholdVal / (weight === 0 ? 1 : weight) - bias;
+    };
 
-  const ythresh = neuronState[0][1].thresholdVal;
-  const yweight = neuronState[0][1].weights[0];
-  const ybias = neuronState[0][1].bias;
+    return [
+      {
+        x: getCoord(neuronState[0][0]),
+        y: getCoord(neuronState[0][1]),
+      },
+    ];
+  })();
 
-  const lines = [
-    {
-      x: xthresh / (xweight === 0 ? 1 : xweight) - xbias,
-      y: ythresh / (yweight === 0 ? 1 : yweight) - ybias,
-    },
-  ];
+  console.log("neuron state for demo 3", neuronState);
 
   return (
     <div>
-      <MLPGraphNeuron
+      <MLPGraphNetwork
         labelColor={props.labelColor}
         neuronState={neuronState}
         changeNeuronValue={changeNeuronValue}
         resetNeuronState={resetNeuronState}
-        intermediateValues={outputs}
+        intermediateValues={getNeuronOutputs(inputs[currPoint])}
       />
       <EditingRblattGraph
         inputs={correctPointColorInputs}

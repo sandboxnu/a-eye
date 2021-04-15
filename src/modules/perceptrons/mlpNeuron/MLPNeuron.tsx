@@ -1,14 +1,13 @@
 import React, { useState, useMemo, useCallback } from "react";
 import MPBasicNeuron, { NeuronInput } from "../mpNeuron/MPBasicNeuron";
-import MPLayerNeuron from "../mpNeuron/MPLayerNeuron";
 
 import { zip, calculateThreshold } from "../mpNeuron/utils";
 import { INIT_CONFIG } from "../rosenblatt/constants";
 
-const defaultInput = [{ val: 1, weight: 10 }];
-const initialWeights = [-0.5, 1];
-const defaultWeights = [10, 10];
-const defaultThreshold = 0;
+const DEFAULT_INPUT = [1];
+const DEFAULT_WEIGHT = [10];
+const DEFAULT_WEIGHTS_2 = [-0.5, 1];
+const DEFAULT_THRESHOLD = 0;
 const NUM_NEURONS_FIRST_LAYER = 2;
 
 type NeuronLayer = {
@@ -32,8 +31,8 @@ const getOutputs = (nlayer) => nlayer.map(({ output }) => output);
 
 const getInitialInputs = (num): NeuronLayer[][] => [
   Array(num).fill({
-    inputs: [1],
-    weights: [10],
+    inputs: DEFAULT_INPUT,
+    weights: DEFAULT_WEIGHT,
     threshold: 0,
     isGreater: true,
     bias: 10,
@@ -41,8 +40,8 @@ const getInitialInputs = (num): NeuronLayer[][] => [
   [
     {
       inputs: [],
-      weights: initialWeights,
-      threshold: 0,
+      weights: DEFAULT_WEIGHTS_2,
+      threshold: DEFAULT_THRESHOLD,
       isGreater: true,
       bias: INIT_CONFIG.bias,
     },
@@ -77,10 +76,6 @@ const MLPNeuron = (props: { labelColor: string }) => {
     [setNeuronState]
   );
 
-  const setBias = (val) => setAttr(1, 0, "bias", val);
-
-  console.log(neuronState);
-
   const finalNeuronState = (() => {
     let lastLayer;
     return neuronState.map((neuronLayer, layerNum) => {
@@ -103,12 +98,10 @@ const MLPNeuron = (props: { labelColor: string }) => {
     });
   })();
 
-  console.log(finalNeuronState);
+  const resetDemo = () =>
+    setNeuronState(() => getInitialInputs(NUM_NEURONS_FIRST_LAYER));
 
-  const resetDemo = useCallback(
-    () => setNeuronState(() => getInitialInputs(NUM_NEURONS_FIRST_LAYER)),
-    [setNeuronState]
-  );
+  const setBias = (val) => setAttr(1, 0, "bias", val);
 
   const setAnd = useCallback(() => {
     resetDemo();
@@ -123,40 +116,25 @@ const MLPNeuron = (props: { labelColor: string }) => {
   return (
     <div>
       <div className="m-2 flex items-center">
-        {finalNeuronState.map((neuronLayer, i) => (
-          <div key={`neuronLayer-${i}`}>
-            {neuronLayer.map(
-              (
-                {
-                  inputs,
-                  weights,
-                  threshold,
-                  isGreater,
-                  inputSum,
-                  output,
-                  bias,
-                },
-                j
-              ) => (
-                <MPBasicNeuron
-                  key={`neuron-${i}-${j}`}
-                  labelColor={props.labelColor}
-                  canAddInputs={false}
-                  hideInputs={i !== 0}
-                  weights={weights}
-                  setWeights={(we) => setAttr(i, j, "weights", we)}
-                  threshold={threshold}
-                  setThreshold={(th) => setAttr(i, j, "threshold", th)}
-                  isGreater={isGreater}
-                  setIsGreater={(ig) => setAttr(i, j, "isGreater", ig)}
-                  inputs={inputs}
-                  setInputs={(ip) => setAttr(i, j, "inputs", ip)}
-                  inputSum={inputSum}
-                  output={output}
-                  bias={bias}
-                />
-              )
-            )}
+        {finalNeuronState.map((neuronLayer, layerNum) => (
+          <div key={`neuronLayer-${layerNum}`}>
+            {neuronLayer.map((neuron, neuronNum) => (
+              <MPBasicNeuron
+                {...neuron}
+                key={`neuron-${layerNum}-${neuronNum}`}
+                labelColor={props.labelColor}
+                canAddInputs={false}
+                hideInputs={layerNum !== 0}
+                setWeights={(we) => setAttr(layerNum, neuronNum, "weights", we)}
+                setThreshold={(th) =>
+                  setAttr(layerNum, neuronNum, "threshold", th)
+                }
+                setIsGreater={(ig) =>
+                  setAttr(layerNum, neuronNum, "isGreater", ig)
+                }
+                setInputs={(ip) => setAttr(layerNum, neuronNum, "inputs", ip)}
+              />
+            ))}
           </div>
         ))}
       </div>
