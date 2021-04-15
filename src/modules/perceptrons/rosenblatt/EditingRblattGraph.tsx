@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import RblattGraph from "./RblattGraph";
 import { RblattInput, RblattConfig } from "./constants";
-import { NeuronConfig } from "../mlpDemo/constants";
+import { NeuronConfig } from "../mpNeuron/utils";
 
 type EditingRblattGraphProps = {
   inputs: RblattInput[];

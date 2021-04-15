@@ -1,7 +1,11 @@
 import React, { useState, useCallback } from "react";
 import MPBasicNeuron from "../mpNeuron/MPBasicNeuron";
 
-import { calculateThreshold, calculateInputSum } from "../mpNeuron/utils";
+import {
+  calculateThreshold,
+  calculateInputSum,
+  setNeuronAttr,
+} from "../mpNeuron/utils";
 import { INIT_CONFIG } from "../rosenblatt/constants";
 
 const DEFAULT_INPUT = [1];
@@ -51,25 +55,8 @@ const MLPNeuron = (props: { labelColor: string }) => {
     getInitialInputs(NUM_NEURONS_FIRST_LAYER)
   );
 
-  const setAttr = useCallback(
-    (neuronLayerNum, neuronNum, attr, value) =>
-      setNeuronState((neuronState) =>
-        neuronState.map((neuronLayer, i) =>
-          neuronLayer.map((neuronValues, j) =>
-            neuronLayerNum === i && neuronNum === j
-              ? {
-                  ...neuronValues,
-                  [attr]:
-                    typeof value === "function"
-                      ? value(neuronValues[attr])
-                      : value,
-                }
-              : neuronValues
-          )
-        )
-      ),
-    [setNeuronState]
-  );
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const setAttr = useCallback(setNeuronAttr(setNeuronState), [setNeuronState]);
 
   const finalNeuronState = (() => {
     let lastLayer;

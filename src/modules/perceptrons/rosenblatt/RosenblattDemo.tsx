@@ -5,6 +5,8 @@ import distanceToLineSegment from "distance-to-line-segment";
 import InteractiveNeuron from "./InteractiveNeuron";
 import { round } from "./utils";
 
+import { changeInputsAfterClick } from "../mpNeuron/utils";
+
 import {
   RblattInput,
   RblattConfig,
@@ -140,27 +142,10 @@ const RosenBlattDemo = ({ labelColor }: { labelColor: string }) => {
     updateErrors([], INIT_CONFIG);
   }, [setInputs, setConfig, setCurrPoint, updateErrors]);
 
-  const handleClick = useCallback(
-    (clickedX, clickedY, color) => {
-      setInputs((inp) => {
-        const BOUND = 0.1;
-        let newInputs = inp.filter(([x, y]) => {
-          return !(
-            clickedX - BOUND <= x &&
-            x <= clickedX + BOUND &&
-            clickedY - BOUND <= y &&
-            y <= clickedY + BOUND
-          );
-        });
-
-        if (newInputs.length === inp.length) {
-          return newInputs.concat([[clickedX, clickedY, color ? color : 0]]); // TODO: Fix Z
-        }
-        return newInputs;
-      });
-    },
-    [setInputs]
-  );
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const handleClick = useCallback(changeInputsAfterClick(setInputs), [
+    setInputs,
+  ]);
 
   return (
     <div className="m-4 w-max">

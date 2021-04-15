@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 import MPBasicNeuron from "../mpNeuron/MPBasicNeuron";
 
-import { NeuronConfig } from "../mlpDemo/constants";
+import { NeuronConfig } from "../mpNeuron/utils";
 
 type MLPGraphNetworkType = {
   labelColor: string;

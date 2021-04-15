@@ -55,16 +55,23 @@ export const MPBasicNeuron: React.FC<MPBasicNeuronType> = ({
     ? output
     : calculateThreshold(finalInputSum, isGreater, threshold);
 
-  const changeWeight = (e, idx) => {
-    const val = parseFloat(e.target.value);
-    if (!isNaN(val))
-      setWeights((w) => w.map((ov, i) => (i === idx ? val : ov)));
-  };
+  const changeWeight = useCallback(
+    (e, idx) => {
+      const val = parseFloat(e.target.value);
+      if (!isNaN(val))
+        setWeights((w) => w.map((ov, i) => (i === idx ? val : ov)));
+    },
+    [setWeights]
+  );
 
-  const changeVal = (e, idx) => {
-    const val = parseFloat(e.target.value);
-    if (!isNaN(val)) setInputs((w) => w.map((ov, i) => (i === idx ? val : ov)));
-  };
+  const changeVal = useCallback(
+    (e, idx) => {
+      const val = parseFloat(e.target.value);
+      if (!isNaN(val))
+        setInputs((w) => w.map((ov, i) => (i === idx ? val : ov)));
+    },
+    [setInputs]
+  );
 
   const removeInput = useCallback(() => {
     setInputs((inputs) => inputs.slice(0, -1));

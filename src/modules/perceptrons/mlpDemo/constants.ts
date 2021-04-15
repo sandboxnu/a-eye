@@ -1,15 +1,17 @@
+import { NeuronConfig } from "../mpNeuron/utils";
+
 const neuronInputConfig: NeuronConfig[][] = [
   [
     {
       weights: [-0.5],
-      bias: 10,
+      bias: 0,
       greaterThan: true,
       thresholdVal: 0,
       output: 0,
     },
     {
       weights: [1],
-      bias: 10,
+      bias: 0,
       greaterThan: true,
       thresholdVal: 0,
       output: 1,
@@ -25,13 +27,5 @@ const neuronInputConfig: NeuronConfig[][] = [
     },
   ],
 ];
-
-export type NeuronConfig = {
-  weights: number[];
-  bias: number;
-  output: number;
-  greaterThan: boolean;
-  thresholdVal: number;
-};
 
 export { neuronInputConfig };
