@@ -1,12 +1,10 @@
-import React, { useMemo, useCallback } from "react";
+import React, { useCallback } from "react";
 import { AddCircle, RemoveCircle } from "@material-ui/icons";
 
-import { zip, calculateThreshold } from "./utils";
-import { INIT_CONFIG } from "../rosenblatt/constants";
+import { zip, calculateThreshold, calculateInputSum } from "./utils";
 import ControlledThresholdFunc from "./ControlledThresholdFunc";
 import InputLines from "./InputLines";
 
-// const INPT_CLR = '#b92079';
 const OUTPT_CLR = "#0FD4C0";
 
 export type NeuronInput = {
@@ -29,7 +27,7 @@ export type MPBasicNeuronType = {
   setIsGreater?: any;
   showInput?: boolean;
   inputSum?: number;
-  output: number;
+  output?: number;
   bias?: number;
 };
 
@@ -52,9 +50,11 @@ export const MPBasicNeuron: React.FC<MPBasicNeuronType> = ({
 }) => {
   const finalInputSum = inputSum
     ? inputSum
-    : zip(inputs, weights).reduce((prev, acc) => {
-        return (acc[0] && acc[1] ? acc[0] * acc[1] : 0) + prev;
-      }, 0) + (bias ? bias : 0);
+    : calculateInputSum(inputs, weights, bias);
+
+  const finalOutput = output
+    ? output
+    : calculateThreshold(finalInputSum, isGreater, threshold);
 
   const changeWeight = (e, idx) => {
     const val = parseFloat(e.target.value);
@@ -108,6 +108,7 @@ export const MPBasicNeuron: React.FC<MPBasicNeuronType> = ({
       <div className="w-10 h-1 bg-navy" />
       <div className="m-1">
         <input
+          disabled={!setWeights}
           className="number-input w-20 h-10 border-2 border-pink-700"
           type="number"
           value={weight !== null ? weight : ""}
@@ -133,7 +134,7 @@ export const MPBasicNeuron: React.FC<MPBasicNeuronType> = ({
                 className="font-bold rounded-full w-12 h-12 bg-pink-700 m-1
                                         flex items-center justify-center text-white"
               >
-                {bias}
+                {bias.toFixed(1)}
               </div>
             </div>
           )}
@@ -162,11 +163,11 @@ export const MPBasicNeuron: React.FC<MPBasicNeuronType> = ({
         <div
           className="rounded-full w-12 h-12 font-bold bg-moduleTeal flex items-center justify-center"
           style={{
-            backgroundColor: output === 1 ? OUTPT_CLR : "white",
-            border: output === 1 ? "none" : `2px solid ${OUTPT_CLR}`,
+            backgroundColor: finalOutput === 1 ? OUTPT_CLR : "white",
+            border: finalOutput === 1 ? "none" : `2px solid ${OUTPT_CLR}`,
           }}
         >
-          {output}
+          {finalOutput}
         </div>
       </div>
       {canAddInputs && setInputs && (

@@ -1,6 +1,5 @@
 import React from "react";
 import { RblattConfig, RblattInput } from "./constants";
-import ControlledThresholdFunc from "../mpNeuron/ControlledThresholdFunc";
 import MPBasicNeuron from "../mpNeuron/MPBasicNeuron";
 import { calculateThreshold, calculateInputSum } from "../mpNeuron/utils";
 

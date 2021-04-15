@@ -1,7 +1,7 @@
-import React, { useState, useMemo, useCallback } from "react";
-import MPBasicNeuron, { NeuronInput } from "../mpNeuron/MPBasicNeuron";
+import React, { useState, useCallback } from "react";
+import MPBasicNeuron from "../mpNeuron/MPBasicNeuron";
 
-import { zip, calculateThreshold } from "../mpNeuron/utils";
+import { calculateThreshold, calculateInputSum } from "../mpNeuron/utils";
 import { INIT_CONFIG } from "../rosenblatt/constants";
 
 const DEFAULT_INPUT = [1];
@@ -17,15 +17,6 @@ type NeuronLayer = {
   isGreater: boolean;
   bias?: number;
 };
-
-const applyThreshold = (n: number, threshold: number, isGreater: boolean) =>
-  isGreater ? (n > threshold ? 1 : 0) : n < threshold ? 1 : 0;
-
-const getInputSum = ({ inputs, weights, bias }: NeuronLayer) =>
-  zip(inputs, weights).reduce(
-    (prev, [input, weight]) => (input && weight ? input * weight : 0) + prev,
-    0
-  ) + (bias ? bias : INIT_CONFIG.bias);
 
 const getOutputs = (nlayer) => nlayer.map(({ output }) => output);
 
@@ -49,7 +40,11 @@ const getInitialInputs = (num): NeuronLayer[][] => [
 ];
 
 const getOutput = (neuron) =>
-  applyThreshold(getInputSum(neuron), neuron.threshold, neuron.isGreater);
+  calculateThreshold(
+    calculateInputSum(neuron.inputs, neuron.weights, neuron.bias),
+    neuron.threshold,
+    neuron.isGreater
+  );
 
 const MLPNeuron = (props: { labelColor: string }) => {
   const [neuronState, setNeuronState] = useState(
@@ -89,7 +84,11 @@ const MLPNeuron = (props: { labelColor: string }) => {
               };
         return {
           ...finalNeuron,
-          inputSum: getInputSum(neuron),
+          inputSum: calculateInputSum(
+            neuron.inputs,
+            neuron.weights,
+            neuron.bias
+          ),
           output: getOutput(neuron),
         };
       });
@@ -98,10 +97,12 @@ const MLPNeuron = (props: { labelColor: string }) => {
     });
   })();
 
-  const resetDemo = () =>
-    setNeuronState(() => getInitialInputs(NUM_NEURONS_FIRST_LAYER));
+  const resetDemo = useCallback(
+    () => setNeuronState(() => getInitialInputs(NUM_NEURONS_FIRST_LAYER)),
+    [setNeuronState]
+  );
 
-  const setBias = (val) => setAttr(1, 0, "bias", val);
+  const setBias = useCallback((val) => setAttr(1, 0, "bias", val), [setAttr]);
 
   const setAnd = useCallback(() => {
     resetDemo();

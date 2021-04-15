@@ -1,10 +1,7 @@
 import React, { useState } from "react";
-import { AddCircle, RemoveCircle } from "@material-ui/icons";
 import { INIT_CONFIG } from "../rosenblatt/constants";
 import MPBasicNeuron from "./MPBasicNeuron";
-import { zip, calculateThreshold, calculateInputSum } from "./utils";
-
-import ThresholdFunc from "./ThresholdFunc";
+import { calculateThreshold, calculateInputSum } from "./utils";
 
 export type NeuronInput = {
   val: number | null;
