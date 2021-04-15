@@ -62,6 +62,9 @@ const BackgroundPoly = ({
   const botLeft = [botRight[0], topLeft[1]];
   const points = [topLeft, topRight, botRight, botLeft];
 
+  // Note that my PR to add points to the Visx polygon has been merged.
+  // When a new @visx/shapes release arrives, please replace this component with that one.
+
   return (
     <polygon
       fillOpacity="20%"
