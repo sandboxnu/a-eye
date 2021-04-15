@@ -2,41 +2,7 @@ import React from "react";
 import ControlledThresholdFunc from "./ControlledThresholdFunc";
 import InputLines from "./InputLines";
 
-const zip = (arr1: Array<any>, arr2: Array<any>) => {
-  return arr1.map(function (e, i) {
-    return [e, arr2[i]];
-  });
-};
-
-const InputLinesLayer = (props: { numInpts: number }) => {
-  const height = 56 * props.numInpts;
-  const centerY = height / 2;
-
-  return (
-    <div>
-      <svg
-        width="125px"
-        height={height}
-        viewBox={`0 0 125 ${height}`}
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        {Array(props.numInpts)
-          .fill(null)
-          .map((_, idx) => (
-            <line
-              key={idx}
-              x1="0"
-              y1={idx * 56 * 2 + 28}
-              x2="125"
-              y2={centerY}
-              strokeWidth="4px"
-              stroke="#394D73"
-            />
-          ))}
-      </svg>
-    </div>
-  );
-};
+import { zip, calculateThreshold } from "./utils";
 
 export type MPLayerNeuronType = {
   labelColor: string;
@@ -49,7 +15,6 @@ export type MPLayerNeuronType = {
   setThreshold: (inpts: number) => void;
   isGreater: boolean;
   setIsGreater: (inpts: boolean) => void;
-  setOutput?: (inpts: React.SetStateAction<number>) => void;
   showInput?: boolean;
   noutput?: number;
 };
@@ -65,7 +30,6 @@ const MPLayerNeuron: React.FC<MPLayerNeuronType> = ({
   setThreshold,
   isGreater,
   setIsGreater,
-  setOutput = () => null,
   showInput = false,
   // zero is falsy so we check against a non-zero value ;_;
   noutput = "none",
@@ -85,20 +49,15 @@ const MPLayerNeuron: React.FC<MPLayerNeuronType> = ({
     }
   };
 
-  const func = (n: number) => {
-    if (isGreater) {
-      return n > threshold ? 1 : 0;
-    } else {
-      return n < threshold ? 1 : 0;
-    }
-  };
-
   const inputSum =
     zip(inputs, weights).reduce((prev, acc) => {
       return (acc[0] && acc[1] ? acc[0] * acc[1] : 0) + prev;
     }, 0) + bias;
 
-  const output = noutput === "none" ? func(inputSum) : noutput;
+  const output =
+    noutput === "none"
+      ? calculateThreshold(inputSum, isGreater, threshold)
+      : noutput;
 
   const Input = ({ inpt, weight, idx }) => (
     <div className="flex items-center cursor-pointer pb-2.5 pt-16" key={idx}>
@@ -144,7 +103,6 @@ const MPLayerNeuron: React.FC<MPLayerNeuronType> = ({
             </div>
           )}
         </div>
-
         <InputLines
           numInpts={(addBias ? 1 : 0) + inputs.length}
           transformY={2}
