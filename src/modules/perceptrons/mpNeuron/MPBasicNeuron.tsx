@@ -7,12 +7,7 @@ import InputLines from "./InputLines";
 
 const OUTPT_CLR = "#0FD4C0";
 
-export type NeuronInput = {
-  val: number | null;
-  weight: number | null;
-};
-
-export type MPBasicNeuronType = {
+type MPBasicNeuronType = {
   labelColor: string;
   canAddInputs?: boolean;
   hideInputs?: boolean;
@@ -29,6 +24,8 @@ export type MPBasicNeuronType = {
   inputSum?: number;
   output?: number;
   bias?: number;
+  inputToAdd?: number;
+  weightToAdd?: number;
 };
 
 export const MPBasicNeuron: React.FC<MPBasicNeuronType> = ({
@@ -47,10 +44,12 @@ export const MPBasicNeuron: React.FC<MPBasicNeuronType> = ({
   inputSum = undefined,
   output,
   bias,
+  inputToAdd = 1,
+  weightToAdd = 1,
 }) => {
   const finalInputSum = inputSum
     ? inputSum
-    : calculateInputSum(inputs, weights, bias);
+    : calculateInputSum(inputs, weights, bias || 0);
 
   const finalOutput = output
     ? output
@@ -73,9 +72,9 @@ export const MPBasicNeuron: React.FC<MPBasicNeuronType> = ({
   }, [setInputs, setWeights]);
 
   const addInput = useCallback(() => {
-    setInputs((newInputs) => newInputs.concat([1]));
-    setWeights((weights) => weights.concat([0]));
-  }, [setInputs, setWeights]);
+    setInputs((newInputs) => newInputs.concat([inputToAdd]));
+    setWeights((weights) => weights.concat([weightToAdd]));
+  }, [setInputs, setWeights, inputToAdd, weightToAdd]);
 
   const Input = ({ inpt, weight, idx }) => (
     <div
@@ -127,7 +126,7 @@ export const MPBasicNeuron: React.FC<MPBasicNeuronType> = ({
             zip(inputs, weights).map(([input, weight], index) => (
               <Input inpt={input} weight={weight} idx={index} key={index} />
             ))}
-          {bias && (
+          {typeof bias === "number" && (
             <div className="flex items-center self-end">
               <p className={labelColor}>bias</p>
               <div
@@ -140,10 +139,10 @@ export const MPBasicNeuron: React.FC<MPBasicNeuronType> = ({
           )}
         </div>
         <InputLines
-          numInpts={(bias ? 1 : 0) + inputs.length}
+          numInpts={(typeof bias === "number" ? 1 : 0) + inputs.length}
           transformY={hideInputs ? 2 : 1}
         />
-        {finalInputSum && (
+        {typeof finalInputSum === "number" && (
           <div
             className="rounded-full w-20 h-20 bg-brightOrange
                 flex items-center justify-center"

@@ -3,12 +3,7 @@ import { INIT_CONFIG } from "../rosenblatt/constants";
 import MPBasicNeuron from "./MPBasicNeuron";
 import { calculateThreshold, calculateInputSum } from "./utils";
 
-export type NeuronInput = {
-  val: number | null;
-  weight: number | null;
-};
-
-export type MPNeuronType = {
+type MPNeuronType = {
   labelColor: string;
   canAddInputs?: boolean;
   input?: number[];

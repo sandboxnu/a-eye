@@ -139,12 +139,12 @@ const MLPNeuron = (props: { labelColor: string }) => {
           </div>
         ))}
       </div>
-      <div>
-        <button className="bg-white" onClick={setAnd}>
+      <div className="flex flex-row">
+        <button className="basic-button" onClick={setAnd}>
           Set to And
         </button>
         <br />
-        <button className="bg-white" onClick={setOr}>
+        <button className="basic-button" onClick={setOr}>
           Set to Or
         </button>
       </div>
