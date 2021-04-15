@@ -100,7 +100,7 @@ const changeInputsAfterClick = (setInputs) => (clickedX, clickedY, color) =>
     // If the length changed, then we removed one, so we didn't add one! Otherwise, we know we added one.
     if (newInputs.length === 0) return inp;
     return newInputs.length === inp.length
-      ? newInputs.concat([[clickedX, clickedY]])
+      ? newInputs.concat([[clickedX, clickedY, color]])
       : newInputs;
   });
 
