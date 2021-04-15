@@ -143,8 +143,6 @@ const MLPDemo = (props: { labelColor: string }) => {
     ];
   })();
 
-  console.log("neuron state for demo 3", neuronState);
-
   return (
     <div>
       <MLPGraphNetwork

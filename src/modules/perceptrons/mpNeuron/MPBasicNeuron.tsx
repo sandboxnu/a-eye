@@ -21,17 +21,16 @@ export type MPBasicNeuronType = {
   inputs: number[];
   setInputs?: any;
   weights: number[];
-  setWeights;
+  setWeights?: any;
   connecting?: boolean;
   threshold;
-  setThreshold;
+  setThreshold?: any;
   isGreater;
-  setIsGreater;
+  setIsGreater?: any;
   showInput?: boolean;
   inputSum?: number;
   output: number;
   bias?: number;
-  canChangeInputs?: boolean;
 };
 
 export const MPBasicNeuron: React.FC<MPBasicNeuronType> = ({
@@ -39,9 +38,8 @@ export const MPBasicNeuron: React.FC<MPBasicNeuronType> = ({
   canAddInputs = true,
   connecting = false,
   hideInputs = false,
-  canChangeInputs = true,
   inputs,
-  setInputs = () => {},
+  setInputs,
   weights,
   setWeights,
   threshold,
@@ -52,21 +50,6 @@ export const MPBasicNeuron: React.FC<MPBasicNeuronType> = ({
   output,
   bias,
 }) => {
-  const changeSetting = useCallback(
-    (type: string, e: React.ChangeEvent<HTMLInputElement>, idx: number) => {
-      const val = parseFloat(e.target.value);
-      const newInputs = JSON.parse(JSON.stringify(inputs));
-      if (!isNaN(val)) {
-        newInputs[idx][type] = val;
-        setInputs(newInputs);
-      } else if (e.target.value === "") {
-        newInputs[idx][type] = null;
-        setInputs(newInputs);
-      }
-    },
-    [inputs, setInputs]
-  );
-
   const finalInputSum = inputSum
     ? inputSum
     : zip(inputs, weights).reduce((prev, acc) => {
@@ -102,7 +85,7 @@ export const MPBasicNeuron: React.FC<MPBasicNeuronType> = ({
       key={idx}
     >
       {!hideInputs &&
-        (canChangeInputs ? (
+        (setInputs ? (
           <div className="m-1">
             <input
               className="number-input w-20 h-10 border-2 border-pink-700"
@@ -169,6 +152,7 @@ export const MPBasicNeuron: React.FC<MPBasicNeuronType> = ({
         )}
         <div className="w-2 h-1 bg-navy" />
         <ControlledThresholdFunc
+          labelColor={labelColor}
           threshold={threshold}
           setThreshold={setThreshold}
           isGreater={isGreater}
@@ -185,7 +169,7 @@ export const MPBasicNeuron: React.FC<MPBasicNeuronType> = ({
           {output}
         </div>
       </div>
-      {canAddInputs && (
+      {canAddInputs && setInputs && (
         <div>
           <RemoveCircle
             className="icon-button"
