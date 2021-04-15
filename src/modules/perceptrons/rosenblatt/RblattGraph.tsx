@@ -4,7 +4,7 @@ import { RblattInput } from "./constants";
 import { zip } from "../mpNeuron/utils";
 
 import { Group } from "@visx/group";
-import { Circle } from "@visx/shape";
+import { Circle, Polygon } from "@visx/shape";
 import { voronoi } from "@visx/voronoi";
 import { withTooltip, Tooltip } from "@visx/tooltip";
 import { WithTooltipProvidedProps } from "@visx/tooltip/lib/enhancers/withTooltip";
@@ -53,23 +53,23 @@ const BackgroundPoly = ({
   botRight,
   shading,
 }: {
-  topLeft: number[];
-  botRight: number[];
+  topLeft: [number, number];
+  botRight: [number, number];
   shading: 0 | 1;
 }) => {
   const backgroundColor = COLORS[shading];
-  const topRight = [topLeft[0], botRight[1]];
-  const botLeft = [botRight[0], topLeft[1]];
-  const points = [topLeft, topRight, botRight, botLeft];
+  const topRight: [number, number] = [topLeft[0], botRight[1]];
+  const botLeft: [number, number] = [botRight[0], topLeft[1]];
+  const points: [number, number][] = [topLeft, topRight, botRight, botLeft];
 
   // Note that my PR to add points to the Visx polygon has been merged.
   // When a new @visx/shapes release arrives, please replace this component with that one.
 
   return (
-    <polygon
+    <Polygon
       fillOpacity="20%"
       fill={backgroundColor}
-      points={points.join(" ")}
+      points={points}
     />
   );
 };
@@ -189,9 +189,9 @@ const RblattGraph = withTooltip<GraphProps, RblattInput>(
     x_Scale.range([0, xMax]);
     y_Scale.range([yMax, 0]);
 
-    const convertPoint = ({ x: xc, y: yc }) => [xScale(xc), yScale(yc)];
+    const convertPoint = ({ x: xc, y: yc }: {x: number, y: number}): [number, number] => [xScale(xc), yScale(yc)];
 
-    const intersection = lines && convertPoint(lines[0]);
+    const intersection: ([number, number] | undefined) = lines && convertPoint(lines[0]!);
 
     const permuteDimensions = (x) => [
       [-x, x],
