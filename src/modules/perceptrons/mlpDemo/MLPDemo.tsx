@@ -72,9 +72,9 @@ const MLPDemo = (props: { labelColor: string }) => {
   ]);
 
   const lines = (() => {
-    const getCoord = ({ thresholdVal, weights, bias }) => {
+    const getCoord = ({ threshold, weights, bias }) => {
       const weight = weights[0];
-      return thresholdVal / (weight === 0 ? 1 : weight) - bias;
+      return threshold / (weight === 0 ? 1 : weight) - bias;
     };
 
     return [

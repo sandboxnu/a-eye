@@ -61,41 +61,29 @@ const MLPGraphNetwork: React.FC<MLPGraphNetworkType> = ({
       <div className="m-2 flex items-center">
         {neuronState.map((layer, layerNum) => (
           <div id="layer" key={layerNum}>
-            {layer.map(
-              ({ weights, bias, greaterThan, thresholdVal }, neuronNum) => (
-                <MPBasicNeuron
-                  key={`LayerNeuron-${layerNum}-${neuronNum}`}
-                  labelColor={labelColor}
-                  canAddInputs={false}
-                  hideInputs={layerNum !== 0}
-                  inputs={getInputs(layerNum, neuronNum, weights.length)}
-                  weights={weights}
-                  bias={bias}
-                  isGreater={greaterThan}
-                  threshold={thresholdVal}
-                  output={getOutput(layerNum, neuronNum)}
-                  setIsGreater={(isGreater: boolean) =>
-                    changeNeuronValue(
-                      layerNum,
-                      neuronNum,
-                      "isGreater",
-                      isGreater
-                    )
-                  }
-                  setThreshold={(threshold: number) =>
-                    changeNeuronValue(
-                      layerNum,
-                      neuronNum,
-                      "thresholdVal",
-                      threshold
-                    )
-                  }
-                  setWeights={(weights) =>
-                    changeNeuronValue(layerNum, neuronNum, "weights", weights)
-                  }
-                />
-              )
-            )}
+            {layer.map(({ weights, bias, isGreater, threshold }, neuronNum) => (
+              <MPBasicNeuron
+                key={`LayerNeuron-${layerNum}-${neuronNum}`}
+                labelColor={labelColor}
+                canAddInputs={false}
+                hideInputs={layerNum !== 0}
+                inputs={getInputs(layerNum, neuronNum, weights.length)}
+                weights={weights}
+                bias={bias}
+                isGreater={isGreater}
+                threshold={threshold}
+                output={getOutput(layerNum, neuronNum)}
+                setIsGreater={(isGreater: boolean) =>
+                  changeNeuronValue(layerNum, neuronNum, "isGreater", isGreater)
+                }
+                setThreshold={(threshold: number) =>
+                  changeNeuronValue(layerNum, neuronNum, "threshold", threshold)
+                }
+                setWeights={(weights) =>
+                  changeNeuronValue(layerNum, neuronNum, "weights", weights)
+                }
+              />
+            ))}
           </div>
         ))}
       </div>

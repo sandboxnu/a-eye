@@ -2,8 +2,8 @@ export type NeuronConfig = {
   weights: number[];
   bias: number;
   output: number;
-  greaterThan: boolean;
-  thresholdVal: number;
+  isGreater: boolean;
+  threshold: number;
 };
 
 const zip = (arr1: Array<any>, arr2: Array<any>) =>
@@ -57,10 +57,10 @@ const getNeuronOutputs = (inputs, neuronState) => {
   let curResults = deepcopy(inputs);
   neuronState.forEach((layer: NeuronConfig[], i: number) => {
     const layerResults: number[] = layer.map(
-      ({ weights, bias, greaterThan, thresholdVal }, j: number) => {
-        const thresholdFunc = greaterThan
-          ? (a: number) => (a > thresholdVal ? 1 : 0)
-          : (a: number) => (a < thresholdVal ? 1 : 0);
+      ({ weights, bias, isGreater, threshold }, j: number) => {
+        const thresholdFunc = isGreater
+          ? (a: number) => (a > threshold ? 1 : 0)
+          : (a: number) => (a < threshold ? 1 : 0);
         const result =
           weights.reduce((acc: number, weight: number) => {
             const input = curResults.splice(0, 1)[0];
