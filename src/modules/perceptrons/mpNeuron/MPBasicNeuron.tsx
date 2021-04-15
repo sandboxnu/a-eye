@@ -91,7 +91,12 @@ export const MPBasicNeuron: React.FC<MPBasicNeuronType> = ({
   }, [setInputs, setWeights]);
 
   const Input = ({ inpt, weight, idx }) => (
-    <div className="flex items-center cursor-pointer" key={idx}>
+    <div
+      className={`flex items-center cursor-pointer ${
+        hideInputs ? "pb-2.5 pt-16" : ""
+      }`}
+      key={idx}
+    >
       {!hideInputs &&
         (canChangeInputs ? (
           <div className="m-1">
@@ -128,7 +133,7 @@ export const MPBasicNeuron: React.FC<MPBasicNeuronType> = ({
   return (
     <div className="m-2 flex flex-col items-center justify-center">
       <div className="flex items-center">
-        <div className="flex flex-col">
+        <div className="flex flex-col h-36">
           {inputs &&
             weights &&
             zip(inputs, weights).map(([input, weight], index) => (
