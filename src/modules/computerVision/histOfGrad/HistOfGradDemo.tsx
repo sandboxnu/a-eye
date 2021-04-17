@@ -3,7 +3,7 @@
 var Chart = require('chart.js');
 import React, {useLayoutEffect, useRef, useState} from 'react';
 import {histogramAggregate, histogramBlocks, gradientImages, GradientsType, BlocksType, map, denseConfig, mediumConfig, sparseConfig, hogConfig} from './histOfGrad';
-import sobelImg from '../../../media/modules/computerVision/sobelOperators.png';
+import sobelFilter from '../../../media/modules/computerVision/sobelFilters.png';
 import needleImg from '../../../media/modules/computerVision/needleExample.png';
 
 type HistOfGradDemoType = {
@@ -12,7 +12,7 @@ type HistOfGradDemoType = {
 }
 
 type hogConfigType = 'dense' | 'medium' | 'sparse';
-type orientationConfigType = 'all' | 'horizontal' | 'vertical' | 'diagonal';
+type orientationConfigType = 'all' | 'horizontal' | 'vertical' | 'diagonal45' | 'diagonal135';
 
 type HogTabType = {
   labelColor: string;
@@ -55,7 +55,7 @@ const SobelTab: React.FC<HogTabType> = ({
             />
         </div>
         <div className="my-auto mx-3">
-            <img src={sobelImg} alt="img" />
+            <img src={sobelFilter} alt="img" />
         </div>
         <div className="my-auto mx-3">
             <p className={labelColor}>Vertical Sobel</p>
@@ -131,7 +131,8 @@ const CombinedSobelTab: React.FC<HogTabType> = ({
             <button className={orientation === 'all' ? 'selected' : ''} onClick={() => setOrientation('all')}>All Orientations</button>
             <button className={orientation === 'horizontal' ? 'selected' : ''} onClick={() => setOrientation('horizontal')}>Horizontal</button>
             <button className={orientation === 'vertical' ? 'selected' : ''} onClick={() => setOrientation('vertical')}>Vertical</button>
-            <button className={orientation === 'diagonal' ? 'selected' : ''} onClick={() => setOrientation('diagonal')}>Diagonal</button>
+            <button className={orientation === 'diagonal45' ? 'selected' : ''} onClick={() => setOrientation('diagonal45')}>Diagonal 45</button>
+            <button className={orientation === 'diagonal135' ? 'selected' : ''} onClick={() => setOrientation('diagonal135')}>Diagonal 135</button>
         </div>
 
       </div>
@@ -191,8 +192,51 @@ const SobelNeedleTab: React.FC<HogTabType> = ({
                     <button className={orientation === 'all' ? 'selected' : ''} onClick={() => setOrientation('all')}>All Orientations</button>
                     <button className={orientation === 'horizontal' ? 'selected' : ''} onClick={() => setOrientation('horizontal')}>Horizontal</button>
                     <button className={orientation === 'vertical' ? 'selected' : ''} onClick={() => setOrientation('vertical')}>Vertical</button>
-                    <button className={orientation === 'diagonal' ? 'selected' : ''} onClick={() => setOrientation('diagonal')}>Diagonal</button>
+                    <button className={orientation === 'diagonal45' ? 'selected' : ''} onClick={() => setOrientation('diagonal45')}>Diagonal 45</button>
+                    <button className={orientation === 'diagonal135' ? 'selected' : ''} onClick={() => setOrientation('diagonal135')}>Diagonal 135</button>
                 </div>
+            </div>
+        </div>
+    )
+}
+
+const NeedleExampleTab: React.FC<HistOfGradDemoType> = ({labelColor}) => {
+    const canvasHist = useRef<HTMLCanvasElement>(null);
+    const canvasNdlPlt = useRef<HTMLCanvasElement>(null);
+
+    useLayoutEffect(() => {
+        const canvasHistElem = canvasHist.current;
+        const canvasNdlPltElem = canvasNdlPlt.current;
+        if (!(canvasHistElem && canvasNdlPltElem)) return;
+        const needles: {[angle: number]: number} = {0: 75, 45: 18.75, 90: 7.5, 135: 55};
+        // draw needles
+        canvasNdlPlt.current?.getContext('2d')?.fillRect(0, 0, canvasNdlPlt.current?.width, canvasNdlPlt.current?.height);
+        // @ts-ignore
+        Object.entries(needles).forEach(([angle, mag]) => drawNeedle(canvasNdlPlt.current, 0, 0, canvasNdlPlt.current.width, parseInt(angle), mag / 100, 255));
+        // draw histogram
+        // @ts-ignore
+        displayHistogram(canvasHist.current, Object.entries(needles).map(([angle, mag]) => mag), "all");
+    })
+
+    return (
+        <div className="flex justify-evenly">
+            <div className="my-auto mx-3">
+                <p className={labelColor}>Needle Plot</p>
+                <canvas
+                    className="crisp-pixels mx-auto max-w-screen-md"
+                    ref={canvasNdlPlt}
+                    width={500}
+                    height={500}
+                />
+            </div>
+            <div className="my-auto mx-3">
+                <p className={labelColor}>Aggregated Histogram</p>
+                <canvas
+                    className="crisp-pixels mx-auto max-w-screen-md"
+                    ref={canvasHist}
+                    width={500}
+                    height={500}
+                />
             </div>
         </div>
     )
@@ -241,7 +285,8 @@ const NeedleHistogramTab: React.FC<HogTabType> = ({
             <button className={orientation === 'all' ? 'selected' : ''} onClick={() => setOrientation('all')}>All Orientations</button>
             <button className={orientation === 'horizontal' ? 'selected' : ''} onClick={() => setOrientation('horizontal')}>Horizontal</button>
             <button className={orientation === 'vertical' ? 'selected' : ''} onClick={() => setOrientation('vertical')}>Vertical</button>
-            <button className={orientation === 'diagonal' ? 'selected' : ''} onClick={() => setOrientation('diagonal')}>Diagonal</button>
+            <button className={orientation === 'diagonal45' ? 'selected' : ''} onClick={() => setOrientation('diagonal45')}>Diagonal 45</button>
+            <button className={orientation === 'diagonal135' ? 'selected' : ''} onClick={() => setOrientation('diagonal135')}>Diagonal 135</button>
         </div>
       </div>
       <div className="my-auto mx-3">
@@ -295,7 +340,8 @@ const angleInOrientation = (orientation: orientationConfigType, angleDeg: number
         case "all": return true;
         case "horizontal": return (angleDeg + 180) % 180 <= 10;
         case "vertical": return Math.abs(90 - angleDeg) <= 10;
-        case "diagonal": return Math.abs(45 - angleDeg) <= 15 || Math.abs(135 - angleDeg) <= 15;
+        case "diagonal45": return Math.abs(45 - angleDeg) <= 15;
+        case "diagonal135": return Math.abs(135 - angleDeg) <= 15;
         default: return false;
     }
 }
@@ -308,6 +354,7 @@ const drawNeedle = (cnv: HTMLCanvasElement, blockRow: number, blockCol: number, 
     const context = cnv.getContext('2d');
     if (!context || !(context instanceof CanvasRenderingContext2D)) throw new Error('Failed to get 2D context');
     const ctx: CanvasRenderingContext2D = context;
+    //console.log(pt1, pt2);
 
     ctx.strokeStyle = `rgba(${opacity}, ${opacity}, ${opacity}, ${opacity / 255})`;
     ctx.beginPath();
@@ -410,14 +457,15 @@ const HistOfGradDemo: React.FC<HistOfGradDemoType> = ({
         <div className="border-2 border-navy pb-3 my-4">
           <img ref={imgRef} src={imgUrl} alt="image" className="hidden" />
           <div className="text-navy mb-3">
-            {([1, 2, 3, 4]).map((t, idx) => (
-              <div className={`inline-flex border-b-2 ${idx < 3 && 'border-r-2'} border-navy cursor-pointer w-1/4 ${tab === idx && 'bg-teal-a-eye'}`} onClick={() => setTab(idx)}><p className="mx-auto">{t}</p></div>
+            {([1, 2, 3, 4, 5]).map((t, idx) => (
+              <div className={`inline-flex border-b-2 ${idx < 4 && 'border-r-2'} border-navy cursor-pointer w-1/5 ${tab === idx && 'bg-teal-a-eye'}`} onClick={() => setTab(idx)}><p className="mx-auto">{t}</p></div>
             ))}
           </div>
             {tab === 0 && (gradients && blocks && histogram) && <SobelTab labelColor={labelColor} width={imgWidth} height={imgHeight} gradients={gradients} blocks={blocks} histogram={histogram} setHogConfig={setHogConfig} hogConfig={hogConfig}/> }
             {tab === 1 && (gradients && blocks && histogram) && <CombinedSobelTab labelColor={labelColor} width={imgWidth} height={imgHeight} gradients={gradients} blocks={blocks} histogram={histogram} setHogConfig={setHogConfig} hogConfig={hogConfig}/> }
             {tab === 2 && (gradients && blocks && histogram) && <SobelNeedleTab labelColor={labelColor} width={imgWidth * 1.25} height={imgHeight * 1.25} gradients={gradients} blocks={blocks} histogram={histogram} setHogConfig={setHogConfig} hogConfig={hogConfig}/> }
-            {tab === 3 && (gradients && blocks && histogram) && <NeedleHistogramTab labelColor={labelColor} width={imgWidth} height={imgHeight} gradients={gradients} blocks={blocks} histogram={histogram} setHogConfig={setHogConfig} hogConfig={hogConfig}/> }
+            {tab === 3 && <NeedleExampleTab labelColor={labelColor} imgUrl={imgUrl} /> }
+            {tab === 4 && (gradients && blocks && histogram) && <NeedleHistogramTab labelColor={labelColor} width={imgWidth} height={imgHeight} gradients={gradients} blocks={blocks} histogram={histogram} setHogConfig={setHogConfig} hogConfig={hogConfig}/> }
         </div>
     );
 }
