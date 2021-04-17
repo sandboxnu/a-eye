@@ -1,6 +1,6 @@
 /* eslint-disable */
 
-var Chart = require('chart.js');
+const Chart = require('chart.js');
 import React, {useLayoutEffect, useRef, useState} from 'react';
 import {histogramAggregate, histogramBlocks, gradientImages, GradientsType, BlocksType, map, denseConfig, mediumConfig, sparseConfig, hogConfig} from './histOfGrad';
 import sobelFilter from '../../../media/modules/computerVision/sobelFilters.png';
@@ -215,7 +215,7 @@ const NeedleExampleTab: React.FC<HistOfGradDemoType> = ({labelColor}) => {
         Object.entries(needles).forEach(([angle, mag]) => drawNeedle(canvasNdlPlt.current, 0, 0, canvasNdlPlt.current.width, parseInt(angle), mag / 100, 255));
         // draw histogram
         // @ts-ignore
-        displayHistogram(canvasHist.current, Object.entries(needles).map(([angle, mag]) => mag), "all");
+        displayHistogram(canvasHist.current, Object.entries(needles).map(([_, mag]) => mag), "all");
     })
 
     return (
@@ -368,7 +368,7 @@ const displayHistogram = (cnvHist: HTMLCanvasElement, histogram: number[], orien
     const filteredHistogram = histogram.map((h, i) => angleInOrientation(orientation, (i) * (180 / histogram.length)) ? h : 0);
     const labels: string[] = [];
     histogram.forEach((h, i) => labels.push(((180 / bins) * i).toString()));
-    const chart =  new Chart(cnvHist?.getContext('2d'), {
+    new Chart(cnvHist?.getContext('2d'), {
         type: 'bar',
         data: {
             labels,
@@ -425,6 +425,13 @@ const HistOfGradDemo: React.FC<HistOfGradDemoType> = ({
     const [histogram, setHistogram] = useState<number[]>();
     const [hogConfig, setHogConfig] = useState<hogConfigType>('dense');
     const configs: {[type: string]: hogConfig} = {'dense': denseConfig, 'medium': mediumConfig, 'sparse': sparseConfig};
+    const dialogues = [
+        "Tab 1 description",
+        "Tab 2 description",
+        "Tab 3 description",
+        "Tab 4 description",
+        "Tab 5 description"
+    ];
 
     const img = useRef('');
     const config = useRef('');
@@ -448,10 +455,9 @@ const HistOfGradDemo: React.FC<HistOfGradDemoType> = ({
       imgElem.onload = () => {
         setImgHeight(imgElem.height);
         setImgWidth(imgElem.width);
+        console.log(imgElem.width, imgElem.height);
       };
     })
-
-    const setBlockSparse = (type: hogConfigType): void => setHogConfig(type);
 
     return (
         <div className="border-2 border-navy pb-3 my-4">
@@ -461,6 +467,7 @@ const HistOfGradDemo: React.FC<HistOfGradDemoType> = ({
               <div className={`inline-flex border-b-2 ${idx < 4 && 'border-r-2'} border-navy cursor-pointer w-1/5 ${tab === idx && 'bg-teal-a-eye'}`} onClick={() => setTab(idx)}><p className="mx-auto">{t}</p></div>
             ))}
           </div>
+            <p className={`my-4 ${labelColor}`}>{dialogues[tab]}</p>
             {tab === 0 && (gradients && blocks && histogram) && <SobelTab labelColor={labelColor} width={imgWidth} height={imgHeight} gradients={gradients} blocks={blocks} histogram={histogram} setHogConfig={setHogConfig} hogConfig={hogConfig}/> }
             {tab === 1 && (gradients && blocks && histogram) && <CombinedSobelTab labelColor={labelColor} width={imgWidth} height={imgHeight} gradients={gradients} blocks={blocks} histogram={histogram} setHogConfig={setHogConfig} hogConfig={hogConfig}/> }
             {tab === 2 && (gradients && blocks && histogram) && <SobelNeedleTab labelColor={labelColor} width={imgWidth * 1.25} height={imgHeight * 1.25} gradients={gradients} blocks={blocks} histogram={histogram} setHogConfig={setHogConfig} hogConfig={hogConfig}/> }

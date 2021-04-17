@@ -95,3 +95,7 @@ input[type="range"]:focus {
 .axis-selector button.selected {
   background-color: #394D73;
 }
+
+.min-w-20vw {
+  min-width: 20vw;
+}
