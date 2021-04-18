@@ -34,6 +34,7 @@ export const map = (x: number, min1: number, max1: number, min2: number, max2: n
 
 export async function histogramAggregate(img: any, options: hogConfig): Promise<number[]> {
   return Image.load(img).then((image: any) => {
+    image = image.resize({width: 350});
 
     const descriptor = hog.extractHOG(image, options);
     const histogram: number[] = new Array(options.bins).fill(0);
@@ -53,65 +54,15 @@ export type BlocksType = {
 
 export async function histogramBlocks(img: any, options: hogConfig): Promise<BlocksType> {
   return Image.load(img).then((image: any) => {
-    const sparseBlocks = {
-      cellSize: 16,
-      blockSize: 4,
-      blockStride: 2,
-      bins: 9,
-    };
+    image = image.resize({width: 350});
+
     const descriptor = hog.extractHOG(image, options);
 
-    const intensities: { x: number[][], y: number[][] } = hog.gradients(image, options);
-    const intensitiesX: number[] = intensities.x.flat();
-    const intensitiesY: number[] = intensities.y.flat();
-    const intensitiesV: number[] = intensitiesX.map((num, idx) => Math.sqrt(Math.pow(num, 2) + Math.pow(intensitiesY[idx], 2)));
-
-    const blockWidth = Math.floor((image.width / options.cellSize - options.blockSize) / options.blockStride) + 1;
-    const blockHeight = Math.floor((image.height / options.cellSize - options.blockSize) / options.blockStride) + 1;
-    const blockPixels = options.cellSize * options.blockSize;
-
-    const blockHistograms: number[][][] = [];
-    for (let blockRow = 0; blockRow < blockHeight; blockRow += 1) {
-      const row: number[][] = [];
-      const mRow: number[] = [];
-      for (let blockCol = 0; blockCol < blockWidth; blockCol += 1) {
-        const index = blockRow * blockWidth + blockCol;
-        row.push(
-          descriptor.slice(
-            index * options.bins,
-            index * options.bins + options.bins,
-          ),
-        );
-      }
-      blockHistograms.push(row);
-    }
-
-    // reshape intensitiesV to be [image width, image height]
-    const intensitiesV2D: number[][] = math.reshape(intensitiesV, [image.height, image.width]);
-
-    // for each block, calculate average of all pixels within block
-    const mBlocks: number[][] = [];
-    for (let blockRow = 0; blockRow < blockHeight; blockRow += 1) {
-      const mRow: number[] = [];
-      for (let blockCol = 0; blockCol < blockWidth; blockCol += 1) {
-        const avg = blockAvgPixel(intensitiesV2D, blockRow, blockCol, blockPixels / 2);
-        mRow.push(avg);
-      }
-      mBlocks.push(mRow);
-    }
+    const blockHistograms: number[][][] = hog.extractHistograms(image, options);
+    const mBlocks: number[][] = blockHistograms.map(row => row.map(col => col.reduce((acc, curr) => acc + curr)));
 
     return {histogram: blockHistograms, blockMagnitudes: mBlocks};
   });
-}
-
-function blockAvgPixel(pixels: number[][], blockRow: number, blockCol: number, blockSize: number): number {
-  let sum = 0;
-  for (let y = blockRow * blockSize; y < blockRow * blockSize + blockSize && y < pixels.length; y += 1) {
-    for (let x = blockCol * blockSize; x < blockCol * blockSize + blockSize && x < pixels[0].length; x += 1) {
-      sum += pixels[y][x];
-    }
-  }
-  return sum / (length * length);
 }
 
 export type GradientsType = {
@@ -123,6 +74,8 @@ export type GradientsType = {
 
 export async function gradientImages(img: any): Promise<GradientsType> {
   return Image.load(img).then((image: any) => {
+    image = image.resize({width: 350});
+
     const intensities: { x: number[][], y: number[][] } = hog.gradients(image);
     const intensitiesX: number[] = intensities.x.flat();
     const intensitiesY: number[] = intensities.y.flat();
@@ -153,7 +106,3 @@ export async function gradientImages(img: any): Promise<GradientsType> {
     }
   });
 }
-
-
-// todo: what are we doing the 'v' image, clarify what g_x and g_y are
-// todo: do we want to add interactive feature to show gradient for a clicked block on the imag

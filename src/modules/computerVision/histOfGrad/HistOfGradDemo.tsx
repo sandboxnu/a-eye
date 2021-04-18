@@ -44,11 +44,11 @@ const SobelTab: React.FC<HogTabType> = ({
   })
   
   return (
-    <div className="flex justify-evenly">
+    <div className="flex flex-col md:flex-row justify-evenly">
         <div className="my-auto mx-3">
             <p className={labelColor}>Horizontal Sobel</p>
             <canvas
-                className="crisp-pixels mx-auto"
+                className="crisp-pixels mx-auto max-w-60vw"
                 ref={canvasX}
                 width={width}
                 height={height}
@@ -60,7 +60,7 @@ const SobelTab: React.FC<HogTabType> = ({
         <div className="my-auto mx-3">
             <p className={labelColor}>Vertical Sobel</p>
             <canvas
-                className="crisp-pixels mx-auto"
+                className="crisp-pixels mx-auto max-w-60vw"
                 ref={canvasY}
                 width={width}
                 height={height}
@@ -97,18 +97,18 @@ const CombinedSobelTab: React.FC<HogTabType> = ({
   })
   
   return (
-    <div className="flex justify-evenly">
+    <div className="flex flex-col md:flex-row justify-evenly">
       <div className="my-auto mx-3">
         <p className={labelColor}>Horizontal Sobel</p>
         <canvas
-            className="crisp-pixels mx-auto"
+            className="crisp-pixels mx-auto max-w-60vw"
             ref={canvasX}
             width={width}
             height={height}
         />
         <p className={labelColor}>Vertical Sobel</p>
         <canvas
-            className="crisp-pixels mx-auto"
+            className="crisp-pixels mx-auto max-w-60vw"
             ref={canvasY}
             width={width}
             height={height}
@@ -122,7 +122,7 @@ const CombinedSobelTab: React.FC<HogTabType> = ({
               <button className={hogConfig === 'sparse' ? 'selected' : ''} onClick={() => setHogConfig('sparse')}>Sparse</button>
           </div>
         <canvas
-            className="crisp-pixels mx-auto"
+            className="crisp-pixels mx-auto max-w-60vw"
             ref={canvasNdlPlt}
             width={width * 1.5}
             height={height * 1.5}
@@ -165,11 +165,11 @@ const SobelNeedleTab: React.FC<HogTabType> = ({
     })
 
     return (
-        <div className="flex justify-evenly">
+        <div className="flex flex-col md:flex-row justify-evenly">
             <div className="my-auto mx-3">
                 <p className={labelColor}>Combined Sobel</p>
                 <canvas
-                    className="crisp-pixels mx-auto"
+                    className="crisp-pixels mx-auto max-w-60vw"
                     ref={canvasV}
                     width={width}
                     height={height}
@@ -183,7 +183,7 @@ const SobelNeedleTab: React.FC<HogTabType> = ({
                     <button className={hogConfig === 'sparse' ? 'selected' : ''} onClick={() => setHogConfig('sparse')}>Sparse</button>
                 </div>
                 <canvas
-                    className="crisp-pixels mx-auto max-w-screen-md"
+                    className="crisp-pixels mx-auto max-w-60vw"
                     ref={canvasNdlPlt}
                     width={width}
                     height={height}
@@ -219,23 +219,23 @@ const NeedleExampleTab: React.FC<HistOfGradDemoType> = ({labelColor}) => {
     })
 
     return (
-        <div className="flex justify-evenly">
+        <div className="flex flex-col md:flex-row justify-evenly">
             <div className="my-auto mx-3">
                 <p className={labelColor}>Needle Plot</p>
                 <canvas
-                    className="crisp-pixels mx-auto max-w-screen-md"
+                    className="crisp-pixels mx-auto max-w-60vw"
                     ref={canvasNdlPlt}
-                    width={500}
-                    height={500}
+                    width={350}
+                    height={350}
                 />
             </div>
             <div className="my-auto mx-3">
                 <p className={labelColor}>Aggregated Histogram</p>
                 <canvas
-                    className="crisp-pixels mx-auto max-w-screen-md"
+                    className="crisp-pixels mx-auto max-w-60vw"
                     ref={canvasHist}
-                    width={500}
-                    height={500}
+                    width={350}
+                    height={350}
                 />
             </div>
         </div>
@@ -267,7 +267,7 @@ const NeedleHistogramTab: React.FC<HogTabType> = ({
   })
   
   return (
-    <div className="flex justify-evenly">
+    <div className="flex flex-col md:flex-row justify-evenly">
       <div className="my-auto mx-3">
         <p className={labelColor}>Needle Plot</p>
           <div className="axis-selector inline">
@@ -276,7 +276,7 @@ const NeedleHistogramTab: React.FC<HogTabType> = ({
               <button className={hogConfig === 'sparse' ? 'selected' : ''} onClick={() => setHogConfig('sparse')}>Sparse</button>
           </div>
         <canvas
-            className="crisp-pixels mx-auto max-w-screen-md"
+            className="crisp-pixels mx-auto max-w-60vw"
             ref={canvasNdlPlt}
             width={width}
             height={height}
@@ -289,14 +289,14 @@ const NeedleHistogramTab: React.FC<HogTabType> = ({
             <button className={orientation === 'diagonal135' ? 'selected' : ''} onClick={() => setOrientation('diagonal135')}>Diagonal 135</button>
         </div>
       </div>
-      <div className="my-auto mx-3">
-        <img src={needleImg} alt="img" />
+      <div className="my-auto mx-auto max-w-20vw">
+        <img src={needleImg} alt="img" className="mx-auto"/>
         <p className={labelColor}>We take this needle, find the bin the angle belongs in, and add the needle's magnitude to the bin.</p>
       </div>
       <div className="my-auto mx-3">
         <p className={labelColor}>Aggregated Histogram</p>
         <canvas
-            className="crisp-pixels mx-auto max-w-screen-md"
+            className="crisp-pixels mx-auto max-w-60vw"
             ref={canvasHist}
             width={width}
             height={height}
@@ -453,9 +453,11 @@ const HistOfGradDemo: React.FC<HistOfGradDemoType> = ({
       const imgElem = imgRef.current;
       if (!imgElem) return;
       imgElem.onload = () => {
-        setImgHeight(imgElem.height);
-        setImgWidth(imgElem.width);
-        console.log(imgElem.width, imgElem.height);
+          //const resizeFactor = imgElem.width < 300 ? (300 / imgElem.width) : 1;
+          const mobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+          const resizeFactor = 350 / imgElem.width;
+          setImgWidth(imgElem.width * resizeFactor);
+          setImgHeight(imgElem.height * resizeFactor);
       };
     })
 

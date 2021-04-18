@@ -99,3 +99,11 @@ input[type="range"]:focus {
 .min-w-20vw {
   min-width: 20vw;
 }
+
+.max-w-20vw {
+  max-width: 20vw;
+}
+
+.max-w-60vw {
+  max-width: 60vw;
+}
