@@ -57,7 +57,7 @@ const BackgroundPoly = ({
   botRight: [number, number];
   shading: 0 | 1;
 }) => {
-  const backgroundColor = COLORS[shading];
+  const backgroundColor = shading === 0 ? COLORS[shading] : "#ccd9ef";
   const topRight: [number, number] = [topLeft[0], botRight[1]];
   const botLeft: [number, number] = [botRight[0], topLeft[1]];
   const points: [number, number][] = [topLeft, topRight, botRight, botLeft];
