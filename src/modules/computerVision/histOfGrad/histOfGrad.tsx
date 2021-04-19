@@ -1,7 +1,6 @@
 /* eslint-disable */
 
 const { Image } = require('image-js');
-const math = require('mathjs');
 const hog = require('hog-features');
 
 export const denseConfig = {
@@ -17,22 +16,24 @@ export const mediumConfig = {
   bins: 18,
 };
 export const sparseConfig = {
-  cellSize: 12,
+  cellSize: 16,
   blockSize: 6,
   blockStride: 3,
   bins: 18,
 };
 
-export type hogConfig = {
+export type HogOptionsType = {
   cellSize: number;
   blockSize: number;
   blockStride: number;
   bins: number;
 }
 
+// backend functions
+
 export const map = (x: number, min1: number, max1: number, min2: number, max2: number): number => (x - min1) * (max2 - min2) / (max1 - min1) + min2;
 
-export async function histogramAggregate(img: any, options: hogConfig): Promise<number[]> {
+export async function histogramAggregate(img: any, options: HogOptionsType): Promise<number[]> {
   return Image.load(img).then((image: any) => {
     image = image.resize({width: 350});
 
@@ -52,11 +53,9 @@ export type BlocksType = {
   blockMagnitudes: number[][];
 };
 
-export async function histogramBlocks(img: any, options: hogConfig): Promise<BlocksType> {
+export async function histogramBlocks(img: any, options: HogOptionsType): Promise<BlocksType> {
   return Image.load(img).then((image: any) => {
     image = image.resize({width: 350});
-
-    const descriptor = hog.extractHOG(image, options);
 
     const blockHistograms: number[][][] = hog.extractHistograms(image, options);
     const mBlocks: number[][] = blockHistograms.map(row => row.map(col => col.reduce((acc, curr) => acc + curr)));
