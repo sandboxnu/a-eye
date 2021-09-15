@@ -2,8 +2,8 @@
   "modules": [
     {
       "number": 8,
-      "title": "Module 8: Visual Features for Computer Vision",
-      "dropdownTitle": "8: Computer Vision",
+      "title": "Visual Features for Computer Vision",
+      "dropdownTitle": "Computer Vision",
       "body": "While artificial intelligence is applied to a wide range of domains, the applications of AI to computer vision tend to begin with operations that mimic to some degree the receptive fields of early visual neurons. We will explore automated image filtering, convolutions, and feature extraction, comparing and contrasting physiological and machine processes. What is a visual “feature” for computer vision? What are some commonly extracted visual features when using convolutional neural networks? How do “early” feature-detectors in artificial neural networks work? In other words, how does one go from an array of image intensity values to an “early”network layer’s array of feature values?",
       "bgColor": "bg-lightblue",
       "textColor": "text-darkblue",
@@ -14,8 +14,8 @@
     },
     {
       "number": 9,
-      "title": "Module 9: Recognition as a Classification Problem",
-      "dropdownTitle": "9: Classification",
+      "title": "Recognition as a Classification Problem",
+      "dropdownTitle": "Classification",
       "body": "Once features have been detected and, perhaps combined into “higher-order features”, machine vision algorithms are often tasked to perform classification–that is, to determine what an array of features is “of”. Does this bundle of features in an image indicate the presence of a dog? Does that bundle of features over there indicate a cat? A set of features can be thought of as a location in a “state space”. Nearby locations in state space tend to correspond to similar objects or scenes. Features of many dogs of the same breed may form a “cluster” in state space. We will explore clusters of features in some simple state spaces and begin to ask how different “naturally occurring” clusters (corresponding to dogs and cats in our example) might be detected by a machine.",
       "bgColor": "bg-darkblue",
       "textColor": "text-white",
@@ -26,8 +26,8 @@
     },
     {
       "number": 10,
-      "title": "Module 10: Introduction to Machine Learning: Perceptrons",
-      "dropdownTitle": "10: Perceptrons",
+      "title": "Introduction to Machine Learning: Perceptrons",
+      "dropdownTitle": "Perceptrons",
       "body": "Today’s remarkable advances in the power of artificial neural networks leverage  foundations laid in 1943 by the McCulloch and Pitts neuron model and Rosenblatt’s 1958 software implementation of the first perceptron. We will examine the architecture and functions of the simplest trainable pattern classifier.This classifier is so simple, in fact, that it cannot effectively separate clusters that are not “linearly separable”. Two clusters in a two-dimensional state space that cannot be separated by a single straight line are examples of non-linearly separable classes. What does the perceptron do when confronted with a data-set that is not linearly separable?",
       "bgColor": "bg-offwhite",
       "textColor": "text-darkblue",
@@ -38,8 +38,8 @@
     },
     {
       "number": 11,
-      "title": "Module 11: Multi-layer Perceptrons & Backpropagation",
-      "dropdownTitle": "11: Neural Networks",
+      "title": "Multi-layer Perceptrons & Backpropagation",
+      "dropdownTitle": "Neural Networks",
       "body": "The problem of trying to separate clusters that are not linearly separable has been known for more than half a century, and many variations of multi-layer perceptrons continue to be developed to address and overcome limitations of earlier approaches. Multi-layered artificial neural networks are often said to have “hidden layers” where features are iteratively “weighted” in various ways until a desired classification performance is reached. We will consider a simple example of how hidden layers help to solve the “exclusive-OR problem” and explore the “credit assignment problem.” How does an algorithm know which weights to change and by how much, in order to promote learning for improved classification by a neural network?",
       "bgColor": "bg-darkblue",
       "textColor": "text-white",
