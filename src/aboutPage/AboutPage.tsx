@@ -1,14 +1,18 @@
 import React from 'react';
 import ProfileCard from './ProfileCard';
-import krishPic from '../media/aboutPage/krishPic.png';
-import liliPic from '../media/aboutPage/liliPic.png';
-import cassiePic from '../media/aboutPage/cassiePic.png';
-import danPic from '../media/aboutPage/danPic.jpg';
-import irisPic from '../media/aboutPage/irisPic.jpg';
-import maxPic from '../media/aboutPage/maxPic.png';
-import jakePic from '../media/aboutPage/jakePic.jpeg';
-import stanPic from '../media/aboutPage/stanPic.jpg';
-import angelaPic from '../media/aboutPage/angelaPic.jpg';
+import krishSharmaPic from '../media/aboutPage/krishSharmaPic.png';
+import liliKobayashiPic from '../media/aboutPage/liliKobayashiPic.png';
+import cassieHarbourPic from '../media/aboutPage/cassieHarbourPic.png';
+import danKrasnonosenkikhPic from '../media/aboutPage/danKrasnonosenkikhPic.jpg';
+import irisLiuPic from '../media/aboutPage/irisLiuPic.jpg';
+import maxPinheiroPic from '../media/aboutPage/maxPinheiroPic.png';
+import jakeChvatalPic from '../media/aboutPage/jakeChvatalPic.jpeg';
+import stanWuPic from '../media/aboutPage/stanWuPic.jpg';
+import angelaLinPic from '../media/aboutPage/angelaLinPic.jpg';
+import connorBarkerPic from '../media/aboutPage/connorBarkerPic.jpg';
+import michaelBriggsPic from '../media/aboutPage/michaelBriggsPic.jpg';
+import johnCiolfiPic from '../media/aboutPage/johnCiolfiPic.png';
+import jakeDuffyPic from '../media/aboutPage/jakeDuffyPic.jpg';
 
 const AboutPage = () => (
   <div className="relative inline-block w-full min-h-full bg-offwhite bg-about bg-no-repeat bg-scroll bg-bottom bg-stretchBottom">
@@ -18,70 +22,105 @@ const AboutPage = () => (
       </h1>
       <h2 className="text-navy text-xl">Team Description</h2>
     </div>
+    <h2 className="text-navy text-4xl mt-16">Current Members</h2>
     <div
-      id="profile-cards-section"
-      className="m-auto mt-32 mb-48 w-3/4 flex flex-wrap justify-center"
+      id="current-profile-cards-section"
+      className="m-auto mb-16 w-3/4 flex flex-wrap justify-center"
     >
       <ProfileCard
-        image={krishPic}
-        name="Krish Sharma"
-        title="Project Lead"
-        linkedin="https://www.linkedin.com/in/krish-sharma/"
-        email="sharma.kri@northeastern.edu"
-      />
-      <ProfileCard
-        image={maxPic}
+        image={maxPinheiroPic}
         name="Max Pinheiro"
-        title="Technical Lead"
+        title="Project Lead"
         linkedin="https://www.linkedin.com/in/max-pinheiro-4a5b11181/"
         email="pinheiro.m@northeastern.edu"
       />
       <ProfileCard
-        image={liliPic}
+        image={connorBarkerPic}
+        name="Connor Barker"
+        title="Developer"
+        linkedin="https://www.linkedin.com/in/connorlbark/"
+        email="barker.co@northeastern.edu"
+      />
+      <ProfileCard
+        image={michaelBriggsPic}
+        name="Michael Briggs"
+        title="Developer"
+        linkedin="https://www.linkedin.com/in/owanari-briggs-b9871819b/"
+        email="briggs.ow@northeastern.edu"
+      />
+      <ProfileCard
+        image={johnCiolfiPic}
+        name="John Ciolfi"
+        title="Developer"
+        linkedin="https://www.linkedin.com/in/johnciolfi/"
+        email="ciolfi.j@northeastern.edu"
+      />
+      <ProfileCard
+        image={jakeDuffyPic}
+        name="Jake Duffy"
+        title="Developer"
+        linkedin="https://www.linkedin.com/in/jake-duffy/"
+        email="duffy.jak@northeastern.edu"
+      />
+    </div>
+    <h2 className="text-navy text-4xl mt-16">Former Members</h2>
+    <div
+      id="former-profile-cards-section"
+      className="m-auto mb-48 w-3/4 flex flex-wrap justify-center"
+    >
+      <ProfileCard
+        image={krishSharmaPic}
+        name="Krish Sharma"
+        title="Former Project Lead"
+        linkedin="https://www.linkedin.com/in/krish-sharma/"
+        email="sharma.kri@northeastern.edu"
+      />
+      <ProfileCard
+        image={liliKobayashiPic}
         name="Lili Kobayashi"
-        title="Designer"
+        title="Former Designer"
         linkedin="http://linkedin.com/in/lili-kobayashi"
         email="Kobayashi.l@northeastern.edu"
       />
       <ProfileCard
-        image={cassiePic}
+        image={cassieHarbourPic}
         name="Cassie Harbour"
-        title="Developer"
+        title="Former Developer"
         linkedin=""
         email="harbour.c@northeastern.edu"
       />
       <ProfileCard
-        image={danPic}
+        image={danKrasnonosenkikhPic}
         name="Dan Krasnonosenkikh"
-        title="Developer"
+        title="Former Developer"
         linkedin="https://www.linkedin.com/in/dankrasno/"
         email="krasnonosenkikh.d@northeastern.edu"
       />
       <ProfileCard
-        image={irisPic}
+        image={irisLiuPic}
         name="Iris Liu"
-        title="Developer"
+        title="Former Developer"
         linkedin="https://www.linkedin.com/in/iris-liu-curiously"
         email="liu.i@northeastern.edu"
       />
       <ProfileCard
-        image={jakePic}
+        image={jakeChvatalPic}
         name="Jake Chvatal"
-        title="Developer"
+        title="Former Developer"
         linkedin="https://linkedin.com/in/jacob-chvatal"
         email="jacob@chvatal.com"
       />
       <ProfileCard
-        image={stanPic}
+        image={stanWuPic}
         name="Stanley Wu"
-        title="Developer"
+        title="Former Developer"
         linkedin="https://www.linkedin.com/in/stanleykywu"
         email="wu.sta@northeastern.edu"
       />
       <ProfileCard
-        image={angelaPic}
+        image={angelaLinPic}
         name="Angela Lin"
-        title="Designer"
+        title="Former Designer"
         linkedin="https://www.linkedin.com/in/angelalinzm"
         email="lin.angel@northeastern.edu"
       />
