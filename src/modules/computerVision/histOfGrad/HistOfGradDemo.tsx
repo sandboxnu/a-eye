@@ -272,7 +272,7 @@ const HistOfGradDemo: React.FC<HistOfGradDemoType> = ({
     medium: mediumConfig,
     sparse: sparseConfig,
   };
-  const dialogues = [
+  const dialogues: string[] = [
     'Tab 1 description',
     'Tab 2 description',
     'Tab 3 description',
