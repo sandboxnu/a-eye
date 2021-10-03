@@ -76,8 +76,8 @@ function convolute(inCanvas: HTMLCanvasElement, outCanvas: HTMLCanvasElement, an
       if (y >= h) clearInterval(interval);
     }, 10);
   } else {
-    for (var y = 0; y < h; y++) {
-      processRow(y);
+    for (var yx = 0; yx < h; yx++) {
+      processRow(yx);
     }
     outCanvas.getContext("2d")?.putImageData(output, 0, 0);
   }

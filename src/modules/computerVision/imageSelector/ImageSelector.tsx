@@ -3,10 +3,11 @@ import './ImageSelector.css';
 
 const ImageSelector = (props: { currImg: string, onSelect: (img: string, imgUrl: string) => any }) => {
     useEffect(() => props.onSelect(props.currImg, ALL_IMGS[props.currImg]),
-        []);
+        [props]);
 
     const makeImg = (key: string) => (
         <img key={key}
+            alt="meaningful alt text: TBD"
             className={key === props.currImg ? 'selected' : ''}
             src={ALL_IMGS[key]}
             onClick={() => props.onSelect(key, ALL_IMGS[key])}
@@ -25,8 +26,6 @@ const ImageSelector = (props: { currImg: string, onSelect: (img: string, imgUrl:
         </div>
     );
 }
-
-
 
 const ALL_IMGS: { [name: string]: any } = {
     'three.png': require('../../../media/modules/computerVision/imageLibrary/three.png').default,

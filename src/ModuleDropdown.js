@@ -20,7 +20,7 @@ export default class ModuleDropdown extends React.Component {
                     <br/>
                     {
                         descriptions.modules.map((module) =>
-                            <div className="py-1 mx-2 text-left">
+                            <div className="py-1 mx-2 text-left" key={module.dropdownTitle}>
                                 <a className="text-xs uppercase font-opensans font-bold text-white hover:text-moduleTeal" href={`/modules/${module.path}`} key={module.number.toString()}>
                                     {module.dropdownTitle}
                                 </a>

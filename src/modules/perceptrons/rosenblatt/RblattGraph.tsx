@@ -1,237 +1,296 @@
-import React, { useEffect, useState, useCallback } from 'react';
-import { RblattInput, RblattConfig, INIT_CONFIG, INIT_INPUTS } from './constants';
-import JXG from 'jsxgraph';
+import React, { useCallback, useMemo, useRef } from "react";
+import { RblattInput } from "./constants";
 
-type RblattGraphProps = {
-    inputs: RblattInput[],
-    line?: RblattConfig,
-    highlighted?: RblattInput,
-    editingType: {val:  0 | 1 | null},
-    onInputsChange: (inpts: React.SetStateAction<RblattInput[]>) => void,
-    reset: {isReset:boolean, setReset:Function},
-    clear: {isCleared:boolean, setCleared:Function},
-    changedWeight?: { isChanged: boolean, setChanged: Function},
-    calculatePointColor?: (RblattInput, any) => 0 | 1,
-    neuronState?: any,
- }
+import { zip } from "../mpNeuron/utils";
 
-const isInitialInputPoint = (xCoord: number, yCoord: number) => {
-    let result = false
-    INIT_INPUTS.forEach(({x: xInit, y: yInit}) => {
-        if(xInit === xCoord && yInit === yCoord) {
-            result = true;
-        }
-    });
-    return result;
+import { Group } from "@visx/group";
+import { Circle, Polygon } from "@visx/shape";
+import { voronoi } from "@visx/voronoi";
+import { withTooltip, Tooltip } from "@visx/tooltip";
+import { WithTooltipProvidedProps } from "@visx/tooltip/lib/enhancers/withTooltip";
+import { localPoint } from "@visx/event";
+import { GridRows, GridColumns } from "@visx/grid";
+import { scaleLinear } from "@visx/scale";
+import { AxisLeft, AxisBottom } from "@visx/axis";
+
+const COL_HOVER = "white";
+const COLORS = {
+  0: "#f15e2c",
+  1: "#394d73",
 };
 
-// returns all the points which are all not initial inputs, aka all the points that have been added
-const getListInputs = (inputs: RblattInput[]) => {
-    let toRemove:RblattInput[] = []
-    let toAdd:RblattInput[] = []
-    inputs.forEach((input: RblattInput) => {
-        const {x,y} = input;
-        if (!isInitialInputPoint(x, y)) {
-            toRemove.push(input);
-        } else {
-            toAdd.push(input);
+const background = "#FFC0CB";
+
+export type GraphProps = {
+  width?: number;
+  height?: number;
+  domain?: number;
+  range?: number;
+  inputs: any;
+  line: any;
+  lines?: { x: number; y: number }[];
+  handleClick: any;
+  showControls?: boolean;
+  highlighted: RblattInput | undefined;
+  editingType: 0 | 1;
+  squareColors?: (0 | 1)[];
+};
+
+const x = (d: RblattInput) => d[0];
+const y = (d: RblattInput) => d[1];
+const color = (d: RblattInput) => COLORS[d[2]];
+
+const SELECTED_DOT_SIZE = 5;
+const DOT_SIZE = 3;
+
+let tooltipTimeout: number;
+
+const defaultMargin = { top: 0, right: 0, bottom: 0, left: 0 };
+
+// only cares about the first 2 items in the array
+const BackgroundPoly = ({
+  topLeft,
+  botRight,
+  shading,
+}: {
+  topLeft: [number, number];
+  botRight: [number, number];
+  shading: 0 | 1;
+}) => {
+  const backgroundColor = shading === 0 ? COLORS[shading] : "#ccd9ef";
+  const topRight: [number, number] = [topLeft[0], botRight[1]];
+  const botLeft: [number, number] = [botRight[0], topLeft[1]];
+  const points: [number, number][] = [topLeft, topRight, botRight, botLeft];
+
+  // Note that my PR to add points to the Visx polygon has been merged.
+  // When a new @visx/shapes release arrives, please replace this component with that one.
+
+  return (
+    <Polygon
+      fillOpacity="20%"
+      fill={backgroundColor}
+      points={points}
+    />
+  );
+};
+
+const RblattGraph = withTooltip<GraphProps, RblattInput>(
+  ({
+    inputs: points,
+    line,
+    highlighted,
+    editingType,
+    handleClick,
+    hideTooltip,
+    showTooltip,
+    tooltipOpen,
+    tooltipData,
+    tooltipLeft,
+    tooltipTop,
+    lines,
+    width = 1000,
+    height = 1000,
+    domain = 10,
+    range = 10,
+    squareColors,
+  }: GraphProps & WithTooltipProvidedProps<RblattInput>) => {
+    const graphId = useMemo(() => `graph-${Math.random()}`, []);
+    const svgRef = useRef<SVGSVGElement>(null);
+
+    // convert from a value of our point system to one on the graph system
+    const xScale = useCallback((a) => (a + domain) * (width / (2 * domain)), [
+      width,
+      domain,
+    ]);
+    const yScale = useCallback(
+      (a) => height - (a + range) * (height / (2 * range)),
+      [height, range]
+    );
+
+    // convert from a value on the graph system to one of our point system
+    const revXScale = useCallback((a) => a * ((2 * domain) / width) - domain, [
+      width,
+      domain,
+    ]);
+    const revYScale = useCallback(
+      (a) => -(a * ((2 * range) / height) - range),
+      [height, range]
+    );
+
+    //
+    const scaleX = useCallback((pt) => xScale(x(pt)), [xScale]);
+    const scaleY = useCallback((pt) => yScale(y(pt)), [yScale]);
+
+    const voronoiLayout = useMemo(
+      () =>
+        voronoi<RblattInput>({
+          x: (d) => scaleX(d) ?? 0,
+          y: (d) => scaleY(d) ?? 0,
+          width,
+          height,
+        })(points),
+      [width, height, points, scaleX, scaleY]
+    );
+
+    // event handlers
+    const handleMouseMove = useCallback(
+      (event: React.MouseEvent | React.TouchEvent) => {
+        if (tooltipTimeout) clearTimeout(tooltipTimeout);
+        if (!svgRef.current) return;
+
+        // find the nearest polygon to the current mouse position
+        const point = localPoint(svgRef.current, event);
+        if (!point) return;
+        const neighborRadius = 50;
+        const closest = voronoiLayout.find(point.x, point.y, neighborRadius);
+        if (closest) {
+          showTooltip({
+            tooltipLeft: scaleX(closest.data),
+            tooltipTop: scaleY(closest.data),
+            tooltipData: closest.data,
+          });
         }
-    })
-    return [toRemove, toAdd];
-}
+      },
+      [scaleX, scaleY, showTooltip, voronoiLayout]
+    );
 
-const RblattGraph = (props: RblattGraphProps) => {
-    const [brdId, setBrdId] = useState('board_' + Math.random().toString(36).substr(2, 9));
-    const [board, setBoard] = useState<any>(null);
-    const [pointA, setPointA] = useState<any>(null); // 2 points to define the line
-    const [pointB, setPointB] = useState<any>(null);
+    const handleMouseLeave = useCallback(() => {
+      tooltipTimeout = window.setTimeout(() => {
+        hideTooltip();
+      }, 300);
+    }, [hideTooltip]);
 
-    // creates the board when the component loads
-    useEffect(() => {
-        const newBoard = JXG.JSXGraph.initBoard(brdId, { boundingbox: [-10, 10, 10, -10], axis: true });
-        setBoard(newBoard);
-        props.inputs.forEach((inpt, idx) => {
-            const color = inpt.z === 1 ? COL_1 : COL_0
-            const p = newBoard.create('point', [inpt.x, inpt.y], { name: '', size: 1, color, fixed: true });
-        });
-        if (props.line) {
-            const {aCoords, bCoords} = getLinePoints(props.line);
-            const pA = newBoard.create('point', aCoords, { name: '', fixed: true, color: 'transparent'});
-            const pB = newBoard.create('point', bCoords, { name: '', fixed: true, color: 'transparent'});
-            const li = newBoard.create('line', [pA, pB], { strokeColor: 'black', strokeWidth: 2, fixed: true });
-            newBoard.create('inequality', [li], {fillColor: COL_0});
-            newBoard.create('inequality', [li], { inverse: true, fillColor: COL_1 });
-            setPointA(pA);
-            setPointB(pB);
-        }
-    }, []);
+    const editGraph = useCallback(
+      (e) => {
+        // TODO: There should be a way to do this with the ref as well
+        const elem = document.getElementById(graphId)?.getBoundingClientRect();
+        if (!elem) return;
+        const xClicked = revXScale(e.clientX - elem.left);
+        const yClicked = revYScale(e.clientY - elem.top);
+        handleClick(xClicked, yClicked, editingType);
+      },
+      [handleClick, revXScale, revYScale, graphId, editingType]
+    );
 
-    // register listeners after the state var has been set
-    useEffect(() => { board && board.on('down', editPoint)}, [board]);
+    // bounds
+    const x_Scale = scaleLinear<number>({
+      domain: [-domain, domain],
+      nice: true,
+    });
 
-    useEffect(() => {
-        if (props.line) {
-            const {aCoords, bCoords} = getLinePoints(props.line);
-            pointA?.moveTo(aCoords, 700);
-            pointB?.moveTo(bCoords, 700);
-            board?.removeObject('prevLine');
-            board?.create('line', [[pointA?.X(), pointA?.Y()], [pointB?.X(), pointB?.Y()]],
-                            {name: 'prevLine', color: 'rgba(0, 0, 0, 0.2)'});
-        }
-    }, [props.line]);
+    const y_Scale = scaleLinear<number>({
+      domain: [-range, range],
+      nice: true,
+    });
 
-    useEffect(() => {
-        if(props.highlighted !== undefined) {
-            board?.select({
-                elementClass: JXG.OBJECT_CLASS_POINT
-            }).setAttribute({size: 1});
-            board?.select({
-                Y: (v: number) => v === props.highlighted!.y,
-                X: (v: number) => v === props.highlighted!.x
-            }).setAttribute({size: 4});
-        }
-    }, [props.highlighted]);
+    const xMax = width - defaultMargin.left - defaultMargin.right;
+    const yMax = height - defaultMargin.top - defaultMargin.bottom;
 
-    useEffect(() => {
-        if(board && props.reset.isReset) {
-            const [pointsToRemove, pointsToAdd] = getListInputs(props.inputs)
-            for (let el in board.objects) {
-                if (JXG.isPoint(board.objects[el])) {
-                    const [z, x, y] = board.objects[el].coords.usrCoords
-                    pointsToRemove.forEach((point) => {
-                        const {x: x1, y: y1} = point;
-                        if (x1 == x && y1 == y)  {
-                            removePoint(el, x, y);
-                        }
-                    })
-                }
-            }
-            INIT_INPUTS.forEach(({x, y, z}) => {
-                const newColor = props.calculatePointColor ? props.calculatePointColor({x, y}, props.neuronState) : z;
-                board.create('point', [x, y], { name: '', size: 1, color: newColor ? COL_1 : COL_0 });
-            });
-            props.reset.setReset(false);
-        }
-        else if(board && props.changedWeight && props.changedWeight.isChanged) {
-            // const [pointsToRemove, pointsToAdd] = getListInputs(props.inputs)
-            const pointsToRemove = props.inputs;
-            for (let el in board.objects) {
-                if (JXG.isPoint(board.objects[el])) {
-                    const [z, x, y] = board.objects[el].coords.usrCoords
-                    pointsToRemove.forEach((point) => {
-                        const {x: x1, y: y1} = point;
-                        if (x1 == x && y1 == y)  {
-                            removePoint(el, x, y, true);
-                        }
-                    })
-                }
-            }
-            props.inputs.forEach(({x, y, z}) => {
-                const newColor = props.calculatePointColor ? props.calculatePointColor({x, y}, props.neuronState) : z;
-                board.create('point', [x, y], { name: '', size: 1, color: newColor ? COL_1 : COL_0 });
-            });
-            props.changedWeight.setChanged(false);
-        }
-        else if(board && props.clear.isCleared) {
-            const pointsToRemove = props.inputs;
-            for (let el in board.objects) {
-                if (JXG.isPoint(board.objects[el])) {
-                    const [z, x, y] = board.objects[el].coords.usrCoords
-                    pointsToRemove.forEach((point) => {
-                        const {x: x1, y: y1} = point;
-                        if (x1 == x && y1 == y)  {
-                            removePoint(el, x, y);
-                        }
-                    })
-                }
-            }
-            props.clear.setCleared(false);
-        }
-    }, [props]);
+    x_Scale.range([0, xMax]);
+    y_Scale.range([yMax, 0]);
 
-    const editPoint = useCallback((e: any) => {
-        if (props.editingType.val === null) return;
+    const convertPoint = ({ x: xc, y: yc }: {x: number, y: number}): [number, number] => [xScale(xc), yScale(yc)];
 
-        let canCreate = true;
-        let i;
-        let pointToDelete;
-        if (e[JXG.touchProperty]) {
-            i = 0;
-        }
-        const coords = getMouseCoords(board, e, i);
-        for (let el in board.objects) {
-            if (JXG.isPoint(board.objects[el]) && board.objects[el].hasPoint(coords.scrCoords[1], coords.scrCoords[2])) {
-                canCreate = false;
-                pointToDelete = el;
-                break;
-            }
-        }
-        if (canCreate) {
-            const x = coords.usrCoords[1];
-            const y = coords.usrCoords[2];
-            const z = props.calculatePointColor ? props.calculatePointColor({x, y}, props.neuronState) 
-                : props.editingType.val || 0;
-            addPoint(x, y, z, board);
-        } else {
-            removePoint(pointToDelete, coords.scrCoords[1], coords.scrCoords[2], false, board);
-        }
-    }, [props.neuronState, board]);
+    const intersection: ([number, number] | undefined) = lines && convertPoint(lines[0]!);
 
-    const addPoint = (x: number, y: number, z: 0 | 1,  currBoard?: any) => {
-        props.onInputsChange(oldInpts => {
-            return oldInpts.concat([{x, y, z}]);
-        });
-
-        // can't directly use state var for board bc of closures
-        if (!currBoard) currBoard = board;
-        // creating points here is *technically* going against controlled components
-        // shhh do not look
-        board.create('point', [x, y],
-            { name: '', size: 1, color: z ? COL_1 : COL_0 });
-
-        props.changedWeight?.setChanged && props.changedWeight?.setChanged(true);
-    }
-
-    const removePoint = (pointId: string, x: number, y: number, dontRemoveFromInputs?: boolean | undefined, currBoard?: any) => {
-        if (props.editingType.val === null) return;
-        if(!dontRemoveFromInputs) {
-            props.onInputsChange(oldInpts => oldInpts.filter(inpt => inpt.x != x && inpt.y != y));
-        }
-
-        // can't directly use state var for board bc of closures
-        if (!currBoard) currBoard = board;
-        currBoard.removeObject(pointId);
-    }
+    const permuteDimensions = (x) => [
+      [-x, x],
+      [x, x],
+      [x, -x],
+      [-x, -x],
+    ];
 
     return (
-        <div className="bg-white" id={brdId} style={{ width: '500px', height: '500px' }} />
+      <div>
+        <svg width={width} height={height} ref={svgRef}>
+          <rect
+            id={graphId}
+            width={width}
+            height={height}
+            fill={background}
+            onMouseMove={handleMouseMove}
+            onMouseLeave={handleMouseLeave}
+            onTouchMove={handleMouseMove}
+            onTouchEnd={handleMouseLeave}
+            onClick={editGraph}
+          />
+          <Group pointerEvents="none">
+            {lines &&
+              squareColors &&
+              zip(
+                permuteDimensions(10),
+                squareColors
+              ).map(([[i, j], curColor]) => (
+                <BackgroundPoly
+                  topLeft={[xScale(i), yScale(j)]}
+                  botRight={intersection!}
+                  shading={curColor}
+                />
+              ))}
+            <GridRows
+              scale={x_Scale}
+              width={xMax}
+              height={yMax}
+              stroke="#e0e0e0"
+            />
+            <GridColumns
+              scale={x_Scale}
+              width={xMax}
+              height={yMax}
+              stroke="#e0e0e0"
+            />
+            <AxisBottom
+              top={xMax / 2}
+              scale={x_Scale}
+              hideZero={true}
+              numTicks={domain}
+            />
+            <AxisLeft
+              left={xMax / 2}
+              scale={y_Scale}
+              hideZero={true}
+              numTicks={range}
+            />
+            {points.length > 0 &&
+              points.map((point: RblattInput, i: number) => (
+                <Circle
+                  key={`point-${x(point)}-${i}`}
+                  className="dot"
+                  cx={scaleX(point)}
+                  cy={scaleY(point)}
+                  r={
+                    highlighted &&
+                    x(highlighted) === x(point) &&
+                    y(highlighted) === y(point)
+                      ? SELECTED_DOT_SIZE
+                      : DOT_SIZE
+                  }
+                  fill={tooltipData === point ? COL_HOVER : color(point)}
+                />
+              ))}
+          </Group>
+        </svg>
+        {tooltipOpen &&
+          tooltipData &&
+          tooltipLeft != null &&
+          tooltipTop != null && (
+            <Tooltip left={tooltipLeft + 10} top={tooltipTop + 10}>
+              <div>
+                <strong>x:</strong> {x(tooltipData).toFixed(2)}
+              </div>
+              <div>
+                <strong>y:</strong> {y(tooltipData).toFixed(2)}
+              </div>
+              {points.length === 1 && (
+                <div>
+                  <strong>Last Point! Can't remove it!</strong>
+                </div>
+              )}
+            </Tooltip>
+          )}
+      </div>
     );
-}
+  }
+);
 
 export default RblattGraph;
-
-
-
-
-var getMouseCoords = function (board: any, e: MouseEvent, i?: number) {
-    var cPos = board.getCoordsTopLeftCorner(e),
-        absPos = JXG.getPosition(e, i),
-        dx = absPos[0] - cPos[0],
-        dy = absPos[1] - cPos[1];
-
-    return new JXG.Coords(JXG.COORDS_BY_SCREEN, [dx, dy], board);
-}
-
-// todo test if this is correct when switching between normal/ vertical line
-function getLinePoints(line: RblattConfig) {
-    if (line.weightY === 0) {
-        const x = line.bias / line.weightX;
-        return {aCoords: [x, 1], bCoords: [x, 2]}
-    } else {
-        const func = (x: number) => (line.weightX * x + line.bias) / (- line.weightY);
-        return {aCoords: [1, func(1)], bCoords: [2, func(2)]}
-    }
-}
-
-const COL_0 = '#f15e2c';
-const COL_1 = '#394d73';
