@@ -13,6 +13,7 @@ import connorBarkerPic from '../media/aboutPage/connorBarkerPic.jpg';
 import michaelBriggsPic from '../media/aboutPage/michaelBriggsPic.jpg';
 import johnCiolfiPic from '../media/aboutPage/johnCiolfiPic.png';
 import jakeDuffyPic from '../media/aboutPage/jakeDuffyPic.jpg';
+import lindaZengPic from '../media/aboutPage/lindaZengPic.jpg';
 
 const AboutPage = () => (
   <div className="relative inline-block w-full min-h-full bg-offwhite bg-about bg-no-repeat bg-scroll bg-bottom bg-stretchBottom">
@@ -33,6 +34,13 @@ const AboutPage = () => (
         title="Project Lead"
         linkedin="https://www.linkedin.com/in/max-pinheiro-4a5b11181/"
         email="pinheiro.m@northeastern.edu"
+      />
+      <ProfileCard
+        image={cassieHarbourPic}
+        name="Cassie Harbour"
+        title="Developer"
+        linkedin=""
+        email="harbour.c@northeastern.edu"
       />
       <ProfileCard
         image={connorBarkerPic}
@@ -62,11 +70,18 @@ const AboutPage = () => (
         linkedin="https://www.linkedin.com/in/jake-duffy/"
         email="duffy.jak@northeastern.edu"
       />
+      <ProfileCard
+        image={lindaZengPic}
+        name="Linda Zeng"
+        title="Designer"
+        linkedin=""
+        email=""
+      />
     </div>
     <h2 className="text-navy text-4xl mt-16">Former Members</h2>
     <div
       id="former-profile-cards-section"
-      className="m-auto mb-48 w-3/4 flex flex-wrap justify-center"
+      className="m-auto mb-16 w-3/4 flex flex-wrap justify-center"
     >
       <ProfileCard
         image={krishSharmaPic}
@@ -81,13 +96,6 @@ const AboutPage = () => (
         title="Former Designer"
         linkedin="http://linkedin.com/in/lili-kobayashi"
         email="Kobayashi.l@northeastern.edu"
-      />
-      <ProfileCard
-        image={cassieHarbourPic}
-        name="Cassie Harbour"
-        title="Former Developer"
-        linkedin=""
-        email="harbour.c@northeastern.edu"
       />
       <ProfileCard
         image={danKrasnonosenkikhPic}
