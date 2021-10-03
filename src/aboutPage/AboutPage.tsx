@@ -21,7 +21,6 @@ const AboutPage = () => (
       <h1 className="mt-24 text-6xl font-sans text-teal-a-eye font-bold italic">
         ABOUT US
       </h1>
-      <h2 className="text-navy text-xl">Team Description</h2>
     </div>
     <h2 className="text-navy text-4xl mt-16">Current Members</h2>
     <div
