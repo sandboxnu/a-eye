@@ -36,7 +36,6 @@ const modules: Record<string, Module> = {
  * Renders the entire module page.
  * @param props.match.params.module name of the current module (route has path /modules/module)
  */
-
 export default function ModulePage(
   props: RouteComponentProps<{ module: string }>,
 ) {
@@ -45,6 +44,7 @@ export default function ModulePage(
       params: { module },
     },
   } = props;
+
   const curModule = modules[module];
 
   if (!curModule) {

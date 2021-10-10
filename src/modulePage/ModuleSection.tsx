@@ -140,6 +140,64 @@ function getDemo(comp: string, scheme: ColorScheme) {
   }
 }
 
+// prettier-ignore
+function renderSubsection(section: ModuleSubsection, index: number, bodyColor: string) {
+  if (index % 2 === 0) {
+    return (
+      <div
+        className={`flex flex-col md:flex-row mx-2 md:my-5 ${
+          section.imgSrc === '/blank.png' && 'my-10'
+        } ${section.body ? '' : 'hidden'}`}
+        // eslint-disable-next-line
+        key={index}
+      >
+        <div className="md:w-2/3 flex-col">
+          <p
+            className={`my-2 text-left text-lg font-medium font-mono ${bodyColor}`}
+          >
+            {section.body || lorem}
+          </p>
+        </div>
+        <img
+          src={GetImage(section.imgSrc)}
+          alt=""
+          className={` ${
+            section.imgSrc === '/blank.png'
+              ? 'hidden md:object-none'
+              : 'object-contain'
+          } md:w-1/4 md:mr-16 md:-mt-12`}
+        />
+      </div>
+    );
+  }
+  return (
+    <div
+      className={`flex flex-col md:flex-row mx-2 md:my-5 ${
+        section.imgSrc === '/blank.png' && 'my-10'
+      } ${section.body ? '' : 'hidden'}`}
+      // eslint-disable-next-line
+      key={index}
+    >
+      <img
+        src={GetImage(section.imgSrc)}
+        alt=""
+        className={` ${
+          section.imgSrc === '/blank.png'
+            ? 'hidden md:object-none'
+            : 'object-contain'
+        } md:w-1/4 md:mr-16 md:-mt-12`}
+      />
+      <div className="md:w-2/3 flex-col">
+        <p
+          className={`my-2 text-left text-lg font-medium font-mono ${bodyColor}`}
+        >
+          {section.body || lorem}
+        </p>
+      </div>
+    </div>
+  );
+}
+
 /**
  * Renders a single section on the module page.
  *
@@ -188,41 +246,7 @@ const ModuleSection: React.FC<ModuleSectionType> = ({
         </p>
         <ul className="">
           {/* eslint-disable-next-line */}
-          {sections.map((section, index) => (
-            <div
-              className={`flex flex-col md:flex-row mx-2 md:my-5 ${
-                section.imgSrc === '/blank.png' && 'my-10'
-              } ${section.body ? '' : 'hidden'}`}
-              // eslint-disable-next-line
-              key={index}
-            >
-              <img
-                src={GetImage(section.imgSrc)}
-                alt=""
-                className={`hidden ${index % 2 !== 0 && 'md:flex'} ${
-                  section.imgSrc === '/blank.png'
-                    ? 'hidden md:object-none'
-                    : 'object-contain'
-                } md:w-1/4 md:mr-16 md:-mt-12`}
-              />
-              <div className="md:w-2/3 flex-col">
-                <p
-                  className={`my-2 text-left text-lg font-medium font-mono ${scheme.bodyColor}`}
-                >
-                  {section.body || lorem}
-                </p>
-              </div>
-              <img
-                src={GetImage(section.imgSrc)}
-                alt=""
-                className={`${index % 2 !== 0 && 'md:hidden'} ${
-                  section.imgSrc === '/blank.png'
-                    ? 'hidden md:object-none'
-                    : 'object-contain'
-                } md:w-1/4 md:mr-16 md:-mt-12`}
-              />
-            </div>
-          ))}
+          {sections.map((section, index) => renderSubsection(section, index, scheme.bodyColor))}
         </ul>
         {getDemo(demoComp, scheme)}
       </div>
