@@ -8,7 +8,7 @@
       "subsections": [
         {
           "title": "",
-          "body": "In order to extract valuable information from an image, computers must be able to process images and detect signals based on some criteria. As humans, we do this all the time - if we see an animal, we can identify it as a cat because it has fur, perked up ears, a small nose, and bright eyes. We extract features/traits of the objects in our view that allow us to identify those objects.",
+          "body": "In order to extract valuable information from an image, computers must be able to process images and detect features in those images based on some criteria. As humans, we do this all the time - if we see an animal, we can identify it as a cat because it has fur, perked up ears, a small nose, and bright eyes. We extract features/traits of the objects in our view that allow us to identify those objects.",
           "imgSrc": "blank"
         },
         {
@@ -30,7 +30,7 @@
       "subsections": [
         {
           "title": "Subsection 1",
-          "body": "Let's take a step back and define what an image is first. An image is made up of individual pixels which each have a value that represents the color, and those pixels are organized into a grid of values to give us the resulting image. However, the organization of the pixels is very particular! We can have the exact same pixel values in two grids, just in different orders and the image would be entirely unrecognizable.",
+          "body": "Let's take a step back and define what an image is first. An image is made up of individual pixels which each have a value that represents the color, and those pixels are organized into a grid of values to give us the resulting image.",
           "imgSrc": "animation1"
         },
         {
@@ -40,7 +40,7 @@
         },
         {
           "title": "Subsection 3",
-          "body": "The way this feature extraction occurs is by multiplying the corresponding parts of the kernel with the pixel value directly below it and summing all those products up — let's call that product P. We compute all the P terms by sliding this kernel across the image and repeating the math at every step. As we slide across the image, we stitch together the P terms to create a brand new image!",
+          "body": "The way this feature extraction occurs is by making a 'window' the size of the kernel around a pixel in the original image. We then multiply the original image's pixel values by the numbers in the kernel, and sum them all up. We compute this sum for all pixels by sliding this 'window' across every pixel in the image and repeating the math at every step. As we slide across the image, we stitch together the new values after applying the kernel to create a brand new image!",
           "imgSrc": "animation3"
         }
       ],
@@ -52,7 +52,7 @@
       "subsections": [
         {
           "title": "Subsection 1",
-          "body": "Intuitively, this kernel is used for blurring. This is useful to help amplify the overall image structure, when the picture is being passed into some sort of classification system to identify the image. The same way we don't recognize a cell phone by its serial number, an image processing system wants to focus on the big picture as well (sorry, not sorry).",
+          "body": "Intuitively, this kernel is used for blurring. This is useful to make sure any that, for example, a classification algorithm doesn't focus too much on the details of an image when being identified. The same way we don't recognize a cell phone by its serial number, an image processing system should focus on the big picture (sorry, not sorry).",
           "imgSrc": "blank"
         },
         {
@@ -62,7 +62,7 @@
         },
         {
           "title": "Subsection 3",
-          "body": "We can control the change in the magnitude of the values from the center to the outsides of the kernel (spread of the bell curve) by modifying the standard deviation of the distribution using the σ. The last thing we want to make sure about the kernel is that the values sum up to approximately 1. The motivation for this is to avoid adding or subtracting \"energy\" to the image. We can do this by summing up all of the values and dividing every entry by the sum.",
+          "body": "We can control the change in the magnitude of the values from the center to the outsides of the kernel (spread of the bell curve) by modifying the standard deviation of the distribution using the σ (sigma) parameter. The last thing we want to make sure about the kernel is that the values sum up to approximately 1. If we didn't do this, then the image would end up brighter or darker than intended (called the image's \"energy\"). We can do this by summing up all of the values and dividing every entry by the sum.",
           "imgSrc": "blank"
         },
         {
@@ -89,7 +89,7 @@
         },
         {
           "title": "Subsection 3",
-          "body": "The resulting image contains only the windows of the image that contain features that follow the directionality specified in the generation of the kernel. This can be highly effective when scanning images of text documents that also contain images where we only want to retain the text in the image. The reason for this is that images generally have lower frequency directional components as they are smoother relative to text.",
+          "body": "The resulting image contains only the windows of the image that contain features that follow the angle specified by θ. This can be highly effective when scanning images which contain text where we only want to retain the text in the image. The reason for this is that images generally have lower frequency directional components as they are smoother relative to text.",
           "imgSrc": "blank"
         }
       ],
