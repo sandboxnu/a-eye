@@ -49,6 +49,12 @@ export default function ModulePage(
 
   const curModule = modules[module];
 
+  const openSectionAndJump = (index: number) => {
+    setOpenSection(index);
+    const id = curModule.sections[index].title.split(' ').join('-');
+    window.location.href = '#' + id;
+  }
+
   const [openSection, setOpenSection] = useState<number>(0);
 
   if (!curModule) {
@@ -67,7 +73,8 @@ export default function ModulePage(
       </p>
       <ul>
         {curModule.sections.map((section, index) =>
-          index === openSection ? (
+          <div id={section.title.split(' ').join('-')}>
+            {index === openSection ? (
             <ModuleSection
               title={section.title}
               sections={section.subsections}
@@ -77,12 +84,13 @@ export default function ModulePage(
             />
           ) : (
             <div className={`cursor-pointer flex flex-col w-screen ${section.colorScheme === 'dark' ? ' bg-moduleDarkBlue' : 'bg-modulePaleBlue'}`}
-             onClick={() => setOpenSection(index)}>
-              <p className={`my-12 text-3xl md:text-6xl italic font-bold font-opensans ${section.colorScheme === 'dark' ? 'text-modulePaleBlue' : 'text-moduleNavy'}`}>
+             onClick={() => openSectionAndJump(index)}>
+              <p className={`my-2 text-3xl md:text-4xl italic font-bold font-opensans ${section.colorScheme === 'dark' ? 'text-modulePaleBlue' : 'text-moduleNavy'}`}>
                 {section.title}
               </p>
             </div>
-           ),
+           )}
+          </div>,
         )}
       </ul>
     </div>

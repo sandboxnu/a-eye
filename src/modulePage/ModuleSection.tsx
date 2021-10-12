@@ -237,7 +237,9 @@ const ModuleSection: React.FC<ModuleSectionType> = ({
         };
 
   return (
-    <div className={`flex flex-col w-screen ${scheme.bgColor}`}>
+    <div
+      className={`flex flex-col w-screen ${scheme.bgColor}`}
+    >
       <div className="mx-12 md:mx-40">
         <p
           className={`my-12 text-3xl md:text-6xl italic font-bold font-opensans ${scheme.titleColor}`}
