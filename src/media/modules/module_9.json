@@ -13,12 +13,12 @@
         },
         {
           "title": "Subsection 2",
-          "body": "Let's pretend we are florists and we want to learn about the characteristics of the flowers in our garden. We know we have three types of Iris flowers in our garden: Setosa, Versicolor, and Virginica flowers. We go through and collect some easily measurable information about all of the flowers, particularly, we collect information about the petal length and width as well as the sepal length and width. We are not concerned with which specific plant those measurements came from but we do want to track what subtype of Iris that plant is.",
+          "body": "Let's pretend we are florists and we want to learn about the characteristics of the flowers in our garden. We know we have three types of Iris flowers in our garden: Setosa, Versicolor, and Virginica flowers. We go through and collect some easily measurable information about all of the flowers, particularly, we collect information about the petal length and width as well as the sepal length and width, keeping of which Iris variety these measurements came from.",
           "imgSrc": "blank"
         },
         {
           "title": "Subsection 3",
-          "body": "Fantastic! Now we have that data for every single one of our plants, each being an 'observation', with their corresponding characteristic values which we will refer to as 'features' from now on. We can easily combine the observations into a table of observations since each has the exact same features. Now, times are tough for the flower industry so we cannot hire someone to label each of our Iris flowers as the correct subtype when a new shipment comes in. Can you come up with a way to determine subtype just based on the table below? Note that you can click the triangle in the top right corner of the table to reveal the true subtypes. ",
+          "body": "Fantastic! Now we have the data for every single one of our plants, which we can put into a table. Using the lingo of classification, each raw of the table is an 'observation', each column is a 'feature', and the variable we want to predict is the 'target'. In our example, the target is the Iris species. The possible values of the target - e.g. Setosa, Virginica, and Versicolor - are called the 'classes'. The goal of classification is to correctly determine the target value (or the class) of each observation based upon its features. Can you come up with a way to determine the flower's species just based on the table below? Note that you can click the triangle in the top right corner of the table to reveal the observation's target variable. ",
           "imgSrc": "blank"
         }
       ],
@@ -30,7 +30,7 @@
       "subsections": [
         {
           "title": "Subsection 1",
-          "body": "It is certainly not easy to find a nice way to determine which observation is which flower just from the data table of features! Another approach to understanding our data is to see what the distribution of our observations is for some combination of the features so we can see if flowers of the same subtype have similar values for some features.",
+          "body": "It is certainly not easy to determine which observation is which flower just from the data alone! Another approach to understanding our data is to plot the features of our observations against each other to see if there's some correlation between their values and the target variable.",
           "imgSrc": "blank"
         },
         {
@@ -40,7 +40,7 @@
         },
         {
           "title": "Subsection 3",
-          "body": "First, let's only compare the Setosa and Versicolor flowers. Since we remembered to write down what subtype each of our flowers/observations is our current garden, we can color our points based on that information. Here, the Setosa flowers are blue and the Versicolor flowers are red. We also see a nice separation between the two groups of points! By using the Petal Length and Petal Width, we could draw a line to separate the classes down from 1.8 on the y-axis down to 3.5 on the x-axis. Now if new flowers come in, we can say that the flower's coordinates lie above that line then it is a Versicolor and if the coordinates are below, it is a Setosa. Note that you can click the box of a class in the legend to hide the points belonging to that class.",
+          "body": "First, let's only compare the Setosa and Versicolor flowers. Since we remembered to write down what subtype each of our flowers/observations is in our current garden, we can color our points based upon that information. Here, the Setosa flowers are blue and the Versicolor flowers are red. In our graph, we can see a nice separation between the two groups of points! By using the Petal Length and Petal Width, we could draw a line on this graph to separate the species easily. Now if we got a new flower, we could determine which species it is based upon if it lies above that line or below that line. Note that you can click the box of a species in the legend to hide those points.",
           "imgSrc": "blank"
         }
       ],
@@ -62,7 +62,7 @@
         },
         {
           "title": "Subsection 3",
-          "body": "To use the demo below, select the values you want to plot on each axis by clicking the light blue box corresponding to the feature you are interested in. The plot will automatically resize and animate the plot to change to displaying the new pair of axes you have selected. If you only want to compare two subtypes, click the box at the top with the color that corresponds to the subtype you want to exclude (you can reenable it by clicking again). Experiment with the possible pairings to find what is the approximate best way to separate your subtypes! Note that when you choose the same variable on the same axis, you will consistently get a line as the resulting plot, why is that?",
+          "body": "To use the demo below, select the values you want to plot on each axis by clicking the light blue box corresponding to the feature you are interested in. If you only want to compare two subtypes, click the box at the top with the color that corresponds to the subtype you want to exclude (you can reenable it by clicking again). Experiment with the possible pairings to find what is the best way to separate species! Note that when you choose the same variable on the same axis, you will consistently get a line as the resulting plot, why is that?",
           "imgSrc": "blank"
         }
       ],
@@ -84,7 +84,7 @@
         },
         {
           "title": "Subsection 3",
-          "body": "Below, we see that this is the case when we attempt to use the first two Principle Components to separate the data. Notice that the first principle component maximizes the difference between the blue cluster (Setosa) and the rest of the points. However, the second PC does not possess nearly as much variation between the classes, making it possible to learn an approximate but not entirely accurate separation boundary (i.e. a single or set of line(s) we can draw between the two sets of points) for the Versicolor and Virginica classes. Note that you are not restricted to plotting PCs against other PCs in real life so feel free to do the below, but remember that since all the features can used to develop a PC you may be seeing some duplicate information! Do you think that the visualization here creates more separation? Why or why not?",
+          "body": "Below, we see that the species are more separeted when we use the first two Principle Components to separate the data. Notice that the first principle component maximizes the difference between the blue cluster (Setosa) and the rest of the points. However, the second PC does not possess nearly as much variation between the classes, making it possible to learn an approximate but not entirely accurate separation boundary between the Vertosa and Virginica flowers. Do you think that the visualization here creates more separation? Why or why not?",
           "imgSrc": "blank"
         }
       ],
@@ -96,7 +96,7 @@
       "subsections": [
         {
           "title": "Subsection 1",
-          "body": "Now we will explore a different example where we have two classes of points that we want to label as the appropriate class. Here, we do not have any prior information about what point belongs to what class which begs the question: how can we classify new points when we do not know the classes of the original points? Instead of finding a separation boundary directly -  like we did above where we were able to find a set of lines that separated the two groups of points - we first have to determine which points belong to the same group!",
+          "body": "Now we will explore a different example where we have a bunch of data and all we know about that data is that there are two classes. We do not have any prior information about what point belongs to what class. Like in classification, the goal is to figure out a way to separate these points, but now the goal of our boundaries is to separate this unlabeled data into two groups which are as distinctly different as possible.",
           "imgSrc": "blank"
         },
         {
