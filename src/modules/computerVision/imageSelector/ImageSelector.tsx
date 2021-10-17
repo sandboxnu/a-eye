@@ -1,5 +1,5 @@
 /* eslint-disable global-require */
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import './ImageSelector.css';
 import ImageUploader from './ImageUploader';
 
@@ -36,15 +36,25 @@ export interface ImageSelectorProps {
 }
 
 const ImageSelector = ({ currImg, onSelect }: ImageSelectorProps) => {
+  const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
+  const imgRef = useRef<HTMLImageElement>(null);
+
   useEffect(() => onSelect(currImg, ALL_IMGS[currImg]), []);
 
   const makeImg = (key: string) => (
     // eslint-disable-next-line
     <img
       key={key}
-      className={key === currImg ? 'selected' : ''}
+      ref={key === currImg ? imgRef : undefined}
+      className={key === currImg ? 'selected' : 'unselected'}
       src={ALL_IMGS[key]}
-      onClick={() => onSelect(key, ALL_IMGS[key])}
+      onClick={() => {
+        onSelect(key, ALL_IMGS[key]);
+        setDimensions({
+          width: imgRef.current?.width ?? 0,
+          height: imgRef.current?.height ?? 0,
+        });
+      }}
     />
   );
 
@@ -54,7 +64,15 @@ const ImageSelector = ({ currImg, onSelect }: ImageSelectorProps) => {
       <div className="selection-window">
         {Object.keys(ALL_IMGS).map(key => ALL_IMGS[key] && makeImg(key))}
       </div>
-      <ImageUploader onSelect={onSelect} />
+      <ImageUploader
+        currImg={currImg}
+        onSelect={onSelect}
+        setDimensions={setDimensions}
+      />
+      Image Size:&nbsp;
+      {dimensions.width === 0 ? '?' : dimensions.width}
+      &nbsp;by&nbsp;
+      {dimensions.height === 0 ? '?' : dimensions.height}
     </div>
   );
 };

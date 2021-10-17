@@ -22,6 +22,10 @@
     border: 5px solid #48c0b5;
 }
 
+.image-selector img.unselected {
+    filter: brightness(40%)
+}
+
 .image-selector img:hover {
     filter: brightness(85%);
 }
