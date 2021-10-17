@@ -5,6 +5,7 @@ import module8 from '../media/modules/module_8.json';
 import module9 from '../media/modules/module_9.json';
 import module10 from '../media/modules/module_10.json';
 import module11 from '../media/modules/module_11.json';
+import brokenLink from '../404_page/404_page';
 
 export interface ModuleSubsectionType {
   title: string;
@@ -48,12 +49,7 @@ export default function ModulePage(
   const curModule = modules[module];
 
   if (!curModule) {
-    return (
-      <div>
-        <p>This module does not exist.</p>
-        <a href="/">Return to home</a>
-      </div>
-    );
+    return brokenLink();
   }
 
   return (
