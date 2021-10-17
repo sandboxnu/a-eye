@@ -2,6 +2,8 @@
 
 const { Image } = require('image-js');
 const hog = require('hog-features');
+import { buildQueries } from '@testing-library/dom';
+import Jimp from 'jimp';
 
 export const denseConfig = {
   cellSize: 8,
@@ -65,13 +67,84 @@ export async function histogramBlocks(img: any, options: HogOptionsType): Promis
 }
 
 export type GradientsType = {
+  vert: ImageData,
+  horiz: ImageData,
+  diagDown: ImageData,
+  diagUp: ImageData
+}
+
+export async function gradientImages(imageUrl: string): Promise<GradientsType | null> {
+  const vertKernel: number[][] = [
+    [-1, 0, 1],
+    [-2, 0, 2],
+    [-1, 0, 1,]
+  ];
+
+  const horizKernel: number[][] = [
+    [1, 2, 1],
+    [0, 0, 0],
+    [-1, -2, -1,]
+  ];
+
+  const diagDownKernel: number[][] = [
+    [-2, -1,0],
+    [-1, 0, 1],
+    [0,  1, 2]
+  ];
+
+  const diagUpKernel: number[][] = [
+    [0, 1, 2],
+    [-1, 0, 1],
+    [-2, -1, 0,]
+  ];
+
+  return Jimp.read(imageUrl)
+    .then(image => {
+      let vert = image.clone();
+      let horiz = image.clone();
+      let diagDown = image.clone();
+      let diagUp = image.clone();
+
+      vert.convolute(vertKernel);
+      horiz.convolute(horizKernel);
+      diagDown.convolute(diagDownKernel);
+      diagUp.convolute(diagUpKernel);
+
+      let vertClampedArray = Uint8ClampedArray.from(vert.bitmap.data);
+      let horizClampedArray = Uint8ClampedArray.from(horiz.bitmap.data);
+      let diagDownClampedArray = Uint8ClampedArray.from(diagDown.bitmap.data);
+      let diagUpClampedArray = Uint8ClampedArray.from(diagUp.bitmap.data);
+      
+      let vertImageData = new ImageData(vertClampedArray, vert.bitmap.width, vert.bitmap.height)
+      let horizImageData = new ImageData(horizClampedArray, horiz.bitmap.width, horiz.bitmap.height)
+      let diagDownImageData = new ImageData(diagDownClampedArray, diagDown.bitmap.width, diagDown.bitmap.height)
+      let diagUpImageData = new ImageData(diagUpClampedArray, diagUp.bitmap.width, diagUp.bitmap.height)
+
+      console.log({
+        vert: vertImageData,
+        horiz: horizImageData,
+        diagDown: diagDownImageData,
+        diagUp: diagUpImageData,
+      })
+
+      return {
+        vert: vertImageData,
+        horiz: horizImageData,
+        diagDown: diagDownImageData,
+        diagUp: diagUpImageData,
+      }
+    }).catch(e => {console.log(e); return null;});
+
+}
+
+export type OldGradientsType = {
   x: ImageData;
   y: ImageData;
   a: number[][];
   v: ImageData;
 };
 
-export async function gradientImages(img: any): Promise<GradientsType> {
+export async function oldGradientImages(img: any): Promise<OldGradientsType> {
   return Image.load(img).then((image: any) => {
     image = image.resize({width: 350});
 

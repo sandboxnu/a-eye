@@ -4,6 +4,8 @@ import React, { useLayoutEffect, useRef, useState } from "react";
 import {
   histogramAggregate,
   histogramBlocks,
+  oldGradientImages,
+  OldGradientsType,
   gradientImages,
   GradientsType,
   BlocksType,
@@ -33,7 +35,7 @@ type HogTabType = {
   labelColor: string;
   width: number;
   height: number;
-  gradients: GradientsType;
+  gradients: OldGradientsType;
   blocks: BlocksType;
   histogram: number[];
   setHogConfig: (type: HogConfigType) => void;
@@ -263,7 +265,7 @@ const HistOfGradDemo: React.FC<HistOfGradDemoType> = ({
   const [imgWidth, setImgWidth] = useState<number>(0);
   const [imgHeight, setImgHeight] = useState<number>(0);
   const [tab, setTab] = useState<number>(0);
-  const [gradients, setGradients] = useState<GradientsType>();
+  const [gradients, setGradients] = useState<OldGradientsType>();
   const [blocks, setBlocks] = useState<BlocksType>();
   const [histogram, setHistogram] = useState<number[]>();
   const [hogConfig, setHogConfig] = useState<HogConfigType>('dense');
@@ -287,9 +289,11 @@ const HistOfGradDemo: React.FC<HistOfGradDemoType> = ({
     // reset to tab 0 when changing images
     if (img.current !== imgUrl || config.current !== hogConfig) {
       if (img.current !== imgUrl) setTab(0);
+      console.log(imgUrl)
+      gradientImages(imgUrl)
       // calculate HoG features
       Promise.all([
-        gradientImages(imgUrl),
+        oldGradientImages(imgUrl),
         histogramBlocks(imgUrl, configs[hogConfig]),
         histogramAggregate(imgUrl, configs[hogConfig]),
       ]).then(features => {
