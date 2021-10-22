@@ -70,10 +70,11 @@ export type GradientsType = {
   vert: ImageData,
   horiz: ImageData,
   diagDown: ImageData,
-  diagUp: ImageData
+  diagUp: ImageData,
+  combined: ImageData
 }
 
-export async function gradientImages(imageUrl: string): Promise<GradientsType | null> {
+export async function gradientImages(imageUrl: string): Promise<GradientsType | undefined> {
   const vertKernel: number[][] = [
     [-1, 0, 1],
     [-2, 0, 2],
@@ -100,6 +101,7 @@ export async function gradientImages(imageUrl: string): Promise<GradientsType | 
 
   return Jimp.read(imageUrl)
     .then(image => {
+      image.greyscale()
       let vert = image.clone();
       let horiz = image.clone();
       let diagDown = image.clone();
@@ -120,11 +122,18 @@ export async function gradientImages(imageUrl: string): Promise<GradientsType | 
       let diagDownImageData = new ImageData(diagDownClampedArray, diagDown.bitmap.width, diagDown.bitmap.height)
       let diagUpImageData = new ImageData(diagUpClampedArray, diagUp.bitmap.width, diagUp.bitmap.height)
 
+      let combinedClampedArray = Uint8ClampedArray.from(vertClampedArray)
+      combinedClampedArray = combinedClampedArray.map((element, index) => {
+        return element + horizClampedArray[index];
+      })
+      let combinedImageData =  new ImageData(combinedClampedArray, vert.bitmap.width, vert.bitmap.height)
+
       console.log({
         vert: vertImageData,
         horiz: horizImageData,
         diagDown: diagDownImageData,
         diagUp: diagUpImageData,
+        combined: combinedImageData
       })
 
       return {
@@ -132,8 +141,15 @@ export async function gradientImages(imageUrl: string): Promise<GradientsType | 
         horiz: horizImageData,
         diagDown: diagDownImageData,
         diagUp: diagUpImageData,
+        combined: combinedImageData
       }
-    }).catch(e => {console.log(e); return null;});
+    }).catch(e => {console.log(e); return {
+      horiz: new ImageData(385,385),
+      vert: new ImageData(385,385),
+      diagUp: new ImageData(385,385),
+      diagDown: new ImageData(385,385),
+      combined: new ImageData(385,385)
+    };});
 
 }
 

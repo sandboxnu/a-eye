@@ -35,7 +35,7 @@ type HogTabType = {
   labelColor: string;
   width: number;
   height: number;
-  gradients: OldGradientsType;
+  gradients: GradientsType;
   blocks: BlocksType;
   histogram: number[];
   setHogConfig: (type: HogConfigType) => void;
@@ -51,7 +51,7 @@ const SobelTab: React.FC<HogTabType> = ({
   <div className="flex flex-col md:flex-row justify-evenly">
     <GradientImage
       label="Horizontal Sobel"
-      gradient={gradients.x}
+      gradient={gradients.horiz}
       width={width}
       height={height}
       labelColor={labelColor}
@@ -61,7 +61,7 @@ const SobelTab: React.FC<HogTabType> = ({
     </div>
     <GradientImage
       label="Vertical Sobel"
-      gradient={gradients.y}
+      gradient={gradients.vert}
       width={width}
       height={height}
       labelColor={labelColor}
@@ -84,14 +84,14 @@ const SobelNeedleTab: React.FC<HogTabType> = ({
       <div>
         <GradientImage
           label="Horizontal Sobel"
-          gradient={gradients.x}
+          gradient={gradients.horiz}
           width={width}
           height={height}
           labelColor={labelColor}
         />
         <GradientImage
           label="Vertical Sobel"
-          gradient={gradients.y}
+          gradient={gradients.vert}
           width={width}
           height={height}
           labelColor={labelColor}
@@ -125,7 +125,8 @@ const CombinedNeedleTab: React.FC<HogTabType> = ({
     <div className="flex flex-col md:flex-row justify-evenly">
       <GradientImage
         label="Combined Sobel"
-        gradient={gradients.v}
+        //todo broken
+        gradient={gradients.combined}
         width={width}
         height={height}
         labelColor={labelColor}
@@ -265,7 +266,7 @@ const HistOfGradDemo: React.FC<HistOfGradDemoType> = ({
   const [imgWidth, setImgWidth] = useState<number>(0);
   const [imgHeight, setImgHeight] = useState<number>(0);
   const [tab, setTab] = useState<number>(0);
-  const [gradients, setGradients] = useState<OldGradientsType>();
+  const [gradients, setGradients] = useState<GradientsType>();
   const [blocks, setBlocks] = useState<BlocksType>();
   const [histogram, setHistogram] = useState<number[]>();
   const [hogConfig, setHogConfig] = useState<HogConfigType>('dense');
@@ -289,11 +290,10 @@ const HistOfGradDemo: React.FC<HistOfGradDemoType> = ({
     // reset to tab 0 when changing images
     if (img.current !== imgUrl || config.current !== hogConfig) {
       if (img.current !== imgUrl) setTab(0);
-      console.log(imgUrl)
       gradientImages(imgUrl)
       // calculate HoG features
       Promise.all([
-        oldGradientImages(imgUrl),
+        gradientImages(imgUrl),
         histogramBlocks(imgUrl, configs[hogConfig]),
         histogramAggregate(imgUrl, configs[hogConfig]),
       ]).then(features => {
