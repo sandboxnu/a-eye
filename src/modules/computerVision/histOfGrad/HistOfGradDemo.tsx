@@ -48,24 +48,45 @@ const SobelTab: React.FC<HogTabType> = ({
   height,
   gradients,
 }) => (
-  <div className="flex flex-col md:flex-row justify-evenly">
-    <GradientImage
-      label="Horizontal Sobel"
-      gradient={gradients.horiz}
-      width={width}
-      height={height}
-      labelColor={labelColor}
-    />
-    <div className="my-auto mx-3">
-      <img src={sobelFilter} alt="img" />
+  <div>
+    <div className="flex flex-col md:flex-row justify-evenly">
+      <GradientImage
+        label="Horizontal Sobel"
+        gradient={gradients.horiz}
+        width={width}
+        height={height}
+        labelColor={labelColor}
+      />
+      <div className="my-auto mx-3">
+        <img src={sobelFilter} alt="img" />
+      </div>
+      <GradientImage
+        label="Vertical Sobel"
+        gradient={gradients.vert}
+        width={width}
+        height={height}
+        labelColor={labelColor}
+      />
     </div>
-    <GradientImage
-      label="Vertical Sobel"
-      gradient={gradients.vert}
-      width={width}
-      height={height}
-      labelColor={labelColor}
-    />
+    <div className="flex flex-col md:flex-row justify-evenly my-8">
+      <GradientImage
+        label="Diagonal Down Sobel"
+        gradient={gradients.diagDown}
+        width={width}
+        height={height}
+        labelColor={labelColor}
+      />
+      <div className="my-auto mx-3">
+        <img src={sobelFilter} alt="img" />
+      </div>
+      <GradientImage
+        label="Diagonal Up Sobel"
+        gradient={gradients.diagUp}
+        width={width}
+        height={height}
+        labelColor={labelColor}
+      />
+    </div>
   </div>
 );
 
