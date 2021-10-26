@@ -28,7 +28,7 @@ const ALL_IMGS: { [name: string]: any } = {
     .default,
   'bwMan.jpg': require('../../../media/modules/computerVision/imageLibrary/bwMan.jpg')
     .default,
-  'stopSign.jpeg': require('../../../media/modules/computerVision/imageLibrary/stopSign.jpeg')
+  'stopSign.jpeg': require('../../../media/modules/computerVision/imageLibrary/stopSign2.jpeg')
     .default,
 };
 
