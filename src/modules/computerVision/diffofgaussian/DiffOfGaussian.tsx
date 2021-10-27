@@ -123,6 +123,8 @@ const DoG: React.FC<DoGType> = ({ labelColor, imgUrl }) => {
     undefined,
   );
 
+  const [dogGrid, setDogGrid] = useState<number[][] | undefined>(undefined);
+
   const configureKernel = (
     kernelSize: number,
     sigma: number,
@@ -141,6 +143,10 @@ const DoG: React.FC<DoGType> = ({ labelColor, imgUrl }) => {
       return rslt;
     }, []);
 
+    const newDogGrid = newKernelGrid.map((row, i) =>
+      row.map((cell, j) => cell - newKernelGrid2[i][j]),
+    );
+
     // take difference of the two filters
     // dog = difference of gaussians
     // let dog = newKernel.map((inner, i) => (inner - newKernel2[i]));
@@ -151,8 +157,15 @@ const DoG: React.FC<DoGType> = ({ labelColor, imgUrl }) => {
     setKernel2(newKernel2);
     setKernelGrid(newKernelGrid);
     setKernelGrid2(newKernelGrid2);
+    setDogGrid(newDogGrid);
   };
 
+  /* type NamedKernelDisplayType = {
+    kernelName: string;
+
+  };
+  const NamedKernalDisplay: React.FC<NamedKernelDisplayType> = (kernelName) => {
+ */
   return (
     <div className={`flex flex-col items-center font-bold m-4 ${labelColor}`}>
       <KernelConfig onConfig={configureKernel} labelColor={labelColor} />
@@ -163,7 +176,12 @@ const DoG: React.FC<DoGType> = ({ labelColor, imgUrl }) => {
         <KernelDisplay kernelGrid={kernelGrid} labelColor={labelColor} />
         <KernelDisplay kernelGrid={kernelGrid2} labelColor={labelColor} />
       </div>
-
+      <div
+        className="grid grid-cols-1 items-center mb-5"
+        style={{ width: '1100px' }}
+      >
+        <KernelDisplay kernelGrid={dogGrid} labelColor={labelColor} />
+      </div>
       <p>Filter by the First Kernel</p>
       <FilterByKernel kernel={kernel} imgUrl={imgUrl} />
       <p>Filter by the Second Kernel</p>
