@@ -6,8 +6,9 @@
     font-size: 11pt;
     padding: 10px;
     box-shadow: 0 0 5px rgb(163, 162, 162);
-    display: inline-block;  
-    background-color: white;  
+    display: inline-block;
+    background-color: white;
+    width: 95%;
 }
 
 .image-selector img {
@@ -34,7 +35,7 @@
 .image-selector .selection-window {
     display: flex;
     overflow: auto;
-    width: 80vw;
+    width: auto;
     margin: auto;
 }
 
