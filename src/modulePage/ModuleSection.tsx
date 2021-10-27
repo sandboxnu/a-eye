@@ -1,4 +1,5 @@
 import React from 'react';
+import SobelFilterDemo from 'modules/sobelFilter/sobelFilterDemo';
 import GaussianBlurDemo from '../modules/computerVision/gaussianBlur/GaussianBlurDemo';
 import GaborDemo from '../modules/computerVision/gaborFilter/gaborFilter';
 import DiffOfGaussianDemo from '../modules/computerVision/diffofgaussian/DiffOfGaussian';
@@ -92,6 +93,14 @@ function getDemo(comp: string, scheme: ColorScheme) {
       return (
         <ImageSelectableDemo
           Demo={HistOfGradDemo}
+          initImg="stopSign.jpeg"
+          demoProps={demoArgs}
+        />
+      );
+    case 'SobelFilterDemo':
+      return (
+        <ImageSelectableDemo
+          Demo={SobelFilterDemo}
           initImg="stopSign.jpeg"
           demoProps={demoArgs}
         />
