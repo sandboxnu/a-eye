@@ -107,3 +107,21 @@ input[type="range"]:focus {
 .max-w-60vw {
   max-width: 60vw;
 }
+
+.w-20vw {
+  width: 20vw;
+}
+
+.w-60vw {
+  width: 60vw;
+}
+
+.sobel-image-width {
+  width: 60vw;
+}
+
+@media (min-width:768px) {
+  .sobel-image-width {
+    width: 20vw;
+  }
+}

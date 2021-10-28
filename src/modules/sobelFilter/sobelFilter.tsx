@@ -1,8 +1,4 @@
 /* eslint-disable */
-
-const { Image } = require('image-js');
-const hog = require('hog-features');
-import { buildQueries } from '@testing-library/dom';
 import Jimp from 'jimp';
 
 export type GradientsType = {
