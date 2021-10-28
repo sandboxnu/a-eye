@@ -5,14 +5,14 @@ import {
   gradientImages,
   GradientsType
 } from "./sobelFilter";
-import vertDarkLightKernel from "../../media/modules/computerVision/sobelKernels/vertical_darktolight.png";
-import vertLightDarkKernel from "../../media/modules/computerVision/sobelKernels/vertical_lighttodark.png";
-import horizDarkLightKernel from "../../media/modules/computerVision/sobelKernels/horizontal_darktolight.png";
-import horizLightDarkKernel from "../../media/modules/computerVision/sobelKernels/horizontal_lighttodark.png";
-import diagDownDarkLightKernel from "../../media/modules/computerVision/sobelKernels/diagonaldown_darktolight.png";
-import diagDownLightDarkKernel from "../../media/modules/computerVision/sobelKernels/diagonaldown_lighttodark.png";
-import diagUpDarkLightKernel from "../../media/modules/computerVision/sobelKernels/diagonalup_darktolight.png";
-import diagUpLightDarkKernel from "../../media/modules/computerVision/sobelKernels/diagonalup_lighttodark.png";
+import vertDarkLightKernel from "../../../media/modules/computerVision/sobelKernels/vertical_darktolight.png";
+import vertLightDarkKernel from "../../../media/modules/computerVision/sobelKernels/vertical_lighttodark.png";
+import horizDarkLightKernel from "../../../media/modules/computerVision/sobelKernels/horizontal_darktolight.png";
+import horizLightDarkKernel from "../../../media/modules/computerVision/sobelKernels/horizontal_lighttodark.png";
+import diagDownDarkLightKernel from "../../../media/modules/computerVision/sobelKernels/diagonaldown_darktolight.png";
+import diagDownLightDarkKernel from "../../../media/modules/computerVision/sobelKernels/diagonaldown_lighttodark.png";
+import diagUpDarkLightKernel from "../../../media/modules/computerVision/sobelKernels/diagonalup_darktolight.png";
+import diagUpLightDarkKernel from "../../../media/modules/computerVision/sobelKernels/diagonalup_lighttodark.png";
 
 type GradientImageType = {
   label: string;
