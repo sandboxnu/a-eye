@@ -13,13 +13,73 @@
       "active": true
     },
     {
+      "number": 8.1,
+      "title": "Intro to Images and Kernels",
+      "dropdownTitle": "Images and Kernels",
+      "body": "How do we represent the data contained in an image? What is a kernel, and how do we use them to extract features from images?",
+      "bgColor": "bg-darkblue",
+      "textColor": "text-white",
+      "margin": "ml-64",
+      "imgSrc": "mod8",
+      "path": "images-and-kernels",
+      "active": true
+    },
+    {
+      "number": 8.2,
+      "title": "Image Blurring: The Gaussian Blur",
+      "dropdownTitle": "Gaussian Blur",
+      "body": "Here, we explore an popular instance of a kernel called the Gaussian Blur, which (as its name suggests) is used to blur an image.",
+      "bgColor": "bg-offwhite",
+      "textColor": "text-darkblue",
+      "margin": "mr-64",
+      "imgSrc": "mod8",
+      "path": "gaussian-blur",
+      "active": true
+    },
+    {
+      "number": 8.3,
+      "title": "Directional Filtering: The Gabor Filter",
+      "dropdownTitle": "Gabor Filter",
+      "body": "This section explores yet another kernel called the Gabor Filter, which extracts portions of an image that follow a specific directional pattern",
+      "bgColor": "bg-lightblue",
+      "textColor": "text-darkblue",
+      "margin": "ml-64",
+      "imgSrc": "mod8",
+      "path": "gabor-filter",
+      "active": true
+    },
+    {
+      "number": 8.4,
+      "title": "Edge Detection: The Sobel Filter",
+      "dropdownTitle": "Sobel Filter",
+      "body": "In order for AI to detect an object within an image, we search for edges in the image to give us a sense of the shape of the object. We use the Sobel Filter to detect these edges.",
+      "bgColor": "bg-darkblue",
+      "textColor": "text-white",
+      "margin": "mr-64",
+      "imgSrc": "mod8",
+      "path": "sobel-filter",
+      "active": true
+    },
+    {
+      "number": 8.4,
+      "title": "Histogram of (Oriented) Gradients",
+      "dropdownTitle": "Histogram of Gradients",
+      "body": "While a Sobel Filter can give us information about edges in a singular direction, we need to know about the edges in all directions simultaneously to fully understand the shape of the image. The Histogram of Gradients allows us to collect the edges in all different directions to see which is most prominent.",
+      "bgColor": "bg-lightblue",
+      "textColor": "text-darkblue",
+      "margin": "ml-64",
+      "imgSrc": "mod8",
+      "path": "histogram-of-gradients",
+      "active": true
+    },
+    {
       "number": 9,
       "title": "Recognition as a Classification Problem",
       "dropdownTitle": "Classification",
       "body": "Once features have been detected and, perhaps combined into “higher-order features”, machine vision algorithms are often tasked to perform classification–that is, to determine what an array of features is “of”. Does this bundle of features in an image indicate the presence of a dog? Does that bundle of features over there indicate a cat? A set of features can be thought of as a location in a “state space”. Nearby locations in state space tend to correspond to similar objects or scenes. Features of many dogs of the same breed may form a “cluster” in state space. We will explore clusters of features in some simple state spaces and begin to ask how different “naturally occurring” clusters (corresponding to dogs and cats in our example) might be detected by a machine.",
       "bgColor": "bg-darkblue",
       "textColor": "text-white",
-      "margin": "ml-64",
+      "margin": "mr-64",
       "imgSrc": "mod9",
       "path": "classification",
       "active": true
@@ -31,7 +91,7 @@
       "body": "Today’s remarkable advances in the power of artificial neural networks leverage  foundations laid in 1943 by the McCulloch and Pitts neuron model and Rosenblatt’s 1958 software implementation of the first perceptron. We will examine the architecture and functions of the simplest trainable pattern classifier.This classifier is so simple, in fact, that it cannot effectively separate clusters that are not “linearly separable”. Two clusters in a two-dimensional state space that cannot be separated by a single straight line are examples of non-linearly separable classes. What does the perceptron do when confronted with a data-set that is not linearly separable?",
       "bgColor": "bg-offwhite",
       "textColor": "text-darkblue",
-      "margin": "mr-64",
+      "margin": "ml-64",
       "imgSrc": "mod10",
       "path": "perceptrons",
       "active": false
@@ -43,7 +103,7 @@
       "body": "The problem of trying to separate clusters that are not linearly separable has been known for more than half a century, and many variations of multi-layer perceptrons continue to be developed to address and overcome limitations of earlier approaches. Multi-layered artificial neural networks are often said to have “hidden layers” where features are iteratively “weighted” in various ways until a desired classification performance is reached. We will consider a simple example of how hidden layers help to solve the “exclusive-OR problem” and explore the “credit assignment problem.” How does an algorithm know which weights to change and by how much, in order to promote learning for improved classification by a neural network?",
       "bgColor": "bg-darkblue",
       "textColor": "text-white",
-      "margin": "ml-64",
+      "margin": "mr-64",
       "imgSrc": "mod11",
       "path": "neural-nets",
       "active": false

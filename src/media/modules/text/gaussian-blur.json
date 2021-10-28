@@ -1,0 +1,54 @@
+{
+  "title": "Gaussian Blur",
+  "sections": [
+    {
+      "title": "Gaussian Blur",
+      "colorScheme": "dark",
+      "subsections": [
+        {
+          "title": "Subsection 1",
+          "body": "As its name suggests, the Gaussian blur is used for blurring. This is useful to make sure that computer vision algorithms don't focus too much on the details of an image. The same way we don't recognize a cell phone by its serial number, an image processing system should focus on the big picture when trying to recognize objects.",
+          "imgSrc": "blank"
+        },
+        {
+          "title": "Subsection 2",
+          "body": "The definition of a Gaussian Blur Filter comes from the famous Gaussian/Normal/Bell curve as though it were projected into 3D. The values of the kernel are based on the density of (area under) the bell curve at the location of the current kernel entry. For example, the center of the kernel is the center of the bell curve where the density is the highest; therefore, the largest value of the kernel should be at the center. Conversely, values on the edges of the kernel should be relatively the smallest.",
+          "imgSrc": "blank"
+        },
+        {
+          "title": "Subsection 3",
+          "body": "We can control the change in the magnitude of the values from the center to the outsides of the kernel (spread of the bell curve) by modifying the standard deviation of the distribution using the σ (sigma) parameter. The last thing we want to make sure about the kernel is that the values sum up to approximately 1. If we didn't do this, then the image would end up brighter or darker than intended (called the image's \"energy\"). We can do this by summing up all of the values and dividing every entry by the sum.",
+          "imgSrc": "blank"
+        },
+        {
+          "title": "Subsection 3",
+          "body": "This kernel defocuses the middle pixel of the window by averaging its value with its neighbors. Done across the whole image, you retain the picture's overall structure without sharp details. This achieves our original goal of making a blurred image.",
+          "imgSrc": "blank"
+        }
+      ],
+      "demoComp": "GaussianBlurDemo"
+    },
+    {
+      "title": "Difference of Gaussians",
+      "colorScheme": "light",
+      "subsections": [
+        {
+          "title": "Subsection 1",
+          "body": "The motivation behind the Difference of Gaussians technique is to detect edges in an image. This is particularly useful for segmenting objects from one another or creating a coloring book from pictures on your phone!",
+          "imgSrc": "blank"
+        },
+        {
+          "title": "Subsection 2",
+          "body": "A difference of Gaussians Kernel builds directly upon what we have already covered in Gaussian Blurring. We take two images processed using Gaussian Blur filters with different standard deviations (σ, sigma) and subtract them from each other. We want the image that we are subtracting from to have been processed with a Gaussian Blur filter that has a smaller standard deviation (less spread) than the image that we are subtracting.",
+          "imgSrc": "blank"
+        },
+        {
+          "title": "Subsection 3",
+          "body": "You can think of this technique as extracting what changes most when you blur. If you think about, the sharpest parts of the image, or, the edges of objects, undergo the most change when blurring. When finding the difference between two images at different sigma values, the sharpest parts of the image, or the edges, are going to be the only thing left.",
+          "imgSrc": "blank"
+        }
+      ],
+      "demoComp": "DiffOfGaussian"
+    }
+  ]
+}

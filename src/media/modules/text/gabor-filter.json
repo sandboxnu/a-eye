@@ -1,0 +1,27 @@
+{
+  "title": "Gabor Filter",
+  "sections": [
+    {
+      "title": "Gabor Filter",
+      "colorScheme": "dark",
+      "subsections": [
+        {
+          "title": "Subsection 1",
+          "body": "The Gabor Filter is a bit more complicated in its definition but the features that it aims to extract are just as intuitive as the Gaussian Blur. Instead of wanting to extract the overall structure of the image, now we are interested in extracting portions of an image that follow a specific directional pattern. The canonical example of this is wanting to extract stripes on a zebra that are in a particular direction.",
+          "imgSrc": "blank"
+        },
+        {
+          "title": "Subsection 2",
+          "body": "The gist of how the filter works is that we can detect certain orientations by modifying our angle θ and specifying the size of the window we slide across the image. We can also specify a frequency or magnitude for the directionality that assesses how strong the directionality is as a filter.",
+          "imgSrc": "blank"
+        },
+        {
+          "title": "Subsection 3",
+          "body": "The resulting image contains only the windows of the image that contain features that follow the angle specified by θ. This can be highly effective when scanning images which contain text where we only want to retain the text in the image. The reason for this is that images generally have lower directional content as they are smoother relative to text.",
+          "imgSrc": "blank"
+        }
+      ],
+      "demoComp": "GaborDemo"
+    }
+  ]
+}
