@@ -20,6 +20,12 @@ import blank from '../media/modules/blank.png';
 import animation1 from '../media/modules/computerVision/animation-1.gif';
 import animation2 from '../media/modules/computerVision/animation-2.gif';
 import animation3 from '../media/modules/computerVision/animation-3.gif';
+import combinedSobelKernelExampleLight from '../media/modules/computerVision/combinedSobelKernelExampleLight.png';
+import combinedSobelKernelExampleDark from '../media/modules/computerVision/combinedSobelKernelExampleDark.png';
+import vertSobelExampleLight from '../media/modules/computerVision/sobelKernels/vertical_lighttodark.png';
+import vertSobelExampleDark from '../media/modules/computerVision/sobelKernels/vertical_darktolight.png';
+// import lightVertSobelExampleLight from '../media/modules/computerVision/vertSobelExampleLight.png';
+// import lightVertSobelExampleDark from '../media/modules/computerVision/vertSobelExampleDark.png';
 
 const lorem =
   'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.';
@@ -48,6 +54,14 @@ function GetImage(imgName: string) {
       return animation2;
     case 'animation3':
       return animation3;
+    case 'sobelKernelLight':
+      return vertSobelExampleLight;
+    case 'sobelKernelDark':
+      return vertSobelExampleDark;
+    case 'combinedSobelKernelLight':
+      return combinedSobelKernelExampleLight;
+    case 'combinedSobelKernelDark':
+      return combinedSobelKernelExampleDark;
     default:
   }
 }
