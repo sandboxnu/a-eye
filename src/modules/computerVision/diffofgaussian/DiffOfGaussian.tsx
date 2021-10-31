@@ -160,12 +160,22 @@ const DoG: React.FC<DoGType> = ({ labelColor, imgUrl }) => {
     setDogGrid(newDogGrid);
   };
 
-  /* type NamedKernelDisplayType = {
+  type NamedKernelDisplayType = {
+    grid?: number[][];
+    label: string;
     kernelName: string;
-
   };
-  const NamedKernalDisplay: React.FC<NamedKernelDisplayType> = (kernelName) => {
- */
+  const NamedKernelDisplay: React.FC<NamedKernelDisplayType> = ({
+    grid,
+    label,
+    kernelName,
+  }) => (
+    <div>
+      {kernelName}
+      <KernelDisplay kernelGrid={grid} labelColor={label} />
+    </div>
+  );
+
   return (
     <div className={`flex flex-col items-center font-bold m-4 ${labelColor}`}>
       <KernelConfig onConfig={configureKernel} labelColor={labelColor} />
@@ -173,14 +183,26 @@ const DoG: React.FC<DoGType> = ({ labelColor, imgUrl }) => {
         className="grid grid-cols-2 items-center mb-5"
         style={{ width: '1100px' }}
       >
-        <KernelDisplay kernelGrid={kernelGrid} labelColor={labelColor} />
-        <KernelDisplay kernelGrid={kernelGrid2} labelColor={labelColor} />
+        <NamedKernelDisplay
+          grid={kernelGrid}
+          label={labelColor}
+          kernelName="Kernel 1"
+        />
+        <NamedKernelDisplay
+          grid={kernelGrid2}
+          label={labelColor}
+          kernelName="Kernel 2"
+        />
       </div>
       <div
         className="grid grid-cols-1 items-center mb-5"
         style={{ width: '1100px' }}
       >
-        <KernelDisplay kernelGrid={dogGrid} labelColor={labelColor} />
+        <NamedKernelDisplay
+          grid={dogGrid}
+          label={labelColor}
+          kernelName="Diffenence of Kernels (1 - 2)"
+        />
       </div>
       <p>Filter by the First Kernel</p>
       <FilterByKernel kernel={kernel} imgUrl={imgUrl} />
