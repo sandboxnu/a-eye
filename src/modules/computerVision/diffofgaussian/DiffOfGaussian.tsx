@@ -73,7 +73,7 @@ const KernelConfig: React.FC<KernelConfigType> = ({ labelColor, onConfig }) => {
           onChange={e => changeSigma2(e)}
         />
       </div>
-      <div className={`font-bold m-3 h-10 ${labelColor}`}>
+      <div className={`font-bold m-3 ${labelColor}`}>
         Kernel Size
         <input
           className="mx-2 w-64"
@@ -97,14 +97,16 @@ const KernelConfig: React.FC<KernelConfigType> = ({ labelColor, onConfig }) => {
           {invalidSize ? 'Enter an odd kernel size, between 3 and 7' : ''}
         </div>
       </div>
-      <button
-        type="button"
-        className="basic-button"
-        disabled={invalidConfig}
-        onClick={() => onConfig(kernelSize, sigma, sigma2)}
-      >
-        Generate Kernel
-      </button>
+      <div>
+        <button
+          type="button"
+          className="basic-button"
+          disabled={invalidConfig}
+          onClick={() => onConfig(kernelSize, sigma, sigma2)}
+        >
+          Generate Kernel
+        </button>
+      </div>
     </div>
   );
 };
@@ -182,7 +184,10 @@ const DoG: React.FC<DoGType> = ({ labelColor, imgUrl }) => {
       <KernelConfig onConfig={configureKernel} labelColor={labelColor} />
       {/* TODO:
        un-overlap genwerate kernel button */}
-      <div className="flex flex-col md:flex-row" style={{ width: '1100px' }}>
+      <div
+        className="flex flex-col place-content-center place-content-evenly md:flex-row "
+        style={{ width: '1100px' }}
+      >
         <NamedKernelDisplay
           grid={kernelGrid}
           label={labelColor}
