@@ -171,7 +171,7 @@ const DoG: React.FC<DoGType> = ({ labelColor, imgUrl }) => {
     kernelName,
   }) => (
     <div>
-      {kernelName}
+      {grid && kernelName}
       {/* TODO: Make kernel smaller in mobile rendering, (avoid scrolling) */}
       <KernelDisplay kernelGrid={grid} labelColor={label} />
     </div>
@@ -180,12 +180,9 @@ const DoG: React.FC<DoGType> = ({ labelColor, imgUrl }) => {
   return (
     <div className={`flex flex-col items-center font-bold m-4 ${labelColor}`}>
       <KernelConfig onConfig={configureKernel} labelColor={labelColor} />
-      {/* TODO: make this next div's alignment dependent on screen size  (vertically stacked in mobile) - 
-      check out filter by kernel for implementation??*/ }
-      <div
-        className="grid grid-cols-2 items-center mb-5"
-        style={{ width: '1100px' }}
-      >
+      {/* TODO:
+       un-overlap genwerate kernel button */}
+      <div className="flex flex-col md:flex-row" style={{ width: '1100px' }}>
         <NamedKernelDisplay
           grid={kernelGrid}
           label={labelColor}
