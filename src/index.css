@@ -116,6 +116,16 @@ input[type="range"]:focus {
   width: 60vw;
 }
 
+.responsive-img-width {
+  width: 60vw;
+}
+
+@media (min-width:768px) {
+  .responsive-img-width {
+    width: 35vw;
+  }
+}
+
 .sobel-image-width {
   width: 60vw;
 }
