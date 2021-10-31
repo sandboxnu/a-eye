@@ -16,6 +16,8 @@ const ALL_IMGS: { [name: string]: any } = {
     .default,
   'purpleFlowers.jpeg': require('../../../media/modules/computerVision/imageLibrary/purpleFlowers.jpeg')
     .default,
+  'stopSign.jpeg': require('../../../media/modules/computerVision/imageLibrary/stopSign2.jpeg')
+    .default,
   'steps.png': require('../../../media/modules/computerVision/imageLibrary/steps.png')
     .default,
   'tabbyCat.jpg': require('../../../media/modules/computerVision/imageLibrary/tabbyCat.jpg')
@@ -27,8 +29,6 @@ const ALL_IMGS: { [name: string]: any } = {
   'bwWoman.jpg': require('../../../media/modules/computerVision/imageLibrary/bwWoman.jpg')
     .default,
   'bwMan.jpg': require('../../../media/modules/computerVision/imageLibrary/bwMan.jpg')
-    .default,
-  'stopSign.jpeg': require('../../../media/modules/computerVision/imageLibrary/stopSign2.jpeg')
     .default,
 };
 

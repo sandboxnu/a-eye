@@ -1,5 +1,5 @@
 import React from 'react';
-import SobelFilterDemo from 'modules/sobelFilter/sobelFilterDemo';
+import SobelFilterDemo from '../modules/computerVision/sobelFilter/SobelFilterDemo';
 import GaussianBlurDemo from '../modules/computerVision/gaussianBlur/GaussianBlurDemo';
 import GaborDemo from '../modules/computerVision/gaborFilter/gaborFilter';
 import DiffOfGaussianDemo from '../modules/computerVision/diffofgaussian/DiffOfGaussian';

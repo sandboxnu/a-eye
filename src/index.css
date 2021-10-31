@@ -125,3 +125,7 @@ input[type="range"]:focus {
     width: 20vw;
   }
 }
+
+.img-invert {
+  filter: invert(1)
+}

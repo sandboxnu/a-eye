@@ -1,6 +1,8 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "A-Eye",
+  "name": "Your Eye and A-Eye",
+  "version": "0.0.1",
+  "manifest_version": 2,
   "icons": [
     {
       "src": "favicon.ico",
