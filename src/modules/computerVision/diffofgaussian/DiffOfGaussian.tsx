@@ -172,6 +172,7 @@ const DoG: React.FC<DoGType> = ({ labelColor, imgUrl }) => {
   }) => (
     <div>
       {kernelName}
+      {/* TODO: Make kernel smaller in mobile rendering, (avoid scrolling) */}
       <KernelDisplay kernelGrid={grid} labelColor={label} />
     </div>
   );
@@ -179,6 +180,8 @@ const DoG: React.FC<DoGType> = ({ labelColor, imgUrl }) => {
   return (
     <div className={`flex flex-col items-center font-bold m-4 ${labelColor}`}>
       <KernelConfig onConfig={configureKernel} labelColor={labelColor} />
+      {/* TODO: make this next div's alignment dependent on screen size  (vertically stacked in mobile) - 
+      check out filter by kernel for implementation??*/ }
       <div
         className="grid grid-cols-2 items-center mb-5"
         style={{ width: '1100px' }}
@@ -205,6 +208,7 @@ const DoG: React.FC<DoGType> = ({ labelColor, imgUrl }) => {
         />
       </div>
       <p>Filter by the First Kernel</p>
+      {/* TODO: Make Filter by kernel Images Larger (mobile rendfering? unclear?) */}
       <FilterByKernel kernel={kernel} imgUrl={imgUrl} />
       <p>Filter by the Second Kernel</p>
       <FilterByKernel kernel={kernel2} imgUrl={imgUrl} />
