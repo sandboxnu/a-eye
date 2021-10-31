@@ -203,6 +203,7 @@ const NeedleExampleTab: React.FC<HistOfGradDemoType> = ({ labelColor }) => {
         parseInt(angle, 10),
         mag / 100,
         255,
+        {r: 255, g: 255, b: 255}
       ),
     );
     // draw histogram

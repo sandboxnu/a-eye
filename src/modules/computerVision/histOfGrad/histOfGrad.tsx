@@ -128,14 +128,6 @@ export async function gradientImages(imageUrl: string): Promise<GradientsType | 
       })
       let combinedImageData =  new ImageData(combinedClampedArray, vert.bitmap.width, vert.bitmap.height)
 
-      console.log({
-        vert: vertImageData,
-        horiz: horizImageData,
-        diagDown: diagDownImageData,
-        diagUp: diagUpImageData,
-        combined: combinedImageData
-      })
-
       return {
         vert: vertImageData,
         horiz: horizImageData,

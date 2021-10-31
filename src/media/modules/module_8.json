@@ -138,6 +138,72 @@
         }
       ],
       "demoComp": "SobelFilterDemo"
+    },
+    {
+      "title": "Histogram of Gradients",
+      "colorScheme": "dark",
+      "subsections": [
+        {
+          "title": "Subsection 1",
+          "body": "",
+          "imgSrc": "blank"
+        },
+        {
+          "title": "Subsection 2",
+          "body": "",
+          "imgSrc": "blank"
+        },
+        {
+          "title": "Subsection 3",
+          "body": "",
+          "imgSrc": "blank"
+        }
+      ],
+      "demoComp": "CombinedSobelFilterDemo"
+    },
+    {
+      "title": "Histogram of Gradients",
+      "colorScheme": "light",
+      "subsections": [
+        {
+          "title": "Subsection 1",
+          "body": "",
+          "imgSrc": "blank"
+        },
+        {
+          "title": "Subsection 2",
+          "body": "",
+          "imgSrc": "blank"
+        },
+        {
+          "title": "Subsection 3",
+          "body": "",
+          "imgSrc": "blank"
+        }
+      ],
+      "demoComp": "NeedlePlotDemo"
+    },
+    {
+      "title": "Histogram of Gradients",
+      "colorScheme": "dark",
+      "subsections": [
+        {
+          "title": "Subsection 1",
+          "body": "",
+          "imgSrc": "blank"
+        },
+        {
+          "title": "Subsection 2",
+          "body": "",
+          "imgSrc": "blank"
+        },
+        {
+          "title": "Subsection 3",
+          "body": "",
+          "imgSrc": "blank"
+        }
+      ],
+      "demoComp": "HistOfGradDemo"
     }
   ]
 }

@@ -1,4 +1,6 @@
 import React from 'react';
+import NeedlePlotDemo from 'modules/computerVision/histOfGrad/NeedlePlotDemo';
+import CombinedSobelFilterDemo from 'modules/computerVision/histOfGrad/CombinedSobelDemo';
 import SobelFilterDemo from '../modules/computerVision/sobelFilter/SobelFilterDemo';
 import GaussianBlurDemo from '../modules/computerVision/gaussianBlur/GaussianBlurDemo';
 import GaborDemo from '../modules/computerVision/gaborFilter/gaborFilter';
@@ -101,6 +103,22 @@ function getDemo(comp: string, scheme: ColorScheme) {
       return (
         <ImageSelectableDemo
           Demo={SobelFilterDemo}
+          initImg="stopSign.jpeg"
+          demoProps={demoArgs}
+        />
+      );
+    case 'CombinedSobelFilterDemo':
+      return (
+        <ImageSelectableDemo
+          Demo={CombinedSobelFilterDemo}
+          initImg="stopSign.jpeg"
+          demoProps={demoArgs}
+        />
+      );
+    case 'NeedlePlotDemo':
+      return (
+        <ImageSelectableDemo
+          Demo={NeedlePlotDemo}
           initImg="stopSign.jpeg"
           demoProps={demoArgs}
         />

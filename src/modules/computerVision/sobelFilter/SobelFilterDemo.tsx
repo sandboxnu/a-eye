@@ -14,20 +14,22 @@ import diagDownLightDarkKernel from "../../../media/modules/computerVision/sobel
 import diagUpDarkLightKernel from "../../../media/modules/computerVision/sobelKernels/diagonalup_darktolight.png";
 import diagUpLightDarkKernel from "../../../media/modules/computerVision/sobelKernels/diagonalup_lighttodark.png";
 
-type GradientImageType = {
+type SobelImageType = {
   label: string;
   gradient: ImageData;
   width: number;
   height: number;
   labelColor: string;
+  forceLabelDisplay ?: boolean
 };
 
-export const GradientImage: React.FC<GradientImageType> = ({
+export const SobelImage: React.FC<SobelImageType> = ({
   label,
   gradient,
   width,
   height,
   labelColor,
+  forceLabelDisplay
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -43,7 +45,7 @@ export const GradientImage: React.FC<GradientImageType> = ({
 
   return (
     <div className="my-auto mx-3">
-      <p className={`${labelColor} md:hidden`}>{label}</p>
+      <p className={`${labelColor} ${forceLabelDisplay?'':'md:hidden'}`}>{label}</p>
       <canvas
         className="crisp-pixels mx-auto sobel-image-width"
         ref={canvasRef}
@@ -75,7 +77,7 @@ const SobelFilterRow: React.FC<SobelFilterRowType> = ({
     <div className="my-3">
       <p className={`text-3xl ${labelColor}`}>{label}</p>
       <div className="flex flex-col md:flex-row justify-evenly ">
-        <GradientImage
+        <SobelImage
           label="Dark to Light"
           gradient={darkLightImage}
           width={darkLightImage.width}
@@ -88,7 +90,7 @@ const SobelFilterRow: React.FC<SobelFilterRowType> = ({
         <div className="my-auto mx-auto">
           <img src={lightDarkKernelSrc} alt="img" className={`min-w-20vw ${labelColor === "text-modulePaleBlue" ? "img-invert" : ""}`} />
         </div>
-        <GradientImage
+        <SobelImage
           label="Light to Dark"
           gradient={lightDarkImage}
           width={lightDarkImage.width}

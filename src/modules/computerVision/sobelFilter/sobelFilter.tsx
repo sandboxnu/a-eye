@@ -10,6 +10,12 @@ export type GradientsType = {
   horizDarkLight: ImageData,
   diagDownDarkLight: ImageData,
   diagUpDarkLight: ImageData,
+
+  vert: ImageData,
+  horiz: ImageData,
+  diagDown: ImageData,
+  diagUp: ImageData,
+
   combined: ImageData
 }
 
@@ -85,17 +91,6 @@ export async function gradientImages(imageUrl: string): Promise<GradientsType | 
         imageDataList.push(imageData)
       })
 
-      let combinedClampedArray = Uint8ClampedArray.from(imageDataList[0].data)
-
-      combinedClampedArray = combinedClampedArray.map((_, index) => {
-        let sum = 0
-        for (let i = 0; i < 8; i++) {
-          sum += imageDataList[i].data[index]
-        }
-        return sum;
-      })
-      let combinedImageData =  new ImageData(combinedClampedArray, imageDataList[0].width, imageDataList[0].height)
-
       return {
         vertLightDark: imageDataList[0],
         horizLightDark: imageDataList[1],
@@ -105,7 +100,13 @@ export async function gradientImages(imageUrl: string): Promise<GradientsType | 
         horizDarkLight: imageDataList[5],
         diagDownDarkLight: imageDataList[6],
         diagUpDarkLight: imageDataList[7],
-        combined: combinedImageData
+
+        vert: sumImages(imageDataList[0], imageDataList[4]),
+        horiz: sumImages(imageDataList[1], imageDataList[5]),
+        diagDown: sumImages(imageDataList[2], imageDataList[6]),
+        diagUp: sumImages(imageDataList[3], imageDataList[7]),
+        
+        combined: sumImages(...imageDataList)
       }
     }).catch(e => {console.log(e); return {
       vertLightDark: new ImageData(385,385),
@@ -116,7 +117,29 @@ export async function gradientImages(imageUrl: string): Promise<GradientsType | 
       horizDarkLight: new ImageData(385,385),
       diagDownDarkLight: new ImageData(385,385),
       diagUpDarkLight: new ImageData(385,385),
+
+
+      vert: new ImageData(385,385),
+      horiz: new ImageData(385,385),
+      diagDown: new ImageData(385,385),
+      diagUp: new ImageData(385,385),
+
+
       combined: new ImageData(385,385)
     };});
 
+}
+
+function sumImages(...images: ImageData[]) : ImageData {
+  let combinedClampedArray = Uint8ClampedArray.from(images[0].data)
+
+  combinedClampedArray = combinedClampedArray.map((_, index) => {
+    let sum = 0
+    for (let i = 0; i < images.length; i++) {
+      sum += images[i].data[index]
+    }
+    return sum;
+  })
+  let combinedImageData =  new ImageData(combinedClampedArray, images[0].width, images[0].height)
+  return combinedImageData
 }

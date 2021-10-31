@@ -35,6 +35,7 @@ export const drawNeedle = (
   angleDeg: number,
   lengthPct: number,
   opacity: number,
+  color: { r: number; g: number; b: number },
 ): void => {
   const length: number = lengthPct * blockSize;
   const pt1 = {
@@ -51,7 +52,7 @@ export const drawNeedle = (
     throw new Error('Failed to get 2D context');
   const ctx: CanvasRenderingContext2D = context;
 
-  ctx.strokeStyle = `rgba(${opacity}, ${opacity}, ${opacity}, ${
+  ctx.strokeStyle = `rgba(${color.r}, ${color.g}, ${color.b}, ${
     opacity / 255
   })`;
   ctx.beginPath();
@@ -85,10 +86,14 @@ export const displayNeedlePlot = (
   canvasNdlPlt: HTMLCanvasElement,
   blocks: BlocksType,
   orientation: OrientationConfigType,
+  needleColor?: { r: number; g: number; b: number },
+  transparent?: boolean,
 ): void => {
-  canvasNdlPlt
-    .getContext('2d')
-    ?.fillRect(0, 0, canvasNdlPlt.width, canvasNdlPlt.height);
+  if (!transparent) {
+    canvasNdlPlt
+      .getContext('2d')
+      ?.fillRect(0, 0, canvasNdlPlt.width, canvasNdlPlt.height);
+  }
   const histograms: number[][][] = blocks.histogram;
   const magnitudes: number[][] = blocks.blockMagnitudes;
   let maxV = 0;
@@ -126,6 +131,7 @@ export const displayNeedlePlot = (
             angle,
             lengthPct,
             opacity,
+            needleColor || { r: opacity, g: opacity, b: opacity },
           );
         }
       }
