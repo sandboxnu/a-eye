@@ -9,7 +9,7 @@ import cvIntroModule from '../media/modules/text/computer-vision-intro.json';
 import gaborModule from '../media/modules/text/gabor-filter.json';
 import gaussianModule from '../media/modules/text/gaussian-blur.json';
 import sobelModule from '../media/modules/text/sobel-filter.json';
-import hogModule from '../media/modules/text/histogram-of-gradients.json';
+// import hogModule from '../media/modules/text/histogram-of-gradients.json';
 
 export interface ModuleSubsectionType {
   title: string;
@@ -31,13 +31,13 @@ interface Module {
 
 // eslint-disable-next-line
 type moduleName = 'computer-vision' | 'images-and-kernels' | 'gaussian-blur' | 'gabor-filter' | 'sobel-filter' | 'histogram-of-gradients' | 'classification' | 'perceptron' | 'neural-nets';
-const modules: Record<moduleName, Module> = {
+const modules: Record<moduleName, Module | null> = {
   'computer-vision': module8,
   'images-and-kernels': cvIntroModule,
   'gaussian-blur': gaussianModule,
   'gabor-filter': gaborModule,
   'sobel-filter': sobelModule,
-  'histogram-of-gradients': hogModule,
+  'histogram-of-gradients': null,
   // eslint-disable-next-line
   'classification': module9,
   // eslint-disable-next-line
@@ -55,7 +55,7 @@ export default function ModulePage(
 ) {
   // eslint-disable-next-line
   const module = props.match.params.module;
-  const curModule: Module = modules[module];
+  const curModule: Module | null = modules[module];
 
   if (!curModule) {
     return (

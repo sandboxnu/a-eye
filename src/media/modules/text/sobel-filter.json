@@ -17,7 +17,7 @@
         },
         {
           "title": "Subsection 3",
-          "body": "To get a more accurate understanding about the shape of the image, we need to extract the image gradient in the four primary edge directions: vertical, horizontal, diagonal up (45 degrees), and diagonal down (-45 degrees). The demo below calculates the images resulting from filtering by the eight Sobel kernels (4 directions, 2 filters per direction for dark-to-light and light-to-dark) for a stop sign image. Note that you can select other images to filter from the box below.",
+          "body": "To get a more accurate understanding about the shape of the image, we need to <strong>extract the image gradient in the four primary edge directions: vertical, horizontal, diagonal up (45 degrees), and diagonal down (-45 degrees)</strong>. The demo below calculates the images resulting from filtering by the eight Sobel kernels (4 directions, 2 filters per direction for dark-to-light and light-to-dark) for a stop sign image. Note that you can select other images to filter from the box below.",
           "imgSrc": "blank"
         }
       ],

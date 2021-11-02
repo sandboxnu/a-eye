@@ -1,8 +1,13 @@
 import React from 'react';
-import mod8 from '../media/modules/mod8.png';
-import mod9 from '../media/modules/mod9.png';
-import mod10 from '../media/modules/mod10.png';
-import mod11 from '../media/modules/mod11.png';
+import mod8 from '../media/modules/previews/mod8.png';
+import mod9 from '../media/modules/previews/mod9.png';
+import mod10 from '../media/modules/previews/mod10.png';
+import mod11 from '../media/modules/previews/mod11.png';
+import kernel from '../media/modules/previews/kernel.png';
+import gausBlur from '../media/modules/previews/gausBlur.png';
+import gabor from '../media/modules/previews/gabor.png';
+import sobel from '../media/modules/previews/sobel.png';
+import hog from '../media/modules/previews/hog.png';
 
 function getCoverImage(imgName: string) {
   switch (imgName) {
@@ -14,6 +19,16 @@ function getCoverImage(imgName: string) {
       return mod10;
     case 'mod11':
       return mod11;
+    case 'kernel':
+      return kernel;
+    case 'gausBlur':
+      return gausBlur;
+    case 'gabor':
+      return gabor;
+    case 'sobel':
+      return sobel;
+    case 'hog':
+      return hog;
     default:
       return undefined;
   }
