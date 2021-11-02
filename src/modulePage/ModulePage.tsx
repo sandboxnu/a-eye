@@ -59,7 +59,7 @@ export default function ModulePage(
 
   if (!curModule) {
     return (
-      <div>
+      <div className="container w-screen h-screen">
         <p>This module does not exist.</p>
         <a href="/">Return to home</a>
       </div>
