@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React from 'react';
 
 import trainData from '../data/train.json';

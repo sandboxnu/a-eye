@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React from "react";
 import {RouteComponentProps} from 'react-router';
 import ModuleSection from "./ModuleSection";
@@ -64,10 +65,10 @@ export default function ModulePage(
   }
   return (
       <div className="container w-screen">
-        <p className={`w-screen p-4 text-5xl font-bold font-opensans bg-modulePaleBlue text-moduleNavy`}>{module.title}</p>
+        <p className={`w-screen p-4 text-5xl font-bold font-opensans bg-modulePaleBlue text-moduleNavy`}>{curModule.title}</p>
         <ul>
           {
-            module.sections.map((section) =>
+            curModule.sections.map((section) =>
                 <ModuleSection title={section.title}
                                sections={section.subsections}
                                colorScheme={section.colorScheme}

@@ -117,10 +117,6 @@ function getDemo(comp: string, scheme: ColorScheme) {
     case "StaticAxisChart":
       return (
           <StaticAxisChart
-              xIdx={4}
-              yIdx={5}
-              columnSet={pcaConfig.columns}
-              classes={['versicolor', 'setosa']}
               labelColorHex={scheme.labelColorHex}
           />
       );

@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React from 'react';
 import descriptions from './media/modules/module_descriptions.json';
 

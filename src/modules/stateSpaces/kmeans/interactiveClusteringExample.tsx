@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useState } from 'react';
 
 import trainData from '../data/train.json';
@@ -22,24 +23,23 @@ type InteractiveClusteringExampleType = {
 };
 
 const InteractiveClusteringExample: React.FC<InteractiveClusteringExampleType> = ({
-                                                                                      hidden = false,
-                                                                                      xLabel = '',
-                                                                                      yLabel = '',
-                                                                                      k = 2,
-                                                                                      // 0 == original data
-                                                                                      // 1 == iris data
-                                                                                      // 2 == diff iris data
-                                                                                      // 3 == titanic data
-                                                                                      // change to an int if more datasets
-                                                                                      trainingDatasets = [trainData, trainDataIris, trainDataIris2, titanicData],
-                                                                                      centersList = [
-                                                                                          [[0, 0], [50, 50]],
-                                                                                          [[2, 2], [7, 5]],
-                                                                                          [[20, 20], [40, 40]],
-                                                                                          [[10, 10], [40, 40]],
-                                                                                      ],
-                                                                                  }) => {
-
+  hidden = false,
+  xLabel = '',
+  yLabel = '',
+  k = 2,
+  // 0 == original data
+  // 1 == iris data
+  // 2 == diff iris data
+  // 3 == titanic data
+  // change to an int if more datasets
+  trainingDatasets = [trainData, trainDataIris, trainDataIris2, titanicData],
+  centersList = [
+      [[0, 0], [50, 50]],
+      [[2, 2], [7, 5]],
+      [[20, 20], [40, 40]],
+      [[10, 10], [40, 40]],
+  ],
+}) => {
     let organizedDatasets: number[][][] = [];
     for(const dataset of trainingDatasets) {
         organizedDatasets.push(organiseData(dataset));
@@ -140,7 +140,7 @@ const InteractiveClusteringExample: React.FC<InteractiveClusteringExampleType> =
     // remove removethese from data
     for (const removethese of pointsToRemove) {
         for (let i = 0; i < removethese.length; i++) {
-            data.datasets[removethese[i].ds_index].data.splice(removethese[i].ind, 1);
+            data.datasets[removethese[i].dsIndex].data.splice(removethese[i].ind, 1);
         }
     }
 
@@ -248,7 +248,7 @@ const InteractiveClusteringExample: React.FC<InteractiveClusteringExampleType> =
                     let ind = asdgwg._index
 
 
-                    addPointToRemove(originalDataset, {ds_index, ind});
+                    addPointToRemove(originalDataset, {dsIndex: ds_index, ind});
 
                     // @ts-ignore
                     setX1Idx(this.chart.data.datasets[0].data[0].x  + 0.1);

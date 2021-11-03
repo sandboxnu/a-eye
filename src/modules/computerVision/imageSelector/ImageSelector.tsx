@@ -1,4 +1,4 @@
-/* eslint-disable global-require */
+/* eslint-disable */
 import React, { useEffect } from 'react';
 import './ImageSelector.css';
 import ImageUploader from './ImageUploader';

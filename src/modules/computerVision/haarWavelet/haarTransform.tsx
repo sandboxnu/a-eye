@@ -1,3 +1,4 @@
+/* eslint-disable */
 // https://stevenbas.art/examples/ImageProcessing/ex4/
 
 /**

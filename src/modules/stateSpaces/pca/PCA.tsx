@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useState } from "react";
 import { PCA } from "ml-pca";
 import datasetIris from "ml-dataset-iris";

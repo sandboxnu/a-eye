@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useState } from 'react';
 import KernelDisplay from '../common/KernelDisplay';
 import FilterByKernel from '../common/FilterByKernel';

@@ -1,4 +1,4 @@
-
+/* eslint-disable */
 export {
   convolute, getPixels, createImageData
 };
