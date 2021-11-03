@@ -69,3 +69,73 @@ input[type="range"] {
 input[type="range"]:focus {
   outline: none;
 }
+
+.kmeansgraph {
+  position: relative;
+  width: 60%;
+  height: 50%;
+  float: right;
+}
+
+.axis-selector button {
+  border: none;
+  outline: none;
+  padding: 7px 10px;
+  margin: 1px;
+  background-color: #8D9DBA;
+  font-weight: bold;
+  font-size: 12pt;
+  color: #f2f2f2;
+}
+
+.axis-selector button:hover {
+  background-color: #617394;
+}
+
+.axis-selector button.selected {
+  background-color: #394D73;
+}
+
+.min-w-20vw {
+  min-width: 20vw;
+}
+
+.max-w-20vw {
+  max-width: 20vw;
+}
+
+.max-w-60vw {
+  max-width: 60vw;
+}
+
+.w-20vw {
+  width: 20vw;
+}
+
+.w-60vw {
+  width: 60vw;
+}
+
+.responsive-img-width {
+  width: 60vw;
+}
+
+@media (min-width:768px) {
+  .responsive-img-width {
+    width: 35vw;
+  }
+}
+
+.sobel-image-width {
+  width: 60vw;
+}
+
+@media (min-width:768px) {
+  .sobel-image-width {
+    width: 20vw;
+  }
+}
+
+.img-invert {
+  filter: invert(1)
+}

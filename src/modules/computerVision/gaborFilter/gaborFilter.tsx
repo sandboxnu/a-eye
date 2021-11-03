@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useState } from 'react';
 import FilterByKernel from '../common/FilterByKernel';
 import KernelDisplay from '../common/KernelDisplay';
@@ -37,12 +38,12 @@ function makeMeshgrid(sz: number[]) {
 
 //http://vision.psych.umn.edu/users/kersten/kersten-lab/courses/Psy5036W2017/Lectures/17_PythonForVision/Demos/html/2b.Gabor.html
 function gaborFilter(sz: number,
-    omega: number,
-    theta: number,
-    func = Math.cos,
-    K = Math.PI) {
+                     omega: number,
+                     theta: number,
+                     func = Math.cos,
+                     K = Math.PI) {
 
-    // EXAMPLE INPUTS 
+    // EXAMPLE INPUTS
 
     // let sz = [4,4]
     // let omega = 0.3
@@ -70,9 +71,9 @@ const GaborDemo = (props: {labelColor: string, imgUrl: string}) => {
     const [kernelGrid, setKernelGrid] = useState<number[][] | undefined>(undefined);
 
     const configureKernel = (kernelSize: number,
-        omega: number,
-        theta: number,
-        K: number) => {
+                             omega: number,
+                             theta: number,
+                             K: number) => {
 
         const func = Math.cos;
 
@@ -111,11 +112,11 @@ const KernelConfig = (props: { onConfig: (kernelSize: number, omega: number, the
             <div className={`font-bold m-3 h-10 ${props.labelColor}`}>
                 Kernel Size
                 <input className="mx-2 w-1/4"
-                    type="range" min="1" max="7" step={1}
-                    value={kernelSize} onChange={(e) => changeKernelSize(e)} />
+                       type="range" min="1" max="7" step={1}
+                       value={kernelSize} onChange={(e) => changeKernelSize(e)} />
                 <input className="number-input text-black"
-                    type="number" min="1" max="7" step={1}
-                    value={kernelSize} onChange={(e) => changeKernelSize(e)} />
+                       type="number" min="1" max="7" step={1}
+                       value={kernelSize} onChange={(e) => changeKernelSize(e)} />
 
             </div>
             <div className={`font-bold m-3 ${props.labelColor}`}>
@@ -130,21 +131,21 @@ const KernelConfig = (props: { onConfig: (kernelSize: number, omega: number, the
                     <div className="font-bold m-3">
                         Omega
                         <input className="mx-2 w-64"
-                            type="range" min="0" max="10"
-                            value={omega} onChange={(e) => changeOmega(e)} />
+                               type="range" min="0" max="10"
+                               value={omega} onChange={(e) => changeOmega(e)} />
                         <input className="number-input text-black"
-                            type="number" min="0" max="10"
-                            value={omega} onChange={(e) => changeOmega(e)} />
+                               type="number" min="0" max="10"
+                               value={omega} onChange={(e) => changeOmega(e)} />
                     </div>
                     <div className="font-bold m-3 h-10">
                         K
                         <input className="mx-2 w-64"
                             // Math.PI/4 ~= 0.79
-                            type="range" min="0" max="12.56" step={0.785}
-                            value={K} onChange={(e) => changeK(e)} />
+                               type="range" min="0" max="12.56" step={0.785}
+                               value={K} onChange={(e) => changeK(e)} />
                         <input className="number-input text-black"
-                            type="number" min="0" max="12.56" step={0.785}
-                            value={K} onChange={(e) => changeK(e)} />
+                               type="number" min="0" max="12.56" step={0.785}
+                               value={K} onChange={(e) => changeK(e)} />
                     </div>
                 </AccordionDetails>
             </Accordion>

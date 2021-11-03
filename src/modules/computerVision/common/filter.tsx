@@ -1,4 +1,4 @@
-
+/* eslint-disable */
 export {
   convolute, getPixels, createImageData
 };
@@ -8,8 +8,8 @@ export {
 
 /**
  * Run an image convolution based on inCanvas, and draws the output to outCanvas.
- * Don't ask me how any of this works!!!! I dont know!!!!!!! 
- * 
+ * Don't ask me how any of this works!!!! I dont know!!!!!!!
+ *
  * @param inCanvas the canvas to be filtered, with an image already drawn on it
  * @param outCanvas the canvas to be outputted to
  * @param animate whether or not to animate the filter by each row of pixels
@@ -56,7 +56,7 @@ function convolute(inCanvas: HTMLCanvasElement, outCanvas: HTMLCanvasElement, an
           }
         }
       }
-      
+
       dst[dstOff] = r;
       dst[dstOff + 1] = g;
       dst[dstOff + 2] = b;
@@ -76,8 +76,8 @@ function convolute(inCanvas: HTMLCanvasElement, outCanvas: HTMLCanvasElement, an
       if (y >= h) clearInterval(interval);
     }, 10);
   } else {
-    for (var y = 0; y < h; y++) {
-      processRow(y);
+    for (var yx = 0; yx < h; yx++) {
+      processRow(yx);
     }
     outCanvas.getContext("2d")?.putImageData(output, 0, 0);
   }
@@ -92,4 +92,3 @@ function createImageData(canvas: HTMLCanvasElement) {
   var ctx = canvas.getContext('2d');
   return ctx && ctx.createImageData(canvas.width, canvas.height);
 }
-
