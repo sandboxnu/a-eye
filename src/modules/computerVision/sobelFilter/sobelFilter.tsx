@@ -27,13 +27,13 @@ export async function gradientImages(imageUrl: string): Promise<GradientsType | 
     [1, 0, -1,]
   ];
 
-  const diagDownKernelLightDark: number[][] = [
+  const diagUpKernelDarkLight: number[][] = [
     [-2, -1,0],
     [-1, 0, 1],
     [0,  1, 2]
   ];
 
-  const diagUpKernelLightDark: number[][] = [
+  const diagDownKernelLightDark: number[][] = [
     [0, 1, 2],
     [-1, 0, 1],
     [-2, -1, 0,]
@@ -50,13 +50,13 @@ export async function gradientImages(imageUrl: string): Promise<GradientsType | 
     [-1, 0, 1,]
   ];
 
-  const diagDownKernelDarkLight: number[][] = [
+  const diagUpKernelLightDark: number[][] = [
     [2, 1,0],
     [1, 0, -1],
     [0,  -1, -2]
   ];
 
-  const diagUpKernelDarkLight: number[][] = [
+  const diagDownKernelDarkLight: number[][] = [
     [0, -1, -2],
     [1, 0, -1],
     [2, 1, 0,]

@@ -1,0 +1,49 @@
+{
+  "title": "Intro to Computer Vision: Images and Kernels",
+  "sections": [
+    {
+      "title": "What is Computer Vision?",
+      "colorScheme": "dark",
+      "subsections": [
+        {
+          "title": "",
+          "body": "In order to extract valuable information from an image, computers must be able to process images and detect features in those images based on some criteria. As humans, we do this all the time - if we see an animal, we can identify it as a cat because it has fur, perked up ears, a small nose, and bright eyes. We extract features/traits of the objects in our view that allow us to identify those objects.",
+          "imgSrc": "blank"
+        },
+        {
+          "title": "",
+          "body": "Computer vision is conceptually not all that different! To identify features in an image, a small window called a *kernel* slides across the image and at every step, makes a calculation.",
+          "imgSrc": "blank"
+        },
+        {
+          "title": "",
+          "body": "Depending on what trait the kernel is supposed to capture, that calculation reveals whether that trait is present at the current location of the window or not. These calculations are then joined into a new image that represents the result of sliding that window across the original image.",
+          "imgSrc": "blank"
+        }
+      ],
+      "demoComp": ""
+    },
+    {
+      "title": "What is a Kernel?",
+      "colorScheme": "light",
+      "subsections": [
+        {
+          "title": "Subsection 1",
+          "body": "Let's take a step back and define what an image is first. An image is made up of individual pixels which each have a value that represents the color, and those pixels are organized into a grid of values to give us the resulting image.",
+          "imgSrc": "animation1"
+        },
+        {
+          "title": "Subsection 2",
+          "body": "Kernels are not all the different from images in that sense - we specify a much smaller grid of numbers that, based on their value and organization are capable of extracting a \"feature\" from the part of the image the kernel is currently sitting on. A kernel might find the edges of an object in an image, sharpen the details of an image, or smooth the image out.",
+          "imgSrc": "animation2"
+        },
+        {
+          "title": "Subsection 3",
+          "body": "The way this feature extraction occurs is by making a 'window' the size of the kernel around a pixel in the original image. We then multiply the original image's pixel values by the numbers in the kernel, and sum them all up. We compute this sum for all pixels by sliding this 'window' across every pixel in the image and repeating the math at every step. As we slide across the image, we stitch together the new values after applying the kernel to create a brand new image!",
+          "imgSrc": "animation3"
+        }
+      ],
+      "demoComp": ""
+    }
+  ]
+}
