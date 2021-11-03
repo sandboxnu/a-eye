@@ -1,28 +1,35 @@
-import React from 'react';
-import SobelFilterDemo from '../modules/computerVision/sobelFilter/SobelFilterDemo';
-import GaussianBlurDemo from '../modules/computerVision/gaussianBlur/GaussianBlurDemo';
-import GaborDemo from '../modules/computerVision/gaborFilter/gaborFilter';
-import DiffOfGaussianDemo from '../modules/computerVision/diffofgaussian/DiffOfGaussian';
-import HaarWaveletDemo from '../modules/computerVision/haarWavelet/HaarWaveletDemo';
-import { ImageSelectableDemo } from '../modules/computerVision/imageSelector/ImageSelectableDemo';
+/* eslint-disable */
+import React from "react";
+import SobelFilterDemo from "../modules/computerVision/sobelFilter/SobelFilterDemo";
+import GaussianBlurDemo from "../modules/computerVision/gaussianBlur/GaussianBlurDemo";
+import GaborDemo from "../modules/computerVision/gaborFilter/gaborFilter";
+import DiffOfGaussianDemo from "../modules/computerVision/diffofgaussian/DiffOfGaussian";
+import HaarWaveletDemo from "../modules/computerVision/haarWavelet/HaarWaveletDemo";
+import { ImageSelectableDemo } from "../modules/computerVision/imageSelector/ImageSelectableDemo";
 import PCADemo, {
   RawDataTable,
   SelectableAxisChart,
   StaticAxisChart,
   config as pcaConfig,
-} from '../modules/stateSpaces/pca/PCA';
+} from "../modules/stateSpaces/pca/PCA";
 
 import KMeans, {
   KMeansStepExample,
   InteractiveClusteringExample,
-} from '../modules/stateSpaces/kmeans';
-import blank from '../media/modules/blank.png';
-import animation1 from '../media/modules/computerVision/animation-1.gif';
-import animation2 from '../media/modules/computerVision/animation-2.gif';
-import animation3 from '../media/modules/computerVision/animation-3.gif';
+} from "../modules/stateSpaces/kmeans";
+import blank from "../media/modules/blank.png";
+import animation1 from "../media/modules/computerVision/animation-1.gif";
+import animation2 from "../media/modules/computerVision/animation-2.gif";
+import animation3 from "../media/modules/computerVision/animation-3.gif";
+import combinedSobelKernelExampleLight from "../media/modules/computerVision/combinedSobelKernelExampleLight.png";
+import combinedSobelKernelExampleDark from "../media/modules/computerVision/combinedSobelKernelExampleDark.png";
+import vertSobelExampleLight from "../media/modules/computerVision/sobelKernels/vertical_lighttodark.png";
+import vertSobelExampleDark from "../media/modules/computerVision/sobelKernels/vertical_darktolight.png";
+// import lightVertSobelExampleLight from '../media/modules/computerVision/vertSobelExampleLight.png';
+// import lightVertSobelExampleDark from '../media/modules/computerVision/vertSobelExampleDark.png';
 
 const lorem =
-  'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.';
+  "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
 
 interface ColorScheme {
   bgColor: string;
@@ -40,14 +47,22 @@ interface ModuleSubsection {
 
 function GetImage(imgName: string) {
   switch (imgName) {
-    case 'blank':
+    case "blank":
       return blank;
-    case 'animation1':
+    case "animation1":
       return animation1;
-    case 'animation2':
+    case "animation2":
       return animation2;
-    case 'animation3':
+    case "animation3":
       return animation3;
+    case "sobelKernelLight":
+      return vertSobelExampleLight;
+    case "sobelKernelDark":
+      return vertSobelExampleDark;
+    case "combinedSobelKernelLight":
+      return combinedSobelKernelExampleLight;
+    case "combinedSobelKernelDark":
+      return combinedSobelKernelExampleDark;
     default:
   }
 }
@@ -56,7 +71,7 @@ function getDemo(comp: string, scheme: ColorScheme) {
   const demoArgs = { labelColor: scheme.titleColor };
 
   switch (comp) {
-    case 'GaussianBlurDemo':
+    case "GaussianBlurDemo":
       return (
         <ImageSelectableDemo
           Demo={GaussianBlurDemo}
@@ -64,7 +79,7 @@ function getDemo(comp: string, scheme: ColorScheme) {
           demoProps={demoArgs}
         />
       );
-    case 'GaborDemo':
+    case "GaborDemo":
       return (
         <ImageSelectableDemo
           Demo={GaborDemo}
@@ -72,7 +87,7 @@ function getDemo(comp: string, scheme: ColorScheme) {
           demoProps={demoArgs}
         />
       );
-    case 'DiffOfGaussian':
+    case "DiffOfGaussian":
       return (
         <ImageSelectableDemo
           Demo={DiffOfGaussianDemo}
@@ -80,7 +95,7 @@ function getDemo(comp: string, scheme: ColorScheme) {
           demoProps={demoArgs}
         />
       );
-    case 'HaarWaveletDemo':
+    case "HaarWaveletDemo":
       return (
         <ImageSelectableDemo
           Demo={HaarWaveletDemo}
@@ -88,7 +103,7 @@ function getDemo(comp: string, scheme: ColorScheme) {
           demoProps={demoArgs}
         />
       );
-    case 'SobelFilterDemo':
+    case "SobelFilterDemo":
       return (
         <ImageSelectableDemo
           Demo={SobelFilterDemo}
@@ -96,21 +111,21 @@ function getDemo(comp: string, scheme: ColorScheme) {
           demoProps={demoArgs}
         />
       );
-    case 'PCADemo':
+    case "PCADemo":
       return <PCADemo {...demoArgs} />;
-    case 'RawDataTable':
+    case "RawDataTable":
       return <RawDataTable />;
-    case 'StaticAxisChart':
+    case "StaticAxisChart":
       return (
         <StaticAxisChart
           xIdx={4}
           yIdx={5}
           columnSet={pcaConfig.columns}
-          classes={['versicolor', 'setosa']}
+          classes={["versicolor", "setosa"]}
           labelColorHex={scheme.labelColorHex}
         />
       );
-    case 'SelectableAxisChart':
+    case "SelectableAxisChart":
       return (
         <SelectableAxisChart
           columnSet={pcaConfig.columns}
@@ -120,7 +135,7 @@ function getDemo(comp: string, scheme: ColorScheme) {
           labelColorHex={scheme.labelColorHex}
         />
       );
-    case 'PCASelectableAxisChart':
+    case "PCASelectableAxisChart":
       return (
         <SelectableAxisChart
           columnSet={pcaConfig.pcaColumns}
@@ -130,19 +145,19 @@ function getDemo(comp: string, scheme: ColorScheme) {
           labelColorHex={scheme.labelColorHex}
         />
       );
-    case 'InteractiveKMeans':
+    case "InteractiveKMeans":
       return (
         <div>
           <InteractiveClusteringExample hidden={false} />
         </div>
       );
-    case 'StepKMeans':
+    case "StepKMeans":
       return (
         <div>
           <KMeansStepExample hidden={false} />
         </div>
       );
-    case 'KMeans':
+    case "KMeans":
       return <KMeans />;
     default:
       return <div />;
@@ -171,20 +186,20 @@ const ModuleSection: React.FC<ModuleSectionType> = ({
   demoComp,
 }) => {
   const scheme =
-    colorScheme === 'dark'
+    colorScheme === "dark"
       ? {
-          bgColor: 'bg-moduleDarkBlue',
-          titleColor: 'text-modulePaleBlue',
-          headingColor: 'text-moduleTeal',
-          bodyColor: 'text-moduleOffwhite',
-          labelColorHex: '#CBD9F2',
+          bgColor: "bg-moduleDarkBlue",
+          titleColor: "text-modulePaleBlue",
+          headingColor: "text-moduleTeal",
+          bodyColor: "text-moduleOffwhite",
+          labelColorHex: "#CBD9F2",
         }
       : {
-          bgColor: 'bg-modulePaleBlue',
-          titleColor: 'text-moduleNavy',
-          headingColor: 'text-moduleDarkBlue',
-          bodyColor: 'text-moduleNavy',
-          labelColorHex: '#394D73',
+          bgColor: "bg-modulePaleBlue",
+          titleColor: "text-moduleNavy",
+          headingColor: "text-moduleDarkBlue",
+          bodyColor: "text-moduleNavy",
+          labelColorHex: "#394D73",
         };
 
   return (
@@ -200,34 +215,42 @@ const ModuleSection: React.FC<ModuleSectionType> = ({
           {sections.map((section, index) => (
             <div
               className={`flex flex-col md:flex-row mx-2 md:my-5 ${
-                section.imgSrc === '/blank.png' && 'my-10'
-              } ${section.body ? '' : 'hidden'}`}
+                section.imgSrc === "/blank.png" && "my-10"
+              } ${section.body ? "" : "hidden"}`}
               // eslint-disable-next-line
               key={index}
             >
               <img
                 src={GetImage(section.imgSrc)}
                 alt=""
-                className={`hidden ${index % 2 !== 0 && 'md:flex'} ${
-                  section.imgSrc === '/blank.png'
-                    ? 'hidden md:object-none'
-                    : 'object-contain'
+                className={`hidden ${index % 2 !== 0 && "md:flex"} ${
+                  section.imgSrc === "/blank.png"
+                    ? "hidden md:object-none"
+                    : "object-contain"
                 } md:w-1/4 md:mr-16 md:-mt-12`}
               />
               <div className="md:w-2/3 flex-col">
-                <p
-                  className={`my-2 text-left text-lg font-medium font-mono ${scheme.bodyColor}`}
-                >
-                  {section.body || lorem}
-                </p>
+                {section.body?.includes("<strong>") ? (
+                  <p
+                    className={`my-2 text-left text-lg font-medium font-mono ${scheme.bodyColor}`}
+                    dangerouslySetInnerHTML={{__html: section.body}}
+                  >
+                  </p>
+                ) : (
+                  <p
+                    className={`my-2 text-left text-lg font-medium font-mono ${scheme.bodyColor}`}
+                  >
+                    {section.body || lorem}
+                  </p>
+                )}
               </div>
               <img
                 src={GetImage(section.imgSrc)}
                 alt=""
-                className={`${index % 2 !== 0 && 'md:hidden'} ${
-                  section.imgSrc === '/blank.png'
-                    ? 'hidden md:object-none'
-                    : 'object-contain'
+                className={`${index % 2 !== 0 && "md:hidden"} ${
+                  section.imgSrc === "/blank.png"
+                    ? "hidden md:object-none"
+                    : "object-contain"
                 } md:w-1/4 md:mr-16 md:-mt-12`}
               />
             </div>
