@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useEffect, useRef } from 'react';
 import { BlocksType, map } from './histOfGrad';
 
@@ -60,6 +61,39 @@ export const drawNeedle = (
   ctx.lineTo(blockPos.x + pt2.x, blockPos.y + pt2.y);
   ctx.stroke();
 };
+
+export const drawGrid = (
+  cnv: HTMLCanvasElement,
+  numRow: number,
+  numCol: number,
+  color: { r: number; g: number; b: number },
+): void => {
+  const width = cnv.width
+  const height = cnv.height
+
+  const colSize = width / numCol;
+  const rowSize = height / numRow;
+
+  var ctx = cnv.getContext("2d");
+  if (!ctx) return;
+
+
+  for (let i = 0; i <= numCol; i++) {
+    ctx.beginPath();
+    ctx.moveTo(i*colSize, 0);
+    ctx.lineTo(i*colSize, height);
+    ctx.strokeStyle = `rgb(${color.r},${color.g},${color.b})`;
+    ctx.stroke();  
+  }
+
+  for (let i = 0; i <= numRow; i++) {
+    ctx.beginPath();
+    ctx.moveTo(0, i*rowSize);
+    ctx.lineTo(width, i*rowSize);
+    ctx.strokeStyle = `rgb(${color.r},${color.g},${color.b})`;
+    ctx.stroke();  
+  }
+}
 
 // returns true if the angle is part of the orientation config
 const angleInOrientation = (
