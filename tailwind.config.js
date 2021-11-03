@@ -24,54 +24,53 @@ module.exports = {
         lightNavy: '#5e76a2'
       },
       fontFamily: {
-        opensans: ["open sans", "sans-serif"],
-        roboto: ["roboto", "sans-serif"],
-        robotoMono: ["roboto-mono", "sans-serif"]
+        opensans: ['open sans', 'sans-serif'],
+        roboto: ['roboto', 'sans-serif'],
+        robotoMono: ['roboto-mono', 'sans-serif'],
       },
       fontSize: {
-        "3.5xl": ['32px'],
-        "7xl": ['72px']
+        '3.5xl': ['32px'],
+        '7xl': ['72px'],
       },
       fontWeight: {
-        'micro': 25
+        micro: 25,
       },
-      backgroundImage: theme => ({
-        'about': 'url("../media/aboutPage/aboutCurve.svg")',
-        'landing-page': 'url("../media/landingPage/background_landing_page.svg")'
+      backgroundImage: () => ({
+        about: 'url("../media/aboutPage/aboutCurve.svg")',
+        'landing-page':
+          'url("../media/landingPage/background_landing_page.svg")',
       }),
       backgroundSize: {
-        stretchBottom: '103% 50%'
+        stretchBottom: '103% 50%',
       },
       borderRadius: {
-        module: '64px'
+        module: '64px',
       },
       boxShadow: {
         module: '12px 10px 19px rgba(0, 0, 0, 0.30)',
         spacing: {
-          '500px': '500px'
-        }
-      }
-      ,
+          '500px': '500px',
+        },
+      },
       top: {
-        '-1': '-1px'
+        '-1': '-1px',
       },
       maxHeight: {
         xs: '20rem',
         sm: '24rem',
         md: '28rem',
-        lg: '32rem'
+        lg: '32rem',
       },
       width: {
-        '35vw': '35vw'
-      }
+        '35vw': '35vw',
+      },
     },
     variants: {
       mixBlendMode: ['responsive'],
       backgroundBlendMode: ['responsive'],
       isolation: ['responsive'],
     },
-    plugins: [
-      require('tailwindcss-blend-mode')()
-    ],
-  }
-}
+    /* eslint-disable-next-line */
+    plugins: [require('tailwindcss-blend-mode')()],
+  },
+};

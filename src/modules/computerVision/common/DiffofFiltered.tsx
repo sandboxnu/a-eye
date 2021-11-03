@@ -25,7 +25,7 @@ const FilterByDiffKernel = (props: { kernel?: number[], kernel2?:number[], imgUr
                 const result2 = Uint8ClampedArray.from(check2.data);
                 const width = check.width;
                 const height = check.height;
-                
+
                 const diff = result1.map((pix, i)=> ((i+1)%4 === 0 ? 255 : 255 - Math.abs(pix - result2[i])));
                 const output = new ImageData(diff, width, height);
                 outCanvas.getContext('2d')?.putImageData(output, 0, 0);

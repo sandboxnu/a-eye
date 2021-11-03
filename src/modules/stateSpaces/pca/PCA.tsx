@@ -20,24 +20,24 @@ type PCAProps = { labelColor: string; labelColorHex?: string };
  */
 export const PCADemo = ({ labelColor, labelColorHex = "" }: PCAProps) => {
   return (
-    <div className={`PCA-div ${labelColor}`}>
-      <RawDataTable />
-      <StaticAxisChart labelColorHex={labelColorHex} />
-      <SelectableAxisChart
-        columnSet={columns}
-        initXIdx={2}
-        initYIdx={3}
-        labelColor={"text-white"}
-        labelColorHex={labelColorHex}
-      />
-      <SelectableAxisChart
-        columnSet={pcaColumns}
-        initXIdx={0}
-        initYIdx={1}
-        labelColor={"text-white"}
-        labelColorHex={labelColorHex}
-      />
-    </div>
+      <div className={`PCA-div ${labelColor}`}>
+        <RawDataTable />
+        <StaticAxisChart labelColorHex={labelColorHex} />
+        <SelectableAxisChart
+            columnSet={columns}
+            initXIdx={2}
+            initYIdx={3}
+            labelColor={"text-white"}
+            labelColorHex={labelColorHex}
+        />
+        <SelectableAxisChart
+            columnSet={pcaColumns}
+            initXIdx={0}
+            initYIdx={1}
+            labelColor={"text-white"}
+            labelColorHex={labelColorHex}
+        />
+      </div>
   );
 };
 
@@ -53,7 +53,7 @@ export const RawDataTable = () => {
   var currDataset: number[][] = [];
   var currClasses: string[][] = [];
   var columns: string[] = ["", ""].concat(
-    Object.keys(datasets[indexDataset][0]).slice(0, -1)
+      Object.keys(datasets[indexDataset][0]).slice(0, -1)
   );
   const target = Object.keys(datasets[indexDataset][0]).slice(-1)[0];
 
@@ -68,45 +68,45 @@ export const RawDataTable = () => {
   });
 
   return (
-    <div className="container mx-auto my-4">
-      <div className="pca raw-data-table mx-auto">
-        <table className="table-auto">
-          <thead>
+      <div className="container mx-auto my-4">
+        <div className="pca raw-data-table mx-auto">
+          <table className="table-auto">
+            <thead>
             <tr>
               {columns.map((title) => title && <th key={title}>{title}</th>)}
               <th
-                className="cursor-pointer"
-                onClick={() => {
-                  setShowClass(!showClass);
-                }}
-                title={showClass ? "Hide Classes" : "Display Classes"}
+                  className="cursor-pointer"
+                  onClick={() => {
+                    setShowClass(!showClass);
+                  }}
+                  title={showClass ? "Hide Classes" : "Display Classes"}
               >
                 {showClass ? `Class: ${target}` : "►"}
               </th>
             </tr>
-          </thead>
-          <tbody>
+            </thead>
+            <tbody>
             {currDataset.map((row: number[], idx: number) => {
               return (
-                <tr key={idx} className="'datarow' text-white">
-                  {row.map((val: number, idx: number) => (
-                    <td key={idx}>{val}</td>
-                  ))}
-                  <td>{showClass && currClasses[idx]}</td>
-                </tr>
+                  <tr key={idx} className="'datarow' text-white">
+                    {row.map((val: number, idx: number) => (
+                        <td key={idx}>{val}</td>
+                    ))}
+                    <td>{showClass && currClasses[idx]}</td>
+                  </tr>
               );
             })}
-          </tbody>
-        </table>
+            </tbody>
+          </table>
+        </div>
+        <div className="axis-selector inline">
+          <button
+              onClick={(e) => setIndexDataset((indexDataset + 1) % datasets.length)}
+          >
+            Current: {datasetLabel[indexDataset]}
+          </button>
+        </div>
       </div>
-      <div className="axis-selector inline">
-        <button
-          onClick={(e) => setIndexDataset((indexDataset + 1) % datasets.length)}
-        >
-          Current: {datasetLabel[indexDataset]}
-        </button>
-      </div>
-    </div>
   );
 };
 
@@ -139,7 +139,7 @@ export const SelectableAxisChart = (props: {
   const [yIdx, setYIdx] = useState(yLabelIndex);
 
   var columns: string[] = ["", ""].concat(
-    Object.keys(datasets[indexDataset][0]).slice(0, -1)
+      Object.keys(datasets[indexDataset][0]).slice(0, -1)
   );
 
   datasets[indexDataset].forEach((row) => {
@@ -165,7 +165,7 @@ export const SelectableAxisChart = (props: {
     currDataset.forEach((row, idx) => {
       if (dataClass === currClasses[idx]) {
         dataByClass[dataClass].push(
-          [prediction.get(idx, 0), prediction.get(idx, 1)].concat(row)
+            [prediction.get(idx, 0), prediction.get(idx, 1)].concat(row)
         );
       }
     });
@@ -179,49 +179,49 @@ export const SelectableAxisChart = (props: {
   });
 
   return (
-    <>
-      <div className="pca raw-data-chart">
-        <div className="select-axis-menu yIdx">
-          <p className={`font-opensans font-bold italic ${props.labelColor}`}>
-            {" "}
-            Select Y Axis{" "}
-          </p>
-          <AxisSelector
-            selected={yIdx}
-            onChange={setYIdx}
-            columnSet={columns}
-          />
+      <>
+        <div className="pca raw-data-chart">
+          <div className="select-axis-menu yIdx">
+            <p className={`font-opensans font-bold italic ${props.labelColor}`}>
+              {" "}
+              Select Y Axis{" "}
+            </p>
+            <AxisSelector
+                selected={yIdx}
+                onChange={setYIdx}
+                columnSet={columns}
+            />
+          </div>
+          <div className="raw-data-scatter">
+            <BasicScatter
+                colorMap={colorMap}
+                points={points}
+                xLabel={columns[xIdx]}
+                yLabel={columns[yIdx]}
+                labelColorHex={props.labelColorHex}
+            />
+          </div>
+          <div className="select-axis-menu xIdx">
+            <p className={`font-opensans font-bold italic ${props.labelColor}`}>
+              {" "}
+              Select X Axis
+            </p>
+            <AxisSelector
+                selected={xIdx}
+                onChange={setXIdx}
+                columnSet={columns}
+            />
+          </div>
         </div>
-        <div className="raw-data-scatter">
-          <BasicScatter
-            colorMap={colorMap}
-            points={points}
-            xLabel={columns[xIdx]}
-            yLabel={columns[yIdx]}
-            labelColorHex={props.labelColorHex}
-          />
-        </div>
-        <div className="select-axis-menu xIdx">
-          <p className={`font-opensans font-bold italic ${props.labelColor}`}>
-            {" "}
-            Select X Axis
-          </p>
-          <AxisSelector
-            selected={xIdx}
-            onChange={setXIdx}
-            columnSet={columns}
-          />
-        </div>
-      </div>
 
-      <div className="axis-selector inline">
-        <button
-          onClick={(e) => setIndexDataset((indexDataset + 1) % datasets.length)}
-        >
-          Current: {datasetLabel[indexDataset]}
-        </button>
-      </div>
-    </>
+        <div className="axis-selector inline">
+          <button
+              onClick={(e) => setIndexDataset((indexDataset + 1) % datasets.length)}
+          >
+            Current: {datasetLabel[indexDataset]}
+          </button>
+        </div>
+      </>
   );
 };
 
@@ -275,7 +275,7 @@ export const StaticAxisChart = (props: { labelColorHex: string }) => {
     currDataset.forEach((row, idx) => {
       if (dataClass === currClasses[idx]) {
         dataByClass[dataClass].push(
-          [prediction.get(idx, 0), prediction.get(idx, 1)].concat(row)
+            [prediction.get(idx, 0), prediction.get(idx, 1)].concat(row)
         );
       }
     });
@@ -289,26 +289,26 @@ export const StaticAxisChart = (props: { labelColorHex: string }) => {
   });
 
   return (
-    <div className="pca pca-chart">
-      <div className="raw-data-scatter">
-        <BasicScatter
-          colorMap={colorMap}
-          points={points}
-          xLabel={xLabel}
-          yLabel={yLabel}
-          labelColorHex={props.labelColorHex}
-        />
-        <div className="axis-selector inline">
-          <button
-            onClick={(e) =>
-              setIndexDataset((indexDataset + 1) % datasets.length)
-            }
-          >
-            Current: {datasetLabel[indexDataset]}
-          </button>
+      <div className="pca pca-chart">
+        <div className="raw-data-scatter">
+          <BasicScatter
+              colorMap={colorMap}
+              points={points}
+              xLabel={xLabel}
+              yLabel={yLabel}
+              labelColorHex={props.labelColorHex}
+          />
+          <div className="axis-selector inline">
+            <button
+                onClick={(e) =>
+                    setIndexDataset((indexDataset + 1) % datasets.length)
+                }
+            >
+              Current: {datasetLabel[indexDataset]}
+            </button>
+          </div>
         </div>
       </div>
-    </div>
   );
 };
 
@@ -317,20 +317,20 @@ export const AxisSelector = (props: {
   selected: number;
   onChange: (arg: number) => void;
 }) => (
-  <div className="axis-selector">
-    {props.columnSet.map(
-      (col, idx) =>
-        col && (
-          <button
-            className={props.selected === idx ? "selected" : ""}
-            key={col}
-            onClick={() => props.onChange(idx)}
-          >
-            {col}
-          </button>
-        )
-    )}
-  </div>
+    <div className="axis-selector">
+      {props.columnSet.map(
+          (col, idx) =>
+              col && (
+                  <button
+                      className={props.selected === idx ? "selected" : ""}
+                      key={col}
+                      onClick={() => props.onChange(idx)}
+                  >
+                    {col}
+                  </button>
+              )
+      )}
+    </div>
 );
 
 const COLORS = [
@@ -373,7 +373,7 @@ datasetIris.getDistinctClasses().forEach((dataClass: string, i: number) => {
   dataset.forEach((row, idx) => {
     if (dataClass === classes[idx]) {
       dataByClass[dataClass].push(
-        [prediction.get(idx, 0), prediction.get(idx, 1)].concat(row)
+          [prediction.get(idx, 0), prediction.get(idx, 1)].concat(row)
       );
     }
   });
@@ -381,7 +381,7 @@ datasetIris.getDistinctClasses().forEach((dataClass: string, i: number) => {
 
 const titanicKeysToRemove = ["Name", "Sex", "Ticket", "Cabin", "Embarked"];
 titanicData.forEach((datapoint) =>
-  titanicKeysToRemove.forEach((key) => delete datapoint[key])
+    titanicKeysToRemove.forEach((key) => delete datapoint[key])
 );
 
 export default PCADemo;

@@ -1,5 +1,3 @@
-export { haarFilter };
-
 // https://stevenbas.art/examples/ImageProcessing/ex4/
 
 /**
@@ -11,16 +9,16 @@ export { haarFilter };
  * @param iterations how many recursions to do
  */
 function haarFilter(
-  inCanvas: HTMLCanvasElement,
-  outCanvas: HTMLCanvasElement,
-  iterations: number
+    inCanvas: HTMLCanvasElement,
+    outCanvas: HTMLCanvasElement,
+    iterations: number
 ) {
   const inData = inCanvas
-    .getContext("2d")
-    ?.getImageData(0, 0, inCanvas.width, inCanvas.height);
+      .getContext("2d")
+      ?.getImageData(0, 0, inCanvas.width, inCanvas.height);
   const outData = outCanvas
-    .getContext("2d")
-    ?.getImageData(0, 0, outCanvas.width, outCanvas.height);
+      .getContext("2d")
+      ?.getImageData(0, 0, outCanvas.width, outCanvas.height);
   if (!inData || !outData) return;
 
   const inPix = inData.data;
@@ -124,3 +122,5 @@ function oneDHaarTransform(pixRow: number[]) {
     pixRow[j] = tempHaar[j];
   }
 }
+
+export { haarFilter };

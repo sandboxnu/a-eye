@@ -5,7 +5,7 @@ import trainDataIris from '../data/iris.json';
 import trainDataIris2 from '../data/iris2.json';
 import titanicData from '../data/titanic.json';
 
-import dragData from 'chartjs-plugin-dragdata'; 
+import dragData from 'chartjs-plugin-dragdata';
 import { Scatter } from 'react-chartjs-2';
 import kmeans from 'ml-kmeans';
 import './chartjs-plugin-dragdata.d.ts';
@@ -22,23 +22,23 @@ type InteractiveClusteringExampleType = {
 };
 
 const InteractiveClusteringExample: React.FC<InteractiveClusteringExampleType> = ({
-    hidden = false,
-    xLabel = '',
-    yLabel = '',
-    k = 2,
-    // 0 == original data
-    // 1 == iris data
-    // 2 == diff iris data
-    // 3 == titanic data
-    // change to an int if more datasets
-    trainingDatasets = [trainData, trainDataIris, trainDataIris2, titanicData],
-    centersList = [
-        [[0, 0], [50, 50]],
-        [[2, 2], [7, 5]],
-        [[20, 20], [40, 40]],
-        [[10, 10], [40, 40]],
-    ],
-}) => {
+                                                                                      hidden = false,
+                                                                                      xLabel = '',
+                                                                                      yLabel = '',
+                                                                                      k = 2,
+                                                                                      // 0 == original data
+                                                                                      // 1 == iris data
+                                                                                      // 2 == diff iris data
+                                                                                      // 3 == titanic data
+                                                                                      // change to an int if more datasets
+                                                                                      trainingDatasets = [trainData, trainDataIris, trainDataIris2, titanicData],
+                                                                                      centersList = [
+                                                                                          [[0, 0], [50, 50]],
+                                                                                          [[2, 2], [7, 5]],
+                                                                                          [[20, 20], [40, 40]],
+                                                                                          [[10, 10], [40, 40]],
+                                                                                      ],
+                                                                                  }) => {
 
     let organizedDatasets: number[][][] = [];
     for(const dataset of trainingDatasets) {
@@ -205,41 +205,41 @@ const InteractiveClusteringExample: React.FC<InteractiveClusteringExampleType> =
                 // @ts-ignore
                 const asdgwg = this.chart.getElementAtEvent(evt)[0];
 
-                 // @ts-ignore
-                 let yTop = this.chartArea.top;
-                 // @ts-ignore
-                 let yBottom = this.chartArea.bottom;
-                 // @ts-ignore
-                 let yMin = this.scales['y-axis-1'].min;
-                 // @ts-ignore
-                 let yMax = this.scales['y-axis-1'].max;
-                 let newY = 0;
+                // @ts-ignore
+                let yTop = this.chartArea.top;
+                // @ts-ignore
+                let yBottom = this.chartArea.bottom;
+                // @ts-ignore
+                let yMin = this.scales['y-axis-1'].min;
+                // @ts-ignore
+                let yMax = this.scales['y-axis-1'].max;
+                let newY = 0;
 
-                 if (evt.offsetY <= yBottom && evt.offsetY >= yTop) {
-                     newY = Math.abs((evt.offsetY - yTop) / (yBottom - yTop));
-                     newY = (newY - 1) * -1;
-                     newY = newY * (Math.abs(yMax - yMin)) + yMin;
-                 };
-                 // @ts-ignore
-                 let xTop = this.chartArea.left;
-                 // @ts-ignore
-                 let xBottom = this.chartArea.right;
-                 // @ts-ignore
-                 let xMin = this.scales['x-axis-1'].min;
-                 // @ts-ignore
-                 let xMax = this.scales['x-axis-1'].max;
-                 let newX = 0;
+                if (evt.offsetY <= yBottom && evt.offsetY >= yTop) {
+                    newY = Math.abs((evt.offsetY - yTop) / (yBottom - yTop));
+                    newY = (newY - 1) * -1;
+                    newY = newY * (Math.abs(yMax - yMin)) + yMin;
+                };
+                // @ts-ignore
+                let xTop = this.chartArea.left;
+                // @ts-ignore
+                let xBottom = this.chartArea.right;
+                // @ts-ignore
+                let xMin = this.scales['x-axis-1'].min;
+                // @ts-ignore
+                let xMax = this.scales['x-axis-1'].max;
+                let newX = 0;
 
-                 if (evt.offsetX <= xBottom && evt.offsetX >= xTop) {
-                     newX = Math.abs((evt.offsetX - xTop) / (xBottom - xTop));
-                     newX = newX * (Math.abs(xMax - xMin)) + xMin;
-                 };
-                 
-                 // checking to make sure where you click isnt on the centroids
-                 // dont want to remove those
-                 const rad = 7
-                 const inXBounds = ((newX < x1Idx + rad) && (newX > x1Idx - rad)) || ((newX < x2Idx + rad) && (newX > x2Idx - rad))
-                 const inYBounds = ((newY < y1Idx + rad) && (newY > y1Idx - rad)) || ((newY < y2Idx + rad) && (newY > y2Idx - rad))
+                if (evt.offsetX <= xBottom && evt.offsetX >= xTop) {
+                    newX = Math.abs((evt.offsetX - xTop) / (xBottom - xTop));
+                    newX = newX * (Math.abs(xMax - xMin)) + xMin;
+                };
+
+                // checking to make sure where you click isnt on the centroids
+                // dont want to remove those
+                const rad = 7
+                const inXBounds = ((newX < x1Idx + rad) && (newX > x1Idx - rad)) || ((newX < x2Idx + rad) && (newX > x2Idx - rad))
+                const inYBounds = ((newY < y1Idx + rad) && (newY > y1Idx - rad)) || ((newY < y2Idx + rad) && (newY > y2Idx - rad))
 
                 const onCentroid =  inXBounds && inYBounds
 
@@ -247,7 +247,7 @@ const InteractiveClusteringExample: React.FC<InteractiveClusteringExampleType> =
                     let ds_index = asdgwg._datasetIndex
                     let ind = asdgwg._index
 
-                    
+
                     addPointToRemove(originalDataset, {ds_index, ind});
 
                     // @ts-ignore
@@ -257,7 +257,7 @@ const InteractiveClusteringExample: React.FC<InteractiveClusteringExampleType> =
                     return;
                 }
                 else {
-                
+
                     if (newX > 0 && newY > 0) {
 
                         const point = {Distance_Feature: newX, Speeding_Feature: newY};
@@ -273,7 +273,7 @@ const InteractiveClusteringExample: React.FC<InteractiveClusteringExampleType> =
                 }
             }
         },
-        
+
         onDragEnd,
         onDragStart:onDragEnd,
         onDrag:onDragEnd,
