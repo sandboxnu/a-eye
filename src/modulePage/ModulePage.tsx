@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { RouteComponentProps } from 'react-router';
 import ModuleSection from './ModuleSection';
 import module8 from '../media/modules/module_8.json';
@@ -49,14 +49,6 @@ export default function ModulePage(
 
   const curModule = modules[module];
 
-  const openSectionAndJump = (index: number) => {
-    setOpenSection(index);
-    const id = curModule.sections[index].title.split(' ').join('-');
-    window.location.href = '#' + id;
-  }
-
-  const [openSection, setOpenSection] = useState<number>(0);
-
   if (!curModule) {
     return (
       <div>
@@ -74,7 +66,6 @@ export default function ModulePage(
       <ul>
         {curModule.sections.map((section, index) =>
           <div id={section.title.split(' ').join('-')}>
-            {index === openSection ? (
             <ModuleSection
               title={section.title}
               sections={section.subsections}
@@ -82,14 +73,6 @@ export default function ModulePage(
               key={section.title}
               demoComp={section.demoComp}
             />
-          ) : (
-            <div className={`cursor-pointer flex flex-col w-screen ${section.colorScheme === 'dark' ? ' bg-moduleDarkBlue' : 'bg-modulePaleBlue'}`}
-             onClick={() => openSectionAndJump(index)}>
-              <p className={`my-2 text-3xl md:text-4xl italic font-bold font-opensans ${section.colorScheme === 'dark' ? 'text-modulePaleBlue' : 'text-moduleNavy'}`}>
-                {section.title}
-              </p>
-            </div>
-           )}
           </div>,
         )}
       </ul>

@@ -126,6 +126,17 @@ input[type="range"]:focus {
   }
 }
 
+.md30vw-sm60vw {
+  width: 60vw;
+}
+
+@media (min-width:768px) {
+  .md30vw-sm60vw {
+    width: 30vw;
+  }
+}
+
+
 .img-invert {
   filter: invert(1)
 }

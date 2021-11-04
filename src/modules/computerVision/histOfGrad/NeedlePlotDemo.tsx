@@ -1,6 +1,6 @@
 /* eslint-disable */
 
-import React, { useLayoutEffect, useRef, useState, useEffect } from "react";
+import React, {useLayoutEffect, useRef, useState, useEffect, EffectCallback} from "react";
 import {
     gradientImages,
     GradientsType
@@ -163,7 +163,6 @@ const NeedlePlotDemo: React.FC<NeedlePlotDemoType> = ({
         }
     }
 
-
     useLayoutEffect(() => {
         fillNeedleOverlayCanvas();
         fillGridOverlayCanvas();
@@ -174,16 +173,16 @@ const NeedlePlotDemo: React.FC<NeedlePlotDemoType> = ({
     return (
 
         <div>
-            <p className={`text-3xl crisp-pixels ${labelColor}`}>Original Image</p>
-
             {step == 0 &&
-                <img ref={imgRef} src={imgUrl} alt="img" className="mx-auto max-w-60vw" />
+                <div className='my-10'>
+                    <img ref={imgRef} src={imgUrl} alt="img" className="mx-auto md30vw-sm60vw" />
+                </div>
             }
 
             {step == 1 &&
                 <div className='my-10'>
                     <canvas
-                        className="crisp-pixels mx-auto max-w-60vw"
+                        className="crisp-pixels mx-auto md30vw-sm60vw"
                         ref={gridOverlay}
                         width={canvasWidth}
                         height={canvasHeight}
@@ -195,7 +194,7 @@ const NeedlePlotDemo: React.FC<NeedlePlotDemoType> = ({
 
                 <div className='my-10'>
                     <canvas
-                        className="crisp-pixels mx-auto max-w-60vw"
+                        className="crisp-pixels mx-auto md30vw-sm60vw"
                         ref={needleOverlay}
                         width={canvasWidth}
                         height={canvasHeight}
@@ -207,7 +206,7 @@ const NeedlePlotDemo: React.FC<NeedlePlotDemoType> = ({
 
                 <div className='my-10'>
                     <canvas
-                        className="crisp-pixels mx-auto max-w-60vw"
+                        className="crisp-pixels mx-auto md30vw-sm60vw"
                         ref={gridNeedle}
                         width={canvasWidth}
                         height={canvasHeight}
@@ -218,7 +217,7 @@ const NeedlePlotDemo: React.FC<NeedlePlotDemoType> = ({
 
                 <div className='my-10'>
                     <canvas
-                        className="crisp-pixels mx-auto max-w-60vw"
+                        className="crisp-pixels mx-auto md30vw-sm60vw"
                         ref={needleOnly}
                         width={canvasWidth}
                         height={canvasHeight}
@@ -226,7 +225,7 @@ const NeedlePlotDemo: React.FC<NeedlePlotDemoType> = ({
                 </div>
             }
             <div className="text-moduleOffwhite m-3 space-x-2 justify-center space-y-3">
-                <div className="flex justify-around rounded w-1/4 mx-auto bg-moduleNavy">
+                <div className="flex justify-around rounded md:w-1/4 mx-auto bg-moduleNavy">
                     <button
                         type="button"
                         onClick={() => setStep(step => Math.max(step - 1, 0))}
