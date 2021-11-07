@@ -3,6 +3,7 @@
 import React, { useLayoutEffect, useRef, useState, useEffect } from "react";
 import SobelFilterDemo from "../sobelFilter/SobelFilterDemo"
 import CombinedSobelFilterDemo from "./CombinedSobelDemo"
+import NeedleHistogramDemo from "./NeedleHistrogramDemo";
 import NeedlePlotDemo from "./NeedlePlotDemo"
 
 
@@ -21,6 +22,7 @@ const HistogramOfGradDemo: React.FC<HistogramOfGradType> = ({
       <SobelFilterDemo labelColor={labelColor} imgUrl={imgUrl}/>
       <CombinedSobelFilterDemo labelColor={labelColor} imgUrl={imgUrl}/>
       <NeedlePlotDemo labelColor={labelColor} imgUrl={imgUrl}/>
+      <NeedleHistogramDemo labelColor={labelColor} imgUrl={imgUrl}/>
     </div>
   );
 };
