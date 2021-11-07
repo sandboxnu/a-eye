@@ -1,4 +1,5 @@
 import React from 'react';
+import HistogramOfGradDemo from 'modules/computerVision/histOfGrad/HistogramOfGradDemo';
 import NeedlePlotDemo from 'modules/computerVision/histOfGrad/NeedlePlotDemo';
 import CombinedSobelFilterDemo from 'modules/computerVision/histOfGrad/CombinedSobelDemo';
 import SobelFilterDemo from '../modules/computerVision/sobelFilter/SobelFilterDemo';
@@ -95,6 +96,14 @@ function getDemo(comp: string, scheme: ColorScheme) {
       return (
         <ImageSelectableDemo
           Demo={HistOfGradDemo}
+          initImg="stopSign.jpeg"
+          demoProps={demoArgs}
+        />
+      );
+    case 'HistogramOfGradDemo':
+      return (
+        <ImageSelectableDemo
+          Demo={HistogramOfGradDemo}
           initImg="stopSign.jpeg"
           demoProps={demoArgs}
         />

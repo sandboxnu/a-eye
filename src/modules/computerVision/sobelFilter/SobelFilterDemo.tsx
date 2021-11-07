@@ -107,7 +107,7 @@ type SobelFilterDemoType = {
   imgUrl: string;
 };
 
-const SobelFilterDemo: React.FC<SobelFilterDemoType> = ({
+export const SobelFilterDemo: React.FC<SobelFilterDemoType> = ({
   labelColor,
   imgUrl,
 }) => {

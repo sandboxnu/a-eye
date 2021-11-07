@@ -119,28 +119,6 @@
     },
     {
       "title": "Histogram of Gradients",
-      "colorScheme": "light",
-      "subsections": [
-        {
-          "title": "Subsection 1",
-          "body": "",
-          "imgSrc": "blank"
-        },
-        {
-          "title": "Subsection 2",
-          "body": "",
-          "imgSrc": "blank"
-        },
-        {
-          "title": "Subsection 3",
-          "body": "",
-          "imgSrc": "blank"
-        }
-      ],
-      "demoComp": "SobelFilterDemo"
-    },
-    {
-      "title": "Histogram of Gradients",
       "colorScheme": "dark",
       "subsections": [
         {
@@ -159,29 +137,7 @@
           "imgSrc": "blank"
         }
       ],
-      "demoComp": "CombinedSobelFilterDemo"
-    },
-    {
-      "title": "Histogram of Gradients",
-      "colorScheme": "light",
-      "subsections": [
-        {
-          "title": "Subsection 1",
-          "body": "",
-          "imgSrc": "blank"
-        },
-        {
-          "title": "Subsection 2",
-          "body": "",
-          "imgSrc": "blank"
-        },
-        {
-          "title": "Subsection 3",
-          "body": "",
-          "imgSrc": "blank"
-        }
-      ],
-      "demoComp": "NeedlePlotDemo"
+      "demoComp": "HistogramOfGradDemo"
     },
     {
       "title": "Histogram of Gradients",
