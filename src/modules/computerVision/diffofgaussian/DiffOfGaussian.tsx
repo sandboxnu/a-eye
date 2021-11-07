@@ -206,7 +206,7 @@ const DoG: React.FC<DoGType> = ({ labelColor, imgUrl }) => {
         <NamedKernelDisplay
           grid={dogGrid}
           label={labelColor}
-          kernelName="Diffenence of Kernels (1 - 2)"
+          kernelName="Difference of Kernels (1 - 2)"
         />
       </div>
       <p>Filter by the First Kernel</p>
