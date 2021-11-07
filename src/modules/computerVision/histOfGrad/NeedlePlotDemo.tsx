@@ -1,11 +1,11 @@
 /* eslint-disable */
 
-import React, {useLayoutEffect, useRef, useState, useEffect, EffectCallback} from "react";
+import React, { useLayoutEffect, useRef, useState, useEffect, EffectCallback } from "react";
 import {
     gradientImages,
     GradientsType
 } from "../sobelFilter/sobelFilter";
-import { denseConfig, histogramBlocks, mediumConfig, sparseConfig } from "./histOfGrad";
+import { denseConfig, histogramBlocks, mediumConfig, sparseConfig, BlocksType } from "./histOfGrad";
 import { displayNeedlePlot, drawGrid } from "./hogComponents";
 
 
@@ -30,16 +30,35 @@ const NeedlePlotDemo: React.FC<NeedlePlotDemoType> = ({
     const [numGridCols, setNumGridCols] = useState<number>(0);
     const [numGridRows, setNumGridRows] = useState<number>(0);
 
+    const [blocks, setBlocks] = useState<BlocksType>();
+
     const needleConfig = sparseConfig;
 
-    const gridOverlay = useRef<HTMLCanvasElement>(null);
-    const needleOverlay = useRef<HTMLCanvasElement>(null);
+    const canvas = useRef<HTMLCanvasElement>(null)
 
-    const gridNeedle = useRef<HTMLCanvasElement>(null);
-    const needleOnly = useRef<HTMLCanvasElement>(null);
+    const fillOriginalImage = () => {
+        const gridOverlayElm = canvas.current
+        if (!gridOverlayElm) return;
+
+        const ctx = gridOverlayElm.getContext('2d');
+        if (!ctx) return;
+
+        var img = new Image();
+        img.src = imgUrl;
+        img.onload = function (e) {
+            const width = 500 * (img.width / img.height);
+            const height = 500;
+
+            setCanvasHeight(height);
+            setCanvasWidth(width);
+
+            ctx.imageSmoothingEnabled = false;
+            ctx.drawImage(img, 0, 0, width, height);
+        }
+    }
 
     const fillNeedleOverlayCanvas = () => {
-        const needleOverlayElm = needleOverlay.current
+        const needleOverlayElm = canvas.current
         if (!needleOverlayElm) return;
 
         const ctx = needleOverlayElm.getContext('2d');
@@ -51,31 +70,23 @@ const NeedlePlotDemo: React.FC<NeedlePlotDemoType> = ({
             const width = 500 * (img.width / img.height);
             const height = 500;
 
+            setCanvasHeight(height);
+            setCanvasWidth(width);
 
-            histogramBlocks(imgUrl, needleConfig).then((blocks) => {
+            ctx.imageSmoothingEnabled = false;
+            ctx.drawImage(img, 0, 0, width, height);
 
+            ctx.fillStyle = 'rgba(0,0,0,0.5)';
+            ctx.fillRect(0, 0, width, height)
 
-                setNumGridRows(blocks.histogram.length)
-                setNumGridCols(blocks.histogram[0].length)
-
-                setCanvasHeight(height);
-                setCanvasWidth(width);
-
-                ctx.imageSmoothingEnabled = false;
-                ctx.drawImage(img, 0, 0, width, height);
-
-                ctx.fillStyle = 'rgba(0,0,0,0.5)';
-                ctx.fillRect(0, 0, width, height)
-
-                drawGrid(needleOverlayElm, numGridRows, numGridCols, { r: 255, g: 255, b: 255 })
-
-                displayNeedlePlot(needleOverlayElm, blocks, "all", { r: 255, g: 255, b: 255 }, true)
-            })
+            drawGrid(needleOverlayElm, numGridRows, numGridCols, { r: 255, g: 255, b: 255 })
+            if (!blocks) return
+            displayNeedlePlot(needleOverlayElm, blocks, "all", { r: 255, g: 255, b: 255 }, true)
         }
     }
 
     const fillGridOverlayCanvas = () => {
-        const gridOverlayElm = gridOverlay.current
+        const gridOverlayElm = canvas.current
         if (!gridOverlayElm) return;
 
         const ctx = gridOverlayElm.getContext('2d');
@@ -86,6 +97,9 @@ const NeedlePlotDemo: React.FC<NeedlePlotDemoType> = ({
         img.onload = function (e) {
             const width = 500 * (img.width / img.height);
             const height = 500;
+
+            setCanvasHeight(height);
+            setCanvasWidth(width);
 
             ctx.imageSmoothingEnabled = false;
             ctx.drawImage(img, 0, 0, width, height);
@@ -100,7 +114,7 @@ const NeedlePlotDemo: React.FC<NeedlePlotDemoType> = ({
     }
 
     const fillGridNeedleCanvas = () => {
-        const gridNeedleElm = gridNeedle.current
+        const gridNeedleElm = canvas.current
         if (!gridNeedleElm) return;
 
         const ctx = gridNeedleElm.getContext('2d');
@@ -113,27 +127,20 @@ const NeedlePlotDemo: React.FC<NeedlePlotDemoType> = ({
             const height = 500;
 
 
-            histogramBlocks(imgUrl, needleConfig).then((blocks) => {
+            setCanvasHeight(height);
+            setCanvasWidth(width);
 
+            ctx.fillStyle = 'rgba(0,0,0)';
+            ctx.fillRect(0, 0, width, height)
 
-                setNumGridRows(blocks.histogram.length)
-                setNumGridCols(blocks.histogram[0].length)
-
-                setCanvasHeight(height);
-                setCanvasWidth(width);
-
-                ctx.fillStyle = 'rgba(0,0,0)';
-                ctx.fillRect(0, 0, width, height)
-
-                drawGrid(gridNeedleElm, numGridRows, numGridCols, { r: 255, g: 255, b: 255 })
-
-                displayNeedlePlot(gridNeedleElm, blocks, "all", { r: 255, g: 255, b: 255 }, true)
-            })
+            drawGrid(gridNeedleElm, numGridRows, numGridCols, { r: 255, g: 255, b: 255 })
+            if (!blocks) return
+            displayNeedlePlot(gridNeedleElm, blocks, "all", { r: 255, g: 255, b: 255 }, true)
         }
     }
 
     const fillNeedleCanvas = () => {
-        const needleElm = needleOnly.current
+        const needleElm = canvas.current
         if (!needleElm) return;
 
         const ctx = needleElm.getContext('2d');
@@ -146,84 +153,60 @@ const NeedlePlotDemo: React.FC<NeedlePlotDemoType> = ({
             const height = 500;
 
 
-            histogramBlocks(imgUrl, needleConfig).then((blocks) => {
+            setCanvasHeight(height);
+            setCanvasWidth(width);
 
+            ctx.fillStyle = 'rgba(0,0,0)';
+            ctx.fillRect(0, 0, width, height)
 
-                setNumGridRows(blocks.histogram.length)
-                setNumGridCols(blocks.histogram[0].length)
-
-                setCanvasHeight(height);
-                setCanvasWidth(width);
-
-                ctx.fillStyle = 'rgba(0,0,0)';
-                ctx.fillRect(0, 0, width, height)
-
-                displayNeedlePlot(needleElm, blocks, "all", { r: 255, g: 255, b: 255 }, true)
-            })
+            if (!blocks) return
+            displayNeedlePlot(needleElm, blocks, "all", { r: 255, g: 255, b: 255 }, true)
         }
     }
 
+    useEffect(() => {
+        setStep(0);
+        histogramBlocks(imgUrl, needleConfig).then((blocks) => {
+            setBlocks(blocks)
+            setNumGridRows(blocks.histogram.length)
+            setNumGridCols(blocks.histogram[0].length)
+        })
+    },
+        [imgUrl]
+    );
+
     useLayoutEffect(() => {
-        fillNeedleOverlayCanvas();
-        fillGridOverlayCanvas();
-        fillGridNeedleCanvas();
-        fillNeedleCanvas();
+        switch (step) {
+            case 0:
+                fillOriginalImage();
+                break;
+            case 1:
+                fillGridOverlayCanvas();
+                break;
+            case 2:
+                fillNeedleOverlayCanvas();
+                break;
+            case 3:
+                fillGridNeedleCanvas();
+                break;
+            case 4:
+                fillNeedleCanvas();
+                break;
+        }
     });
+
 
     return (
 
         <div>
-            {step == 0 &&
-                <div className='my-10'>
-                    <img ref={imgRef} src={imgUrl} alt="img" className="mx-auto md30vw-sm60vw" />
-                </div>
-            }
-
-            {step == 1 &&
-                <div className='my-10'>
-                    <canvas
-                        className="crisp-pixels mx-auto md30vw-sm60vw"
-                        ref={gridOverlay}
-                        width={canvasWidth}
-                        height={canvasHeight}
-                    />
-                </div>
-            }
-
-            {step == 2 &&
-
-                <div className='my-10'>
-                    <canvas
-                        className="crisp-pixels mx-auto md30vw-sm60vw"
-                        ref={needleOverlay}
-                        width={canvasWidth}
-                        height={canvasHeight}
-                    />
-                </div>
-            }
-
-            {step == 3 &&
-
-                <div className='my-10'>
-                    <canvas
-                        className="crisp-pixels mx-auto md30vw-sm60vw"
-                        ref={gridNeedle}
-                        width={canvasWidth}
-                        height={canvasHeight}
-                    />
-                </div>
-            }
-            {step == 4 &&
-
-                <div className='my-10'>
-                    <canvas
-                        className="crisp-pixels mx-auto md30vw-sm60vw"
-                        ref={needleOnly}
-                        width={canvasWidth}
-                        height={canvasHeight}
-                    />
-                </div>
-            }
+            <div className='my-10'>
+                <canvas
+                    className="crisp-pixels mx-auto md30vw-sm60vw"
+                    ref={canvas}
+                    width={canvasWidth}
+                    height={canvasHeight}
+                />
+            </div>
             <div className="text-moduleOffwhite m-3 space-x-2 justify-center space-y-3">
                 <div className="flex justify-around rounded md:w-1/4 mx-auto bg-moduleNavy">
                     <button
