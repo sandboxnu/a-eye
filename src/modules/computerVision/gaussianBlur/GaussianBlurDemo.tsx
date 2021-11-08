@@ -65,14 +65,16 @@ const KernelConfig: React.FC<KernelConfigType> = ({ onConfig, labelColor }) => {
           {invalidSize ? 'Enter an odd kernel size, between 1 and 7' : ''}
         </div>
       </div>
-      <button
-        type="button"
-        className={`basic-button ${window.innerWidth <= 470 ? 'mt-12' : ''}`}
-        disabled={invalidConfig}
-        onClick={() => onConfig(kernelSize, sigma)}
-      >
-        Generate Kernel
-      </button>
+      <div className="p-6">
+        <button
+          type="button"
+          className={`basic-button ${window.innerWidth <= 470 ? 'mt-12' : ''}`}
+          disabled={invalidConfig}
+          onClick={() => onConfig(kernelSize, sigma)}
+        >
+          Generate Kernel
+        </button>
+      </div>
     </div>
   );
 };
@@ -108,8 +110,13 @@ const GaussianBlurDemo: React.FC<GaussianBlurDemoType> = ({
   };
 
   return (
-    <div className="m-4">
-      <KernelConfig onConfig={configureKernel} labelColor={labelColor} />
+    <div className="flex flex-col items-center font-bold m-4">
+      <div
+        className="flex flex-col place-content-center place-content-evenly md:flex-row"
+        style={{ width: '150%' }}
+      >
+        <KernelConfig onConfig={configureKernel} labelColor={labelColor} />
+      </div>
       <KernelDisplay kernelGrid={kernelGrid} labelColor={labelColor} />
       <FilterByKernel kernel={kernel} imgUrl={imgUrl} />
     </div>

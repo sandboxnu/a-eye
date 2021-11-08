@@ -8,7 +8,7 @@
       "subsections": [
         {
           "title": "",
-          "body": "In order to extract valuable information from an image, computers must be able to process images and detect signals based on some criteria. As humans, we do this all the time - if we see an animal, we can identify it as a cat because it has fur, perked up ears, a small nose, and bright eyes. We extract features/traits of the objects in our view that allow us to identify those objects.",
+          "body": "In order to extract valuable information from an image, computers must be able to process images and detect features in those images based on some criteria. As humans, we do this all the time - if we see an animal, we can identify it as a cat because it has fur, perked up ears, a small nose, and bright eyes. We extract features/traits of the objects in our view that allow us to identify those objects.",
           "imgSrc": "blank"
         },
         {
@@ -30,17 +30,17 @@
       "subsections": [
         {
           "title": "Subsection 1",
-          "body": "Let's take a step back and define what an image is first. An image is made up of individual pixels which each have a value that represents the color, and those pixels are organized into a grid of values to give us the resulting image. However, the organization of the pixels is very particular! We can have the exact same pixel values in two grids, just in different orders and the image would be entirely unrecognizable.",
+          "body": "Let's take a step back and define what an image is first. An image is made up of individual pixels which each have a value that represents the color, and those pixels are organized into a grid of values to give us the resulting image.",
           "imgSrc": "animation1"
         },
         {
           "title": "Subsection 2",
-          "body": "Kernels are not all the different from images in that sense - we specify a much smaller grid of numbers that, based on their value and organization are capable of extracting a \"feature\" from the part of the image the kernel is currently sitting on. A feature might be the edge of an object in an image, it might be used to sharpen the details of an image, or it may be used to smooth an image.",
+          "body": "Kernels are not all the different from images in that sense - we specify a much smaller grid of numbers that, based on their value and organization are capable of extracting a \"feature\" from the part of the image the kernel is currently sitting on. A kernel might find the edges of an object in an image, sharpen the details of an image, or smooth the image out.",
           "imgSrc": "animation2"
         },
         {
           "title": "Subsection 3",
-          "body": "The way this feature extraction occurs is by multiplying the corresponding parts of the kernel with the pixel value directly below it and summing all those products up — let's call that product P. We compute all the P terms by sliding this kernel across the image and repeating the math at every step. As we slide across the image, we stitch together the P terms to create a brand new image!",
+          "body": "The way this feature extraction occurs is by making a 'window' the size of the kernel around a pixel in the original image. We then multiply the original image's pixel values by the numbers in the kernel, and sum them all up. We compute this sum for all pixels by sliding this 'window' across every pixel in the image and repeating the math at every step. As we slide across the image, we stitch together the new values after applying the kernel to create a brand new image!",
           "imgSrc": "animation3"
         }
       ],
@@ -52,22 +52,22 @@
       "subsections": [
         {
           "title": "Subsection 1",
-          "body": "Intuitively, this kernel is used for blurring. This is useful to help amplify the overall image structure, when the picture is being passed into some sort of classification system to identify the image. The same way we don't recognize a cell phone by its serial number, an image processing system wants to focus on the big picture as well (sorry, not sorry).",
+          "body": "As its name suggests, the Gaussian blur is used for blurring. This is useful to make sure that computer vision algorithms don't focus too much on the details of an image. The same way we don't recognize a cell phone by its serial number, an image processing system should focus on the big picture when trying to recognize objects.",
           "imgSrc": "blank"
         },
         {
           "title": "Subsection 2",
-          "body": "The definition of a Gaussian Blur Filter comes from the famous Gaussian/Normal/Bell curve as though it were projected into 3D. The values of the kernel are based on the density of (area under) the bell curve at the location of the current kernel entry. For example, the center of the kernel is the center of the bell curve where the density is the highest; therefore, the largest value of the kernel should be at the center. Conversely, values on the edges of the kernel should be relatively the smallest.",
+          "body": "The definition of a Gaussian Blur Filter comes from the famous Gaussian/Normal/Bell curve as though it were projected into 2D. The values of the kernel are based on the density of (area under) the bell curve at the location of the current kernel entry. For example, the center of the kernel is the center of the bell curve where the density is the highest; therefore, the largest value of the kernel should be at the center. Conversely, values on the edges of the kernel should be relatively the smallest.",
           "imgSrc": "blank"
         },
         {
           "title": "Subsection 3",
-          "body": "We can control the change in the magnitude of the values from the center to the outsides of the kernel (spread of the bell curve) by modifying the standard deviation of the distribution using the σ. The last thing we want to make sure about the kernel is that the values sum up to approximately 1. The motivation for this is to avoid adding or subtracting \"energy\" to the image. We can do this by summing up all of the values and dividing every entry by the sum.",
+          "body": "We can control the change in the magnitude of the values from the center to the outsides of the kernel (spread of the bell curve) by modifying the standard deviation of the distribution using the σ (sigma) parameter. The last thing we want to make sure about the kernel is that the values sum up to approximately 1. If we didn't do this, then the image would end up brighter or darker than intended (called the image's \"energy\"). We can do this by summing up all of the values and dividing every entry by the sum.",
           "imgSrc": "blank"
         },
         {
           "title": "Subsection 3",
-          "body": "This kernel extracts the importance of the current window with the center pixel of the window being the focus and surrounding pixels being increasingly less important as they get further from the center. Effectively, the outputted image is less bright where there are not high intensity pixels and vice versa. As a result, we achieve our initial goal of retaining the overall important structure of the image while masking the distracting details under the blur.",
+          "body": "This kernel defocuses the middle pixel of the window by averaging its value with its neighbors. Done across the whole image, you retain the picture's overall structure without sharp details. This achieves our original goal of making a blurred image.",
           "imgSrc": "blank"
         }
       ],
@@ -84,12 +84,12 @@
         },
         {
           "title": "Subsection 2",
-          "body": "The gist of how the filter works is that we can detect certain orientations by modifying our angle θ and specify the size of the window we slide across the image by modifying σ. We can also specify a frequency or magnitude for the directionality that assesses how strong the directionality is as a filter.",
+          "body": "The gist of how the filter works is that we can detect certain orientations by modifying our angle θ and specifying the size of the window we slide across the image. We can also specify a frequency or magnitude for the directionality that assesses how strong the directionality is as a filter.",
           "imgSrc": "blank"
         },
         {
           "title": "Subsection 3",
-          "body": "The resulting image contains only the windows of the image that contain features that follow the directionality specified in the generation of the kernel. This can be highly effective when scanning images of text documents that also contain images where we only want to retain the text in the image. The reason for this is that images generally have lower frequency directional components as they are smoother relative to text.",
+          "body": "The resulting image contains only the windows of the image that contain features that follow the angle specified by θ. This can be highly effective when scanning images which contain text where we only want to retain the text in the image. The reason for this is that images generally have lower directional content as they are smoother relative to text.",
           "imgSrc": "blank"
         }
       ],
@@ -106,12 +106,12 @@
         },
         {
           "title": "Subsection 2",
-          "body": "A difference of Gaussians Kernel builds directly upon what we have already covered in Gaussian Blurring. We take two images processed using Gaussian Blur filters with different standard deviations and subtract them from each other. We want the image that we are subtracting from to have been processed with a Gaussian Blur filter that has a smaller standard deviation (less spread) than the image that we are subtracting.",
+          "body": "A difference of Gaussians Kernel builds directly upon what we have already covered in Gaussian Blurring. We take two images processed using Gaussian Blur filters with different standard deviations (σ, sigma) and subtract them from each other. We want the image that we are subtracting from to have been processed with a Gaussian Blur filter that has a smaller standard deviation (less spread) than the image that we are subtracting.",
           "imgSrc": "blank"
         },
         {
           "title": "Subsection 3",
-          "body": "More intuitively, the reason that this computation works is because we extract the structurally important parts of the image using two Gaussian Blur filters initially. Naturally, the most structurally significant parts of objects in an image are the edges so when we subtract the two processed images, the resulting image is the information that lies between those two images which is the difference in the precision of the edges extracted.",
+          "body": "You can think of this technique as extracting what changes most when you blur. If you think about, the sharpest parts of the image, or, the edges of objects, undergo the most change when blurring. When finding the difference between two images at different sigma values, the sharpest parts of the image, or the edges, are going to be the only thing left.",
           "imgSrc": "blank"
         }
       ],
