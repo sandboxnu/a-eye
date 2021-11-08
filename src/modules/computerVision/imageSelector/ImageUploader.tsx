@@ -25,10 +25,17 @@ const ImageUploader = ({ currImg, onSelect }: ImageUploaderProps) => {
   };
 
   return (
-    <div className="flex flex-row justify-center mt-4">
+    <div className="flex flex-col justify-center mt-4">
       <div>
-        {/* below was the original way img was being shown, not sure why not working with makeUploadImg */}
-        {/* <img src={image} alt="" /> */}
+        <h1>Upload Image</h1>
+        <input
+          type="file"
+          name="myImage"
+          accept="image/*"
+          onChange={onImageChange}
+        />
+      </div>
+      <div className="mx-auto">
         {/* eslint-disable-next-line */}
         <img
           key={UPLOAD_IMG_KEY}
@@ -38,15 +45,6 @@ const ImageUploader = ({ currImg, onSelect }: ImageUploaderProps) => {
           }`}
           src={image}
           onClick={() => onSelect(UPLOAD_IMG_KEY, image)}
-        />
-      </div>
-      <div>
-        <h1>Upload Image</h1>
-        <input
-          type="file"
-          name="myImage"
-          accept="image/*"
-          onChange={onImageChange}
         />
       </div>
     </div>

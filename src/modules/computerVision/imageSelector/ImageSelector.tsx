@@ -78,8 +78,9 @@ const ImageSelector = ({
       <ImageUploader currImg={currImg} onSelect={onSelect} />
       Image Size:&nbsp;
       {dimensions.width === 0 ? '?' : dimensions.width}
-      &nbsp;by&nbsp;
+      &nbsp;px by&nbsp;
       {dimensions.height === 0 ? '?' : dimensions.height}
+      &nbsp;px
     </div>
   );
 };

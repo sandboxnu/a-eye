@@ -39,6 +39,11 @@
     margin: auto;
 }
 
+.image-selector input[type="file"] {
+    color: #838388;
+    max-width: 95%;
+}
+
 .selection-window::-webkit-scrollbar {
     height: 4px;
 }
