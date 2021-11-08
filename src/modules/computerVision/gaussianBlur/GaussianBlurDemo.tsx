@@ -68,7 +68,7 @@ const KernelConfig: React.FC<KernelConfigType> = ({ onConfig, labelColor }) => {
       <div className="p-6">
         <button
           type="button"
-          className={`basic-button ${window.innerWidth <= 470 ? 'mt-12' : ''}`}
+          className="basic-button"
           disabled={invalidConfig}
           onClick={() => onConfig(kernelSize, sigma)}
         >
