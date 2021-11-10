@@ -123,7 +123,7 @@ const NeedleHistogramDemo: React.FC<NeedleHistogramDemoType> = ({
               </button>
             ))}
           </div>
-          <div className="flex flex-col md:flex-row justify-evenly">
+          <div className="flex flex-col md:flex-row justify-evenly my-3">
             <GradientImage
               label={gradientLabel}
               gradient={gradientImg}
