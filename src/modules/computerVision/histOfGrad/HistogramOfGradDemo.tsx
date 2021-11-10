@@ -5,6 +5,7 @@ import SobelFilterDemo from "../sobelFilter/SobelFilterDemo"
 import CombinedSobelFilterDemo from "./CombinedSobelDemo"
 import NeedleHistogramDemo from "./NeedleHistrogramDemo";
 import NeedlePlotDemo from "./NeedlePlotDemo"
+import ZoomedSobelExample from "./ZoomedSobelExample";
 
 
 type HistogramOfGradType = {
@@ -19,10 +20,11 @@ const HistogramOfGradDemo: React.FC<HistogramOfGradType> = ({
 
   return (
     <div>
-      <SobelFilterDemo labelColor={labelColor} imgUrl={imgUrl}/>
-      <CombinedSobelFilterDemo labelColor={labelColor} imgUrl={imgUrl}/>
-      <NeedlePlotDemo labelColor={labelColor} imgUrl={imgUrl}/>
-      <NeedleHistogramDemo labelColor={labelColor} imgUrl={imgUrl}/>
+      <SobelFilterDemo labelColor={labelColor} imgUrl={imgUrl} />
+      <CombinedSobelFilterDemo labelColor={labelColor} imgUrl={imgUrl} />
+      <ZoomedSobelExample labelColor={labelColor} />
+      <NeedlePlotDemo labelColor={labelColor} imgUrl={imgUrl} />
+      <NeedleHistogramDemo labelColor={labelColor} imgUrl={imgUrl} />
     </div>
   );
 };

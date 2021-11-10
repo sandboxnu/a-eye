@@ -7,6 +7,7 @@ import GaussianBlurDemo from '../modules/computerVision/gaussianBlur/GaussianBlu
 import GaborDemo from '../modules/computerVision/gaborFilter/gaborFilter';
 import DiffOfGaussianDemo from '../modules/computerVision/diffofgaussian/DiffOfGaussian';
 import HaarWaveletDemo from '../modules/computerVision/haarWavelet/HaarWaveletDemo';
+import ZoomedSobelExample from '../modules/computerVision/histOfGrad/ZoomedSobelExample';
 import { ImageSelectableDemo } from '../modules/computerVision/imageSelector/ImageSelectableDemo';
 import PCADemo, {
   RawDataTable,
@@ -132,6 +133,8 @@ function getDemo(comp: string, scheme: ColorScheme) {
           demoProps={demoArgs}
         />
       );
+    case 'ZoomedSobelExample':
+      return <ZoomedSobelExample labelColor={demoArgs.labelColor} />;
     case 'PCADemo':
       return <PCADemo {...demoArgs} />;
     case 'RawDataTable':
