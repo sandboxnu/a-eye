@@ -1,4 +1,4 @@
-/* eslint-disable global-require */
+/* eslint-disable */
 import React, { useEffect, useRef, useState } from 'react';
 import './ImageSelector.css';
 import ImageUploader from './ImageUploader';
@@ -78,11 +78,10 @@ const ImageSelector = ({
         {Object.keys(ALL_IMGS).map(key => ALL_IMGS[key] && makeImg(key))}
       </div>
       <ImageUploader currImg={currImg} onSelect={onSelect} />
-      Image Size:&nbsp;
-      {dimensions.width === 0 ? '?' : dimensions.width}
-      &nbsp;px by&nbsp;
-      {dimensions.height === 0 ? '?' : dimensions.height}
-      &nbsp;px
+      <div className="justify-center flex flex-col md:flex-row">
+        <p>Image Size:&nbsp;</p>
+        <p>{dimensions.width === 0 ? '?' : dimensions.width} px by {dimensions.height === 0 ? '?' : dimensions.height} px</p>
+      </div>
     </div>
   );
 };
