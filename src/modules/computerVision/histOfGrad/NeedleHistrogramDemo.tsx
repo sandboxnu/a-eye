@@ -1,5 +1,5 @@
 /* eslint-disable */
-import React, { useLayoutEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { gradientImages } from "../sobelFilter/sobelFilter";
 import {
   GradientsType,
@@ -22,18 +22,35 @@ import {
 } from "./hogComponents";
 
 
-type NeedleHistrogramDemoType = {
+
+const orientations: OrientationConfigType[] = [
+  'all',
+  'horizontal',
+  'vertical',
+  'diagonal45',
+  'diagonal135',
+];
+const orientationLabels: string[] = [
+  'All Orientations',
+  'Horizontal',
+  'Vertical',
+  'Diagonal 45',
+  'Diagonal 135',
+];
+
+type NeedleHistogramDemoType = {
   labelColor: string,
-  imgUrl: string
+  imgUrl: string,
+  gradients: GradientsType,
 }
 
-const NeedleHistogramDemo: React.FC<NeedleHistrogramDemoType> = ({
+const NeedleHistogramDemo: React.FC<NeedleHistogramDemoType> = ({
   labelColor,
-  imgUrl
+  imgUrl,
+  gradients
 }) => {
 
   const imgRef = useRef<HTMLImageElement>(null);
-  const [gradients, setGradients] = useState<GradientsType>();
   const [blocks, setBlocks] = useState<BlocksType>();
   const [hogConfig, setHogConfig] = useState<HogConfigType>('dense');
   const [orientation, setOrientation] = useState<OrientationConfigType>("all");
@@ -44,37 +61,61 @@ const NeedleHistogramDemo: React.FC<NeedleHistrogramDemoType> = ({
     sparse: sparseConfig,
   };
 
+  const [gradientImg, setGradientImg] = useState<ImageData>()
+  const [gradientLabel, setGradientLabel] = useState<string>("")
+
   const img = useRef('');
   const config = useRef('');
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     // reset to tab 0 when changing images
-    if (img.current !== imgUrl || config.current !== hogConfig) {
-      gradientImages(imgUrl)
+    if (config.current !== hogConfig) {
       // calculate HoG features
       Promise.all([
-        gradientImages(imgUrl),
         histogramBlocks(imgUrl, configs[hogConfig]),
         histogramAggregate(imgUrl, configs[hogConfig]),
       ]).then(features => {
-        setGradients(features[0]);
-        setBlocks(features[1]);
-        setHistogram(features[2]);
+        setBlocks(features[0]);
+        setHistogram(features[1]);
       });
     }
-  });
+  }, [imgUrl, hogConfig]);
 
+  useEffect(() => {
+    switch(orientation) {
+      case 'all':
+        setGradientImg(gradients.combined);
+        setGradientLabel('Combined Sobel');
+        break;
+      case 'horizontal':
+        setGradientImg(gradients.horiz);
+        setGradientLabel('Horizontal Sobel');
+        break;
+      case 'vertical':
+        setGradientImg(gradients.vert);
+        setGradientLabel('Vertical Sobel');
+        break;
+      case 'diagonal45':
+        setGradientImg(gradients.diagUp);
+        setGradientLabel('Diagonal 45 (Up) Sobel');
+        break;
+      case 'diagonal135':
+        setGradientImg(gradients.diagDown);
+        setGradientLabel('Diagonal 135 (Down) Sobel');
+        break;
+    }
+  }, [imgUrl, orientation])
 
   return (
     <div>
-      {histogram && gradients && blocks &&
+      {histogram && blocks && gradientImg &&
         <div>
           <div className="flex flex-col md:flex-row justify-evenly">
             <GradientImage
-              label="Combined Sobel"
-              gradient={gradients.combined}
-              width={gradients.combined.width}
-              height={gradients.combined.height}
+              label={gradientLabel}
+              gradient={gradientImg}
+              width={gradientImg.width}
+              height={gradientImg.height}
               labelColor={labelColor}
             />
             <NeedlePlot
@@ -82,18 +123,30 @@ const NeedleHistogramDemo: React.FC<NeedleHistrogramDemoType> = ({
               hogConfig={hogConfig}
               setHogConfig={setHogConfig}
               orientation={orientation}
-              setOrientation={setOrientation}
-              width={gradients.combined.width}
-              height={gradients.combined.height}
+              width={gradientImg.width}
+              height={gradientImg.height}
               labelColor={labelColor}
             />
+
+
           </div>
+          <div className="axis-selector inline">
+              {orientations.map((config, idx) => (
+                <button
+                  type="button"
+                  className={orientation === config ? 'selected' : ''}
+                  onClick={() => setOrientation(config)}
+                >
+                  {orientationLabels[idx]}
+                </button>
+              ))}
+            </div>
           <div className="flex flex-col md:flex-row justify-evenly">
             <Histogram
               histogram={histogram}
               orientation={orientation}
-              width={gradients.combined.width}
-              height={gradients.combined.height}
+              width={gradientImg.width}
+              height={gradientImg.height}
               labelColor={labelColor}
             />
           </div>

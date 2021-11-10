@@ -13,19 +13,21 @@ import { displayNeedlePlot, drawGrid } from "./hogComponents";
 type NeedlePlotDemoType = {
     labelColor: string;
     imgUrl: string;
+    img: CanvasImageSource;
 };
 
 const NeedlePlotDemo: React.FC<NeedlePlotDemoType> = ({
     labelColor,
     imgUrl,
+    img,
 }) => {
     const imgRef = useRef<HTMLImageElement>(null);
 
     const [step, setStep] = useState<number>(0);
     const maxStep = 4;
 
-    const [canvasHeight, setCanvasHeight] = useState<number>(0);
-    const [canvasWidth, setCanvasWidth] = useState<number>(0);
+    const canvasWidth = 500 * (img.width as number / (img.height as number));
+    const canvasHeight = 500;
 
     const [numGridCols, setNumGridCols] = useState<number>(0);
     const [numGridRows, setNumGridRows] = useState<number>(0);
@@ -43,18 +45,8 @@ const NeedlePlotDemo: React.FC<NeedlePlotDemoType> = ({
         const ctx = gridOverlayElm.getContext('2d');
         if (!ctx) return;
 
-        var img = new Image();
-        img.src = imgUrl;
-        img.onload = function (e) {
-            const width = 500 * (img.width / img.height);
-            const height = 500;
-
-            setCanvasHeight(height);
-            setCanvasWidth(width);
-
-            ctx.imageSmoothingEnabled = false;
-            ctx.drawImage(img, 0, 0, width, height);
-        }
+        ctx.imageSmoothingEnabled = false;
+        ctx.drawImage(img, 0, 0, canvasWidth, canvasHeight);
     }
 
     const fillNeedleOverlayCanvas = () => {
@@ -64,25 +56,15 @@ const NeedlePlotDemo: React.FC<NeedlePlotDemoType> = ({
         const ctx = needleOverlayElm.getContext('2d');
         if (!ctx) return;
 
-        var img = new Image();
-        img.src = imgUrl;
-        img.onload = function (e) {
-            const width = 500 * (img.width / img.height);
-            const height = 500;
+        ctx.imageSmoothingEnabled = false;
+        ctx.drawImage(img, 0, 0, canvasWidth, canvasHeight);
 
-            setCanvasHeight(height);
-            setCanvasWidth(width);
+        ctx.fillStyle = 'rgba(0,0,0,0.5)';
+        ctx.fillRect(0, 0, canvasWidth, canvasHeight)
 
-            ctx.imageSmoothingEnabled = false;
-            ctx.drawImage(img, 0, 0, width, height);
-
-            ctx.fillStyle = 'rgba(0,0,0,0.5)';
-            ctx.fillRect(0, 0, width, height)
-
-            drawGrid(needleOverlayElm, numGridRows, numGridCols, { r: 255, g: 255, b: 255 })
-            if (!blocks) return
-            displayNeedlePlot(needleOverlayElm, blocks, "all", { r: 255, g: 255, b: 255 }, true)
-        }
+        drawGrid(needleOverlayElm, numGridRows, numGridCols, { r: 255, g: 255, b: 255 })
+        if (!blocks) return
+        displayNeedlePlot(needleOverlayElm, blocks, "all", { r: 255, g: 255, b: 255 }, true)
     }
 
     const fillGridOverlayCanvas = () => {
@@ -92,25 +74,15 @@ const NeedlePlotDemo: React.FC<NeedlePlotDemoType> = ({
         const ctx = gridOverlayElm.getContext('2d');
         if (!ctx) return;
 
-        var img = new Image();
-        img.src = imgUrl;
-        img.onload = function (e) {
-            const width = 500 * (img.width / img.height);
-            const height = 500;
-
-            setCanvasHeight(height);
-            setCanvasWidth(width);
-
-            ctx.imageSmoothingEnabled = false;
-            ctx.drawImage(img, 0, 0, width, height);
+        ctx.imageSmoothingEnabled = false;
+        ctx.drawImage(img, 0, 0, canvasWidth, canvasHeight);
 
 
-            ctx.fillStyle = 'rgba(0,0,0,0.5)';
-            ctx.fillRect(0, 0, width, height)
+        ctx.fillStyle = 'rgba(0,0,0,0.5)';
+        ctx.fillRect(0, 0, canvasWidth, canvasHeight)
 
-            drawGrid(gridOverlayElm, numGridRows, numGridCols, { r: 255, g: 255, b: 255 })
+        drawGrid(gridOverlayElm, numGridRows, numGridCols, { r: 255, g: 255, b: 255 })
 
-        }
     }
 
     const fillGridNeedleCanvas = () => {
@@ -120,23 +92,13 @@ const NeedlePlotDemo: React.FC<NeedlePlotDemoType> = ({
         const ctx = gridNeedleElm.getContext('2d');
         if (!ctx) return;
 
-        var img = new Image();
-        img.src = imgUrl;
-        img.onload = function (e) {
-            const width = 500 * (img.width / img.height);
-            const height = 500;
 
+        ctx.fillStyle = 'rgba(0,0,0)';
+        ctx.fillRect(0, 0, canvasWidth, canvasHeight)
 
-            setCanvasHeight(height);
-            setCanvasWidth(width);
-
-            ctx.fillStyle = 'rgba(0,0,0)';
-            ctx.fillRect(0, 0, width, height)
-
-            drawGrid(gridNeedleElm, numGridRows, numGridCols, { r: 255, g: 255, b: 255 })
-            if (!blocks) return
-            displayNeedlePlot(gridNeedleElm, blocks, "all", { r: 255, g: 255, b: 255 }, true)
-        }
+        drawGrid(gridNeedleElm, numGridRows, numGridCols, { r: 255, g: 255, b: 255 })
+        if (!blocks) return
+        displayNeedlePlot(gridNeedleElm, blocks, "all", { r: 255, g: 255, b: 255 }, true)
     }
 
     const fillNeedleCanvas = () => {
@@ -146,22 +108,12 @@ const NeedlePlotDemo: React.FC<NeedlePlotDemoType> = ({
         const ctx = needleElm.getContext('2d');
         if (!ctx) return;
 
-        var img = new Image();
-        img.src = imgUrl;
-        img.onload = function (e) {
-            const width = 500 * (img.width / img.height);
-            const height = 500;
 
+        ctx.fillStyle = 'rgba(0,0,0)';
+        ctx.fillRect(0, 0, canvasWidth, canvasHeight)
 
-            setCanvasHeight(height);
-            setCanvasWidth(width);
-
-            ctx.fillStyle = 'rgba(0,0,0)';
-            ctx.fillRect(0, 0, width, height)
-
-            if (!blocks) return
-            displayNeedlePlot(needleElm, blocks, "all", { r: 255, g: 255, b: 255 }, true)
-        }
+        if (!blocks) return
+        displayNeedlePlot(needleElm, blocks, "all", { r: 255, g: 255, b: 255 }, true)
     }
 
     useEffect(() => {

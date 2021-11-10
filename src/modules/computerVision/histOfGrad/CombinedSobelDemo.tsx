@@ -14,23 +14,20 @@ import {
 type CombinedSobelFilterDemoType = {
   labelColor: string;
   imgUrl: string;
+  gradients: GradientsType;
 };
 
 const CombinedSobelFilterDemo: React.FC<CombinedSobelFilterDemoType> = ({
   labelColor,
   imgUrl,
+  gradients,
 }) => {
   const imgRef = useRef<HTMLImageElement>(null);
-  const [gradients, setGradients] = useState<GradientsType>();
 
   const img = useRef('');
   const config = useRef('');
 
   useLayoutEffect(() => {
-    // reset to tab 0 when changing images
-    if (img.current !== imgUrl) {
-      gradientImages(imgUrl).then(gradients => setGradients(gradients));
-    }
     img.current = imgUrl;
   });
 

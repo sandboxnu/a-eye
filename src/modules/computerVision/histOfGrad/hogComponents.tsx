@@ -13,20 +13,7 @@ export type OrientationConfigType =
   | 'diagonal135';
 
 const hogConfigs: HogConfigType[] = ['dense', 'medium', 'sparse'];
-const orientations: OrientationConfigType[] = [
-  'all',
-  'horizontal',
-  'vertical',
-  'diagonal45',
-  'diagonal135',
-];
-const orientationLabels: string[] = [
-  'All Orientations',
-  'Horizontal',
-  'Vertical',
-  'Diagonal 45',
-  'Diagonal 135',
-];
+
 
 export const drawNeedle = (
   cnv: HTMLCanvasElement,
@@ -279,7 +266,6 @@ type NeedlePlotType = {
   hogConfig: HogConfigType;
   setHogConfig: (type: HogConfigType) => void;
   orientation: OrientationConfigType;
-  setOrientation: (type: OrientationConfigType) => void;
   width: number;
   height: number;
   labelColor: string;
@@ -290,7 +276,6 @@ export const NeedlePlot: React.FC<NeedlePlotType> = ({
   hogConfig,
   setHogConfig,
   orientation,
-  setOrientation,
   width,
   height,
   labelColor,
@@ -323,17 +308,7 @@ export const NeedlePlot: React.FC<NeedlePlotType> = ({
         width={width}
         height={height}
       />
-      <div className="axis-selector inline">
-        {orientations.map((config, idx) => (
-          <button
-            type="button"
-            className={orientation === config ? 'selected' : ''}
-            onClick={() => setOrientation(config)}
-          >
-            {orientationLabels[idx]}
-          </button>
-        ))}
-      </div>
+
     </div>
   );
 };

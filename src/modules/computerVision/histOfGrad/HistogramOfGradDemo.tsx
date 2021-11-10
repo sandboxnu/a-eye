@@ -1,6 +1,7 @@
 /* eslint-disable */
 
 import React, { useLayoutEffect, useRef, useState, useEffect } from "react";
+import { gradientImages, GradientsType } from "../sobelFilter/sobelFilter";
 import SobelFilterDemo from "../sobelFilter/SobelFilterDemo"
 import CombinedSobelFilterDemo from "./CombinedSobelDemo"
 import NeedleHistogramDemo from "./NeedleHistrogramDemo";
@@ -18,13 +19,45 @@ const HistogramOfGradDemo: React.FC<HistogramOfGradType> = ({
   imgUrl,
 }) => {
 
+  const [img, setImg] = useState<CanvasImageSource>();
+  const [gradients, setGradients] = useState<GradientsType>();
+
+  useEffect(() => {
+    gradientImages(imgUrl).then((newGradients) => {
+      setGradients(newGradients);
+    })
+
+    let newImg = new Image()
+    newImg.src = imgUrl
+
+    setImg(newImg);
+
+  }, [imgUrl])
+
   return (
     <div>
-      <SobelFilterDemo labelColor={labelColor} imgUrl={imgUrl} />
-      <CombinedSobelFilterDemo labelColor={labelColor} imgUrl={imgUrl} />
-      <ZoomedSobelExample labelColor={labelColor} />
-      <NeedlePlotDemo labelColor={labelColor} imgUrl={imgUrl} />
-      <NeedleHistogramDemo labelColor={labelColor} imgUrl={imgUrl} />
+      {gradients && img &&
+        <div>
+          <SobelFilterDemo
+            labelColor={labelColor}
+            imgUrl={imgUrl}
+            gradients={gradients} />
+          <CombinedSobelFilterDemo 
+            labelColor={labelColor} 
+            imgUrl={imgUrl}
+            gradients={gradients} />
+          <ZoomedSobelExample 
+            labelColor={labelColor} />
+          <NeedlePlotDemo 
+            labelColor={labelColor} 
+            imgUrl={imgUrl}
+            img={img} />
+          <NeedleHistogramDemo 
+            labelColor={labelColor} 
+            imgUrl={imgUrl}
+            gradients={gradients} />
+        </div>
+      }
     </div>
   );
 };

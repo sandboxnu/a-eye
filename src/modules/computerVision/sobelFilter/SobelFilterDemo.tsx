@@ -105,23 +105,21 @@ const SobelFilterRow: React.FC<SobelFilterRowType> = ({
 type SobelFilterDemoType = {
   labelColor: string;
   imgUrl: string;
+  gradients: GradientsType;
 };
 
 export const SobelFilterDemo: React.FC<SobelFilterDemoType> = ({
   labelColor,
   imgUrl,
+  gradients,
 }) => {
   const imgRef = useRef<HTMLImageElement>(null);
-  const [gradients, setGradients] = useState<GradientsType>();
 
   const img = useRef('');
   const config = useRef('');
 
   useLayoutEffect(() => {
     // reset to tab 0 when changing images
-    if (img.current !== imgUrl) {
-      gradientImages(imgUrl).then(gradients => setGradients(gradients));
-    }
     img.current = imgUrl;
   });
 
