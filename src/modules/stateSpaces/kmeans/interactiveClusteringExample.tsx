@@ -1,3 +1,4 @@
+/* eslint-disable*/
 /* eslint-disable react/no-this-in-sfc  */
 /* eslint-disable no-underscore-dangle */
 // must disable due to referencing the inside of the chart
