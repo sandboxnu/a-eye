@@ -210,6 +210,7 @@ const NeedleExampleTab: React.FC<HistOfGradDemoType> = ({ labelColor }) => {
       canvasHist.current,
       Object.entries(needles).map(([angle, mag]) => mag),
       'all',
+      1,
     );
   });
 
@@ -272,6 +273,7 @@ const NeedleHistogramTab: React.FC<HogTabType> = ({
         width={width}
         height={height}
         labelColor={labelColor}
+        aspectRatio={1}
       />
     </div>
   );

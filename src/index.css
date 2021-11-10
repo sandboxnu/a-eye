@@ -116,15 +116,16 @@ input[type="range"]:focus {
   width: 60vw;
 }
 
-.sobel-image-width {
+.md60vw-sm20vw {
   width: 60vw;
 }
 
 @media (min-width:768px) {
-  .sobel-image-width {
+  .md60vw-sm20vw {
     width: 20vw;
   }
 }
+
 
 .md30vw-sm60vw {
   width: 60vw;

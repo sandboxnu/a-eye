@@ -38,7 +38,7 @@ const CombinedSobelFilterDemo: React.FC<CombinedSobelFilterDemoType> = ({
         <div>
             <p className={`text-3xl ${labelColor}`}>Original Image</p>
 
-            <img ref={imgRef} src={imgUrl} alt="img" className="mx-auto sobel-image-width" />
+            <img ref={imgRef} src={imgUrl} alt="img" className="mx-auto md60vw-sm20vw" />
         </div>
         {gradients &&
             <div>

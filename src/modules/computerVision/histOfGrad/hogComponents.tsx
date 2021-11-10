@@ -12,7 +12,6 @@ export type OrientationConfigType =
   | 'diagonal45'
   | 'diagonal135';
 
-const hogConfigs: HogConfigType[] = ['dense', 'medium', 'sparse'];
 
 
 export const drawNeedle = (
@@ -40,9 +39,8 @@ export const drawNeedle = (
     throw new Error('Failed to get 2D context');
   const ctx: CanvasRenderingContext2D = context;
 
-  ctx.strokeStyle = `rgba(${color.r}, ${color.g}, ${color.b}, ${
-    opacity / 255
-  })`;
+  ctx.strokeStyle = `rgba(${color.r}, ${color.g}, ${color.b}, ${opacity / 255
+    })`;
   ctx.beginPath();
   ctx.moveTo(blockPos.x + pt1.x, blockPos.y + pt1.y);
   ctx.lineTo(blockPos.x + pt2.x, blockPos.y + pt2.y);
@@ -67,18 +65,18 @@ export const drawGrid = (
 
   for (let i = 0; i <= numCol; i++) {
     ctx.beginPath();
-    ctx.moveTo(i*colSize, 0);
-    ctx.lineTo(i*colSize, height);
+    ctx.moveTo(i * colSize, 0);
+    ctx.lineTo(i * colSize, height);
     ctx.strokeStyle = `rgb(${color.r},${color.g},${color.b})`;
-    ctx.stroke();  
+    ctx.stroke();
   }
 
   for (let i = 0; i <= numRow; i++) {
     ctx.beginPath();
-    ctx.moveTo(0, i*rowSize);
-    ctx.lineTo(width, i*rowSize);
+    ctx.moveTo(0, i * rowSize);
+    ctx.lineTo(width, i * rowSize);
     ctx.strokeStyle = `rgb(${color.r},${color.g},${color.b})`;
-    ctx.stroke();  
+    ctx.stroke();
   }
 }
 
@@ -164,6 +162,7 @@ export const displayHistogram = (
   cnvHist: HTMLCanvasElement,
   histogram: number[],
   orientation: OrientationConfigType,
+  aspectRatio: number,
 ): any => {
   const bins = histogram.length;
   const filteredHistogram = histogram.map((h, i) =>
@@ -185,6 +184,7 @@ export const displayHistogram = (
     },
     options: {
       responsive: true,
+      aspectRatio: aspectRatio,
       scales: {
         xAxes: [
           {
@@ -252,7 +252,7 @@ export const GradientImage: React.FC<GradientImageType> = ({
     <div className="my-auto mx-3">
       <p className={labelColor}>{label}</p>
       <canvas
-        className="crisp-pixels mx-auto max-w-60vw"
+        className="crisp-pixels mx-auto md60vw-sm20vw"
         ref={canvasRef}
         width={width}
         height={height}
@@ -291,19 +291,9 @@ export const NeedlePlot: React.FC<NeedlePlotType> = ({
   return (
     <div className="my-auto mx-3">
       <p className={labelColor}>Needle Plot</p>
-      <div className="axis-selector inline">
-        {hogConfigs.map(config => (
-          <button
-            type="button"
-            className={hogConfig === config ? 'selected' : ''}
-            onClick={() => setHogConfig(config)}
-          >
-            {config.charAt(0).toUpperCase() + config.slice(1)}
-          </button>
-        ))}
-      </div>
+
       <canvas
-        className="crisp-pixels mx-auto max-w-60vw"
+        className="crisp-pixels mx-auto md60vw-sm20vw"
         ref={canvasRef}
         width={width}
         height={height}
@@ -319,6 +309,7 @@ type HistogramType = {
   width: number;
   height: number;
   labelColor: string;
+  aspectRatio: number;
 };
 
 export const Histogram: React.FC<HistogramType> = ({
@@ -327,24 +318,28 @@ export const Histogram: React.FC<HistogramType> = ({
   width,
   height,
   labelColor,
+  aspectRatio,
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
     const cnvElm = canvasRef.current;
     if (!cnvElm) return;
-    displayHistogram(cnvElm, histogram, orientation);
+    displayHistogram(cnvElm, histogram, orientation, aspectRatio);
   });
 
   return (
     <div className="my-auto mx-3">
       <p className={labelColor}>Aggregated Histogram</p>
-      <canvas
-        className="crisp-pixels mx-auto max-w-60vw"
-        ref={canvasRef}
-        width={width}
-        height={height}
-      />
+      <div className="md60vw-sm20vw">
+        <canvas
+          className="crisp-pixels mx-auto "
+          ref={canvasRef}
+          width={width}
+          height={height}
+        />
+      </div>
+
     </div>
   );
 };

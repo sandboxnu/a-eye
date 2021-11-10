@@ -47,7 +47,7 @@ export const SobelImage: React.FC<SobelImageType> = ({
     <div className="my-auto mx-3">
       <p className={`${labelColor} ${forceLabelDisplay?'':'md:hidden'}`}>{label}</p>
       <canvas
-        className="crisp-pixels mx-auto sobel-image-width"
+        className="crisp-pixels mx-auto md60vw-sm20vw"
         ref={canvasRef}
         width={width}
         height={height}
@@ -127,7 +127,7 @@ export const SobelFilterDemo: React.FC<SobelFilterDemoType> = ({
 
     <div>
       <p className={`text-3xl ${labelColor}`}>Original Image</p>
-      <img ref={imgRef} src={imgUrl} alt="img" className="mx-auto sobel-image-width" />
+      <img ref={imgRef} src={imgUrl} alt="img" className="mx-auto md60vw-sm20vw" />
 
       {gradients &&
         <div className='my-10'>

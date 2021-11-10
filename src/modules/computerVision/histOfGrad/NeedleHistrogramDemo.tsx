@@ -38,6 +38,8 @@ const orientationLabels: string[] = [
   'Diagonal 135',
 ];
 
+const hogConfigs: HogConfigType[] = ['sparse', 'medium', 'dense'];
+
 type NeedleHistogramDemoType = {
   labelColor: string,
   imgUrl: string,
@@ -52,7 +54,7 @@ const NeedleHistogramDemo: React.FC<NeedleHistogramDemoType> = ({
 
   const imgRef = useRef<HTMLImageElement>(null);
   const [blocks, setBlocks] = useState<BlocksType>();
-  const [hogConfig, setHogConfig] = useState<HogConfigType>('dense');
+  const [hogConfig, setHogConfig] = useState<HogConfigType>('sparse');
   const [orientation, setOrientation] = useState<OrientationConfigType>("all");
   const [histogram, setHistogram] = useState<number[]>();
   const configs: { [type: string]: HogOptionsType } = {
@@ -61,7 +63,7 @@ const NeedleHistogramDemo: React.FC<NeedleHistogramDemoType> = ({
     sparse: sparseConfig,
   };
 
-  const [gradientImg, setGradientImg] = useState<ImageData>()
+  const [gradientImg, setGradientImg] = useState<ImageData>(gradients.combined)
   const [gradientLabel, setGradientLabel] = useState<string>("")
 
   const img = useRef('');
@@ -82,7 +84,7 @@ const NeedleHistogramDemo: React.FC<NeedleHistogramDemoType> = ({
   }, [imgUrl, hogConfig]);
 
   useEffect(() => {
-    switch(orientation) {
+    switch (orientation) {
       case 'all':
         setGradientImg(gradients.combined);
         setGradientLabel('Combined Sobel');
@@ -104,12 +106,23 @@ const NeedleHistogramDemo: React.FC<NeedleHistogramDemoType> = ({
         setGradientLabel('Diagonal 135 (Down) Sobel');
         break;
     }
-  }, [imgUrl, orientation])
+  }, [imgUrl, gradients, orientation])
 
   return (
     <div>
       {histogram && blocks && gradientImg &&
         <div>
+          <div className="axis-selector inline">
+            {orientations.map((config, idx) => (
+              <button
+                type="button"
+                className={orientation === config ? 'selected' : ''}
+                onClick={() => setOrientation(config)}
+              >
+                {orientationLabels[idx]}
+              </button>
+            ))}
+          </div>
           <div className="flex flex-col md:flex-row justify-evenly">
             <GradientImage
               label={gradientLabel}
@@ -127,28 +140,25 @@ const NeedleHistogramDemo: React.FC<NeedleHistogramDemoType> = ({
               height={gradientImg.height}
               labelColor={labelColor}
             />
-
-
-          </div>
-          <div className="axis-selector inline">
-              {orientations.map((config, idx) => (
-                <button
-                  type="button"
-                  className={orientation === config ? 'selected' : ''}
-                  onClick={() => setOrientation(config)}
-                >
-                  {orientationLabels[idx]}
-                </button>
-              ))}
-            </div>
-          <div className="flex flex-col md:flex-row justify-evenly">
             <Histogram
               histogram={histogram}
               orientation={orientation}
               width={gradientImg.width}
               height={gradientImg.height}
+              aspectRatio={gradientImg.height/gradientImg.width}
               labelColor={labelColor}
             />
+          </div>
+          <div className="axis-selector inline">
+            {hogConfigs.map(config => (
+              <button
+                type="button"
+                className={hogConfig === config ? 'selected' : ''}
+                onClick={() => setHogConfig(config)}
+              >
+                {config.charAt(0).toUpperCase() + config.slice(1)}
+              </button>
+            ))}
           </div>
         </div>}
     </div>
