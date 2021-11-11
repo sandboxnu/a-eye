@@ -119,7 +119,7 @@
     },
     {
       "title": "Histogram of Gradients",
-      "colorScheme": "dark",
+      "colorScheme": "light",
       "subsections": [
         {
           "title": "Subsection 1",

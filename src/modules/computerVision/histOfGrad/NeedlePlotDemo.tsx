@@ -5,9 +5,15 @@ import {
     gradientImages,
     GradientsType
 } from "../sobelFilter/sobelFilter";
-import {denseConfig, histogramBlocks, mediumConfig, sparseConfig, BlocksType, calculateSobelHog} from "./histOfGrad";
+import {
+    denseConfig,
+    histogramBlocks,
+    mediumConfig,
+    sparseConfig,
+    BlocksType,
+    calculateSobelHog
+} from "./histOfGrad";
 import { displayNeedlePlot, drawGrid } from "./hogComponents";
-
 
 
 type NeedlePlotDemoType = {
@@ -119,7 +125,7 @@ const NeedlePlotDemo: React.FC<NeedlePlotDemoType> = ({
     useEffect(() => {
         setStep(0);
         //histogramBlocks(imgUrl, sparseConfig).then((blocks) => {
-        calculateSobelHog(imgUrl, needleConfig).then((blocks) => {
+        calculateSobelHog(imgUrl, needleConfig.cellSize).then((blocks) => {
             setBlocks(blocks)
             setNumGridRows(blocks.histogram.length)
             setNumGridCols(blocks.histogram[0].length)
@@ -148,11 +154,18 @@ const NeedlePlotDemo: React.FC<NeedlePlotDemoType> = ({
         }
     });
 
+    const descriptions: string[] = [
+        "We start with the original image.",
+        `First, we separate the image into blocks that are sized (${needleConfig.cellSize} by ${needleConfig.cellSize}) pixels.`,
+        "Then, in each block, we combine the needles of all of the pixels in the block to obtain four composite needles, and draw those four needles in the block.",
+        "We then replace the original image with a black background to make the needles easier to see.",
+        "After removing the grid lines, we are left with our needle plot."
+    ];
 
     return (
 
         <div>
-            <div className='my-10'>
+            <div className='my-5'>
                 <canvas
                     className="crisp-pixels mx-auto md30vw-sm60vw"
                     ref={canvas}
@@ -160,6 +173,7 @@ const NeedlePlotDemo: React.FC<NeedlePlotDemoType> = ({
                     height={canvasHeight}
                 />
             </div>
+            <p className="mb-5">{descriptions[step]}</p>
             <div className="text-moduleOffwhite m-3 space-x-2 justify-center space-y-3">
                 <div className="flex justify-around rounded md:w-1/4 mx-auto bg-moduleNavy">
                     <button
