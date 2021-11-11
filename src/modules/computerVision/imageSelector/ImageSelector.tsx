@@ -18,7 +18,7 @@ const ALL_IMGS: { [name: string]: any } = {
     .default,
   'stopSign.jpeg': require('../../../media/modules/computerVision/imageLibrary/stopSign2.jpeg')
     .default,
-  'steps.png': require('../../../media/modules/computerVision/imageLibrary/steps.png')
+  'steps.png': require('../../../media/modules/computerVision/imageLibrary/stepsHighRes.png')
     .default,
   'tabbyCat.jpg': require('../../../media/modules/computerVision/imageLibrary/tabbyCat.jpg')
     .default,
