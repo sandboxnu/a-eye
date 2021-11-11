@@ -63,7 +63,7 @@ const HistogramOfGradDemo: React.FC<HistogramOfGradType> = ({
             </div>
             <div className="my-5">
                 <p className="text-4xl">Creating the Needle Plot</p>
-                <p className="my-5">We can then create a needle plot by applying the above process to each block within our image:</p>
+                <p className="my-5">We can then create a needle plot by splitting the image into blocks and applying the above process to each block:</p>
                 <NeedlePlotDemo
                     labelColor={labelColor}
                     imgUrl={imgUrl}
