@@ -4,10 +4,6 @@ import React, { useLayoutEffect, useRef, useState } from "react";
 import {
   histogramAggregate,
   histogramBlocks,
-  oldGradientImages,
-  OldGradientsType,
-  gradientImages,
-  GradientsType,
   BlocksType,
   denseConfig,
   mediumConfig,
@@ -25,6 +21,7 @@ import {
   displayHistogram,
   drawNeedle,
 } from "./hogComponents";
+import { gradientImages, GradientsType } from "../sobelFilter/sobelFilter";
 
 type HistOfGradDemoType = {
   labelColor: string;

@@ -67,7 +67,7 @@ export const drawGrid = (
     ctx.beginPath();
     ctx.moveTo(i * colSize, 0);
     ctx.lineTo(i * colSize, height);
-    ctx.strokeStyle = `rgb(${color.r},${color.g},${color.b})`;
+    ctx.strokeStyle = `rgba(${color.r},${color.g},${color.b}, 0.5)`;
     ctx.stroke();
   }
 
@@ -75,7 +75,7 @@ export const drawGrid = (
     ctx.beginPath();
     ctx.moveTo(0, i * rowSize);
     ctx.lineTo(width, i * rowSize);
-    ctx.strokeStyle = `rgb(${color.r},${color.g},${color.b})`;
+    ctx.strokeStyle = `rgba(${color.r},${color.g},${color.b}, 0.5)`;
     ctx.stroke();
   }
 }

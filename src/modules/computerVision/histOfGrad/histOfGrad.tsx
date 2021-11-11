@@ -1,5 +1,7 @@
 /* eslint-disable */
 
+import {HogConfigType} from "./hogComponents";
+
 const { Image } = require('image-js');
 const hog = require('hog-features');
 import { buildQueries } from '@testing-library/dom';
@@ -9,19 +11,19 @@ export const denseConfig = {
   cellSize: 8,
   blockSize: 2,
   blockStride: 1,
-  bins: 18,
+  bins: 4,
 };
 export const mediumConfig = {
   cellSize: 12,
   blockSize: 4,
   blockStride: 2,
-  bins: 18,
+  bins: 4,
 };
 export const sparseConfig = {
   cellSize: 16,
   blockSize: 6,
   blockStride: 3,
-  bins: 18,
+  bins: 4,
 };
 
 export type HogOptionsType = {
@@ -66,123 +68,84 @@ export async function histogramBlocks(img: any, options: HogOptionsType): Promis
   });
 }
 
-export type GradientsType = {
-  vert: ImageData,
-  horiz: ImageData,
-  diagDown: ImageData,
-  diagUp: ImageData,
-  combined: ImageData
-}
-
-export async function gradientImages(imageUrl: string): Promise<GradientsType | undefined> {
-  const vertKernel: number[][] = [
-    [-1, 0, 1],
-    [-2, 0, 2],
-    [-1, 0, 1,]
-  ];
-
-  const horizKernel: number[][] = [
-    [1, 2, 1],
-    [0, 0, 0],
-    [-1, -2, -1,]
-  ];
-
-  const diagDownKernel: number[][] = [
-    [-2, -1,0],
-    [-1, 0, 1],
-    [0,  1, 2]
-  ];
-
-  const diagUpKernel: number[][] = [
-    [0, 1, 2],
-    [-1, 0, 1],
-    [-2, -1, 0,]
-  ];
-
-  return Jimp.read(imageUrl)
-    .then(image => {
-      image.greyscale()
-      let vert = image.clone();
-      let horiz = image.clone();
-      let diagDown = image.clone();
-      let diagUp = image.clone();
-
-      vert.convolute(vertKernel);
-      horiz.convolute(horizKernel);
-      diagDown.convolute(diagDownKernel);
-      diagUp.convolute(diagUpKernel);
-
-      let vertClampedArray = Uint8ClampedArray.from(vert.bitmap.data);
-      let horizClampedArray = Uint8ClampedArray.from(horiz.bitmap.data);
-      let diagDownClampedArray = Uint8ClampedArray.from(diagDown.bitmap.data);
-      let diagUpClampedArray = Uint8ClampedArray.from(diagUp.bitmap.data);
-      
-      let vertImageData = new ImageData(vertClampedArray, vert.bitmap.width, vert.bitmap.height)
-      let horizImageData = new ImageData(horizClampedArray, horiz.bitmap.width, horiz.bitmap.height)
-      let diagDownImageData = new ImageData(diagDownClampedArray, diagDown.bitmap.width, diagDown.bitmap.height)
-      let diagUpImageData = new ImageData(diagUpClampedArray, diagUp.bitmap.width, diagUp.bitmap.height)
-
-      let combinedClampedArray = Uint8ClampedArray.from(vertClampedArray)
-      combinedClampedArray = combinedClampedArray.map((element, index) => {
-        return element + horizClampedArray[index];
-      })
-      let combinedImageData =  new ImageData(combinedClampedArray, vert.bitmap.width, vert.bitmap.height)
-
-      return {
-        vert: vertImageData,
-        horiz: horizImageData,
-        diagDown: diagDownImageData,
-        diagUp: diagUpImageData,
-        combined: combinedImageData
-      }
-    }).catch(e => {console.log(e); return {
-      horiz: new ImageData(385,385),
-      vert: new ImageData(385,385),
-      diagUp: new ImageData(385,385),
-      diagDown: new ImageData(385,385),
-      combined: new ImageData(385,385)
-    };});
-
-}
-
-export type OldGradientsType = {
-  x: ImageData;
-  y: ImageData;
-  a: number[][];
-  v: ImageData;
-};
-
-export async function oldGradientImages(img: any): Promise<OldGradientsType> {
+// splits the images pixels into blocks of size options.cellSize
+export async function calculateSobelHog(img: any, options: HogOptionsType): Promise<BlocksType> {
   return Image.load(img).then((image: any) => {
-    image = image.resize({width: 350});
+    image = image.resize({width: Math.max(350, image.width)});
+    const pixelsHist: number[][][] = pixelSobelValues(image, options);
 
-    const intensities: { x: number[][], y: number[][] } = hog.gradients(image);
-    const intensitiesX: number[] = intensities.x.flat();
-    const intensitiesY: number[] = intensities.y.flat();
-    const intensitiesV: number[] = intensitiesX.map((num, idx) => Math.sqrt(Math.pow(num, 2) + Math.pow(intensitiesY[idx], 2)));
-    const intensitiesA: number[] = intensitiesX.map((x, idx) => ((Math.atan(intensitiesY[idx] / x) * (180.0 / Math.PI)) + 180) % 180);
+    const numBlockRows = Math.floor(pixelsHist.length / options.cellSize) + 1;
+    const numBlockCols = Math.floor(pixelsHist[0].length / options.cellSize) + 1;
 
-    let maxX = 0, maxY = 0, maxV = 0, minX = 0, minY = 0, minV = 0;
-    intensitiesX.forEach(x => {if (!isNaN(x)) {maxX = Math.max(maxX, x); minX = Math.min(minX, x);}});
-    intensitiesY.forEach(y => {if (!isNaN(y)) {maxY = Math.max(maxY, y); minY = Math.min(minY, y);}});
-    intensitiesV.forEach(v => {if (!isNaN(v)) {maxV = Math.max(maxV, v); minV = Math.min(minV, v);}});
-
-    const valToRGB = (val: number): number[] => [val, val, val, 255];
-
-    const imageX: Uint8ClampedArray = new Uint8ClampedArray(intensitiesX.map(x => valToRGB(map(x, minX, maxX, 0, 255))).flat());
-    const imageY: Uint8ClampedArray = new Uint8ClampedArray(intensitiesY.map(y => valToRGB(map(y, minY, maxY, 0, 255))).flat());
-    const imageV: Uint8ClampedArray = new Uint8ClampedArray(intensitiesV.map(v => valToRGB(map(v, minV, maxV, 0, 255))).flat());
-
-    const alphas: number[][] = [];
-    for (let row = 0; row < image.height; row++) {
-      alphas.push(intensitiesA.slice(row * image.height, row * image.height + image.width));
+    // set up histogram array
+    const histogram: number[][][] = [];
+    for (let blockRow = 0; blockRow < numBlockRows; blockRow++) {
+      histogram[blockRow] = [];
+      for (let blockCol = 0; blockCol < numBlockCols; blockCol++) {
+        histogram[blockRow][blockCol] = [0, 0, 0, 0];
+      }
     }
 
-    return {
-      x: new ImageData(imageX, image.width, image.height),
-      y: new ImageData(imageY, image.width, image.height),
-      a: alphas,
-      v: new ImageData(imageV, image.width, image.height),
+    // iterate through pixels, add needles to appropriate block
+    for (let row = 0; row < pixelsHist.length; row++) {
+      for (let col = 0; col < pixelsHist[0].length; col++) {
+        const blockRow = Math.floor(row / options.cellSize);
+        const blockCol = Math.floor(col / options.cellSize);
+        // values in order of degree: 0, 45, 90, 135
+        let needles = pixelsHist[row][col];
+        needles.forEach((value, idx) => histogram[blockRow][blockCol][idx] += value);
+      }
     }
+
+    const mBlocks: number[][] = histogram.map(row => row.map(col => col.reduce((acc, curr) => acc + curr)));
+
+    return {histogram: histogram, blockMagnitudes: mBlocks};
   });
+}
+
+// returns 3d array: 2d array of [row][col] pixels, each pixel has [horiz, diagUp, vert, diagDown] sobel outputs
+function pixelSobelValues(image: any, options: HogOptionsType): number[][][] {
+  // convert image to b&w and split pixels into 2d array
+  const bw = image.grey();
+  const pixels1d: number[] = Array.from(bw.data);
+  const pixels: number[][] = [];
+  while (pixels1d.length) pixels.push(pixels1d.splice(0, bw.width));
+
+  let histogram: number[][][] = [];
+  // get sobel values at each pixel
+  for (let row = 0; row < pixels.length; row++) {
+    histogram[row] = [];
+    for (let col = 0; col < pixels[0].length; col++) {
+      // values in order of degree: 0, 45, 90, 135
+      histogram[row][col] = gradientsAt(pixels, row, col);;
+    }
+  }
+
+  return histogram;
+}
+
+// calculates the four sobel outputs (horizontal, diagonal up, vertical, diagonal down) at the given pixel
+function gradientsAt(pixels: number[][], row: number, col: number): number[] {
+  const notTop = row > 0;
+  const notBottom = row < pixels.length - 1;
+  const notLeft = col > 0;
+  const notRight = col < pixels[0].length - 1;
+
+  let topLeft: number = notTop && notLeft ? pixels[row-1][col-1] : 0;
+  let top: number = notTop ? pixels[row-1][col] : 0;
+  let topRight: number = notTop && notRight ? pixels[row-1][col+1] : 0;
+  let right: number = notRight ? pixels[row][col+1] : 0;
+  let bottomRight: number = notBottom && notRight ? pixels[row+1][col+1] : 0;
+  let bottom: number = notBottom ? pixels[row+1][col] : 0;
+  let bottomLeft: number = notBottom && notLeft ? pixels[row+1][col-1] : 0;
+  let left: number = notLeft ? pixels[row][col-1] : 0;
+
+  // calculate sobel values; use dark-to-light for each, but take abs value
+  const horiz: number = Math.abs((-1 * topLeft) + (-2 * top) + (-1 * topRight) + bottomLeft + (2 * bottom) + bottomRight);
+  const vert: number = Math.abs((-1 * topLeft) + (-2 * left) + (-1 * bottomLeft) + topRight + (2 * right) + bottomRight);
+  const diagUp: number = Math.abs((-1 * left) + (-2 * topLeft) + (-1 * top) + bottom + (2 * bottomRight) + right);
+  const diagDown: number = Math.abs((-1 * top) + (-2 * topRight) + (-1 * right) + left + (2 * bottomLeft) + bottom);
+
+  // [0, 45, 90, 135]
+  return [horiz, diagUp, vert, diagDown];
 }

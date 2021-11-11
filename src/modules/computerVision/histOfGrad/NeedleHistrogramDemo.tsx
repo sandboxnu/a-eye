@@ -1,15 +1,14 @@
 /* eslint-disable */
 import React, { useEffect, useRef, useState } from "react";
-import { gradientImages } from "../sobelFilter/sobelFilter";
+import {gradientImages, GradientsType} from "../sobelFilter/sobelFilter";
 import {
-  GradientsType,
   BlocksType,
   denseConfig,
   mediumConfig,
   sparseConfig,
   HogOptionsType,
   histogramAggregate,
-  histogramBlocks,
+  histogramBlocks, calculateSobelHog,
 } from "./histOfGrad"
 import {
   GradientImage,
@@ -74,7 +73,8 @@ const NeedleHistogramDemo: React.FC<NeedleHistogramDemoType> = ({
     if (config.current !== hogConfig) {
       // calculate HoG features
       Promise.all([
-        histogramBlocks(imgUrl, configs[hogConfig]),
+        //histogramBlocks(imgUrl, configs[hogConfig]),
+        calculateSobelHog(imgUrl, configs[hogConfig]),
         histogramAggregate(imgUrl, configs[hogConfig]),
       ]).then(features => {
         setBlocks(features[0]);

@@ -5,7 +5,7 @@ import {
     gradientImages,
     GradientsType
 } from "../sobelFilter/sobelFilter";
-import { denseConfig, histogramBlocks, mediumConfig, sparseConfig, BlocksType } from "./histOfGrad";
+import {denseConfig, histogramBlocks, mediumConfig, sparseConfig, BlocksType, calculateSobelHog} from "./histOfGrad";
 import { displayNeedlePlot, drawGrid } from "./hogComponents";
 
 
@@ -118,7 +118,8 @@ const NeedlePlotDemo: React.FC<NeedlePlotDemoType> = ({
 
     useEffect(() => {
         setStep(0);
-        histogramBlocks(imgUrl, needleConfig).then((blocks) => {
+        //histogramBlocks(imgUrl, sparseConfig).then((blocks) => {
+        calculateSobelHog(imgUrl, needleConfig).then((blocks) => {
             setBlocks(blocks)
             setNumGridRows(blocks.histogram.length)
             setNumGridCols(blocks.histogram[0].length)
