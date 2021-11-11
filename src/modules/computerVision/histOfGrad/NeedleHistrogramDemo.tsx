@@ -8,7 +8,7 @@ import {
   sparseConfig,
   HogOptionsType,
   histogramAggregate,
-  histogramBlocks, calculateSobelHog,
+  histogramBlocks, calculateSobelHog, calculateHistogram,
 } from "./histOfGrad"
 import {
   GradientImage,
@@ -71,15 +71,11 @@ const NeedleHistogramDemo: React.FC<NeedleHistogramDemoType> = ({
   useEffect(() => {
     // reset to tab 0 when changing images
     if (config.current !== hogConfig) {
-      // calculate HoG features
-      Promise.all([
-        //histogramBlocks(imgUrl, configs[hogConfig]),
-        calculateSobelHog(imgUrl, configs[hogConfig]),
-        histogramAggregate(imgUrl, configs[hogConfig]),
-      ]).then(features => {
-        setBlocks(features[0]);
-        setHistogram(features[1]);
-      });
+      // calculate histogram
+      calculateSobelHog(imgUrl, configs[hogConfig].cellSize).then(blocks => {
+        setBlocks(blocks);
+        setHistogram(calculateHistogram(blocks.histogram));
+      })
     }
   }, [imgUrl, hogConfig]);
 

@@ -14,13 +14,13 @@ export const denseConfig = {
   bins: 4,
 };
 export const mediumConfig = {
-  cellSize: 12,
+  cellSize: 16,
   blockSize: 4,
   blockStride: 2,
   bins: 4,
 };
 export const sparseConfig = {
-  cellSize: 16,
+  cellSize: 32,
   blockSize: 6,
   blockStride: 3,
   bins: 4,
@@ -68,14 +68,24 @@ export async function histogramBlocks(img: any, options: HogOptionsType): Promis
   });
 }
 
-// splits the images pixels into blocks of size options.cellSize
-export async function calculateSobelHog(img: any, options: HogOptionsType): Promise<BlocksType> {
-  return Image.load(img).then((image: any) => {
-    image = image.resize({width: Math.max(350, image.width)});
-    const pixelsHist: number[][][] = pixelSobelValues(image, options);
+export function calculateHistogram(needleHist: number[][][]): number[] {
+  let histogram: number[] = [0, 0, 0, 0];
+  needleHist.forEach(row => row.forEach(col => col.forEach((needle, idx) => histogram[idx] += needle)));
+  return histogram;
+}
 
-    const numBlockRows = Math.floor(pixelsHist.length / options.cellSize) + 1;
-    const numBlockCols = Math.floor(pixelsHist[0].length / options.cellSize) + 1;
+const roundToMultiple = (x: number, multiple: number): number => (Math.round(x / multiple) * multiple);
+
+// splits the images pixels into blocks of size options.cellSize
+export async function calculateSobelHog(img: any, blockSize: number): Promise<BlocksType> {
+  return Image.load(img).then((image: any) => {
+    image = image.resize({width: Math.max(360, image.width)});
+    // resize image so it's a multiple of blockSize
+    // image = image.resize({width: roundToMultiple(image.width, blockSize)});
+    const pixelsHist: number[][][] = pixelSobelValues(image);
+
+    const numBlockRows = Math.floor(pixelsHist.length / blockSize) + 1;
+    const numBlockCols = Math.floor(pixelsHist[0].length / blockSize) + 1;
 
     // set up histogram array
     const histogram: number[][][] = [];
@@ -89,8 +99,8 @@ export async function calculateSobelHog(img: any, options: HogOptionsType): Prom
     // iterate through pixels, add needles to appropriate block
     for (let row = 0; row < pixelsHist.length; row++) {
       for (let col = 0; col < pixelsHist[0].length; col++) {
-        const blockRow = Math.floor(row / options.cellSize);
-        const blockCol = Math.floor(col / options.cellSize);
+        const blockRow = Math.floor(row / blockSize);
+        const blockCol = Math.floor(col / blockSize);
         // values in order of degree: 0, 45, 90, 135
         let needles = pixelsHist[row][col];
         needles.forEach((value, idx) => histogram[blockRow][blockCol][idx] += value);
@@ -104,7 +114,7 @@ export async function calculateSobelHog(img: any, options: HogOptionsType): Prom
 }
 
 // returns 3d array: 2d array of [row][col] pixels, each pixel has [horiz, diagUp, vert, diagDown] sobel outputs
-function pixelSobelValues(image: any, options: HogOptionsType): number[][][] {
+function pixelSobelValues(image: any): number[][][] {
   // convert image to b&w and split pixels into 2d array
   const bw = image.grey();
   const pixels1d: number[] = Array.from(bw.data);
