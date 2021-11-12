@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useState } from "react";
 import RblattGraph from "./RblattGraph";
 import { RblattInput, RblattConfig } from "./constants";
@@ -12,6 +13,7 @@ type EditingRblattGraphProps = {
   calculatePointColor?: (x: RblattInput, y: NeuronConfig) => 0 | 1;
   handleClick?: any;
   squareColors?: (0 | 1)[];
+  labelColor?: string
 };
 
 const EditingRblattGraph: React.FC<EditingRblattGraphProps> = ({
@@ -22,11 +24,12 @@ const EditingRblattGraph: React.FC<EditingRblattGraphProps> = ({
   allowSelectingPointColor = true,
   handleClick,
   squareColors,
+  labelColor,
 }) => {
   const [editingType, setEditingType] = useState<1 | 0>(0);
 
   return (
-    <div className="flex flex-col items-center justify-center">
+    <div className="flex flex-col items-center justify-center ">
       <RblattGraph
         inputs={inputs}
         line={line}
@@ -35,11 +38,13 @@ const EditingRblattGraph: React.FC<EditingRblattGraphProps> = ({
         editingType={editingType}
         handleClick={handleClick}
         squareColors={squareColors}
+        width={500}
+        height={500}
       />
       <div className="flex items-center justify-center">
         {allowSelectingPointColor && (
           <>
-            <p className="text-modulePaleBlue">Select Point Color:</p>
+            <p className={labelColor}>Select Point Color:</p>
             <button
               className={`basic-button alt py-1 px-2 bg-orange-500 border-4 ${
                 editingType === 0 ? "border-orange-800" : "border-transparent"

@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useState, useCallback } from "react";
 import EditingRblattGraph from "./EditingRblattGraph";
 import RblattInputsTable from "./RblattInputsTable";
@@ -148,8 +149,8 @@ const RosenBlattDemo = ({ labelColor }: { labelColor: string }) => {
   ]);
 
   return (
-    <div className="m-4 w-max">
-      <div className="m-4 flex items-center justify-center">
+    <div className="m-4 w-max container">
+      <div className="m-4 flex flex-col md:flex-row items-center justify-center">
         {inputs.length === 0 ? (
           <div
             className={`m-4 flex items-center justify-center font-bold text-2xl ${labelColor}`}
@@ -171,6 +172,7 @@ const RosenBlattDemo = ({ labelColor }: { labelColor: string }) => {
           line={config}
           highlighted={inputs[currPoint]}
           handleClick={handleClick}
+          labelColor={labelColor}
         />
       </div>
       <div>

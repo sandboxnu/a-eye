@@ -1,8 +1,9 @@
+/* eslint-disable */
 import React, { useEffect, useState } from 'react';
 const JXG = require('jsxgraph');
 const equalArrays = (a1, a2) => (JSON.stringify(a1) === JSON.stringify(a2));
 
-const RblattVectorsDemo = () => {
+const RblattVectorsDemo = ({ labelColor }: { labelColor: string }) => {
     const brdId = 'board_1';  
     const [phase, setPhase] = useState(0);
     const [board, setBoard] = useState<any>(null);
@@ -168,9 +169,7 @@ const RblattVectorsDemo = () => {
 
     return (
         <div className="m-4">
-            <p>
-                Type of Update:
-            </p>
+            <p className={labelColor}>Type of Update: </p>
             <span>
                 <button className='basic-button' onClick={() => {switchConfig('rotation')}} 
                     disabled={JSON.stringify(demoConfig) === JSON.stringify(rotationConfig)}>
@@ -189,7 +188,7 @@ const RblattVectorsDemo = () => {
             <button className='basic-button' onClick={goNext} disabled={phase === 4}>
                 Next Step
             </button>
-            <p className=''>{brdMsg}</p>
+            <p className={labelColor}>{brdMsg}</p>
         </div>
     );
 }

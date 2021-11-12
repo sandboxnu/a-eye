@@ -29,7 +29,7 @@ interface Module {
 }
 
 // eslint-disable-next-line
-type moduleName = 'computer-vision' | 'images-and-kernels' | 'gaussian-blur' | 'gabor-filter' | 'sobel-filter' | 'histogram-of-gradients' | 'classification' | 'perceptron' | 'neural-nets';
+type moduleName = 'computer-vision' | 'images-and-kernels' | 'gaussian-blur' | 'gabor-filter' | 'sobel-filter' | 'histogram-of-gradients' | 'classification' | 'perceptrons' | 'neural-nets';
 const modules: Record<moduleName, Module | null> = {
   'computer-vision': module8,
   'images-and-kernels': cvIntroModule,
@@ -40,7 +40,7 @@ const modules: Record<moduleName, Module | null> = {
   // eslint-disable-next-line
   'classification': module9,
   // eslint-disable-next-line
-  'perceptron': module10,
+  'perceptrons': module10,
   'neural-nets': module11,
 };
 

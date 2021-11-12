@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React from "react";
 import RblattNeuron from "./RblattNeuron";
 import { round } from "./utils";
@@ -40,6 +41,7 @@ const InteractiveNeuron = ({
             learningRate: round(2 ** parseFloat(e.target.value), 3),
           }))
         }
+        disabled
       />
       {config.learningRate}
     </div>

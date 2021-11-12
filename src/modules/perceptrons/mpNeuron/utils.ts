@@ -1,3 +1,4 @@
+/* eslint-disable */
 export type NeuronConfig = {
   weights: number[];
   bias: number;

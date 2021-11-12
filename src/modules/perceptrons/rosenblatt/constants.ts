@@ -1,4 +1,4 @@
-
+/* eslint-disable */
 const INIT_CONFIG = { weightX: .7, weightY: -1, bias: 10 , learningRate: .1 };
 const INIT_INPUTS: RblattInput[] = [
     [ 2.101231155778894, 4.947319932998326, 0 ],

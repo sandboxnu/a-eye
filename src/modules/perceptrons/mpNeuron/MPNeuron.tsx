@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useState } from "react";
 import { INIT_CONFIG } from "../rosenblatt/constants";
 import MPBasicNeuron from "./MPBasicNeuron";

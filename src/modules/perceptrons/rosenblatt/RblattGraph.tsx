@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useCallback, useMemo, useRef } from "react";
 import { RblattInput } from "./constants";
 

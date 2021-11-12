@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React from "react";
 import { RblattConfig, RblattInput } from "./constants";
 import MPBasicNeuron from "../mpNeuron/MPBasicNeuron";
