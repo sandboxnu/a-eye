@@ -138,28 +138,6 @@
         }
       ],
       "demoComp": "HistogramOfGradDemo"
-    },
-    {
-      "title": "Histogram of Gradients",
-      "colorScheme": "dark",
-      "subsections": [
-        {
-          "title": "Subsection 1",
-          "body": "",
-          "imgSrc": "blank"
-        },
-        {
-          "title": "Subsection 2",
-          "body": "",
-          "imgSrc": "blank"
-        },
-        {
-          "title": "Subsection 3",
-          "body": "",
-          "imgSrc": "blank"
-        }
-      ],
-      "demoComp": "HistOfGradDemo"
     }
   ]
 }

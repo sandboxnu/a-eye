@@ -1,14 +1,9 @@
 /* eslint-disable */
+import { CloudDownloadOutlined } from "@material-ui/icons";
 import React, { useEffect, useRef, useState } from "react";
-import {gradientImages, GradientsType} from "../sobelFilter/sobelFilter";
+import { gradientImages, GradientsType } from "../sobelFilter/sobelFilter";
 import {
-  BlocksType,
-  denseConfig,
-  mediumConfig,
-  sparseConfig,
-  HogOptionsType,
-  histogramAggregate,
-  histogramBlocks, calculateSobelHog, calculateHistogram,
+  BlocksType, calculateSobelHog, calculateHistogram,
 } from "./histOfGrad"
 import {
   GradientImage,
@@ -37,8 +32,6 @@ const orientationLabels: string[] = [
   'Diagonal 135',
 ];
 
-const hogConfigs: HogConfigType[] = ['sparse', 'medium', 'dense'];
-
 type NeedleHistogramDemoType = {
   labelColor: string,
   imgUrl: string,
@@ -53,14 +46,10 @@ const NeedleHistogramDemo: React.FC<NeedleHistogramDemoType> = ({
 
   const imgRef = useRef<HTMLImageElement>(null);
   const [blocks, setBlocks] = useState<BlocksType>();
-  const [hogConfig, setHogConfig] = useState<HogConfigType>('sparse');
   const [orientation, setOrientation] = useState<OrientationConfigType>("all");
   const [histogram, setHistogram] = useState<number[]>();
-  const configs: { [type: string]: HogOptionsType } = {
-    dense: denseConfig,
-    medium: mediumConfig,
-    sparse: sparseConfig,
-  };
+
+  const [blockSize, setBlockSize] = useState<number>(32);
 
   const [gradientImg, setGradientImg] = useState<ImageData>(gradients.combined)
   const [gradientLabel, setGradientLabel] = useState<string>("")
@@ -69,15 +58,13 @@ const NeedleHistogramDemo: React.FC<NeedleHistogramDemoType> = ({
   const config = useRef('');
 
   useEffect(() => {
-    // reset to tab 0 when changing images
-    if (config.current !== hogConfig) {
-      // calculate histogram
-      calculateSobelHog(imgUrl, configs[hogConfig].cellSize).then(blocks => {
-        setBlocks(blocks);
-        setHistogram(calculateHistogram(blocks.histogram));
-      })
-    }
-  }, [imgUrl, hogConfig]);
+    // calculate histogram
+    calculateSobelHog(imgUrl, blockSize).then(blocks => {
+      setBlocks(blocks);
+      setHistogram(calculateHistogram(blocks.histogram));
+    });
+
+  }, [imgUrl, blockSize]);
 
   useEffect(() => {
     switch (orientation) {
@@ -129,8 +116,6 @@ const NeedleHistogramDemo: React.FC<NeedleHistogramDemoType> = ({
             />
             <NeedlePlot
               blocks={blocks}
-              hogConfig={hogConfig}
-              setHogConfig={setHogConfig}
               orientation={orientation}
               width={gradientImg.width}
               height={gradientImg.height}
@@ -141,20 +126,48 @@ const NeedleHistogramDemo: React.FC<NeedleHistogramDemoType> = ({
               orientation={orientation}
               width={gradientImg.width}
               height={gradientImg.height}
-              aspectRatio={gradientImg.height/gradientImg.width}
+              aspectRatio={gradientImg.height / gradientImg.width}
               labelColor={labelColor}
             />
           </div>
-          <div className="axis-selector inline">
-            {hogConfigs.map(config => (
-              <button
-                type="button"
-                className={hogConfig === config ? 'selected' : ''}
-                onClick={() => setHogConfig(config)}
-              >
-                {config.charAt(0).toUpperCase() + config.slice(1)}
-              </button>
-            ))}
+          <div className="inline">
+            {/* 
+            Way #1
+
+
+            <div className="text-xl">
+              <label>Block Size: </label>
+              <input type="range" className="bg-white bg-opacity-50" min={8} max={64} onChange={(event) => { setBlockSize(parseInt(event.target.value)) }} />
+              <input
+                className="pixel-input mx-3 text-lg"
+                type="text"
+                value={`${blockSize} px`}
+                readOnly={true}
+              />
+            </div> */}
+
+            <label>Block Size: </label>
+            <div className="flex flex-row justify-center items-center">
+
+                <div className="flex border-2 rounded-lg border-navy">
+                    <button
+                        className="mx-3 text-lg border-r border-navy mr-2 pr-2 focus:outline-none"
+                        disabled={blockSize === 4}
+                        onClick={() => { setBlockSize(blockSize / 2) }}
+                    >-</button>
+
+                    <p>{blockSize} px</p>
+
+                    <button
+                        className="mx-3 text-lg border-l border-navy ml-2 pl-2 focus:outline-none" 
+                        disabled={blockSize === 64}
+                        onClick={() => { setBlockSize(blockSize * 2) }}
+                    >+</button>
+                </div>
+
+
+            </div>
+
           </div>
         </div>}
     </div>

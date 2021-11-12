@@ -6,10 +6,6 @@ import {
     GradientsType
 } from "../sobelFilter/sobelFilter";
 import {
-    denseConfig,
-    histogramBlocks,
-    mediumConfig,
-    sparseConfig,
     BlocksType,
     calculateSobelHog
 } from "./histOfGrad";
@@ -30,7 +26,7 @@ const NeedlePlotDemo: React.FC<NeedlePlotDemoType> = ({
     const imgRef = useRef<HTMLImageElement>(null);
 
     const [step, setStep] = useState<number>(0);
-    const maxStep = 4;
+    const maxStep = 3;
 
     const canvasWidth = 500 * (img.width as number / (img.height as number));
     const canvasHeight = 500;
@@ -40,7 +36,7 @@ const NeedlePlotDemo: React.FC<NeedlePlotDemoType> = ({
 
     const [blocks, setBlocks] = useState<BlocksType>();
 
-    const needleConfig = sparseConfig;
+    const [blockSize, setBlockSize] = useState<number>(32);
 
     const canvas = useRef<HTMLCanvasElement>(null)
 
@@ -124,40 +120,40 @@ const NeedlePlotDemo: React.FC<NeedlePlotDemoType> = ({
 
     useEffect(() => {
         setStep(0);
+    }, [imgUrl])
+
+    useEffect(() => {
         //histogramBlocks(imgUrl, sparseConfig).then((blocks) => {
-        calculateSobelHog(imgUrl, needleConfig.cellSize).then((blocks) => {
+        calculateSobelHog(imgUrl, blockSize).then((blocks) => {
             setBlocks(blocks)
             setNumGridRows(blocks.histogram.length)
             setNumGridCols(blocks.histogram[0].length)
         })
     },
-        [imgUrl]
+        [imgUrl, blockSize]
     );
 
     useLayoutEffect(() => {
         switch (step) {
+
             case 0:
-                fillOriginalImage();
-                break;
-            case 1:
                 fillGridOverlayCanvas();
                 break;
-            case 2:
+            case 1:
                 fillNeedleOverlayCanvas();
                 break;
-            case 3:
+            case 2:
                 fillGridNeedleCanvas();
                 break;
-            case 4:
+            case 3:
                 fillNeedleCanvas();
                 break;
         }
     });
 
     const descriptions: string[] = [
-        "We start with the original image.",
-        `First, we separate the image into blocks that are sized (${needleConfig.cellSize} by ${needleConfig.cellSize}) pixels.`,
-        "Then, in each block, we combine the needles of all of the pixels in the block to obtain four composite needles, and draw those four needles in the block.",
+        `First, we separate the image into blocks of ${blockSize}x${blockSize} pixels. We do this because it would be too cluttered to show the needles for each pixel.`,
+        "In each block, we compute the four needles for each pixel. We then sum the needles in each direction over all the pixels in the block, and display the four resulting composite needles.",
         "We then replace the original image with a black background to make the needles easier to see.",
         "After removing the grid lines, we are left with our needle plot."
     ];
@@ -165,15 +161,40 @@ const NeedlePlotDemo: React.FC<NeedlePlotDemoType> = ({
     return (
 
         <div>
-            <div className='my-5'>
-                <canvas
-                    className="crisp-pixels mx-auto md30vw-sm60vw"
-                    ref={canvas}
-                    width={canvasWidth}
-                    height={canvasHeight}
-                />
+            <div className="flex flex-col md:flex-row justify-center items-center">
+                <p className="mx-10 my-5 md:w-1/4">{descriptions[step]}</p>
+                <div>
+                    <label>Block Size: </label>
+                    <div className="flex flex-row justify-center items-center">
+
+                        <div className="flex border-2 rounded-lg border-navy">
+                            <button
+                                className="mx-3 text-lg border-r border-navy mr-2 pr-2 focus:outline-none"
+                                disabled={blockSize === 4}
+                                onClick={() => { setBlockSize(blockSize / 2) }}
+                            >-</button>
+
+                            <p>{blockSize} px</p>
+
+                            <button
+                                className="mx-3 text-lg border-l border-navy ml-2 pl-2 focus:outline-none"
+                                disabled={blockSize === 64}
+                                onClick={() => { setBlockSize(blockSize * 2) }}
+                            >+</button>
+                        </div>
+
+
+                    </div>
+                    <div className='my-5'>
+                        <canvas
+                            className="crisp-pixels mx-auto md30vw-sm60vw"
+                            ref={canvas}
+                            width={canvasWidth}
+                            height={canvasHeight}
+                        />
+                    </div>
+                </div>
             </div>
-            <p className="mb-5">{descriptions[step]}</p>
             <div className="text-moduleOffwhite m-3 space-x-2 justify-center space-y-3">
                 <div className="flex justify-around rounded md:w-1/4 mx-auto bg-moduleNavy">
                     <button
@@ -185,7 +206,7 @@ const NeedlePlotDemo: React.FC<NeedlePlotDemoType> = ({
                     </button>
                     <div className="md:inline py-2">
                         {/* eslint-disable-next-line */}
-                        Step {step} / {maxStep}
+                        Step {step + 1} / {maxStep + 1}
                     </div>
                     <button
                         type="button"

@@ -7,66 +7,16 @@ const hog = require('hog-features');
 import { buildQueries } from '@testing-library/dom';
 import Jimp from 'jimp';
 
-export const denseConfig = {
-  cellSize: 8,
-  blockSize: 2,
-  blockStride: 1,
-  bins: 4,
-};
-export const mediumConfig = {
-  cellSize: 16,
-  blockSize: 4,
-  blockStride: 2,
-  bins: 4,
-};
-export const sparseConfig = {
-  cellSize: 32,
-  blockSize: 6,
-  blockStride: 3,
-  bins: 4,
-};
-
-export type HogOptionsType = {
-  cellSize: number;
-  blockSize: number;
-  blockStride: number;
-  bins: number;
-}
 
 // backend functions
 
 export const map = (x: number, min1: number, max1: number, min2: number, max2: number): number => (x - min1) * (max2 - min2) / (max1 - min1) + min2;
 
-export async function histogramAggregate(img: any, options: HogOptionsType): Promise<number[]> {
-  return Image.load(img).then((image: any) => {
-    image = image.resize({width: 350});
-
-    const descriptor = hog.extractHOG(image, options);
-    const histogram: number[] = new Array(options.bins).fill(0);
-
-    descriptor.forEach((val: number, idx: number) => {
-      histogram[idx % options.bins] += val;
-    });
-
-    return histogram;
-  });
-}
 
 export type BlocksType = {
   histogram: number[][][];
   blockMagnitudes: number[][];
 };
-
-export async function histogramBlocks(img: any, options: HogOptionsType): Promise<BlocksType> {
-  return Image.load(img).then((image: any) => {
-    image = image.resize({width: 350});
-
-    const blockHistograms: number[][][] = hog.extractHistograms(image, options);
-    const mBlocks: number[][] = blockHistograms.map(row => row.map(col => col.reduce((acc, curr) => acc + curr)));
-
-    return {histogram: blockHistograms, blockMagnitudes: mBlocks};
-  });
-}
 
 export function calculateHistogram(needleHist: number[][][]): number[] {
   let histogram: number[] = [0, 0, 0, 0];

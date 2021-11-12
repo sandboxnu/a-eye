@@ -7,7 +7,7 @@ import {
 } from "../sobelFilter/sobelFilter";
 
 import {
-    SobelImage
+  SobelImage
 } from "../sobelFilter/SobelFilterDemo"
 
 
@@ -34,64 +34,62 @@ const CombinedSobelFilterDemo: React.FC<CombinedSobelFilterDemoType> = ({
   return (
 
     <div>
-      <div className="flex flex-col md:flex-row justify-evenly my-3">
-        <div>
-            <p className={`text-3xl ${labelColor}`}>Original Image</p>
-
-            <img ref={imgRef} src={imgUrl} alt="img" className="mx-auto md60vw-sm20vw" />
-        </div>
-        {gradients &&
-            <div>
-                <p className={`text-3xl ${labelColor}`}>All Directions</p>
-                <SobelImage
-                        label=""
-                        gradient={gradients.combined}
-                        width={gradients.combined.width}
-                        height={gradients.combined.height}
-                        labelColor={labelColor}
-                        forceLabelDisplay={true}
-                    />
-            </div>
-        }
-      </div>
       {gradients &&
         <div className="my-3">
-        <p className={`text-3xl ${labelColor}`}>Combined Filters</p>
-        <div className="flex flex-col md:flex-row justify-evenly my-3">
+          <div className="flex flex-col md:flex-row justify-evenly my-3">
             <SobelImage
-                label="Vertical"
-                gradient={gradients.vert}
-                width={gradients.vert.width}
-                height={gradients.vert.height}
-                labelColor={labelColor}
-                forceLabelDisplay={true}
+              label="Vertical"
+              gradient={gradients.vert}
+              width={gradients.vert.width}
+              height={gradients.vert.height}
+              labelColor={labelColor}
+              forceLabelDisplay={true}
             />
             <SobelImage
-                label="Horizontal"
-                gradient={gradients.horiz}
-                width={gradients.horiz.width}
-                height={gradients.horiz.height}
-                labelColor={labelColor}
-                forceLabelDisplay={true}
+              label="Horizontal"
+              gradient={gradients.horiz}
+              width={gradients.horiz.width}
+              height={gradients.horiz.height}
+              labelColor={labelColor}
+              forceLabelDisplay={true}
             />
             <SobelImage
-                label="Diagonal Up"
-                gradient={gradients.diagUp}
-                width={gradients.diagUp.width}
-                height={gradients.diagUp.height}
-                labelColor={labelColor}
-                forceLabelDisplay={true}
+              label="Diagonal Up"
+              gradient={gradients.diagUp}
+              width={gradients.diagUp.width}
+              height={gradients.diagUp.height}
+              labelColor={labelColor}
+              forceLabelDisplay={true}
             />
             <SobelImage
-                label="Diagonal Down"
-                gradient={gradients.diagDown}
-                width={gradients.diagDown.width}
-                height={gradients.diagDown.height}
-                labelColor={labelColor}
-                forceLabelDisplay={true}
+              label="Diagonal Down"
+              gradient={gradients.diagDown}
+              width={gradients.diagDown.width}
+              height={gradients.diagDown.height}
+              labelColor={labelColor}
+              forceLabelDisplay={true}
             />
+          </div>
+
+          <div className="flex flex-col md:flex-row justify-evenly my-3">
+            <div className="flex flex-col md:flex-row justify-center items-center">
+              <p className={`text-lg mx-3 md:w-1/4 ${labelColor}`}>We can now combine the activities of the four images into a new image that captures the edges in all directions.</p>
+              {gradients &&
+                <div>
+                  <SobelImage
+                    label="All Directions"
+                    gradient={gradients.combined}
+                    width={gradients.combined.width}
+                    height={gradients.combined.height}
+                    labelColor={labelColor}
+                    forceLabelDisplay={true}
+                  />
+                </div>
+              }
+            </div>
+
+          </div>
         </div>
-    </div>
       }
 
     </div>

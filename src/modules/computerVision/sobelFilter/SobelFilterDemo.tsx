@@ -14,13 +14,20 @@ import diagDownLightDarkKernel from "../../../media/modules/computerVision/sobel
 import diagUpDarkLightKernel from "../../../media/modules/computerVision/sobelKernels/diagonalup_darktolight.png";
 import diagUpLightDarkKernel from "../../../media/modules/computerVision/sobelKernels/diagonalup_lighttodark.png";
 
+const filters: string[] = [
+  "Vertical",
+  "Horizontal",
+  "Diagonal Up",
+  "Diagonal Down",
+];
+
 type SobelImageType = {
   label: string;
   gradient: ImageData;
   width: number;
   height: number;
   labelColor: string;
-  forceLabelDisplay ?: boolean
+  forceLabelDisplay?: boolean
 };
 
 export const SobelImage: React.FC<SobelImageType> = ({
@@ -45,7 +52,7 @@ export const SobelImage: React.FC<SobelImageType> = ({
 
   return (
     <div className="my-auto mx-3">
-      <p className={`${labelColor} ${forceLabelDisplay?'':'md:hidden'}`}>{label}</p>
+      <p className={`${labelColor} ${forceLabelDisplay ? '' : 'md:hidden'}`}>{label}</p>
       <canvas
         className="crisp-pixels mx-auto md60vw-sm20vw"
         ref={canvasRef}
@@ -63,6 +70,7 @@ type SobelFilterRowType = {
   lightDarkImage: ImageData,
   darkLightKernelSrc: string,
   lightDarkKernelSrc: string
+  hideLabel?: boolean,
 }
 
 const SobelFilterRow: React.FC<SobelFilterRowType> = ({
@@ -71,11 +79,12 @@ const SobelFilterRow: React.FC<SobelFilterRowType> = ({
   darkLightImage,
   lightDarkImage,
   darkLightKernelSrc,
-  lightDarkKernelSrc
+  lightDarkKernelSrc,
+  hideLabel,
 }) => {
   return (
     <div className="my-3">
-      <p className={`text-3xl ${labelColor}`}>{label}</p>
+      <p className={`text-3xl ${labelColor} ${(hideLabel ? 'hidden' : '')}`}>{label}</p>
       <div className="flex flex-col md:flex-row justify-evenly ">
         <SobelImage
           label="Dark to Light"
@@ -106,14 +115,17 @@ type SobelFilterDemoType = {
   labelColor: string;
   imgUrl: string;
   gradients: GradientsType;
+  compact?: boolean;
 };
 
 export const SobelFilterDemo: React.FC<SobelFilterDemoType> = ({
   labelColor,
   imgUrl,
   gradients,
+  compact,
 }) => {
   const imgRef = useRef<HTMLImageElement>(null);
+  const [filterIdx, setFilterIdx] = useState<number>(0);
 
   const img = useRef('');
   const config = useRef('');
@@ -126,43 +138,76 @@ export const SobelFilterDemo: React.FC<SobelFilterDemoType> = ({
   return (
 
     <div>
-      <p className={`text-3xl ${labelColor}`}>Original Image</p>
-      <img ref={imgRef} src={imgUrl} alt="img" className="mx-auto md60vw-sm20vw" />
-
+      {!compact &&
+        <div>
+          <p className={`text-3xl ${labelColor}`}>Original Image</p>
+          <img ref={imgRef} src={imgUrl} alt="img" className="mx-auto md60vw-sm20vw" />
+        </div>
+      }
       {gradients &&
+
         <div className='my-10'>
-          <SobelFilterRow
-            label="Vertical Edges"
-            labelColor={labelColor}
-            darkLightImage={gradients.vertDarkLight}
-            lightDarkImage={gradients.vertLightDark}
-            darkLightKernelSrc={vertDarkLightKernel}
-            lightDarkKernelSrc={vertLightDarkKernel}
-          />
-          <SobelFilterRow
-            label="Horizontal Edges"
-            labelColor={labelColor}
-            darkLightImage={gradients.horizDarkLight}
-            lightDarkImage={gradients.horizLightDark}
-            darkLightKernelSrc={horizDarkLightKernel}
-            lightDarkKernelSrc={horizLightDarkKernel}
-          />
-          <SobelFilterRow
-            label="Diagonal Down Edges"
-            labelColor={labelColor}
-            darkLightImage={gradients.diagDownDarkLight}
-            lightDarkImage={gradients.diagDownLightDark}
-            darkLightKernelSrc={diagDownDarkLightKernel}
-            lightDarkKernelSrc={diagDownLightDarkKernel}
-          />
-          <SobelFilterRow
-            label="Diagonal Up Edges"
-            labelColor={labelColor}
-            darkLightImage={gradients.diagUpDarkLight}
-            lightDarkImage={gradients.diagUpLightDark}
-            darkLightKernelSrc={diagUpDarkLightKernel}
-            lightDarkKernelSrc={diagUpLightDarkKernel}
-          />
+          {compact &&
+            <div className="text-2xl">
+              <label htmlFor="filters">Filter: </label>
+              <select className="bg-white bg-opacity-50" id="filters" name="filters" onChange={(event) => { setFilterIdx(parseInt(event.target.value)) }}>
+                {
+                  ([0, 1, 2, 3]).map((idx) => <option value={idx} >{[filters[idx]]}</option>)
+                }
+              </select>
+            </div>
+          }
+
+          {(filterIdx == 0 || !compact) &&
+            <SobelFilterRow
+              label="Vertical Edges"
+              labelColor={labelColor}
+              hideLabel={compact}
+              darkLightImage={gradients.vertDarkLight}
+              lightDarkImage={gradients.vertLightDark}
+              darkLightKernelSrc={vertDarkLightKernel}
+              lightDarkKernelSrc={vertLightDarkKernel}
+            />
+          }
+
+          {(filterIdx == 1 || !compact) &&
+
+            <SobelFilterRow
+              label="Horizontal Edges"
+              labelColor={labelColor}
+              hideLabel={compact}
+              darkLightImage={gradients.horizDarkLight}
+              lightDarkImage={gradients.horizLightDark}
+              darkLightKernelSrc={horizDarkLightKernel}
+              lightDarkKernelSrc={horizLightDarkKernel}
+            />
+          }
+
+          {(filterIdx == 2 || !compact) &&
+
+            <SobelFilterRow
+              label="Diagonal Up Edges"
+              labelColor={labelColor}
+              hideLabel={compact}
+              darkLightImage={gradients.diagUpDarkLight}
+              lightDarkImage={gradients.diagUpLightDark}
+              darkLightKernelSrc={diagUpDarkLightKernel}
+              lightDarkKernelSrc={diagUpLightDarkKernel}
+            />
+          }
+          {(filterIdx == 3 || !compact) &&
+
+            <SobelFilterRow
+              label="Diagonal Down Edges"
+              labelColor={labelColor}
+              hideLabel={compact}
+              darkLightImage={gradients.diagDownDarkLight}
+              lightDarkImage={gradients.diagDownLightDark}
+              darkLightKernelSrc={diagDownDarkLightKernel}
+              lightDarkKernelSrc={diagDownLightDarkKernel}
+            />
+          }
+
         </div>
       }
 

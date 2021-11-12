@@ -178,11 +178,12 @@ export const displayHistogram = (
         {
           label: 'Aggregated Histogram',
           data: filteredHistogram,
-          backgroundColor: 'green',
+          backgroundColor: '#394D73',
         },
       ],
     },
     options: {
+      animation: false,
       responsive: true,
       aspectRatio: aspectRatio,
       scales: {
@@ -263,8 +264,6 @@ export const GradientImage: React.FC<GradientImageType> = ({
 
 type NeedlePlotType = {
   blocks: BlocksType;
-  hogConfig: HogConfigType;
-  setHogConfig: (type: HogConfigType) => void;
   orientation: OrientationConfigType;
   width: number;
   height: number;
@@ -273,8 +272,6 @@ type NeedlePlotType = {
 
 export const NeedlePlot: React.FC<NeedlePlotType> = ({
   blocks,
-  hogConfig,
-  setHogConfig,
   orientation,
   width,
   height,
