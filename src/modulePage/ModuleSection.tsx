@@ -47,125 +47,73 @@ interface ModuleSubsection {
   imgSrc: string;
 }
 
+const imageDictionary: {[key: string]: any} = {
+  "blank": blank,
+  "animation1": animation1,
+  "animation2": animation2,
+  "animation3": animation3,
+  "sobelKernelLight": vertSobelExampleLight,
+  "sobelKernelDark": vertSobelExampleDark,
+  "combinedSobelKernelLight": combinedSobelKernelExampleLight,
+  "combinedSobelKernelDark": combinedSobelKernelExampleDark,
+}; 
+
 function GetImage(imgName: string) {
-  switch (imgName) {
-    case "blank":
-      return blank;
-    case "animation1":
-      return animation1;
-    case "animation2":
-      return animation2;
-    case "animation3":
-      return animation3;
-    case "sobelKernelLight":
-      return vertSobelExampleLight;
-    case "sobelKernelDark":
-      return vertSobelExampleDark;
-    case "combinedSobelKernelLight":
-      return combinedSobelKernelExampleLight;
-    case "combinedSobelKernelDark":
-      return combinedSobelKernelExampleDark;
-    default:
-  }
+  return imageDictionary[imgName];
+}
+
+function getImageSelectableDemo(demoType:any, image: string, demoArgs: any) {
+  return (
+    <ImageSelectableDemo
+      Demo={demoType}
+      initImg={image}
+      demoProps={demoArgs}
+    />
+  ); 
+}
+
+function getStaticAxisChart(scheme: ColorScheme) {
+  return (
+    <StaticAxisChart
+      labelColorHex={scheme.labelColorHex}
+    />
+  );
+}
+
+function getSelectableAxisChart(comp: string, xIndx: number, yIndx: number, scheme: ColorScheme) {
+  return (<SelectableAxisChart
+    columnSet={(comp == "SelectableAxisChart") ? pcaConfig.columns : pcaConfig.pcaColumns}
+    initXIdx={xIndx}
+    initYIdx={yIndx}
+    labelColor={scheme.titleColor}
+    labelColorHex={scheme.labelColorHex}
+  />);
 }
 
 function getDemo(comp: string, scheme: ColorScheme) {
-  const demoArgs = { labelColor: scheme.titleColor };
-
-  switch (comp) {
-    case "GaussianBlurDemo":
-      return (
-          <ImageSelectableDemo
-              Demo={GaussianBlurDemo}
-              initImg="purpleFlowers.jpeg"
-              demoProps={demoArgs}
-          />
-      );
-    case "GaborDemo":
-      return (
-          <ImageSelectableDemo
-              Demo={GaborDemo}
-              initImg="zebra.jpg"
-              demoProps={demoArgs}
-          />
-      );
-    case "DiffOfGaussian":
-      return (
-          <ImageSelectableDemo
-              Demo={DiffOfGaussianDemo}
-              initImg="tabbyCat.jpg"
-              demoProps={demoArgs}
-          />
-      );
-    case "HaarWaveletDemo":
-      return (
-          <ImageSelectableDemo
-              Demo={HaarWaveletDemo}
-              initImg="bwWoman.jpg"
-              demoProps={demoArgs}
-          />
-      );
-    case "SobelFilterDemo":
-      return (
-          <ImageSelectableDemo
-              Demo={SobelFilterDemo}
-              initImg="stopSign.jpeg"
-              demoProps={demoArgs}
-          />
-      );
-    case "PCADemo":
-      return <PCADemo {...demoArgs} />;
-    case "RawDataTable":
-      return <RawDataTable />;
-    case "StaticAxisChart":
-      return (
-          <StaticAxisChart
-              labelColorHex={scheme.labelColorHex}
-          />
-      );
-    case "SelectableAxisChart":
-      return (
-          <SelectableAxisChart
-              columnSet={pcaConfig.columns}
-              initXIdx={4}
-              initYIdx={5}
-              labelColor={scheme.titleColor}
-              labelColorHex={scheme.labelColorHex}
-          />
-      );
-    case "PCASelectableAxisChart":
-      return (
-          <SelectableAxisChart
-              columnSet={pcaConfig.pcaColumns}
-              initXIdx={0}
-              initYIdx={1}
-              labelColor={scheme.titleColor}
-              labelColorHex={scheme.labelColorHex}
-          />
-      );
-    case "InteractiveKMeans":
-      return (
-          <div>
-            <InteractiveClusteringExample hidden={false} />
-          </div>
-      );
-    case "StepKMeans":
-      return (
-          <div>
-            <KMeansStepExample hidden={false} />
-          </div>
-      );
-    case "KMeans":
-      return <KMeans />;
-    case "MPNeuron":
-      return <MPNeuron labelColor={demoArgs.labelColor} canAddInputs={true} />
-    case "RblattVectorsDemo":
-      return <RblattVectorsDemo labelColor={demoArgs.labelColor} />
-    case "RblattDemo":
-      return <RosenBlattDemo {...demoArgs}/>
-    default:
-      return <div />;
+  const demoArgs = { labelColor: scheme.titleColor};
+  const demoDictionary: {[key: string]: any} = {
+    "GaussianBlurDemo": getImageSelectableDemo(GaussianBlurDemo, "purpleFlowers.jpeg", demoArgs),
+    "GaborDemo": getImageSelectableDemo(GaborDemo, "zebra.jpg", demoArgs ),
+    "DiffOfGaussian": getImageSelectableDemo(DiffOfGaussianDemo, "tabbyCat.jpg", demoArgs),
+    "HaarWaveletDemo": getImageSelectableDemo(HaarWaveletDemo, "bwWoman.jpg", demoArgs),
+    "SobelFilterDemo": getImageSelectableDemo(SobelFilterDemo, "stopSign.jpeg", demoArgs),
+    "PCADemo": (<PCADemo {...demoArgs} />),
+    "RawDataTable": (<RawDataTable />),
+    "StaticAxisChart": getStaticAxisChart(scheme),
+    "SelectableAxisChart": getSelectableAxisChart("SelectableAxisChart", 4, 5, scheme),
+    "PCASelectableAxisChart": getSelectableAxisChart("PCASelectableAxisChart", 0, 1, scheme),
+    "InteractiveKMeans": (<div><InteractiveClusteringExample hidden={false} /></div>),
+    "StepKMeans": (<div><KMeansStepExample hidden={false} /></div>),
+    "KMeans": (<KMeans />),
+    "MPNeuron": (<MPNeuron labelColor={demoArgs.labelColor} canAddInputs={true} /> ),
+    "RblattVectorsDemo": (<RblattVectorsDemo labelColor={demoArgs.labelColor} />),
+    "RblattDemo": (<RosenBlattDemo {...demoArgs}/>)
+  };
+  if (comp in demoDictionary){
+    return demoDictionary[comp];
   }
+  return <div />;
 }
 
 /**

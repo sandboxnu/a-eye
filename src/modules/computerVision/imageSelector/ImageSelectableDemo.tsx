@@ -36,7 +36,11 @@ export const ImageSelectableDemo = ({
 
   return (
     <div>
-      <ImageSelector currImg={imgName} onSelect={onImgChange} />
+      <ImageSelector
+        currImg={imgName}
+        currImgUrl={imgUrl}
+        onSelect={onImgChange}
+      />
       <Demo imgUrl={imgUrl} labelColor={demoProps.labelColor} />
     </div>
   );

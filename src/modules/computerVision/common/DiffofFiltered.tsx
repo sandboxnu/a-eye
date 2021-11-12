@@ -1,4 +1,4 @@
-/* eslint-disable */
+/* eslint-disable*/
 import React from 'react';
 import InteractiveFilter from './InteractiveFilter';
 import { convolute } from './filter';

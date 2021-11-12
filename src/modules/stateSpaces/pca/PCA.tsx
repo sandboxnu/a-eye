@@ -1,14 +1,14 @@
-/* eslint-disable */
-import React, { useState } from "react";
-import { PCA } from "ml-pca";
-import datasetIris from "ml-dataset-iris";
+/* eslint-disable*/
+import React, { useState } from 'react';
+import { PCA } from 'ml-pca';
+import datasetIris from 'ml-dataset-iris';
+import { BasicScatter, DataSeriesMap, ColorMap } from '../common/BasicScatter';
+import './PCA.css';
 
 // import trainData from '../data/train.json';
 import trainDataIris from "../data/iris.json";
 // import trainDataIris2 from '../data/iris2.json';
 import titanicData from "../data/titanic.json";
-
-import { BasicScatter, DataSeriesMap, ColorMap } from "../common/BasicScatter";
 import "./PCA.css";
 
 type PCAProps = { labelColor: string; labelColorHex?: string };

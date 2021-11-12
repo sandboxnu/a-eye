@@ -1,3 +1,4 @@
+/* eslint-disable*/
 import React, { useState } from 'react';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';

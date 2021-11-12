@@ -1,4 +1,4 @@
-/* eslint-disable */
+/* eslint-disable*/
 import React, { useState } from 'react';
 
 import { Scatter } from 'react-chartjs-2';

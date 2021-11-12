@@ -1,3 +1,4 @@
+/* eslint-disable*/
 import React, { useState } from 'react';
 import './AngleSelector.css';
 import mainCircle from './main-circle.svg';

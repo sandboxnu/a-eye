@@ -1,3 +1,4 @@
+/* eslint-disable*/
 import React from 'react';
 import mod8 from '../media/modules/previews/mod8.png';
 import mod9 from '../media/modules/previews/mod9.png';
@@ -9,29 +10,20 @@ import gabor from '../media/modules/previews/gabor.png';
 import sobel from '../media/modules/previews/sobel.png';
 import hog from '../media/modules/previews/hog.png';
 
+const coverImageCases: {[key: string]: any} = {
+  'mod8': mod8,
+  'mod9': mod9,
+  'mod10': mod10,
+  'mod11': mod11,
+  'kernel': kernel,
+  'gausBlur': gausBlur,
+  'gabor': gabor,
+  'sobel': sobel,
+  'hog': hog,
+};
+
 function getCoverImage(imgName: string) {
-  switch (imgName) {
-    case 'mod8':
-      return mod8;
-    case 'mod9':
-      return mod9;
-    case 'mod10':
-      return mod10;
-    case 'mod11':
-      return mod11;
-    case 'kernel':
-      return kernel;
-    case 'gausBlur':
-      return gausBlur;
-    case 'gabor':
-      return gabor;
-    case 'sobel':
-      return sobel;
-    case 'hog':
-      return hog;
-    default:
-      return undefined;
-  }
+  return coverImageCases[imgName];
 }
 
 /**

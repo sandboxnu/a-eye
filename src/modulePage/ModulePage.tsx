@@ -10,6 +10,7 @@ import cvIntroModule from '../media/modules/text/computer-vision-intro.json';
 import gaborModule from '../media/modules/text/gabor-filter.json';
 import gaussianModule from '../media/modules/text/gaussian-blur.json';
 import sobelModule from '../media/modules/text/sobel-filter.json';
+import perceptronModule from '../media/modules/text/perceptrons.json';
 // import hogModule from '../media/modules/text/histogram-of-gradients.json';
 
 export interface ModuleSubsection {
@@ -40,7 +41,7 @@ const modules: Record<moduleName, Module | null> = {
   // eslint-disable-next-line
   'classification': module9,
   // eslint-disable-next-line
-  'perceptrons': module10,
+  'perceptrons': perceptronModule,
   'neural-nets': module11,
 };
 
