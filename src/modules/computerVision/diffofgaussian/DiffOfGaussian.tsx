@@ -73,7 +73,7 @@ const KernelConfig: React.FC<KernelConfigType> = ({ labelColor, onConfig }) => {
           onChange={e => changeSigma2(e)}
         />
       </div>
-      <div className={`font-bold m-3 h-10 ${labelColor}`}>
+      <div className={`font-bold m-3 ${labelColor}`}>
         Kernel Size
         <input
           className="mx-2 w-64"
@@ -97,14 +97,16 @@ const KernelConfig: React.FC<KernelConfigType> = ({ labelColor, onConfig }) => {
           {invalidSize ? 'Enter an odd kernel size, between 3 and 7' : ''}
         </div>
       </div>
-      <button
-        type="button"
-        className="basic-button"
-        disabled={invalidConfig}
-        onClick={() => onConfig(kernelSize, sigma, sigma2)}
-      >
-        Generate Kernel
-      </button>
+      <div>
+        <button
+          type="button"
+          className="basic-button"
+          disabled={invalidConfig}
+          onClick={() => onConfig(kernelSize, sigma, sigma2)}
+        >
+          Generate Kernel
+        </button>
+      </div>
     </div>
   );
 };
@@ -122,6 +124,8 @@ const DoG: React.FC<DoGType> = ({ labelColor, imgUrl }) => {
   const [kernelGrid2, setKernelGrid2] = useState<number[][] | undefined>(
     undefined,
   );
+
+  const [dogGrid, setDogGrid] = useState<number[][] | undefined>(undefined);
 
   const configureKernel = (
     kernelSize: number,
@@ -141,6 +145,10 @@ const DoG: React.FC<DoGType> = ({ labelColor, imgUrl }) => {
       return rslt;
     }, []);
 
+    const newDogGrid = newKernelGrid.map((row, i) =>
+      row.map((cell, j) => cell - newKernelGrid2[i][j]),
+    );
+
     // take difference of the two filters
     // dog = difference of gaussians
     // let dog = newKernel.map((inner, i) => (inner - newKernel2[i]));
@@ -151,20 +159,58 @@ const DoG: React.FC<DoGType> = ({ labelColor, imgUrl }) => {
     setKernel2(newKernel2);
     setKernelGrid(newKernelGrid);
     setKernelGrid2(newKernelGrid2);
+    setDogGrid(newDogGrid);
   };
+
+  type NamedKernelDisplayType = {
+    grid?: number[][];
+    label: string;
+    kernelName: string;
+  };
+  const NamedKernelDisplay: React.FC<NamedKernelDisplayType> = ({
+    grid,
+    label,
+    kernelName,
+  }) => (
+    <div>
+      {grid && kernelName}
+      {/* TODO: Make kernel smaller in mobile rendering, (avoid scrolling) */}
+      <KernelDisplay kernelGrid={grid} labelColor={label} />
+    </div>
+  );
 
   return (
     <div className={`flex flex-col items-center font-bold m-4 ${labelColor}`}>
       <KernelConfig onConfig={configureKernel} labelColor={labelColor} />
+      {/* TODO:
+       un-overlap genwerate kernel button */}
       <div
-        className="grid grid-cols-2 items-center mb-5"
+        className="flex flex-col place-content-center place-content-evenly md:flex-row "
         style={{ width: '1100px' }}
       >
-        <KernelDisplay kernelGrid={kernelGrid} labelColor={labelColor} />
-        <KernelDisplay kernelGrid={kernelGrid2} labelColor={labelColor} />
+        <NamedKernelDisplay
+          grid={kernelGrid}
+          label={labelColor}
+          kernelName="Kernel 1"
+        />
+        <NamedKernelDisplay
+          grid={kernelGrid2}
+          label={labelColor}
+          kernelName="Kernel 2"
+        />
       </div>
-
+      <div
+        className="grid grid-cols-1 items-center mb-5"
+        style={{ width: '1100px' }}
+      >
+        <NamedKernelDisplay
+          grid={dogGrid}
+          label={labelColor}
+          kernelName="Difference of Kernels (1 - 2)"
+        />
+      </div>
       <p>Filter by the First Kernel</p>
+      {/* TODO: Make Filter by kernel Images Larger (mobile rendfering? unclear?) */}
       <FilterByKernel kernel={kernel} imgUrl={imgUrl} />
       <p>Filter by the Second Kernel</p>
       <FilterByKernel kernel={kernel2} imgUrl={imgUrl} />

@@ -6,11 +6,12 @@
     font-size: 11pt;
     padding: 10px;
     box-shadow: 0 0 5px rgb(163, 162, 162);
-    display: inline-block;  
-    background-color: white;  
+    display: inline-block;
+    background-color: white;
+    width: 95%;
 }
 
-.image-selector img {
+.image-selector .img-visible {
     width: 100px;
     min-width: 100px;
     margin: 5px;
@@ -22,6 +23,10 @@
     border: 5px solid #48c0b5;
 }
 
+.image-selector img.unselected {
+    filter: brightness(40%)
+}
+
 .image-selector img:hover {
     filter: brightness(85%);
 }
@@ -30,8 +35,13 @@
 .image-selector .selection-window {
     display: flex;
     overflow: auto;
-    width: 80vw;
+    width: auto;
     margin: auto;
+}
+
+.image-selector input[type="file"] {
+    color: #838388;
+    max-width: 95%;
 }
 
 .selection-window::-webkit-scrollbar {
