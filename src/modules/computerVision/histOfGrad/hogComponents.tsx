@@ -265,16 +265,14 @@ export const GradientImage: React.FC<GradientImageType> = ({
 type NeedlePlotType = {
   blocks: BlocksType;
   orientation: OrientationConfigType;
-  width: number;
-  height: number;
+  aspectRatio: number;
   labelColor: string;
 };
 
 export const NeedlePlot: React.FC<NeedlePlotType> = ({
   blocks,
   orientation,
-  width,
-  height,
+  aspectRatio,
   labelColor,
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -292,8 +290,8 @@ export const NeedlePlot: React.FC<NeedlePlotType> = ({
       <canvas
         className="crisp-pixels mx-auto md60vw-sm20vw"
         ref={canvasRef}
-        width={width}
-        height={height}
+        width={300*aspectRatio}
+        height={300 }
       />
 
     </div>

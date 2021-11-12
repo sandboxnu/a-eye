@@ -117,8 +117,7 @@ const NeedleHistogramDemo: React.FC<NeedleHistogramDemoType> = ({
             <NeedlePlot
               blocks={blocks}
               orientation={orientation}
-              width={gradientImg.width}
-              height={gradientImg.height}
+              aspectRatio={gradientImg.width/gradientImg.height}
               labelColor={labelColor}
             />
             <Histogram
