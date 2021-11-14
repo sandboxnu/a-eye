@@ -7,17 +7,17 @@
       "subsections": [
         {
           "title": "Subsection 1",
-          "body": "",
+          "body": "The Histogram of Gradients is a feature descriptor used in computer vision for object detection. At a high level, the technique searches over localized portions of the image and counts occurrences of various \"edges\" at different angles. The distribution of edges in an image can help us determine the shape of the object.",
           "imgSrc": "blank"
         },
         {
           "title": "Subsection 2",
-          "body": "",
+          "body": "We detect for \"edges\" at a specific spot in an image by calculating the <strong>image gradient</strong>, a directional change in color, at various directions. To do this, we use the Sobel Filters discussed in the previous section.",
           "imgSrc": "blank"
         },
         {
           "title": "Subsection 3",
-          "body": "",
+          "body": "The demo below takes you through the process of calculating the Histogram of Gradients; for each pixel we calculate the magnitudes of the image gradient in the four main directions, and aggregate those magnitudes in a histogram. In addition to creating a histogram, we use our calculations to form a <strong>needle plot</strong>, which represents the magnitudes of the image gradients within each aggregate block.",
           "imgSrc": "blank"
         }
       ],

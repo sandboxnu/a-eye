@@ -25,6 +25,7 @@ import combinedSobelKernelExampleLight from "../media/modules/computerVision/com
 import combinedSobelKernelExampleDark from "../media/modules/computerVision/combinedSobelKernelExampleDark.png";
 import vertSobelExampleLight from "../media/modules/computerVision/sobelKernels/vertical_lighttodark.png";
 import vertSobelExampleDark from "../media/modules/computerVision/sobelKernels/vertical_darktolight.png";
+import hogBoatExample from "../media/modules/computerVision/hogBoatExample.png";
 import { StandableSobelFilterDemo } from "modules/computerVision/sobelFilter/StandaloneSobelFilterDemo";
 // import lightVertSobelExampleLight from '../media/modules/computerVision/vertSobelExampleLight.png';
 // import lightVertSobelExampleDark from '../media/modules/computerVision/vertSobelExampleDark.png';
@@ -55,6 +56,7 @@ const imageDictionary: {[key: string]: any} = {
   "sobelKernelDark": vertSobelExampleDark,
   "combinedSobelKernelLight": combinedSobelKernelExampleLight,
   "combinedSobelKernelDark": combinedSobelKernelExampleDark,
+  "hogBoatExample": hogBoatExample,
 }; 
 
 function GetImage(imgName: string) {
