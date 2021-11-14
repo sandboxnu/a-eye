@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import React from 'react';
 import CSS from 'csstype';
 import background_img from '../media/landingPage/background.jpeg';
@@ -39,39 +41,42 @@ export default function LandingPage() {
         style={botStyle}
       >
         <ul className="list-none">
-          {descriptions.modules.map(module =>
-            module.active ? (
-              <a href={`/modules/${module.path}`}>
-                <li className="flex justify-center my-48">
-                  <ModuleIntro
-                    title={module.title}
-                    body={module.body}
-                    bgColor={module.bgColor}
-                    key={module.number.toString()}
-                    textColor={module.textColor}
-                    margin={module.margin}
-                    imgSrc={module.imgSrc}
-                    active={module.active}
-                  />
-                </li>
-              </a>
-            ) : (
-              <div>
-                <li className="flex justify-center my-48">
-                  <ModuleIntro
-                    title={module.title}
-                    body={module.body}
-                    bgColor={module.bgColor}
-                    key={module.number.toString()}
-                    textColor={module.textColor}
-                    margin={module.margin}
-                    imgSrc={module.imgSrc}
-                    active={module.active}
-                  />
-                </li>
-              </div>
-            ),
-          )}
+          {descriptions.modules
+            .filter(module => module.parentModule === "")
+            .map(module =>
+              module.active ? (
+                <a href={`/modules/${module.path}`}>
+                  <li className="flex justify-center my-48">
+                    <ModuleIntro
+                      title={module.title}
+                      body={module.body}
+                      bgColor={module.bgColor}
+                      key={module.number.toString()}
+                      textColor={module.textColor}
+                      margin={module.margin}
+                      imgSrc={module.imgSrc}
+                      active={module.active}
+                    />
+                  </li>
+                </a>
+              ) : (
+                <div>
+                  <li className="flex justify-center my-48">
+                    <ModuleIntro
+                      title={module.title}
+                      body={module.body}
+                      bgColor={module.bgColor}
+                      key={module.number.toString()}
+                      textColor={module.textColor}
+                      margin={module.margin}
+                      imgSrc={module.imgSrc}
+                      active={module.active}
+                    />
+                  </li>
+                </div>
+              ),
+            )
+          }
         </ul>
       </div>
     </div>

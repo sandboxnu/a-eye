@@ -25,6 +25,7 @@ import combinedSobelKernelExampleLight from "../media/modules/computerVision/com
 import combinedSobelKernelExampleDark from "../media/modules/computerVision/combinedSobelKernelExampleDark.png";
 import vertSobelExampleLight from "../media/modules/computerVision/sobelKernels/vertical_lighttodark.png";
 import vertSobelExampleDark from "../media/modules/computerVision/sobelKernels/vertical_darktolight.png";
+import ComputerVisionList from "modules/computerVision/ComputerVisionList";
 // import lightVertSobelExampleLight from '../media/modules/computerVision/vertSobelExampleLight.png';
 // import lightVertSobelExampleDark from '../media/modules/computerVision/vertSobelExampleDark.png';
 
@@ -95,6 +96,8 @@ function getDemo(comp: string, scheme: ColorScheme) {
           demoProps={demoArgs}
         />
       );
+    case "ComputerVisionList":
+      return <ComputerVisionList />;
     case "HaarWaveletDemo":
       return (
         <ImageSelectableDemo
@@ -205,11 +208,11 @@ const ModuleSection: React.FC<ModuleSectionType> = ({
   return (
     <div className={`flex flex-col w-screen ${scheme.bgColor}`}>
       <div className="mx-12 md:mx-40">
-        <p
-          className={`my-12 text-3xl md:text-6xl italic font-bold font-opensans ${scheme.titleColor}`}
-        >
-          {title}
-        </p>
+            <p
+              className={`my-12 text-3xl md:text-6xl italic font-bold font-opensans ${scheme.titleColor}`}
+            >
+              {title}
+            </p>
         <ul className="">
           {/* eslint-disable-next-line */}
           {sections.map((section, index) => (
@@ -256,8 +259,8 @@ const ModuleSection: React.FC<ModuleSectionType> = ({
             </div>
           ))}
         </ul>
-        {getDemo(demoComp, scheme)}
       </div>
+      {getDemo(demoComp, scheme)}
     </div>
   );
 };
