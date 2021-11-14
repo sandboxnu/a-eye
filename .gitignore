@@ -19,6 +19,7 @@
 .env.production.local
 /src/react-app-env.d.ts
 tsconfig.json
+.eslintcache
 
 .idea
 

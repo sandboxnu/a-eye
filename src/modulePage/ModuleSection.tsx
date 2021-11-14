@@ -27,11 +27,11 @@ import vertSobelExampleLight from "../media/modules/computerVision/sobelKernels/
 import vertSobelExampleDark from "../media/modules/computerVision/sobelKernels/vertical_darktolight.png";
 import hogBoatExample from "../media/modules/computerVision/hogBoatExample.png";
 import { StandableSobelFilterDemo } from "modules/computerVision/sobelFilter/StandaloneSobelFilterDemo";
-// import lightVertSobelExampleLight from '../media/modules/computerVision/vertSobelExampleLight.png';
-// import lightVertSobelExampleDark from '../media/modules/computerVision/vertSobelExampleDark.png';
+import MPNeuron from "../modules/perceptrons/mpNeuron/MPNeuron";
+import RblattVectorsDemo from '../modules/perceptrons/rblattVectors/RblattVectorsDemo';
+import RosenBlattDemo from "../modules/perceptrons/rosenblatt/RosenblattDemo";
 
-const lorem =
-  "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
+const lorem = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.';
 
 interface ColorScheme {
   bgColor: string;
@@ -76,10 +76,6 @@ function getImageSelectableDemo(demoType:any, image: string, demoArgs: any) {
 function getStaticAxisChart(scheme: ColorScheme) {
   return (
     <StaticAxisChart
-      xIdx={4}
-      yIdx={5}
-      columnSet={pcaConfig.columns}
-      classes={["versicolor", "setosa"]}
       labelColorHex={scheme.labelColorHex}
     />
   );
@@ -112,6 +108,9 @@ function getDemo(comp: string, scheme: ColorScheme) {
     "InteractiveKMeans": (<div><InteractiveClusteringExample hidden={false} /></div>),
     "StepKMeans": (<div><KMeansStepExample hidden={false} /></div>),
     "KMeans": (<KMeans />),
+    "MPNeuron": (<MPNeuron labelColor={demoArgs.labelColor} canAddInputs={true} /> ),
+    "RblattVectorsDemo": (<RblattVectorsDemo labelColor={demoArgs.labelColor} />),
+    "RblattDemo": (<RosenBlattDemo {...demoArgs}/>)
   };
   if (comp in demoDictionary){
     return demoDictionary[comp];

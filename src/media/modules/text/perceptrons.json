@@ -1,0 +1,78 @@
+{
+    "title": "Introduction to Machine Learning: Perceptrons",
+    "sections": [
+        {
+            "title": "",
+            "colorScheme": "light",
+            "subsections": [
+              {
+                "title": "Subsection 1",
+                "body": "We previously showed how we can use PCA and clustering to classify data. However, those methods are limited by the dimensions of our data and can only take us so far; how can we perform more reliable classifications on high-dimensional data? The answer is the perceptron.",
+                "imgSrc": "blank"
+              },
+              {
+                "title": "Subsection 2",
+                "body": "The perceptron is a single-layer neural network that serves as a linear classifier. In other words, it is an algorithm that establishes a binary classification rule for input data. The crux of the perceptron is that certain features of the data are more important (ie weighted more heavily) to the classification.",
+                "imgSrc": "blank"
+              }
+            ],
+            "demoComp": ""
+          },
+          {
+            "title": "McCulloch-Pitts Neuron",
+            "colorScheme": "dark",
+            "subsections": [
+              {
+                "title": "Subsection 1",
+                "body": "The most simple kind of perceptron is the McCulloch-Pitts Neuron. Data used for this perceptron are of the form of a binary vector; each feature is either activated (value 1) or not (value 0). The MP neuron has two key components; it has weights that it assigns to each of the features, and a threshold value used to determine the classification.",
+                "imgSrc": "blank"
+              },
+              {
+                "title": "Subsection 2",
+                "body": "It functions by performing a weighted sum of all of the features (the dot product of the input vector and weight vector) and compares the sum to the threshold. The output of the perceptron is a binary value indicating whether the weighted sum meets the threshold (value 1) or doesn't (value 0). To use the MP neuron below, you can change the number of inputs to see how it affects the weight average, as well as the threshold value in order to change the output of the neuron.",
+                "imgSrc": "blank"
+              }
+            ],
+            "demoComp": "MPNeuron"
+          },
+          {
+            "title": "The Perceptron Update Process",
+            "colorScheme": "dark",
+            "subsections": [
+                {
+                    "title": "Subsection 1",
+                    "body": "So how does each iteration of this algorithm work to minimize error? The answer is some clever vector math. The animation below demonstrates how this process works as it processes a single point from the input.",
+                    "imgSrc": "blank"
+                },
+                {
+                    "title": "Subsection 2",
+                    "body": "We can think of the line dividing our two input groups as represented by a vector Wt; that is, given a vector, you can always draw a line perpendicular to where it starts. When the algorithm encounters a point that has been misclassified, it finds the vector representing the distance, d, between that point our dividing line. To update the dividing line, we subtract d from Wt. This new vector corresponds to a new perpendicular line, which forms a more accurate division between the inputs. Use the buttons below to walk through the steps of updating the dividing line. You can always click 'Previous Step' to revisit any parts you may have missed.",
+                    "imgSrc": "blank"
+                }
+            ],
+            "demoComp": "RblattVectorsDemo"
+          },
+          {
+            "title": "Perceptrons in Action",
+            "colorScheme": "light",
+            "subsections": [
+              {
+                "title": "Subsection 1",
+                "body": "Now that we've seen how a perceptron can work to find an answer, let's see it in action! In this demonstration, we will see how a perceptron can be used to sort a bunch of points on a scatterplot.",
+                "imgSrc": "blank"
+              },
+              {
+                "title": "Subsection 2",
+                "body": "In our classification problem, our goal is to be able to find the best line to sort the points into their respective classes. This may seem pretty simple in a 2D plane, but this example has many more applications and acts as a fundamental building block for more machine learning.",
+                "imgSrc": "blank"
+              },
+              {
+                "title": "Subsection 3",
+                "body": "Watch how the line changes as you train it on a single point or on all points when clicking the buttons above the table. You can also change the learning rate to see how it affects the line changes when training. Be careful though, a learning rate that is too high may cause the line to never converge; similarly, a learning rate that is too low make that too long to learn. Add more points the graph to customize how your line changes! You can always restart the demo by clicking 'Reset', and remove all the points by clicking 'Clear All'. ",
+                "imgSrc": "blank"
+              }
+            ],
+            "demoComp": "RblattDemo"
+          }
+        ]
+      }
