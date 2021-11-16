@@ -7,7 +7,7 @@
       "subsections": [
         {
           "title": "Subsection 1",
-          "body": "The Sobel Filter is popularly used in image detection algorithms to extract edges from an image. The filter uses a 3x3 kernel that detects the image gradient, a directional change in color in the image, for a given direction. The example kernel detects a change in color between the left and right sides of the current pixel, which indicates a vertical edge. ",
+          "body": "The Sobel Filter is popularly used in image detection algorithms to extract edges from an image. The filter uses a 3x3 kernel that detects the <strong>image gradient</strong>, a directional change in color in the image, for a given direction. The example kernel detects a change in color between the left and right sides of the current pixel, which indicates a vertical edge. ",
           "imgSrc": "sobelKernelDark"
         },
         {

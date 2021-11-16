@@ -5,6 +5,7 @@ module.exports = {
   },
   plugins: ['prettier'],
   rules: {
+    'import/no-named-as-default': 0,
     'prettier/prettier': [
       'error',
       {
