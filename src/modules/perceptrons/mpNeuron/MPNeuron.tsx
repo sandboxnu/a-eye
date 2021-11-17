@@ -23,15 +23,14 @@ export const MPNeuron: React.FC<MPNeuronType> = ({
   startThreshold = 0,
   startGreater = true,
   connecting = false,
-  // bias = INIT_CONFIG.bias,
-  bias = 0,
+  bias = INIT_CONFIG.bias,
 }) => {
   const [inputs, setInputs] = useState(input);
   const [weights, setWeights] = useState(weight);
   const [threshold, setThreshold] = useState(startThreshold);
   const [isGreater, setGreater] = useState(startGreater);
 
-  const inputSum = calculateInputSum(inputs, weights, bias);
+  const inputSum = calculateInputSum(inputs, weights, undefined);
 
   return (
     <MPBasicNeuron
@@ -46,6 +45,7 @@ export const MPNeuron: React.FC<MPNeuronType> = ({
       isGreater={isGreater}
       setIsGreater={setGreater}
       output={calculateThreshold(inputSum, isGreater, threshold)}
+      renderLabels={true}
     />
   );
 };

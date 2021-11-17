@@ -27,6 +27,7 @@ type MPBasicNeuronType = {
   bias?: number;
   inputToAdd?: number;
   weightToAdd?: number;
+  renderLabels?: boolean;
 };
 
 export const MPBasicNeuron: React.FC<MPBasicNeuronType> = ({
@@ -47,6 +48,7 @@ export const MPBasicNeuron: React.FC<MPBasicNeuronType> = ({
   bias,
   inputToAdd = 1,
   weightToAdd = 1,
+  renderLabels = false,
 }) => {
   const finalInputSum = inputSum
     ? inputSum
@@ -125,10 +127,11 @@ export const MPBasicNeuron: React.FC<MPBasicNeuronType> = ({
   );
 
   return (
+
     <div className="m-2 flex flex-col items-center justify-center">
       <div>
-
-        <div className="flex flex-row justify-start w-full">
+        
+        <div className={`flex flex-row justify-start w-full ${renderLabels ? "" : "hidden"}`}>
           {/* I hate this */}
           <p className={`ml-4  ${labelColor}`}>Input</p>
           <p className={`ml-16  ${labelColor}`}>Weights</p>
