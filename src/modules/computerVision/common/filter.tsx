@@ -1,10 +1,10 @@
+/* eslint-disable */
+export {
+  convolute, getPixels, createImageData
+};
+
 /// utility functions for filtering / manipulating a DOM canvas
 // reference: https://www.html5rocks.com/en/tutorials/canvas/imagefilters/
-
-function getPixels(canvas: HTMLCanvasElement) {
-  const ctx = canvas.getContext('2d');
-  return ctx && ctx.getImageData(0, 0, canvas.width, canvas.height);
-}
 
 /**
  * Run an image convolution based on inCanvas, and draws the output to outCanvas.
@@ -16,48 +16,39 @@ function getPixels(canvas: HTMLCanvasElement) {
  * @param weights the kernel (matrix of numbers)
  * @param opaque (optional) is the image opaque?
  */
-function convolute(
-  inCanvas: HTMLCanvasElement,
-  outCanvas: HTMLCanvasElement,
-  animate: boolean,
-  weights: number[],
-  opaque?: boolean,
-) {
+function convolute(inCanvas: HTMLCanvasElement, outCanvas: HTMLCanvasElement, animate: boolean, weights: number[], opaque?: boolean) {
   const pixels = getPixels(inCanvas);
   const output = getPixels(outCanvas);
   if (!pixels || !output) return;
 
-  const side = Math.round(Math.sqrt(weights.length));
-  const halfSide = Math.floor(side / 2);
-  const src = pixels.data;
-  const sw = pixels.width;
-  const sh = pixels.height;
+  var side = Math.round(Math.sqrt(weights.length));
+  var halfSide = Math.floor(side / 2);
+  var src = pixels.data;
+  var sw = pixels.width;
+  var sh = pixels.height;
   // pad output by the convolution matrix
-  const w = sw;
-  const h = sh;
-  const dst = output.data;
+  var w = sw;
+  var h = sh;
+  var dst = output.data;
   // go through the destination image pixels
-  const alphaFac = opaque ? 1 : 0;
+  var alphaFac = opaque ? 1 : 0;
 
-  const processRow = (y: number) => {
-    for (let x = 0; x < w; x += 1) {
-      const sy = y;
-      const sx = x;
-      const dstOff = (y * w + x) * 4;
-      const nextDstOff = ((y + 1) * w + x) * 4;
+  const processRow = (y : number) => {
+    for (var x = 0; x < w; x++) {
+      var sy = y;
+      var sx = x;
+      var dstOff = (y * w + x) * 4;
+      var nextDstOff = ((y + 1) * w + x) * 4;
       // calculate the weighed sum of the source image pixels that
       // fall under the convolution matrix
-      let r = 0;
-      let g = 0;
-      let b = 0;
-      let a = 0;
-      for (let cy = 0; cy < side; cy += 1) {
-        for (let cx = 0; cx < side; cx += 1) {
-          const scy = sy + cy - halfSide;
-          const scx = sx + cx - halfSide;
+      var r = 0, g = 0, b = 0, a = 0;
+      for (var cy = 0; cy < side; cy++) {
+        for (var cx = 0; cx < side; cx++) {
+          var scy = sy + cy - halfSide;
+          var scx = sx + cx - halfSide;
           if (scy >= 0 && scy < sh && scx >= 0 && scx < sw) {
-            const srcOff = (scy * sw + scx) * 4;
-            const wt = weights[cy * side + cx];
+            var srcOff = (scy * sw + scx) * 4;
+            var wt = weights[cy * side + cx];
             r += src[srcOff] * wt;
             g += src[srcOff + 1] * wt;
             b += src[srcOff + 2] * wt;
@@ -74,27 +65,30 @@ function convolute(
       dst[nextDstOff + 1] = 0;
       dst[nextDstOff + 2] = 0;
     }
-  };
+  }
 
   if (animate) {
-    let y = 0;
+    var y = 0;
     const interval = setInterval(() => {
       processRow(y);
-      outCanvas.getContext('2d')?.putImageData(output, 0, 0);
-      y += 1;
+      outCanvas.getContext("2d")?.putImageData(output, 0, 0);
+      y++;
       if (y >= h) clearInterval(interval);
     }, 10);
   } else {
-    for (let y = 0; y < h; y += 1) {
-      processRow(y);
+    for (var yx = 0; yx < h; yx++) {
+      processRow(yx);
     }
-    outCanvas.getContext('2d')?.putImageData(output, 0, 0);
+    outCanvas.getContext("2d")?.putImageData(output, 0, 0);
   }
 }
 
-function createImageData(canvas: HTMLCanvasElement) {
-  const ctx = canvas.getContext('2d');
-  return ctx && ctx.createImageData(canvas.width, canvas.height);
+function getPixels(canvas: HTMLCanvasElement) {
+  var ctx = canvas.getContext('2d');
+  return ctx && ctx.getImageData(0, 0, canvas.width, canvas.height);
 }
 
-export { convolute, getPixels, createImageData };
+function createImageData(canvas: HTMLCanvasElement) {
+  var ctx = canvas.getContext('2d');
+  return ctx && ctx.createImageData(canvas.width, canvas.height);
+}

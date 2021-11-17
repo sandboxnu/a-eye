@@ -1,6 +1,6 @@
 /* eslint-disable */
 import React from "react";
-import SobelFilterDemo from "../modules/computerVision/sobelFilter/SobelFilterDemo";
+import HistogramOfGradDemo from "modules/computerVision/histOfGrad/HistogramOfGradDemo";
 import GaussianBlurDemo from "../modules/computerVision/gaussianBlur/GaussianBlurDemo";
 import GaborDemo from "../modules/computerVision/gaborFilter/gaborFilter";
 import DiffOfGaussianDemo from "../modules/computerVision/diffofgaussian/DiffOfGaussian";
@@ -26,11 +26,13 @@ import combinedSobelKernelExampleDark from "../media/modules/computerVision/comb
 import vertSobelExampleLight from "../media/modules/computerVision/sobelKernels/vertical_lighttodark.png";
 import vertSobelExampleDark from "../media/modules/computerVision/sobelKernels/vertical_darktolight.png";
 import ComputerVisionList from "modules/computerVision/ComputerVisionList";
-// import lightVertSobelExampleLight from '../media/modules/computerVision/vertSobelExampleLight.png';
-// import lightVertSobelExampleDark from '../media/modules/computerVision/vertSobelExampleDark.png';
+import hogBoatExample from "../media/modules/computerVision/hogBoatExample.png";
+import { StandableSobelFilterDemo } from "modules/computerVision/sobelFilter/StandaloneSobelFilterDemo";
+import MPNeuron from "../modules/perceptrons/mpNeuron/MPNeuron";
+import RblattVectorsDemo from '../modules/perceptrons/rblattVectors/RblattVectorsDemo';
+import RosenBlattDemo from "../modules/perceptrons/rosenblatt/RosenblattDemo";
 
-const lorem =
-  "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
+const lorem = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.';
 
 interface ColorScheme {
   bgColor: string;
@@ -46,125 +48,75 @@ interface ModuleSubsection {
   imgSrc: string;
 }
 
+const imageDictionary: {[key: string]: any} = {
+  "blank": blank,
+  "animation1": animation1,
+  "animation2": animation2,
+  "animation3": animation3,
+  "sobelKernelLight": vertSobelExampleLight,
+  "sobelKernelDark": vertSobelExampleDark,
+  "combinedSobelKernelLight": combinedSobelKernelExampleLight,
+  "combinedSobelKernelDark": combinedSobelKernelExampleDark,
+  "hogBoatExample": hogBoatExample,
+}; 
+
 function GetImage(imgName: string) {
-  switch (imgName) {
-    case "blank":
-      return blank;
-    case "animation1":
-      return animation1;
-    case "animation2":
-      return animation2;
-    case "animation3":
-      return animation3;
-    case "sobelKernelLight":
-      return vertSobelExampleLight;
-    case "sobelKernelDark":
-      return vertSobelExampleDark;
-    case "combinedSobelKernelLight":
-      return combinedSobelKernelExampleLight;
-    case "combinedSobelKernelDark":
-      return combinedSobelKernelExampleDark;
-    default:
-  }
+  return imageDictionary[imgName];
+}
+
+function getImageSelectableDemo(demoType:any, image: string, demoArgs: any) {
+  return (
+    <ImageSelectableDemo
+      Demo={demoType}
+      initImg={image}
+      demoProps={demoArgs}
+    />
+  ); 
+}
+
+function getStaticAxisChart(scheme: ColorScheme) {
+  return (
+    <StaticAxisChart
+      labelColorHex={scheme.labelColorHex}
+    />
+  );
+}
+function getSelectableAxisChart(comp: string, xIndx: number, yIndx: number, scheme: ColorScheme) {
+  return (<SelectableAxisChart
+    columnSet={(comp == "SelectableAxisChart") ? pcaConfig.columns : pcaConfig.pcaColumns}
+    initXIdx={xIndx}
+    initYIdx={yIndx}
+    labelColor={scheme.titleColor}
+    labelColorHex={scheme.labelColorHex}
+  />);
 }
 
 function getDemo(comp: string, scheme: ColorScheme) {
-  const demoArgs = { labelColor: scheme.titleColor };
-
-  switch (comp) {
-    case "GaussianBlurDemo":
-      return (
-        <ImageSelectableDemo
-          Demo={GaussianBlurDemo}
-          initImg="purpleFlowers.jpeg"
-          demoProps={demoArgs}
-        />
-      );
-    case "GaborDemo":
-      return (
-        <ImageSelectableDemo
-          Demo={GaborDemo}
-          initImg="zebra.jpg"
-          demoProps={demoArgs}
-        />
-      );
-    case "DiffOfGaussian":
-      return (
-        <ImageSelectableDemo
-          Demo={DiffOfGaussianDemo}
-          initImg="tabbyCat.jpg"
-          demoProps={demoArgs}
-        />
-      );
-    case "ComputerVisionList":
-      return <ComputerVisionList />;
-    case "HaarWaveletDemo":
-      return (
-        <ImageSelectableDemo
-          Demo={HaarWaveletDemo}
-          initImg="bwWoman.jpg"
-          demoProps={demoArgs}
-        />
-      );
-    case "SobelFilterDemo":
-      return (
-        <ImageSelectableDemo
-          Demo={SobelFilterDemo}
-          initImg="stopSign.jpeg"
-          demoProps={demoArgs}
-        />
-      );
-    case "PCADemo":
-      return <PCADemo {...demoArgs} />;
-    case "RawDataTable":
-      return <RawDataTable />;
-    case "StaticAxisChart":
-      return (
-        <StaticAxisChart
-          xIdx={4}
-          yIdx={5}
-          columnSet={pcaConfig.columns}
-          classes={["versicolor", "setosa"]}
-          labelColorHex={scheme.labelColorHex}
-        />
-      );
-    case "SelectableAxisChart":
-      return (
-        <SelectableAxisChart
-          columnSet={pcaConfig.columns}
-          initXIdx={4}
-          initYIdx={5}
-          labelColor={scheme.titleColor}
-          labelColorHex={scheme.labelColorHex}
-        />
-      );
-    case "PCASelectableAxisChart":
-      return (
-        <SelectableAxisChart
-          columnSet={pcaConfig.pcaColumns}
-          initXIdx={0}
-          initYIdx={1}
-          labelColor={scheme.titleColor}
-          labelColorHex={scheme.labelColorHex}
-        />
-      );
-    case "InteractiveKMeans":
-      return (
-        <div>
-          <InteractiveClusteringExample hidden={false} />
-        </div>
-      );
-    case "StepKMeans":
-      return (
-        <div>
-          <KMeansStepExample hidden={false} />
-        </div>
-      );
-    case "KMeans":
-      return <KMeans />;
-    default:
-      return <div />;
+  const demoArgs = { labelColor: scheme.titleColor};
+  const demoDictionary: {[key: string]: any} = {
+    "GaussianBlurDemo": getImageSelectableDemo(GaussianBlurDemo, "purpleFlowers.jpeg", demoArgs),
+    "GaborDemo": getImageSelectableDemo(GaborDemo, "zebra.jpg", demoArgs ),
+    "DiffOfGaussian": getImageSelectableDemo(DiffOfGaussianDemo, "tabbyCat.jpg", demoArgs),
+    "HaarWaveletDemo": getImageSelectableDemo(HaarWaveletDemo, "bwWoman.jpg", demoArgs),
+    "SobelFilterDemo": getImageSelectableDemo(StandableSobelFilterDemo, "stopSign.jpeg", demoArgs),
+    "HistogramOfGradDemo": getImageSelectableDemo(HistogramOfGradDemo, "stopSign.jpeg", demoArgs),
+    "PCADemo": (<PCADemo {...demoArgs} />),
+    "RawDataTable": (<RawDataTable />),
+    "StaticAxisChart": getStaticAxisChart(scheme),
+    "SelectableAxisChart": getSelectableAxisChart("SelectableAxisChart", 4, 5, scheme),
+    "PCASelectableAxisChart": getSelectableAxisChart("PCASelectableAxisChart", 0, 1, scheme),
+    "InteractiveKMeans": (<div><InteractiveClusteringExample hidden={false} /></div>),
+    "StepKMeans": (<div><KMeansStepExample hidden={false} /></div>),
+    "KMeans": (<KMeans />),
+    "MPNeuron": (<MPNeuron labelColor={demoArgs.labelColor} canAddInputs={true} /> ),
+    "RblattVectorsDemo": (<RblattVectorsDemo labelColor={demoArgs.labelColor} />),
+    "RblattDemo": (<RosenBlattDemo {...demoArgs}/>),
+    "ComputerVisionList": (<ComputerVisionList />)
+  };
+  if (comp in demoDictionary){
+    return demoDictionary[comp];
   }
+  return <div />;
 }
 
 /**

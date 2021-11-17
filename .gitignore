@@ -19,6 +19,7 @@
 .env.production.local
 /src/react-app-env.d.ts
 tsconfig.json
+.eslintcache
 
 .idea
 
@@ -27,3 +28,4 @@ yarn-debug.log*
 yarn-error.log*
 
 .eslintcache
+yarn.lock

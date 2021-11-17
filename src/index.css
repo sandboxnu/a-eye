@@ -116,25 +116,27 @@ input[type="range"]:focus {
   width: 60vw;
 }
 
-.responsive-img-width {
+.md60vw-sm20vw {
   width: 60vw;
 }
 
 @media (min-width:768px) {
-  .responsive-img-width {
-    width: 35vw;
-  }
-}
-
-.sobel-image-width {
-  width: 60vw;
-}
-
-@media (min-width:768px) {
-  .sobel-image-width {
+  .md60vw-sm20vw {
     width: 20vw;
   }
 }
+
+
+.md30vw-sm60vw {
+  width: 60vw;
+}
+
+@media (min-width:768px) {
+  .md30vw-sm60vw {
+    width: 30vw;
+  }
+}
+
 
 .img-invert {
   filter: invert(1)

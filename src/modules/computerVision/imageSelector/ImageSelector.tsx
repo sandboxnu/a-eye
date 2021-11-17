@@ -4,32 +4,19 @@ import './ImageSelector.css';
 import ImageUploader from './ImageUploader';
 
 const ALL_IMGS: { [name: string]: any } = {
-  'three.png': require('../../../media/modules/computerVision/imageLibrary/three.png')
-    .default,
-  'diamond.png': require('../../../media/modules/computerVision/imageLibrary/diamond.png')
-    .default,
-  'square.png': require('../../../media/modules/computerVision/imageLibrary/square.png')
-    .default,
-  'circles.jpg': require('../../../media/modules/computerVision/imageLibrary/circles.jpg')
-    .default,
-  'dogSilhouette.jpg': require('../../../media/modules/computerVision/imageLibrary/dogSilhouette.jpg')
-    .default,
-  'purpleFlowers.jpeg': require('../../../media/modules/computerVision/imageLibrary/purpleFlowers.jpeg')
-    .default,
-  'stopSign.jpeg': require('../../../media/modules/computerVision/imageLibrary/stopSign.jpeg')
-    .default,
-  'steps.png': require('../../../media/modules/computerVision/imageLibrary/steps.png')
-    .default,
-  'tabbyCat.jpg': require('../../../media/modules/computerVision/imageLibrary/tabbyCat.jpg')
-    .default,
-  'teddyBear.jpg': require('../../../media/modules/computerVision/imageLibrary/teddyBear.jpg')
-    .default,
-  'zebra.jpg': require('../../../media/modules/computerVision/imageLibrary/zebra.jpg')
-    .default,
-  'bwWoman.jpg': require('../../../media/modules/computerVision/imageLibrary/bwWoman.jpg')
-    .default,
-  'bwMan.jpg': require('../../../media/modules/computerVision/imageLibrary/bwMan.jpg')
-    .default,
+  'three.png': require('../../../media/modules/computerVision/imageLibrary/three.png').default,
+  'diamond.png': require('../../../media/modules/computerVision/imageLibrary/diamond.png').default,
+  'square.png': require('../../../media/modules/computerVision/imageLibrary/square.png').default,
+  'circles.jpg': require('../../../media/modules/computerVision/imageLibrary/circles.jpg').default,
+  'dogSilhouette.jpg': require('../../../media/modules/computerVision/imageLibrary/dogSilhouette.jpg').default,
+  'purpleFlowers.jpeg': require('../../../media/modules/computerVision/imageLibrary/purpleFlowers.jpeg').default,
+  'stopSign.jpeg': require('../../../media/modules/computerVision/imageLibrary/stopSign2.jpeg').default,
+  'steps.png': require('../../../media/modules/computerVision/imageLibrary/stepsHighRes.png').default,
+  'tabbyCat.jpg': require('../../../media/modules/computerVision/imageLibrary/tabbyCat.jpg').default,
+  'teddyBear.jpg': require('../../../media/modules/computerVision/imageLibrary/teddyBear.jpg').default,
+  'zebra.jpg': require('../../../media/modules/computerVision/imageLibrary/zebra.jpg').default,
+  'bwWoman.jpg': require('../../../media/modules/computerVision/imageLibrary/bwWoman.jpg').default,
+  'bwMan.jpg': require('../../../media/modules/computerVision/imageLibrary/bwMan.jpg').default
 };
 
 export interface ImageSelectorProps {

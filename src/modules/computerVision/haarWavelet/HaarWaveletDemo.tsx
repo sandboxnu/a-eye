@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import InteractiveFilter from '../common/InteractiveFilter';
-import haarFilter from './haarTransform';
+import { haarFilter } from './haarTransform';
 
 /*
 how does haar relate to normal kernel convolutions?

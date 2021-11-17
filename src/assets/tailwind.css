@@ -17,6 +17,15 @@
     .basic-button:disabled {
         @apply bg-navy-disabled cursor-auto;
     }
+    .basic-button.alt {
+        @apply bg-brightOrange;
+    }
+    .basic-button.alt:hover {
+        @apply bg-orange-600;
+    }
+    .basic-button.alt:disabled {
+        @apply bg-orange-400;
+    }
 
     .number-input {
         @apply w-16 border-2 border-solid border-gray-500 pl-2 rounded-md;
@@ -24,12 +33,30 @@
     .number-input:focus {
         @apply border-solid border-navy pl-2 outline-none;
     }
+   
     .crisp-pixels {
         image-rendering: -moz-crisp-edges;
         image-rendering: -webkit-crisp-edges;
         image-rendering: pixelated;
         image-rendering: crisp-edges;
     }
+
+    .icon-button {
+        @apply text-orange-500 cursor-pointer;
+    }
+    .icon-button:hover {
+        @apply text-brightOrange cursor-pointer;
+    }
     
 
+    .a-eye-table {
+        @apply w-full border-collapse border border-modulePaleBlue;
+    }
+    .a-eye-table th {
+        @apply bg-moduleNavy text-modulePaleBlue sticky top-0 h-16 shadow-md;
+    }
+    .a-eye-table th, td {
+        @apply text-center p-1 border border-modulePaleBlue;
+    }
+    
 }

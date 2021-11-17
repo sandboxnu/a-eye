@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useState } from 'react';
 import descriptions from './media/modules/module_descriptions.json';
 
