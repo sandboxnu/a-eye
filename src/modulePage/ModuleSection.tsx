@@ -25,6 +25,7 @@ import combinedSobelKernelExampleLight from "../media/modules/computerVision/com
 import combinedSobelKernelExampleDark from "../media/modules/computerVision/combinedSobelKernelExampleDark.png";
 import vertSobelExampleLight from "../media/modules/computerVision/sobelKernels/vertical_lighttodark.png";
 import vertSobelExampleDark from "../media/modules/computerVision/sobelKernels/vertical_darktolight.png";
+import ComputerVisionList from "modules/computerVision/ComputerVisionList";
 import hogBoatExample from "../media/modules/computerVision/hogBoatExample.png";
 import { StandableSobelFilterDemo } from "modules/computerVision/sobelFilter/StandaloneSobelFilterDemo";
 import MPNeuron from "../modules/perceptrons/mpNeuron/MPNeuron";
@@ -80,7 +81,6 @@ function getStaticAxisChart(scheme: ColorScheme) {
     />
   );
 }
-
 function getSelectableAxisChart(comp: string, xIndx: number, yIndx: number, scheme: ColorScheme) {
   return (<SelectableAxisChart
     columnSet={(comp == "SelectableAxisChart") ? pcaConfig.columns : pcaConfig.pcaColumns}
@@ -110,7 +110,8 @@ function getDemo(comp: string, scheme: ColorScheme) {
     "KMeans": (<KMeans />),
     "MPNeuron": (<MPNeuron labelColor={demoArgs.labelColor} canAddInputs={true} /> ),
     "RblattVectorsDemo": (<RblattVectorsDemo labelColor={demoArgs.labelColor} />),
-    "RblattDemo": (<RosenBlattDemo {...demoArgs}/>)
+    "RblattDemo": (<RosenBlattDemo {...demoArgs}/>),
+    "ComputerVisionList": (<ComputerVisionList />)
   };
   if (comp in demoDictionary){
     return demoDictionary[comp];
@@ -159,11 +160,11 @@ const ModuleSection: React.FC<ModuleSectionType> = ({
   return (
     <div className={`flex flex-col w-screen ${scheme.bgColor}`}>
       <div className="mx-12 md:mx-40">
-        <p
-          className={`my-12 text-3xl md:text-6xl italic font-bold font-opensans ${scheme.titleColor}`}
-        >
-          {title}
-        </p>
+            <p
+              className={`my-12 text-3xl md:text-6xl italic font-bold font-opensans ${scheme.titleColor}`}
+            >
+              {title}
+            </p>
         <ul className="">
           {/* eslint-disable-next-line */}
           {sections.map((section, index) => (
@@ -210,8 +211,8 @@ const ModuleSection: React.FC<ModuleSectionType> = ({
             </div>
           ))}
         </ul>
-        {getDemo(demoComp, scheme)}
       </div>
+      {getDemo(demoComp, scheme)}
     </div>
   );
 };
