@@ -4,7 +4,7 @@
   "sections": [
     {
       "title": "",
-      "colorScheme": "dark",
+      "colorScheme": "light",
       "subsections": [],
       "demoComp": "ComputerVisionList"
     }
