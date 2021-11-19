@@ -1,6 +1,6 @@
 /* eslint-disable */
 import React from "react";
-import SobelFilterDemo from "../modules/computerVision/sobelFilter/SobelFilterDemo";
+import HistogramOfGradDemo from "modules/computerVision/histOfGrad/HistogramOfGradDemo";
 import GaussianBlurDemo from "../modules/computerVision/gaussianBlur/GaussianBlurDemo";
 import GaborDemo from "../modules/computerVision/gaborFilter/gaborFilter";
 import DiffOfGaussianDemo from "../modules/computerVision/diffofgaussian/DiffOfGaussian";
@@ -25,12 +25,13 @@ import combinedSobelKernelExampleLight from "../media/modules/computerVision/com
 import combinedSobelKernelExampleDark from "../media/modules/computerVision/combinedSobelKernelExampleDark.png";
 import vertSobelExampleLight from "../media/modules/computerVision/sobelKernels/vertical_lighttodark.png";
 import vertSobelExampleDark from "../media/modules/computerVision/sobelKernels/vertical_darktolight.png";
-import MPNeuronDemo from "../modules/perceptrons/mpNeuron/MPNeuronDemo";
-import MLPNeuronDemo from "../modules/perceptrons/mlpNeuron/MLPNeuronDemo";
+import MPNeuronDemo from "modules/perceptrons/mpNeuron/MPNeuronDemo";
+import MLPNeuronDemo from "modules/perceptrons/mlpNeuron/MLPNeuronDemo";
+import ComputerVisionList from "modules/computerVision/ComputerVisionList";
+import hogBoatExample from "../media/modules/computerVision/hogBoatExample.png";
+import { StandableSobelFilterDemo } from "modules/computerVision/sobelFilter/StandaloneSobelFilterDemo";
 import RblattVectorsDemo from '../modules/perceptrons/rblattVectors/RblattVectorsDemo';
-import RosenBlattDemo from "../modules/perceptrons/rosenblatt/RosenblattDemo"
-// import lightVertSobelExampleLight from '../media/modules/computerVision/vertSobelExampleLight.png';
-// import lightVertSobelExampleDark from '../media/modules/computerVision/vertSobelExampleDark.png';
+import RosenBlattDemo from "../modules/perceptrons/rosenblatt/RosenblattDemo";
 
 const lorem = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.';
 
@@ -57,6 +58,7 @@ const imageDictionary: {[key: string]: any} = {
   "sobelKernelDark": vertSobelExampleDark,
   "combinedSobelKernelLight": combinedSobelKernelExampleLight,
   "combinedSobelKernelDark": combinedSobelKernelExampleDark,
+  "hogBoatExample": hogBoatExample,
 }; 
 
 function GetImage(imgName: string) {
@@ -80,7 +82,6 @@ function getStaticAxisChart(scheme: ColorScheme) {
     />
   );
 }
-
 function getSelectableAxisChart(comp: string, xIndx: number, yIndx: number, scheme: ColorScheme) {
   return (<SelectableAxisChart
     columnSet={(comp == "SelectableAxisChart") ? pcaConfig.columns : pcaConfig.pcaColumns}
@@ -98,7 +99,8 @@ function getDemo(comp: string, scheme: ColorScheme) {
     "GaborDemo": getImageSelectableDemo(GaborDemo, "zebra.jpg", demoArgs ),
     "DiffOfGaussian": getImageSelectableDemo(DiffOfGaussianDemo, "tabbyCat.jpg", demoArgs),
     "HaarWaveletDemo": getImageSelectableDemo(HaarWaveletDemo, "bwWoman.jpg", demoArgs),
-    "SobelFilterDemo": getImageSelectableDemo(SobelFilterDemo, "stopSign.jpeg", demoArgs),
+    "SobelFilterDemo": getImageSelectableDemo(StandableSobelFilterDemo, "stopSign.jpeg", demoArgs),
+    "HistogramOfGradDemo": getImageSelectableDemo(HistogramOfGradDemo, "stopSign.jpeg", demoArgs),
     "PCADemo": (<PCADemo {...demoArgs} />),
     "RawDataTable": (<RawDataTable />),
     "StaticAxisChart": getStaticAxisChart(scheme),
@@ -110,7 +112,8 @@ function getDemo(comp: string, scheme: ColorScheme) {
     "MPNeuronDemo": (<MPNeuronDemo labelColor={demoArgs.labelColor} canAddInputs={true} /> ),
     "MLPNeuronDemo": (<MLPNeuronDemo labelColor={demoArgs.labelColor}/>),
     "RblattVectorsDemo": (<RblattVectorsDemo labelColor={demoArgs.labelColor} />),
-    "RblattDemo": (<RosenBlattDemo {...demoArgs}/>)
+    "RblattDemo": (<RosenBlattDemo {...demoArgs}/>),
+    "ComputerVisionList": (<ComputerVisionList />)
   };
   if (comp in demoDictionary){
     return demoDictionary[comp];
@@ -159,11 +162,11 @@ const ModuleSection: React.FC<ModuleSectionType> = ({
   return (
     <div className={`flex flex-col w-screen ${scheme.bgColor}`}>
       <div className="mx-12 md:mx-40">
-        <p
-          className={`my-12 text-3xl md:text-6xl italic font-bold font-opensans ${scheme.titleColor}`}
-        >
-          {title}
-        </p>
+            <p
+              className={`my-12 text-3xl md:text-6xl italic font-bold font-opensans ${scheme.titleColor}`}
+            >
+              {title}
+            </p>
         <ul className="">
           {/* eslint-disable-next-line */}
           {sections.map((section, index) => (
@@ -210,8 +213,8 @@ const ModuleSection: React.FC<ModuleSectionType> = ({
             </div>
           ))}
         </ul>
-        {getDemo(demoComp, scheme)}
       </div>
+      {getDemo(demoComp, scheme)}
     </div>
   );
 };

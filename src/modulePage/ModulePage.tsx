@@ -10,8 +10,8 @@ import cvIntroModule from '../media/modules/text/computer-vision-intro.json';
 import gaborModule from '../media/modules/text/gabor-filter.json';
 import gaussianModule from '../media/modules/text/gaussian-blur.json';
 import sobelModule from '../media/modules/text/sobel-filter.json';
+import hogModule from '../media/modules/text/histogram-of-gradients.json';
 import perceptronModule from '../media/modules/text/perceptrons.json';
-// import hogModule from '../media/modules/text/histogram-of-gradients.json';
 
 export interface ModuleSubsection {
   "title": string,
@@ -37,13 +37,15 @@ const modules: Record<moduleName, Module | null> = {
   'gaussian-blur': gaussianModule,
   'gabor-filter': gaborModule,
   'sobel-filter': sobelModule,
-  'histogram-of-gradients': null,
+  'histogram-of-gradients': hogModule,
   // eslint-disable-next-line
   'classification': module9,
   // eslint-disable-next-line
   'perceptrons': perceptronModule,
   'neural-nets': module11,
 };
+
+/* eslint-disable */
 
 /**
  * Renders the entire module page.
@@ -65,19 +67,23 @@ export default function ModulePage(
     );
   }
   return (
-      <div className="container w-screen">
-        <p className={`w-screen p-4 text-5xl font-bold font-opensans bg-modulePaleBlue text-moduleNavy`}>{curModule.title}</p>
-        <ul>
-          {
-            curModule.sections.map((section) =>
-                <ModuleSection title={section.title}
-                               sections={section.subsections}
-                               colorScheme={section.colorScheme}
-                               key={section.title}
-                               demoComp={section.demoComp}/>
-            )
-          }
-        </ul>
-      </div>
+    <div className="container w-screen">
+      <p className="w-screen p-4 text-5xl font-bold font-opensans bg-modulePaleBlue text-moduleNavy">
+        {curModule.title}
+      </p>
+      <ul>
+        {curModule.sections.map((section, index) =>
+          <div id={section.title.split(' ').join('-')}>
+            <ModuleSection
+              title={section.title}
+              sections={section.subsections}
+              colorScheme={section.colorScheme}
+              key={section.title}
+              demoComp={section.demoComp}
+            />
+          </div>,
+        )}
+      </ul>
+    </div>
   );
 }
