@@ -33,7 +33,7 @@
                 "imgSrc": "blank"
               }
             ],
-            "demoComp": "MPNeuron"
+            "demoComp": "MPNeuronDemo"
           },
           {
             "title": "The Perceptron Update Process",

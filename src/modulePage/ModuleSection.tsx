@@ -25,8 +25,8 @@ import combinedSobelKernelExampleLight from "../media/modules/computerVision/com
 import combinedSobelKernelExampleDark from "../media/modules/computerVision/combinedSobelKernelExampleDark.png";
 import vertSobelExampleLight from "../media/modules/computerVision/sobelKernels/vertical_lighttodark.png";
 import vertSobelExampleDark from "../media/modules/computerVision/sobelKernels/vertical_darktolight.png";
-import MPNeuron from "../modules/perceptrons/mpNeuron/MPNeuron";
-import MLPNeuron from "../modules/perceptrons/mlpNeuron/MLPNeuron";
+import MPNeuronDemo from "../modules/perceptrons/mpNeuron/MPNeuronDemo";
+import MLPNeuronDemo from "../modules/perceptrons/mlpNeuron/MLPNeuronDemo";
 import RblattVectorsDemo from '../modules/perceptrons/rblattVectors/RblattVectorsDemo';
 import RosenBlattDemo from "../modules/perceptrons/rosenblatt/RosenblattDemo"
 // import lightVertSobelExampleLight from '../media/modules/computerVision/vertSobelExampleLight.png';
@@ -107,8 +107,8 @@ function getDemo(comp: string, scheme: ColorScheme) {
     "InteractiveKMeans": (<div><InteractiveClusteringExample hidden={false} /></div>),
     "StepKMeans": (<div><KMeansStepExample hidden={false} /></div>),
     "KMeans": (<KMeans />),
-    "MPNeuron": (<MPNeuron labelColor={demoArgs.labelColor} canAddInputs={true} /> ),
-    "MLPNeuron": (<MLPNeuron labelColor={demoArgs.labelColor}/>),
+    "MPNeuronDemo": (<MPNeuronDemo labelColor={demoArgs.labelColor} canAddInputs={true} /> ),
+    "MLPNeuronDemo": (<MLPNeuronDemo labelColor={demoArgs.labelColor}/>),
     "RblattVectorsDemo": (<RblattVectorsDemo labelColor={demoArgs.labelColor} />),
     "RblattDemo": (<RosenBlattDemo {...demoArgs}/>)
   };

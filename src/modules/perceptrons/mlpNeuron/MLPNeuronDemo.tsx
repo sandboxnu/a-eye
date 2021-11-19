@@ -20,7 +20,7 @@ type NeuronLayer = {
   weights: number[];
   threshold: number;
   isGreater: boolean;
-  bias?: number;
+  bias: number;
 };
 
 const getOutputs = (nlayer) => nlayer.map(({ output }) => output);
@@ -51,7 +51,7 @@ const getOutput = (neuron) =>
     neuron.isGreater
   );
 
-const MLPNeuron = (props: { labelColor: string }) => {
+const MLPNeuronDemo = (props: { labelColor: string }) => {
   const [neuronState, setNeuronState] = useState(
     getInitialInputs(NUM_NEURONS_FIRST_LAYER)
   );
@@ -112,7 +112,7 @@ const MLPNeuron = (props: { labelColor: string }) => {
                 {...neuron}
                 key={`neuron-${layerNum}-${neuronNum}`}
                 labelColor={props.labelColor}
-                canAddInputs={false}
+                canAddInputs={layerNum==0}
                 hideInputs={layerNum !== 0}
                 setWeights={(we) => setAttr(layerNum, neuronNum, "weights", we)}
                 setThreshold={(th) =>
@@ -122,6 +122,8 @@ const MLPNeuron = (props: { labelColor: string }) => {
                   setAttr(layerNum, neuronNum, "isGreater", ig)
                 }
                 setInputs={(ip) => setAttr(layerNum, neuronNum, "inputs", ip)}
+                bias={neuronState[layerNum][neuronNum].bias}
+                setBias={(ib) => setAttr(layerNum, neuronNum, "bias", ib)}
               />
             ))}
           </div>
@@ -140,4 +142,4 @@ const MLPNeuron = (props: { labelColor: string }) => {
   );
 };
 
-export default MLPNeuron;
+export default MLPNeuronDemo;

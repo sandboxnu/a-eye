@@ -15,7 +15,7 @@ const calculateThreshold = (
   isGreater: boolean,
   threshold: number
 ) => {
-  console.log(n);
+
   if (isGreater) {
     return n > threshold ? 1 : 0;
   } else {

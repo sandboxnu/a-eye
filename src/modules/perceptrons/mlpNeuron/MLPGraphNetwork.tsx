@@ -70,6 +70,9 @@ const MLPGraphNetwork: React.FC<MLPGraphNetworkType> = ({
                 inputs={getInputs(layerNum, neuronNum, weights.length)}
                 weights={weights}
                 bias={bias}
+                setBias={(newBias: number) => 
+                  changeNeuronValue(layerNum, neuronNum, "bias", newBias)
+                }
                 isGreater={isGreater}
                 threshold={threshold}
                 output={getOutput(layerNum, neuronNum)}
