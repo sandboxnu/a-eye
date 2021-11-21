@@ -7,7 +7,8 @@ type InputLinesType = {
 };
 
 const InputLines: React.FC<InputLinesType> = ({ numInpts, transformY }) => {
-  const height = 56 * numInpts;
+  const inputHeight = 48;
+  const height = inputHeight * numInpts;
   const centerY = height / 2;
 
   return (
@@ -23,7 +24,7 @@ const InputLines: React.FC<InputLinesType> = ({ numInpts, transformY }) => {
           <line
             key={idx}
             x1="0"
-            y1={(transformY ? transformY : 1) * idx * 56 + 28}
+            y1={(transformY ? transformY : 1) * idx * inputHeight + inputHeight / 2}
             x2="125"
             y2={centerY}
             strokeWidth="4px"

@@ -12,10 +12,10 @@ type MPNeuronType = {
   connecting?: boolean;
   startThreshold?: number;
   startGreater?: boolean;
-  bias?: number;
+  initialBias?: number;
 };
 
-export const MPNeuron: React.FC<MPNeuronType> = ({
+export const MPNeuronDemo: React.FC<MPNeuronType> = ({
   labelColor,
   canAddInputs = true,
   input = [1, 1],
@@ -23,14 +23,15 @@ export const MPNeuron: React.FC<MPNeuronType> = ({
   startThreshold = 0,
   startGreater = true,
   connecting = false,
-  bias = INIT_CONFIG.bias,
+  initialBias,
 }) => {
   const [inputs, setInputs] = useState(input);
   const [weights, setWeights] = useState(weight);
   const [threshold, setThreshold] = useState(startThreshold);
   const [isGreater, setGreater] = useState(startGreater);
+  const [bias, setBias] = useState((initialBias?initialBias:INIT_CONFIG.bias));
 
-  const inputSum = calculateInputSum(inputs, weights, bias);
+  const inputSum = calculateInputSum(inputs, weights, undefined);
 
   return (
     <MPBasicNeuron
@@ -45,8 +46,11 @@ export const MPNeuron: React.FC<MPNeuronType> = ({
       isGreater={isGreater}
       setIsGreater={setGreater}
       output={calculateThreshold(inputSum, isGreater, threshold)}
+      bias={bias}
+      setBias={setBias}
+      renderLabels={true}
     />
   );
 };
 
-export default MPNeuron;
+export default MPNeuronDemo;

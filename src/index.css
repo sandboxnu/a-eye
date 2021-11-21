@@ -141,3 +141,7 @@ input[type="range"]:focus {
 .img-invert {
   filter: invert(1)
 }
+
+.mr-half {
+  margin-right: 0.125rem;
+}
