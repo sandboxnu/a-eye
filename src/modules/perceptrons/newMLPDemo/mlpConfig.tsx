@@ -1,19 +1,17 @@
 /* eslint-disable */
-import { max, exp } from "mathjs";
-
 export const activations = ['sigmoid', 'relu', 'none']
 export type ActivationType = 'sigmoid' | 'relu' | 'none';
 
-export function isActivation(value: string): value is ActivationType {    
+export function isActivation(value: string): value is ActivationType {
     return activations.indexOf(value) !== -1;
 }
 
 export let applyActivation = (val: number, activation: ActivationType): number => {
     switch (activation) {
         case 'sigmoid':
-            return (1.0) / (1.0 + exp(-1.0 * val))
+            return (1.0) / (1.0 + Math.exp(-1.0 * val))
         case 'relu':
-            return max(0.0, val)
+            return Math.max(0.0, val)
         case 'none':
             return val
     }
@@ -31,14 +29,14 @@ export type MLPConfig = {
     layers: HiddenLayerType[], // each hidden layer contains the weights going forward
 };
 
-export const changeInput = (mlpConfig : MLPConfig, newInput: number, idxToChange: number) : MLPConfig => {
+export const changeInput = (mlpConfig: MLPConfig, newInput: number, idxToChange: number): MLPConfig => {
     return {
         inputs: mlpConfig.inputs.map((value: number, mapIdx: number) => (mapIdx == idxToChange ? newInput : value)),
         layers: mlpConfig.layers,
     }
 }
 
-export const changeWeight = (mlpConfig : MLPConfig, newWeight: number, layerIdx: number, inputWeightIdx: number, outputWeightIdx: number) : MLPConfig => {
+export const changeWeight = (mlpConfig: MLPConfig, newWeight: number, layerIdx: number, inputWeightIdx: number, outputWeightIdx: number): MLPConfig => {
     const transformLayerWeight = (layer: HiddenLayerType): HiddenLayerType => {
         return {
             weights: layer.weights.map(
@@ -59,7 +57,7 @@ export const changeWeight = (mlpConfig : MLPConfig, newWeight: number, layerIdx:
     }
 }
 
-export const changeBias = (mlpConfig : MLPConfig, newBias: number, layerIdx: number, biasIdx: number) : MLPConfig => {
+export const changeBias = (mlpConfig: MLPConfig, newBias: number, layerIdx: number, biasIdx: number): MLPConfig => {
     const transformLayerBias = (layer: HiddenLayerType): HiddenLayerType => {
         return {
             biases: layer.biases.map((oldBias: number, mapIdx: number) => (mapIdx == biasIdx) ? newBias : oldBias),
@@ -77,7 +75,7 @@ export const changeBias = (mlpConfig : MLPConfig, newBias: number, layerIdx: num
     }
 }
 
-export const changeActivation = (mlpConfig : MLPConfig, newActivation: ActivationType, layerIdx: number) : MLPConfig => {
+export const changeActivation = (mlpConfig: MLPConfig, newActivation: ActivationType, layerIdx: number): MLPConfig => {
     return {
         inputs: mlpConfig.inputs,
         layers: mlpConfig.layers.map((layer: HiddenLayerType, mapIdx) => (mapIdx == layerIdx ?
@@ -91,7 +89,7 @@ export const changeActivation = (mlpConfig : MLPConfig, newActivation: Activatio
     }
 }
 
-export const addLayer = (mlpConfig : MLPConfig) : MLPConfig => {
+export const addLayer = (mlpConfig: MLPConfig): MLPConfig => {
     // add new layer at end; copy the last layer, and fill in the extra weights and biases needed to
     // complete the previous layer.
 
@@ -129,7 +127,7 @@ export const addLayer = (mlpConfig : MLPConfig) : MLPConfig => {
 
 }
 
-export const removeLayer = (mlpConfig : MLPConfig) : MLPConfig => {
+export const removeLayer = (mlpConfig: MLPConfig): MLPConfig => {
     if (mlpConfig.layers.length <= 1) return mlpConfig
 
     const oldPenultimatelayer = mlpConfig.layers[mlpConfig.layers.length - 2]
@@ -146,8 +144,8 @@ export const removeLayer = (mlpConfig : MLPConfig) : MLPConfig => {
     })
 }
 
-export const addNode = (mlpConfig : MLPConfig, layerIdx: number) : MLPConfig => {
-    if (layerIdx >= mlpConfig.layers.length-1 || layerIdx<0) return mlpConfig // last layer MUST have only one node.
+export const addNode = (mlpConfig: MLPConfig, layerIdx: number): MLPConfig => {
+    if (layerIdx >= mlpConfig.layers.length - 1 || layerIdx < 0) return mlpConfig // last layer MUST have only one node.
 
     // adds the weights to create this node from input layer
     const transformNodeLayer = (layer: HiddenLayerType): HiddenLayerType => {
@@ -166,8 +164,8 @@ export const addNode = (mlpConfig : MLPConfig, layerIdx: number) : MLPConfig => 
     // adds the weights to apply this node to the next layer
     const transformNextLayer = (layer: HiddenLayerType): HiddenLayerType => {
         const numOutputs = layer.weights[0].length
-        const newInputWeights : number[] = []
-        
+        const newInputWeights: number[] = []
+
         for (let i = 0; i < numOutputs; i++) {
             newInputWeights.push(0.0)
         }
@@ -195,8 +193,8 @@ export const addNode = (mlpConfig : MLPConfig, layerIdx: number) : MLPConfig => 
     }
 }
 
-export const removeNode = (mlpConfig : MLPConfig, layerIdx: number) : MLPConfig => {
-    if (layerIdx >= mlpConfig.layers.length-1 || layerIdx<0) return mlpConfig // last layer MUST have only one node.
+export const removeNode = (mlpConfig: MLPConfig, layerIdx: number): MLPConfig => {
+    if (layerIdx >= mlpConfig.layers.length - 1 || layerIdx < 0) return mlpConfig // last layer MUST have only one node.
     if (mlpConfig.layers[layerIdx].biases.length == 1) return mlpConfig// cannot remove last output in layer
 
     // adds the weights to create this node from input layer
@@ -277,7 +275,7 @@ export const calculateIntermediateValues = (mlpConfig: MLPConfig): number[][] =>
     return intermediateValues;
 }
 
-export const defaultMLPConfig : MLPConfig = {
+export const defaultMLPConfig: MLPConfig = {
     inputs: [1.0, 1.0],
     layers: [
         {

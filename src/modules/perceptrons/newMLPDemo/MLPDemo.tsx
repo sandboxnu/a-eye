@@ -1,9 +1,7 @@
 /* eslint-disable */
-import { InputSharp } from "@material-ui/icons";
-import { max, exp } from "mathjs";
-import { OldPlugin } from "postcss";
 import React, { useState, useEffect } from "react";
 import MLPDebug from "./debugDemo";
+import InteractiveMLP from "./InteractiveMLP";
 import { MLPConfig, applyActivation, ActivationType, changeInput, changeWeight, changeBias, changeActivation, addLayer, removeLayer, addNode, removeNode, isActivation, activations } from "./mlpConfig"
 
 
@@ -128,20 +126,30 @@ export const MLPDemo: React.FC<MLPDemoType> = ({
     }
 
     return (
-        <MLPDebug 
-            labelColor={labelColor}
-            mlpConfig={mlpConfig}
-            setMLPConfig={setMLPConfig}
-            intermediateValues={intermediateValues}
-            updateWeight={updateWeight}
-            updateBias={updateBias}
-            updateInput={updateInput}
-            updateAddLayer={updateAddLayer}
-            updateRemoveLayer={updateRemoveLayer}
-            updateActivation={updateActivation}
-            updateAddNode={updateAddNode}
-            updateRemoveNode={updateRemoveNode}
-        />
+        <div>
+            <InteractiveMLP
+                labelColor={labelColor}
+                mlpConfig={mlpConfig}
+                intermediateValues={intermediateValues}
+                setMLPConfig={setMLPConfig}
+                />
+
+            <MLPDebug
+                labelColor={labelColor}
+                mlpConfig={mlpConfig}
+                setMLPConfig={setMLPConfig}
+                intermediateValues={intermediateValues}
+                updateWeight={updateWeight}
+                updateBias={updateBias}
+                updateInput={updateInput}
+                updateAddLayer={updateAddLayer}
+                updateRemoveLayer={updateRemoveLayer}
+                updateActivation={updateActivation}
+                updateAddNode={updateAddNode}
+                updateRemoveNode={updateRemoveNode}
+            />
+        </div>
+
     )
 };
 
