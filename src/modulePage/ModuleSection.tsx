@@ -25,6 +25,7 @@ import combinedSobelKernelExampleLight from "../media/modules/computerVision/com
 import combinedSobelKernelExampleDark from "../media/modules/computerVision/combinedSobelKernelExampleDark.png";
 import vertSobelExampleLight from "../media/modules/computerVision/sobelKernels/vertical_lighttodark.png";
 import vertSobelExampleDark from "../media/modules/computerVision/sobelKernels/vertical_darktolight.png";
+import NewMLPDemo from "modules/perceptrons/newMLPDemo/MLPDemo";
 import MPNeuronDemo from "modules/perceptrons/mpNeuron/MPNeuronDemo";
 import MLPNeuronDemo from "modules/perceptrons/mlpNeuron/MLPNeuronDemo";
 import ComputerVisionList from "modules/computerVision/ComputerVisionList";
@@ -111,6 +112,7 @@ function getDemo(comp: string, scheme: ColorScheme) {
     "KMeans": (<KMeans />),
     "MPNeuronDemo": (<MPNeuronDemo labelColor={demoArgs.labelColor} canAddInputs={true} /> ),
     "MLPNeuronDemo": (<MLPNeuronDemo labelColor={demoArgs.labelColor}/>),
+    "MLPDemo": (<NewMLPDemo labelColor={demoArgs.labelColor}/>),
     "RblattVectorsDemo": (<RblattVectorsDemo labelColor={demoArgs.labelColor} />),
     "RblattDemo": (<RosenBlattDemo {...demoArgs}/>),
     "ComputerVisionList": (<ComputerVisionList />)
