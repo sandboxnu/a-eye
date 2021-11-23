@@ -1,7 +1,7 @@
 /* eslint-disable */
 import { InputSharp } from "@material-ui/icons";
 import { OldPlugin } from "postcss";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 
 type ActivationType = 'sigmoid' | 'relu' | 'none';
@@ -17,8 +17,41 @@ type MLPConfig = {
     layers: HiddenLayerType[], // each hidden layer contains the weights going forward
 };
 
-// TODO:
-// calculate intermediary values
+
+// calculates the values at each layer given the mlpConfig's inputs: first hidden layer at idx 0,
+// and so on.
+let calculateIntermediateValues = (mlpConfig: MLPConfig): number[][] => {
+    let intermediateValues: number[][] = []
+    
+    mlpConfig.layers.forEach((layer, i) => {
+        let prevLayer: number[] = []
+
+        if (i == 0) {
+            prevLayer = mlpConfig.inputs
+        } else {
+            prevLayer = intermediateValues[i-1]
+        }
+
+        let numOutputs = layer.biases.length
+        let numInputs = layer.weights.length
+
+        let layerOutputs: number[] = []
+
+        for (let outputIdx = 0; outputIdx < numOutputs; outputIdx++) {
+            let output = layer.biases[outputIdx]
+
+            for (let inputIdx = 0; inputIdx < numInputs; inputIdx++) {
+                output += layer.weights[inputIdx][outputIdx] * prevLayer[inputIdx]
+            }
+
+            layerOutputs.push(output)            
+        }
+
+        intermediateValues.push(layerOutputs)
+    })
+
+    return intermediateValues;
+}
 
 type MLPNeuronDemoType = {
     labelColor: string,
@@ -59,11 +92,13 @@ export const MLPNeuronDemo: React.FC<MLPNeuronDemoType> = ({
     }
 
 
-    // TODO:
-    // add new node
-    // remove node
-
     const [mlpConfig, setMLPConfig] = useState(initialMLPConfig);
+    const [intermediaryValues, setIntermediaryValues] = useState<number[][]>([])
+
+    useEffect(() => {
+        setIntermediaryValues(calculateIntermediateValues(mlpConfig))
+    }, [mlpConfig])
+
 
     const updateInput = (newInput: number, idxToChange: number) => {
         setMLPConfig({
@@ -73,7 +108,7 @@ export const MLPNeuronDemo: React.FC<MLPNeuronDemoType> = ({
     }
 
     const updateWeight = (newWeight: number, layerIdx: number, inputWeightIdx: number, outputWeightIdx: number) => {
-        const updateLayerWeight = (layer: HiddenLayerType) => {
+        const transformLayerWeight = (layer: HiddenLayerType):HiddenLayerType => {
             return {
                 weights: layer.weights.map(
                     (value: number[], mapIdx) => (mapIdx==inputWeightIdx? 
@@ -87,14 +122,14 @@ export const MLPNeuronDemo: React.FC<MLPNeuronDemoType> = ({
         setMLPConfig({
             inputs: mlpConfig.inputs,
             layers: mlpConfig.layers.map((oldLayer: HiddenLayerType, mapIdx) => (mapIdx == layerIdx?
-                updateLayerWeight(oldLayer)
+                transformLayerWeight(oldLayer)
                 : oldLayer)
             )
         })
     }
 
     const updateBias = (newBias: number, layerIdx: number, biasIdx: number) => {
-        const updateLayerBias = (layer: HiddenLayerType) => {
+        const transformLayerBias = (layer: HiddenLayerType) : HiddenLayerType => {
             return {
                 biases: layer.biases.map((oldBias: number, mapIdx: number) => (mapIdx == biasIdx)?newBias: oldBias),
                 weights: layer.weights,
@@ -105,7 +140,7 @@ export const MLPNeuronDemo: React.FC<MLPNeuronDemoType> = ({
         setMLPConfig({
             inputs: mlpConfig.inputs,
             layers: mlpConfig.layers.map((oldLayer: HiddenLayerType, mapIdx) => (mapIdx == layerIdx?
-                updateLayerBias(oldLayer)
+                transformLayerBias(oldLayer)
                 : oldLayer)
             )
         })
@@ -180,6 +215,86 @@ export const MLPNeuronDemo: React.FC<MLPNeuronDemoType> = ({
             inputs: mlpConfig.inputs,
             layers: mlpConfig.layers.slice(0, -2).concat([newFinalLayer]),
         })
+    }
+
+    const addNode = (layerIdx: number) => {
+        // adds the weights to create this node from input layer
+        const transformNodeLayer = (layer : HiddenLayerType): HiddenLayerType => {
+            const addNewOutput = (outputs : number[]) : number[] => {
+                return outputs.concat([0.0])
+            }
+
+            return {
+                weights: layer.weights.map(addNewOutput),
+                biases: layer.biases.concat([0.0]),
+                activation: layer.activation,
+            }
+        }
+
+
+        // adds the weights to apply this node to the next layer
+        const transformNextLayer = (layer : HiddenLayerType): HiddenLayerType => {
+            const numOutputs = layer.weights[0].length
+            const newInputWeights = Array(numOutputs).fill(0.0)
+
+            return {
+                weights: layer.weights.concat(newInputWeights),
+                biases: layer.biases,
+                activation: layer.activation,
+            }
+        }
+
+
+        return {
+            inputs: mlpConfig.inputs,
+            layers: mlpConfig.layers.map((layer, i) => {
+                if (i == layerIdx) {
+                    return transformNodeLayer(layer)
+                }
+                if (i == layerIdx + 1) {
+                    return transformNextLayer(layer)
+                }
+            })
+        }
+    }
+
+    const removeNode = (layerIdx: number) => {
+                // adds the weights to create this node from input layer
+                const transformNodeLayer = (layer : HiddenLayerType): HiddenLayerType => {
+                    const removeOutput = (outputs : number[]) : number[] => {
+                        return outputs.slice(0,-1) // cut off last value of node mapping for each input.
+                    }
+        
+                    return {
+                        weights: layer.weights.map(removeOutput),
+                        biases: layer.biases.slice(0,-1),
+                        activation: layer.activation,
+                    }
+                }
+        
+        
+                // adds the weights to apply this node to the next layer
+                const transformNextLayer = (layer : HiddenLayerType): HiddenLayerType => {
+        
+                    return {
+                        weights: layer.weights.slice(0,-1), // cut off last input->node mapping
+                        biases: layer.biases,
+                        activation: layer.activation,
+                    }
+                }
+        
+        
+                return {
+                    inputs: mlpConfig.inputs,
+                    layers: mlpConfig.layers.map((layer, i) => {
+                        if (i == layerIdx) {
+                            return transformNodeLayer(layer)
+                        }
+                        if (i == layerIdx + 1) {
+                            return transformNextLayer(layer)
+                        }
+                    })
+                }
     }
 
 
