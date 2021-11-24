@@ -56,7 +56,7 @@ export const MLPDebug: React.FC<MLPDebugType> = ({
                     </div>
                 </div>
 
-                {mlpConfig.layers.map((layer, i) => {
+                {mlpConfig.hiddenLayers.map((layer, i) => {
                     return (
                         <div className="flex flex-col mx-3" key={`layer-${i}`}>
                             <p>Layer {i}</p>
@@ -82,7 +82,7 @@ export const MLPDebug: React.FC<MLPDebugType> = ({
                 {intermediateValues.map((layerValues, i) => {
                     return (
                         <div className="flex flex-col mx-3" key={`layer-${i}`}>
-                            <p>{i ==mlpConfig.layers.length-1?"Output":`Post-Layer ${i}`}</p>
+                            <p>{i ==mlpConfig.hiddenLayers.length-1?"Output":`Post-Layer ${i}`}</p>
 
                             <div className="flex flex-row">
                                 {layerValues.map((bias, j) => <p className="mx-3" key={`layer-${i}-bias-${j}`}>{bias} </p>)}

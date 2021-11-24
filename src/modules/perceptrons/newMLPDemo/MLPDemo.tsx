@@ -10,7 +10,7 @@ import { MLPConfig, applyActivation, ActivationType, changeInput, changeWeight, 
 let calculateIntermediateValues = (mlpConfig: MLPConfig): number[][] => {
     let intermediateValues: number[][] = []
 
-    mlpConfig.layers.forEach((layer, i) => {
+    mlpConfig.hiddenLayers.forEach((layer, i) => {
         let prevLayer: number[] = []
 
         if (i == 0) {
@@ -44,7 +44,7 @@ let calculateIntermediateValues = (mlpConfig: MLPConfig): number[][] => {
 
 const defaultMLPConfig: MLPConfig = {
     inputs: [1.0, 1.0],
-    layers: [
+    hiddenLayers: [
         {
             weights: [
                 [1.0, 1.0, 1.0],
@@ -130,7 +130,6 @@ export const MLPDemo: React.FC<MLPDemoType> = ({
             <InteractiveMLP
                 labelColor={labelColor}
                 mlpConfig={mlpConfig}
-                intermediateValues={intermediateValues}
                 setMLPConfig={setMLPConfig}
                 />
 
