@@ -151,7 +151,7 @@ const ActivationFunctionSelector = ({ layerIdx, mlpConfig, setMLPConfig }) => {
 
 
 /*
-    This interactive demo has two rendering pipelines. First, a p5.js canvas is created. Here, all 'drawings' are created - the lines,
+    This interactive demo has two rendering pipelines. First, a p5.js canvas is created. Here, all of the static drawings are created - the lines,
     the hidden nodes, etc. Next, we calculate where all of the HTML on top of this p5js canvas needs to be rendered - things like the
     input to the weights, inputs, or biases. These are then rendered using 'relative' overtop the canvas.
 */
@@ -171,35 +171,33 @@ export const InteractiveMLP: React.FC<InterativeMLPType> = ({
     height = 1000,
 }) => {
 
-    const [redraw, setRedraw] = useState(() => () => { })
-    const [canvasElm, setCanvasElm] = useState<p5Types.Element>()
-    const [selectedNode, setSelectedNode] = useState<NodeIndex>()
-    const [mlpDOMPlacements, setMLPDOMPlacements] = useState<MLPDOMPlacements>()
+    // function which allows you to refresh the p5js canvas
+    const [redraw, setRedraw] = useState(() => () => { });
 
-    const divRef = React.createRef<HTMLDivElement>();
+    // if the user has selected a node by clicking it, it will be here
+    const [selectedNode, setSelectedNode] = useState<NodeIndex>();
 
+    // contains info about where to place inputs over the canvas; e.g., the
+    // positions of all of the weight inputs.
+    const [mlpDOMPlacements, setMLPDOMPlacements] = useState<MLPDOMPlacements>();
 
-
-
-    // -------------------- p5 functions --------------------
+    // p5js setup: initializes canvas
     const setup = (p5: p5Types, canvasParentRef: Element) => {
-        const elm = p5.createCanvas(width, height).parent(canvasParentRef);
+        p5.createCanvas(width, height).parent(canvasParentRef);
 
         // set up rendering options
         p5.textFont('menlo')
         p5.textAlign('center', 'center')
+
+        // keep redraw function to allow force re-draw on prop change
         setRedraw(() => () => {
             p5.redraw();
         })
-        setCanvasElm(elm)
     };
 
-
+    // p5js draw: renders the canvas & updates the mlpDOMPlacements
     const draw = (p5: p5Types) => {
-        if (!canvasElm) return;
-
-
-        p5.clear();
+        p5.clear(); // clear what was previously in the canvas (i.e. make canvas transparent)
 
         const config = {
             p5: p5,
@@ -210,15 +208,14 @@ export const InteractiveMLP: React.FC<InterativeMLPType> = ({
             selectedNode: selectedNode,
         };
 
-        drawMLP(config);
-        setMLPDOMPlacements(calculateMLPDOMPlacements(config));
+        drawMLP(config); // draw into the p5 canvas
+        setMLPDOMPlacements(calculateMLPDOMPlacements(config)); // update where inputs/buttons are placed over the canvas
 
-        p5.noLoop();
+        p5.noLoop(); // only execute once instead of looping
     };
 
+    // p5js mouseClicked: called when the user clicks on the canvas; updates selected node
     const mouseClicked = (p5: p5Types) => {
-        if (!canvasElm) return;
-
         const config = {
             p5: p5,
             mlpConfig: mlpConfig,
@@ -231,7 +228,7 @@ export const InteractiveMLP: React.FC<InterativeMLPType> = ({
         const clicked = nodeAtPosn(config, {
             x: p5.mouseX,
             y: p5.mouseY,
-        })
+        }) // clicked: undefined if the user did not click on a node, otherwise returns the selected node.
 
         // only update if clicked caused an update
         if (clicked || (!clicked && selectedNode)) {
@@ -240,7 +237,7 @@ export const InteractiveMLP: React.FC<InterativeMLPType> = ({
 
     };
 
-    // if anything changes, force a refresh
+    // if anything changes, force p5js to draw the canvas again.
     useEffect(() => {
         redraw();
     }, [mlpConfig, width, height, selectedNode])
@@ -248,7 +245,7 @@ export const InteractiveMLP: React.FC<InterativeMLPType> = ({
     return (
         <div>
             {
-                mlpDOMPlacements &&
+                mlpDOMPlacements && // draw inputs/buttons/etc. at their appropriate locations according to mlpDOMPlacements
 
                 <div className="w-0 h-0">
 
@@ -376,6 +373,7 @@ export const InteractiveMLP: React.FC<InterativeMLPType> = ({
                 </div>
             }
 
+            {/* p5.js canvas */}
             <Sketch setup={setup} draw={draw} mouseClicked={mouseClicked} />
         </div >
     );
