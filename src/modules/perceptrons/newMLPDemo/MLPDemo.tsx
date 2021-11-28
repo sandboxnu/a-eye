@@ -87,8 +87,6 @@ export const MLPDemo: React.FC<MLPDemoType> = ({
     const [intermediateValues, setIntermediateValues] = useState<number[][]>([])
 
     useEffect(() => {
-        console.log(mlpConfig)
-
         setIntermediateValues(calculateIntermediateValues(mlpConfig))
     }, [mlpConfig])
 

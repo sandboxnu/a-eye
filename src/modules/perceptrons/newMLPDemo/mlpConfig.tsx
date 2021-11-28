@@ -275,6 +275,67 @@ export const calculateIntermediateValues = (mlpConfig: MLPConfig): number[][] =>
     return intermediateValues;
 }
 
+export const addInput = (mlpConfig: MLPConfig): MLPConfig => {
+
+
+
+    // adds the weights to apply this node to the next layer
+    const transformFirstLayer = (layer: HiddenLayerType): HiddenLayerType => {
+        const numOutputs = layer.weights[0].length
+        const newInputWeights: number[] = []
+
+        for (let i = 0; i < numOutputs; i++) {
+            newInputWeights.push(0.0)
+        }
+
+        return {
+            weights: layer.weights.concat([newInputWeights]),
+            biases: layer.biases,
+            activation: layer.activation,
+        }
+    }
+
+
+    return {
+        inputs: mlpConfig.inputs.concat([0.0]),
+        hiddenLayers: mlpConfig.hiddenLayers.map((layer, i) => {
+            if (i == 0) {
+                return transformFirstLayer(layer)
+            }
+
+            return layer;
+        })
+    }
+}
+
+
+export const removeInput = (mlpConfig: MLPConfig): MLPConfig => {
+
+    if (mlpConfig.inputs.length == 1) return mlpConfig;
+
+    // adds the weights to apply this node to the next layer
+    const transformFirstLayer = (layer: HiddenLayerType): HiddenLayerType => {
+
+        return {
+            weights: layer.weights.slice(0, -1), // cut off last input->node mapping
+            biases: layer.biases,
+            activation: layer.activation,
+        }
+    }
+
+
+    return {
+        inputs: mlpConfig.inputs.slice(0,-1),
+        hiddenLayers: mlpConfig.hiddenLayers.map((layer, i) => {
+            if (i == 0) {
+                return transformFirstLayer(layer)
+            }
+
+            return layer;
+        })
+    }
+}
+
 export const defaultMLPConfig: MLPConfig = {
     inputs: [1.0, 1.0],
     hiddenLayers: [
