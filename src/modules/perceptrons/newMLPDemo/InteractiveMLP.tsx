@@ -316,7 +316,7 @@ export const InteractiveMLP: React.FC<InterativeMLPType> = ({
                                 top: placement.posn.y
                             }}
                                 className="h-0"
-                                key={`add-remove-node-${placement.hiddenLayerIdx}`}
+                                key={`activation-${placement.hiddenLayerIdx}`}
                             >
                                 <ActivationFunctionSelector
                                     layerIdx={placement.hiddenLayerIdx}

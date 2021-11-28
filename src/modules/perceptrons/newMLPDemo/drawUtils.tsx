@@ -154,12 +154,6 @@ export const drawMLP = (config: DrawConfig) => {
 }
 
 export const calculateMLPDOMPlacements = (config: DrawConfig): MLPDOMPlacements => {
-    const inputNodePlacements = calculateInputNodePlacements(config);
-    const layerPosn = calculateAddRemoveLayerPosn(config);
-    const addRemoveNodePlacements = calculateAddRemoveNodePlacements(config);
-    const inputPosn = calculateAddRemoveInputPosn(config);
-    const activationPlacements = calculateActivationPlacements(config);
-
     return {
         weightInputs: calculateWeightInputPlacements(config),
         biasInputs: calculateBiasPlacements(config),
@@ -461,7 +455,6 @@ const calculateWeightInputPlacement = (config: DrawConfig, layer: number, inNode
     const inNodePosn = calcNodePosn(config, layer, inNodeIdx);
     const outNodePlusPosn = calcPlusPosn(config, (layer + 1), outNodeIdx);
 
-
     const lineEnds = weightLineEndPositions(config, inNodePosn, outNodePlusPosn);
 
     const inputPosnCenter = followDownLine(lineEnds.start, lineEnds.end, weightInputLocationOnLine);
@@ -491,28 +484,6 @@ const weightLineEndPositions = (config: DrawConfig, inNodePosn: Position, outNod
         }
     }
 }
-
-
-// ok so, you can't actually render DOM elements in a canvas. So, incorporate things like
-// HTML inputs for the weights and biases, we do this in a kind of hacky way. There is a
-// div of 0 height and width directly above the canvas, which has an id, accessible at
-// "config.parentDivID". Using relative positioning, we can place DOM elements above the
-// canvas at any position; so, here, we create a container div with the desired position,
-// then 'render' the JSX within that div 
-const placeJSXElm = (config: DrawConfig, elt: JSX.Element, posn: Position) => {
-    const div = config.p5.createDiv();
-
-    //div.parent(config.parentDivID)
-    div.class('w-0').class('h-0');
-    div.style('position', 'relative');
-    div.style('left', posn.x.toString() + "px");
-    div.style('top', posn.y.toString() + "px");
-
-    ReactDOM.render(elt, div.elt);
-
-    //config.canvasEltDivRef.current?.appendChild(div.elt);
-}
-
 
 const calcLayerWidth = (config: DrawConfig): number => {
     const numLayers = config.mlpConfig.hiddenLayers.length + 1; // extra layer for inputs
