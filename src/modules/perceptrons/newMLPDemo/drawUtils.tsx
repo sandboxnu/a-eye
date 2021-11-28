@@ -98,33 +98,78 @@ export type NodeIndex = {
 
 export type DrawConfig = {
     p5: p5Types,
-    canvas: p5Types.Element,
-    canvasEltDivRef: React.RefObject<HTMLDivElement>, // ref to a div directly above canvas; place DOM elements here
     mlpConfig: MLPConfig,
     intermediateValues: number[][],
     canvasWidth: number,
     canvasHeight: number,
     selectedNode: undefined | NodeIndex,
-    inputs: {
-        biasInput: (hiddenLayerIdx: number, nodeIdx: number) => JSX.Element,
-        inputNode: (inputIdx: number) => JSX.Element,
-        weightInput: (layer: number, inNodeIdx: number, outNodeIdx: number) => JSX.Element,
-        addRemoveLayerButtons: () => JSX.Element,
-        addRemoveNodeButtons: (hiddenLayerIdx: number) => JSX.Element,
-        addRemoveInputButtons: () => JSX.Element,
-        activationFunctionSelector: (layerIdx: number) => JSX.Element,
-    },
+};
+
+// these classes specify where HTML should be rendered over the canvas.
+
+export type WeightPlacement = {
+    posn: Position,
+    layer: number,
+    inNodeIdx: number,
+    outNodeIdx: number
 }
+
+export type BiasPlacement = {
+    posn: Position,
+    hiddenLayerIdx: number,
+    nodeIdx: number,
+}
+
+export type ActivationPlacement = {
+    posn: Position,
+    hiddenLayerIdx: number,
+}
+
+export type InputNodePlacement = {
+    posn: Position,
+    inputIdx: number,
+}
+
+export type AddRemoveNodePlacement = {
+    posn: Position,
+    hiddenLayerIdx: number,
+}
+
+export type MLPDOMPlacements = {
+    weightInputs: WeightPlacement[],
+    biasInputs: BiasPlacement[],
+    activationInputs: ActivationPlacement[],
+    inputNodes: InputNodePlacement[],
+    addRemoveNode: AddRemoveNodePlacement[],
+    addRemoveLayer: Position,
+    addRemoveInput: Position,
+}
+
 
 export const drawMLP = (config: DrawConfig) => {
     drawWeightLines(config);
-    drawInputNodes(config);
     drawHiddenLayerNodes(config);
-    drawAddRemoveLayerButtons(config);
-    drawAddRemoveNodeButtons(config);
-    drawAddRemoveInputButtons(config);
-    drawActivationFunctionSelectors(config);
+    /*
+    */
+}
 
+export const calculateMLPDOMPlacements = (config: DrawConfig): MLPDOMPlacements => {
+    const inputNodePlacements = calculateInputNodePlacements(config);
+    const layerPosn = calculateAddRemoveLayerPosn(config);
+    const addRemoveNodePlacements = calculateAddRemoveNodePlacements(config);
+    const inputPosn = calculateAddRemoveInputPosn(config);
+    const activationPlacements = calculateActivationPlacements(config);
+
+    return {
+        weightInputs: calculateWeightInputPlacements(config),
+        biasInputs: calculateBiasPlacements(config),
+        activationInputs: calculateActivationPlacements(config),
+        inputNodes: calculateInputNodePlacements(config),
+        addRemoveNode: calculateAddRemoveNodePlacements(config),
+        addRemoveLayer: calculateAddRemoveLayerPosn(config),
+        addRemoveInput: calculateAddRemoveInputPosn(config),
+
+    }
 }
 
 const drawHiddenLayerNodes = (config: DrawConfig) => {
@@ -136,41 +181,80 @@ const drawHiddenLayerNodes = (config: DrawConfig) => {
 
         for (let nodeIdx = 0; nodeIdx < numNodes; nodeIdx++) {
             drawHiddenLayerNode(config, hiddenLayerIdx, nodeIdx);
-            drawBiasInputForNode(config, hiddenLayerIdx, nodeIdx)
         }
 
     }
 
 }
 
-const drawInputNodes = (config: DrawConfig) => {
-    const numInputs = config.mlpConfig.inputs.length;
+const calculateBiasPlacements = (config: DrawConfig) => {
+    const numHiddenLayers = config.mlpConfig.hiddenLayers.length;
 
-    for (let inputIdx = 0; inputIdx < numInputs; inputIdx++) {
-        drawInputNode(config, inputIdx);
+    const placements: BiasPlacement[] = []
+    for (let hiddenLayerIdx = 0; hiddenLayerIdx < numHiddenLayers; hiddenLayerIdx++) {
+        const layer = config.mlpConfig.hiddenLayers[hiddenLayerIdx];
+        const numNodes = layer.biases.length;
+
+        for (let nodeIdx = 0; nodeIdx < numNodes; nodeIdx++) {
+            placements.push(calculateBiasPlacement(config, hiddenLayerIdx, nodeIdx))
+        }
+
     }
 
+    return placements;
 }
 
-const drawWeightLines = (config: DrawConfig) => {
+const calculateInputNodePlacements = (config: DrawConfig): InputNodePlacement[]=> {
+    const numInputs = config.mlpConfig.inputs.length;
+
+    let placements: InputNodePlacement[] = []
+    for (let inputIdx = 0; inputIdx < numInputs; inputIdx++) {
+        placements.push(calculateInputNodePlacement(config, inputIdx));
+    }
+
+    return placements;
+}
+
+const drawWeightLines = (config: DrawConfig): WeightPlacement[] => {
     const numLayers = config.mlpConfig.hiddenLayers.length + 1;
 
+    let placements: WeightPlacement[] = []
     for (let layer = 0; layer < numLayers - 1; layer++) {
         const nodesInInputLayer = calcNumNodesInLayer(config, layer);
         const nodesInOutputLayer = calcNumNodesInLayer(config, layer + 1);
 
         for (let inNode = 0; inNode < nodesInInputLayer; inNode++) {
             for (let outNode = 0; outNode < nodesInOutputLayer; outNode++) {
-                drawWeightLine(config, layer, inNode, outNode)
+                drawWeightLine(config, layer, inNode, outNode);
             }
         }
 
     }
+
+    return placements
 }
 
-const drawAddRemoveLayerButtons = (config: DrawConfig) => {
-    const btns = config.inputs.addRemoveLayerButtons();
 
+const calculateWeightInputPlacements = (config: DrawConfig): WeightPlacement[] => {
+    const numLayers = config.mlpConfig.hiddenLayers.length + 1;
+
+    let placements: WeightPlacement[] = []
+    for (let layer = 0; layer < numLayers - 1; layer++) {
+        const nodesInInputLayer = calcNumNodesInLayer(config, layer);
+        const nodesInOutputLayer = calcNumNodesInLayer(config, layer + 1);
+
+        for (let inNode = 0; inNode < nodesInInputLayer; inNode++) {
+            for (let outNode = 0; outNode < nodesInOutputLayer; outNode++) {
+                placements.push(calculateWeightInputPlacement(config, layer, inNode, outNode));
+            }
+        }
+
+    }
+
+    return placements
+}
+
+const calculateAddRemoveLayerPosn = (config: DrawConfig): Position => {
     const lastHiddenLayerIdx = config.mlpConfig.hiddenLayers.length - 1;
     const lastLayer = config.mlpConfig.hiddenLayers[lastHiddenLayerIdx];
 
@@ -179,80 +263,89 @@ const drawAddRemoveLayerButtons = (config: DrawConfig) => {
 
     const bottomRightmostNodePosn = calcNodePosn(config, layer, lastNodeIdx);
 
-    placeJSXElm(config, btns, {
+    return {
         x: bottomRightmostNodePosn.x - 100,
         y: bottomRightmostNodePosn.y + 20,
-    })
-}
-
-const drawAddRemoveNodeButtons = (config: DrawConfig) => {
-
-    const numLayers = config.mlpConfig.hiddenLayers.length;
-
-    // loop to numLayers -1 bc output layer cannot have nodes added to
-    for (let hiddenLayerIdx = 0; hiddenLayerIdx < numLayers - 1; hiddenLayerIdx++) {
-
-        const hiddenLayer = config.mlpConfig.hiddenLayers[hiddenLayerIdx];
-
-        const lastNodeIdx = hiddenLayer.biases.length - 1;
-        const layer = hiddenLayerIdx + 1;
-
-        const bottommostNodePosn = calcNodePosn(config, layer, lastNodeIdx);
-
-        const btns = config.inputs.addRemoveNodeButtons(hiddenLayerIdx);
-
-
-        placeJSXElm(config, btns, {
-            x: bottommostNodePosn.x - 60,
-            y: bottommostNodePosn.y + 30,
-        });
     }
 }
 
-const drawAddRemoveInputButtons = (config: DrawConfig) => {
+const calculateAddRemoveNodePlacements = (config: DrawConfig) => {
 
-    const btns = config.inputs.addRemoveInputButtons();
+    const numLayers = config.mlpConfig.hiddenLayers.length;
 
+    let placements: AddRemoveNodePlacement[] = []
+    // loop to numLayers -1 bc output layer cannot have nodes added to
+    for (let hiddenLayerIdx = 0; hiddenLayerIdx < numLayers - 1; hiddenLayerIdx++) {
+        placements.push(calculateAddRemoveNodePlacement(config, hiddenLayerIdx))
+    }
+    return placements;
+}
+
+const calculateAddRemoveNodePlacement = (config: DrawConfig, hiddenLayerIdx: number): AddRemoveNodePlacement => {
+    const hiddenLayer = config.mlpConfig.hiddenLayers[hiddenLayerIdx];
+
+    const lastNodeIdx = hiddenLayer.biases.length - 1;
+    const layer = hiddenLayerIdx + 1;
+
+    const bottommostNodePosn = calcNodePosn(config, layer, lastNodeIdx);
+
+
+    return {
+        posn: {
+            x: bottommostNodePosn.x - 60,
+            y: bottommostNodePosn.y + 30,
+        },
+        hiddenLayerIdx: hiddenLayerIdx
+    };
+}
+
+const calculateAddRemoveInputPosn = (config: DrawConfig): Position => {
     const lastNodeIdx = config.mlpConfig.inputs.length - 1;
     const layer = 0;
 
     const bottomRightmostNodePosn = calcNodePosn(config, layer, lastNodeIdx);
 
-    placeJSXElm(config, btns, {
+    return {
         x: bottomRightmostNodePosn.x - 36,
         y: bottomRightmostNodePosn.y + 30,
-    })
-}
-
-const drawActivationFunctionSelectors = (config: DrawConfig) => {
-
-    const numLayers = config.mlpConfig.hiddenLayers.length;
-
-    // loop to numLayers -1 bc output layer cannot have nodes added to
-    for (let hiddenLayerIdx = 0; hiddenLayerIdx < numLayers; hiddenLayerIdx++) {
-        const hiddenLayer = config.mlpConfig.hiddenLayers[hiddenLayerIdx];
-        const layer = hiddenLayerIdx + 1;
-
-        const topNodePosn = calcNodePosn(config, layer, 0);
-
-        const btns = config.inputs.activationFunctionSelector(hiddenLayerIdx);
-
-
-        placeJSXElm(config, btns, {
-            x: topNodePosn.x - 83,
-            y: topNodePosn.y - 60,
-        });
     }
 }
 
-const drawInputNode = (config: DrawConfig, inputIdx: number) => {
-    const inputJSX = config.inputs.inputNode(inputIdx);
+const calculateActivationPlacements = (config: DrawConfig): ActivationPlacement[] => {
+
+    const numLayers = config.mlpConfig.hiddenLayers.length;
+
+    let placements: ActivationPlacement[] = []
+    // loop to numLayers -1 bc output layer cannot have nodes added to
+    for (let hiddenLayerIdx = 0; hiddenLayerIdx < numLayers; hiddenLayerIdx++) {
+        placements.push(calculateActivationPlacement(config, hiddenLayerIdx));
+    }
+
+    return placements;
+}
+
+const calculateActivationPlacement = (config: DrawConfig, hiddenLayerIdx: number): ActivationPlacement => {
+    const layer = hiddenLayerIdx + 1;
+    const topNodePosn = calcNodePosn(config, layer, 0);
+    return {
+        posn: {
+            x: topNodePosn.x - 83,
+            y: topNodePosn.y - 60,
+        },
+        hiddenLayerIdx: hiddenLayerIdx,
+    };
+
+}
+const calculateInputNodePlacement = (config: DrawConfig, inputIdx: number): InputNodePlacement => {
     const nodePosn = calcNodePosn(config, 0, inputIdx);
 
-    placeJSXElm(config, inputJSX, {
-        x: nodePosn.x - nodeSize / 2,
-        y: nodePosn.y - nodeSize / 2
-    })
+    return {
+        posn: {
+            x: nodePosn.x - nodeSize / 2,
+            y: nodePosn.y - nodeSize / 2,
+        },
+        inputIdx: inputIdx,
+    }
 
 }
 
@@ -279,25 +372,25 @@ const drawHiddenLayerNodeAtPosn = (config: DrawConfig, hiddenLayerIdx: number, n
     setFillColor(config, black)
     config.p5.strokeWeight(0)
     config.p5.text(val.toFixed(1).toString(), posn.x, posn.y)
+
+    drawBiasPlus(config, hiddenLayerIdx, nodeIdx, posn);
+    
 }
 
-const drawBiasInputForNode = (config: DrawConfig, hiddenLayerIdx: number, nodeIdx: number) => {
+const calculateBiasPlacement = (config: DrawConfig, hiddenLayerIdx: number, nodeIdx: number) => {
     const nodePosn = calcNodePosn(config, hiddenLayerIdx + 1, nodeIdx)
 
-    return drawBiasInputAtPosn(config, hiddenLayerIdx, nodeIdx, {
-        x: nodePosn.x,
-        y: nodePosn.y
-    })
+    return {
+        hiddenLayerIdx: hiddenLayerIdx,
+        nodeIdx: nodeIdx,
+        posn: {
+            x: nodePosn.x - 92,
+            y: nodePosn.y - 16
+        }
+    }
 }
 
-const drawBiasInputAtPosn = (config: DrawConfig, hiddenLayerIdx: number, nodeIdx: number, posn: Position) => {
-    const inp = config.inputs.biasInput(hiddenLayerIdx, nodeIdx);
-
-    placeJSXElm(config, inp, {
-        x: posn.x - 92,
-        y: posn.y - 16
-    });
-
+const drawBiasPlus = (config: DrawConfig, hiddenLayerIdx: number, nodeIdx: number, posn: Position) => {
     const plusPosn = calcPlusPosnFromNodePosn(posn);
     drawPlus(config, plusSize, {
         x: plusPosn.x,
@@ -341,15 +434,11 @@ const drawWeightLine = (config: DrawConfig, layer: number, inNodeIdx: number, ou
     const inNodePosn = calcNodePosn(config, layer, inNodeIdx);
     const outNodePlusPosn = calcPlusPosn(config, (layer + 1), outNodeIdx);
 
-    const lineStart: Position = {
-        x: inNodePosn.x + nodeSize / 2,
-        y: inNodePosn.y,
-    };
+    const lineEnds = weightLineEndPositions(config, inNodePosn, outNodePlusPosn);
 
-    const lineEnd: Position = {
-        x: outNodePlusPosn.x - plusSize / 2 - 5,
-        y: outNodePlusPosn.y
-    };
+    const lineStart: Position = lineEnds.start;
+
+    const lineEnd: Position = lineEnds.end;
 
     if (shouldDrawMulticolorLines) {
         setStrokeColor(config, nodeIdxToColor[inNodeIdx])
@@ -366,20 +455,42 @@ const drawWeightLine = (config: DrawConfig, layer: number, inNodeIdx: number, ou
     if (shouldDrawMult) {
         drawMult(config, 16, followDownLine(lineStart, lineEnd, multLocationOnLine));
     }
-
-    drawWeightInput(config, layer, inNodeIdx, outNodeIdx, followDownLine(lineStart, lineEnd, weightInputLocationOnLine));
 }
 
-const drawWeightInput = (config: DrawConfig, layer: number, inNodeIdx: number, outNodeIdx: number, posn: Position) => {
-    const inp = config.inputs.weightInput(layer, inNodeIdx, outNodeIdx);
+const calculateWeightInputPlacement = (config: DrawConfig, layer: number, inNodeIdx: number, outNodeIdx: number): WeightPlacement => {
+    const inNodePosn = calcNodePosn(config, layer, inNodeIdx);
+    const outNodePlusPosn = calcPlusPosn(config, (layer + 1), outNodeIdx);
 
-    placeJSXElm(config, inp, {
-        x: posn.x - 20,
-        y: posn.y - 16
-    });
 
+    const lineEnds = weightLineEndPositions(config, inNodePosn, outNodePlusPosn);
+
+    const inputPosnCenter = followDownLine(lineEnds.start, lineEnds.end, weightInputLocationOnLine);
+
+
+    return {
+        posn: {
+            x: inputPosnCenter.x - 20,
+            y: inputPosnCenter.y - 16
+        },
+        layer: layer,
+        inNodeIdx: inNodeIdx,
+        outNodeIdx: outNodeIdx,
+    }
 }
 
+const weightLineEndPositions = (config: DrawConfig, inNodePosn: Position, outNodePlusPosn: Position): { start: Position, end: Position } => {
+
+    return {
+        start: {
+            x: inNodePosn.x + nodeSize / 2,
+            y: inNodePosn.y,
+        },
+        end: {
+            x: outNodePlusPosn.x - plusSize / 2 - 5,
+            y: outNodePlusPosn.y
+        }
+    }
+}
 
 
 // ok so, you can't actually render DOM elements in a canvas. So, incorporate things like
@@ -399,7 +510,7 @@ const placeJSXElm = (config: DrawConfig, elt: JSX.Element, posn: Position) => {
 
     ReactDOM.render(elt, div.elt);
 
-    config.canvasEltDivRef.current?.appendChild(div.elt);
+    //config.canvasEltDivRef.current?.appendChild(div.elt);
 }
 
 

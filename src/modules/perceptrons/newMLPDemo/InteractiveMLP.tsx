@@ -3,18 +3,164 @@ import { activations, ActivationType, addInput, addLayer, addNode, calculateInte
 import React, { useState, useEffect } from "react";
 import Sketch from "react-p5";
 import p5Types from "p5";
-import { DrawConfig, drawMLP, nodeAtPosn, NodeIndex } from "./drawUtils";
+import { calculateMLPDOMPlacements, DrawConfig, drawMLP, MLPDOMPlacements, nodeAtPosn, NodeIndex } from "./drawUtils";
 import { AddCircle, RemoveCircle } from "@material-ui/icons";
 
 
+const WeightInput = ({ layer, inNodeIdx, outNodeIdx, mlpConfig, setMLPConfig }) => {
+    return (
+        <div>
+            <input
+                className="number-input w-16  border-2 border-teal-700 hide-number-spinners"
+                type="number"
+                step="any"
+                value={mlpConfig.hiddenLayers?.[layer]?.weights?.[inNodeIdx]?.[outNodeIdx]}
+                onChange={(e) => {
+                    const val = parseFloat(e.target.value);
 
+                    if (!val) return
+
+                    setMLPConfig(changeWeight(mlpConfig, val, layer, inNodeIdx, outNodeIdx))
+                }}
+            />
+        </div>
+    )
+}
+
+const BiasInput = ({ layerIdx, nodeIdx, mlpConfig, setMLPConfig }) => {
+    return (
+        <div>
+            <input
+                className="number-input w-16  border-2 border-teal-700"
+                type="number"
+                value={mlpConfig.hiddenLayers?.[layerIdx]?.biases?.[nodeIdx]}
+                onChange={(e) => {
+                    let val = parseFloat(e.target.value);
+
+                    if (e.target.value === "") {
+                        val = 0.0
+                    }
+                    if (!val) return
+
+                    setMLPConfig(changeBias(mlpConfig, val, layerIdx, nodeIdx))
+                }}
+            />
+        </div>
+    )
+}
+
+
+const InputNode = ({ inputIdx, mlpConfig, setMLPConfig }) => {
+    return (
+        <div>
+            <input
+                className="rounded-full w-12 h-12 px-2 border-2 border-teal-700"
+                type="number"
+                value={mlpConfig.inputs?.[inputIdx]}
+                onChange={(e) => {
+                    const val = parseFloat(e.target.value);
+
+                    if (!val) return
+
+                    setMLPConfig(changeInput(mlpConfig, val, inputIdx))
+                }}
+            />
+        </div>
+    )
+}
+
+
+
+const AddRemoveLayerButtons = ({ labelColor, mlpConfig, setMLPConfig }) => {
+    return (
+        <div className="flex flex-row items-center">
+            <RemoveCircle
+                className="icon-button"
+                fontSize="large"
+                onClick={() => setMLPConfig(removeLayer(mlpConfig))}
+            />
+            <p className={`w-30 m-2 ${labelColor}`}>{mlpConfig.hiddenLayers.length} layer(s)</p>
+            <AddCircle
+                className="icon-button"
+                fontSize="large"
+                onClick={() => setMLPConfig(addLayer(mlpConfig))}
+            />
+        </div>
+
+    )
+}
+
+
+const AddRemoveNodeButtons = ({ hiddenLayerIdx, mlpConfig, setMLPConfig }) => {
+    return (
+        <div className="flex flex-row items-center">
+            <RemoveCircle
+                className="icon-button"
+                fontSize="large"
+                onClick={() => setMLPConfig(removeNode(mlpConfig, hiddenLayerIdx))}
+            />
+            <AddCircle
+                className="icon-button"
+                fontSize="large"
+                onClick={() => setMLPConfig(addNode(mlpConfig, hiddenLayerIdx))}
+            />
+        </div>
+
+    )
+}
+
+const AddRemoveInputButtons = ({ mlpConfig, setMLPConfig }) => {
+    return (
+        <div className="flex flex-row items-center">
+            <RemoveCircle
+                className="icon-button"
+                fontSize="large"
+                onClick={() => setMLPConfig(removeInput(mlpConfig))}
+            />
+            <AddCircle
+                className="icon-button"
+                fontSize="large"
+                onClick={() => setMLPConfig(addInput(mlpConfig))}
+            />
+        </div>
+
+    )
+}
+
+const ActivationFunctionSelector = ({ layerIdx, mlpConfig, setMLPConfig }) => {
+    const currActivation = mlpConfig.hiddenLayers?.[layerIdx]?.activation;
+    return (
+        <div className="">
+            <select value={currActivation} onChange={(e) => {
+                const selected = e.target.value;
+
+                if (isActivation(selected)) {
+                    setMLPConfig(changeActivation(mlpConfig, selected, layerIdx));
+                }
+            }} >
+                {
+                    activations.map((activation, i) =>
+                        <option key={`activation-${i}`}>{activation}</option>
+                    )
+                }
+            </select>
+        </div>
+
+    )
+}
+
+
+/*
+    This interactive demo has two rendering pipelines. First, a p5.js canvas is created. Here, all 'drawings' are created - the lines,
+    the hidden nodes, etc. Next, we calculate where all of the HTML on top of this p5js canvas needs to be rendered - things like the
+    input to the weights, inputs, or biases. These are then rendered using 'relative' overtop the canvas.
+*/
 type InterativeMLPType = {
     labelColor: string,
     mlpConfig: MLPConfig,
     setMLPConfig: (m: MLPConfig) => void,
     width?: number,
     height?: number
-    id?: string,
 };
 
 export const InteractiveMLP: React.FC<InterativeMLPType> = ({
@@ -28,149 +174,11 @@ export const InteractiveMLP: React.FC<InterativeMLPType> = ({
     const [redraw, setRedraw] = useState(() => () => { })
     const [canvasElm, setCanvasElm] = useState<p5Types.Element>()
     const [selectedNode, setSelectedNode] = useState<NodeIndex>()
+    const [mlpDOMPlacements, setMLPDOMPlacements] = useState<MLPDOMPlacements>()
 
     const divRef = React.createRef<HTMLDivElement>();
 
-    // -------------------- JSX for inputs --------------------
-    const createBiasInput = (layerIdx: number, nodeIdx: number): JSX.Element => {
-        return ( 
-            <div>
-                <input
-                    className="number-input w-16  border-2 border-teal-700"
-                    type="number"
-                    value={mlpConfig.hiddenLayers[layerIdx].biases[nodeIdx]}
-                    onChange={(e) => {
-                        let val = parseFloat(e.target.value);
 
-                        if (e.target.value === "") {
-                            val = 0.0
-                        }
-                        if (!val) return
-
-                        setMLPConfig(changeBias(mlpConfig, val, layerIdx, nodeIdx))
-                    }}
-                />
-            </div>
-        )
-    }
-
-
-    const createInputNode = (inputIdx: number): JSX.Element => {
-        return (
-            <div>
-                <input
-                    className="rounded-full w-12 h-12 px-2 border-2 border-teal-700"
-                    type="number"
-                    value={mlpConfig.inputs[inputIdx]}
-                    onChange={(e) => {
-                        const val = parseFloat(e.target.value);
-
-                        if (!val) return
-
-                        setMLPConfig(changeInput(mlpConfig, val, inputIdx))
-                    }}
-                />
-            </div>
-        )
-    }
-
-    const createWeightInput = (layer: number, inNodeIdx: number, outNodeIdx: number): JSX.Element => {
-        return (
-            <div>
-                <input
-                    className="number-input w-16  border-2 border-teal-700 hide-number-spinners"
-                    type="number"
-                    step="any"
-                    value={mlpConfig.hiddenLayers[layer].weights[inNodeIdx][outNodeIdx]}
-                    onChange={(e) => {
-                        const val = parseFloat(e.target.value);
-
-                        if (!val) return
-
-                        setMLPConfig(changeWeight(mlpConfig, val, layer, inNodeIdx, outNodeIdx))
-                    }}
-                />
-            </div>
-        )
-    }
-
-    const createAddRemoveLayerButtons = (): JSX.Element => {
-        return (
-            <div className="flex flex-row items-center">
-                <RemoveCircle
-                    className="icon-button"
-                    fontSize="large"
-                    onClick={() => setMLPConfig(removeLayer(mlpConfig))}
-                />
-                <p className={`w-30 m-2 ${labelColor}`}>{mlpConfig.hiddenLayers.length} layer(s)</p>
-                <AddCircle
-                    className="icon-button"
-                    fontSize="large"
-                    onClick={() => setMLPConfig(addLayer(mlpConfig))}
-                />
-            </div>
-
-        )
-    }
-
-
-    const createAddRemoveNodeButtons = (hiddenLayerIdx: number): JSX.Element => {
-        return (
-            <div className="flex flex-row items-center">
-                <RemoveCircle
-                    className="icon-button"
-                    fontSize="large"
-                    onClick={() => setMLPConfig(removeNode(mlpConfig, hiddenLayerIdx))}
-                />
-                <AddCircle
-                    className="icon-button"
-                    fontSize="large"
-                    onClick={() => setMLPConfig(addNode(mlpConfig, hiddenLayerIdx))}
-                />
-            </div>
-
-        )
-    }
-
-    const createAddRemoveInputButtons = (): JSX.Element => {
-        return (
-            <div className="flex flex-row items-center">
-                <RemoveCircle
-                    className="icon-button"
-                    fontSize="large"
-                    onClick={() => setMLPConfig(removeInput(mlpConfig))}
-                />
-                <AddCircle
-                    className="icon-button"
-                    fontSize="large"
-                    onClick={() => setMLPConfig(addInput(mlpConfig))}
-                />
-            </div>
-
-        )
-    }
-
-    const createActivationFunctionSelector = (layerIdx: number): JSX.Element => {
-        const currActivation = mlpConfig.hiddenLayers[layerIdx].activation;
-        return (
-            <div className="">
-                <select value={currActivation} onChange={(e) => {
-                    const selected = e.target.value;
-
-                    if (isActivation(selected)){
-                        setMLPConfig(changeActivation(mlpConfig, selected, layerIdx));
-                    } 
-                 }} >
-                    {
-                        activations.map((activation, i) =>
-                            <option key={`activation-${i}`}>{activation}</option>
-                        )
-                    }
-                </select>
-            </div>
-
-        )
-    }
 
 
     // -------------------- p5 functions --------------------
@@ -189,38 +197,21 @@ export const InteractiveMLP: React.FC<InterativeMLPType> = ({
 
     const draw = (p5: p5Types) => {
         if (!canvasElm) return;
-        // remove all of the div ref's children
-        // TODO: make this more intelligent
-        if (divRef.current) {
-            while (divRef.current.firstChild) {
-                divRef.current.removeChild(divRef.current.firstChild);
-            }
-        }
 
 
         p5.clear();
 
         const config = {
             p5: p5,
-            canvasEltDivRef: divRef,
-            canvas: canvasElm,
             mlpConfig: mlpConfig,
             canvasHeight: height,
             canvasWidth: width,
             intermediateValues: calculateIntermediateValues(mlpConfig),
             selectedNode: selectedNode,
-            inputs: {
-                biasInput: createBiasInput,
-                inputNode: createInputNode,
-                weightInput: createWeightInput,
-                addRemoveLayerButtons: createAddRemoveLayerButtons,
-                addRemoveNodeButtons: createAddRemoveNodeButtons,
-                addRemoveInputButtons: createAddRemoveInputButtons,
-                activationFunctionSelector: createActivationFunctionSelector,
-            }
         };
 
         drawMLP(config);
+        setMLPDOMPlacements(calculateMLPDOMPlacements(config));
 
         p5.noLoop();
     };
@@ -230,22 +221,11 @@ export const InteractiveMLP: React.FC<InterativeMLPType> = ({
 
         const config = {
             p5: p5,
-            canvasEltDivRef: divRef,
-            canvas: canvasElm,
             mlpConfig: mlpConfig,
             canvasHeight: height,
             canvasWidth: width,
             intermediateValues: [], // optimization: TODO; keep intermediate values or config as state
             selectedNode: selectedNode,
-            inputs: {
-                biasInput: createBiasInput,
-                inputNode: createInputNode,
-                weightInput: createWeightInput,
-                addRemoveLayerButtons: createAddRemoveLayerButtons,
-                addRemoveNodeButtons: createAddRemoveNodeButtons,
-                addRemoveInputButtons: createAddRemoveInputButtons,
-                activationFunctionSelector: createActivationFunctionSelector,
-            }
         }
 
         const clicked = nodeAtPosn(config, {
@@ -267,17 +247,137 @@ export const InteractiveMLP: React.FC<InterativeMLPType> = ({
 
     return (
         <div>
-            {/* 
-            
-            TODO: Use fixed popup to show how "selectedNode" is being computed.
-            <div className="fixed bottom-0">
-                <div className="m-5 rounded-md border-2 w-20 h-20">
-                    Test
+            {
+                mlpDOMPlacements &&
+
+                <div className="w-0 h-0">
+
+                    {mlpDOMPlacements.weightInputs.map((placement) => {
+                        return (
+                            <div style={{
+                                position: 'relative',
+                                left: placement.posn.x,
+                                top: placement.posn.y
+                            }}
+                                className="h-0"
+                                key={`weights-layer-${placement.layer}-in-${placement.inNodeIdx}-out-${placement.outNodeIdx}`}
+                            >
+                                <WeightInput
+                                    layer={placement.layer}
+                                    inNodeIdx={placement.inNodeIdx}
+                                    outNodeIdx={placement.outNodeIdx}
+                                    mlpConfig={mlpConfig}
+                                    setMLPConfig={setMLPConfig}
+                                />
+                            </div>)
+                    })}
+
+                    {mlpDOMPlacements.inputNodes.map((placement) => {
+                        return (
+                            <div style={{
+                                position: 'relative',
+                                left: placement.posn.x,
+                                top: placement.posn.y
+                            }}
+                                className="h-0"
+                                key={`input-node-${placement.inputIdx}`}
+                            >
+                                <InputNode
+                                    inputIdx={placement.inputIdx}
+                                    mlpConfig={mlpConfig}
+                                    setMLPConfig={setMLPConfig}
+                                />
+                            </div>)
+                    })}
+
+                    {mlpDOMPlacements.addRemoveNode.map((placement) => {
+                        return (
+                            <div style={{
+                                position: 'relative',
+                                left: placement.posn.x,
+                                top: placement.posn.y
+                            }}
+                                className="h-0"
+                                key={`add-remove-node-${placement.hiddenLayerIdx}`}
+                            >
+                                <AddRemoveNodeButtons
+                                    hiddenLayerIdx={placement.hiddenLayerIdx}
+                                    mlpConfig={mlpConfig}
+                                    setMLPConfig={setMLPConfig}
+                                />
+                            </div>)
+                    })}
+
+                    {mlpDOMPlacements.activationInputs.map((placement) => {
+                        return (
+                            <div style={{
+                                position: 'relative',
+                                left: placement.posn.x,
+                                top: placement.posn.y
+                            }}
+                                className="h-0"
+                                key={`add-remove-node-${placement.hiddenLayerIdx}`}
+                            >
+                                <ActivationFunctionSelector
+                                    layerIdx={placement.hiddenLayerIdx}
+                                    mlpConfig={mlpConfig}
+                                    setMLPConfig={setMLPConfig}
+                                />
+                            </div>)
+                    })}
+
+
+                    {mlpDOMPlacements.biasInputs.map((placement) => {
+                        return (
+                            <div style={{
+                                position: 'relative',
+                                left: placement.posn.x,
+                                top: placement.posn.y
+                            }}
+                                className="h-0"
+                                key={`bias-inputs-${placement.hiddenLayerIdx}-${placement.nodeIdx}`}
+                            >
+                                <BiasInput
+                                    layerIdx={placement.hiddenLayerIdx}
+                                    nodeIdx={placement.nodeIdx}
+                                    mlpConfig={mlpConfig}
+                                    setMLPConfig={setMLPConfig}
+                                />
+                            </div>)
+                    })}
+
+                    <div style={{
+                        position: 'relative',
+                        left: mlpDOMPlacements.addRemoveInput.x,
+                        top: mlpDOMPlacements.addRemoveInput.y
+                    }}
+                        className="h-0"
+                    >
+                        <AddRemoveInputButtons
+                            mlpConfig={mlpConfig}
+                            setMLPConfig={setMLPConfig}
+                        />
+                    </div>
+
+                    <div style={{
+                        position: 'relative',
+                        left: mlpDOMPlacements.addRemoveLayer.x,
+                        top: mlpDOMPlacements.addRemoveLayer.y
+                    }}
+                        className="h-0"
+                    >
+                        <AddRemoveLayerButtons
+                            labelColor={labelColor}
+                            mlpConfig={mlpConfig}
+                            setMLPConfig={setMLPConfig}
+                        />
+                    </div>
+
                 </div>
-            </div> */}
-            <div ref={divRef} className="w-0 h-0"></div>
+            }
+
             <Sketch setup={setup} draw={draw} mouseClicked={mouseClicked} />
-        </div>
+        </div >
     );
 }
 
