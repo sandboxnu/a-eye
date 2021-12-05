@@ -1,5 +1,3 @@
-import './kmeans.css';
-
 import { squaredEuclidean } from 'ml-distance-euclidean';
 
 // types for each of the four datasets
@@ -29,7 +27,7 @@ export interface DataFormat3 {
 export interface TitanicData {
   PassengerId: number;
   Survived: number;
-  Pclass: number;
+  PassengerClass: number;
   Name: string;
   Sex: string;
   Age: number;

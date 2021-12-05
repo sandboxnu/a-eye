@@ -1,0 +1,27 @@
+{
+  "title": "Sobel Filter",
+  "sections": [
+    {
+      "title": "",
+      "colorScheme": "light",
+      "subsections": [
+        {
+          "title": "Subsection 1",
+          "body": "The Sobel Filter is popularly used in image detection algorithms to extract edges from an image. The filter uses a 3x3 kernel that detects the <strong>image gradient</strong>, a directional change in color in the image, for a given direction. The example kernel detects a change in color between the left and right sides of the current pixel, which indicates a vertical edge. ",
+          "imgSrc": "sobelKernelDark"
+        },
+        {
+          "title": "Subsection 2",
+          "body": "Note that the above kernel only detects a dark-to-light gradient (from left to right); to capture all vertical edges, we need to also use a \"mirror-image\" kernel that has positive values in the left column and negative values in the right (shown here).",
+          "imgSrc": "sobelKernelLight"
+        },
+        {
+          "title": "Subsection 3",
+          "body": "To get a more accurate understanding about the shape of the image, we need to <strong>extract the image gradient in the four primary edge directions: vertical, horizontal, diagonal up (45 degrees), and diagonal down (-45 degrees)</strong>. The demo below calculates the images resulting from filtering by the eight Sobel kernels (4 directions, 2 filters per direction for dark-to-light and light-to-dark) for a stop sign image. Note that you can select other images to filter from the box below.",
+          "imgSrc": "blank"
+        }
+      ],
+      "demoComp": "SobelFilterDemo"
+    }
+  ]
+}

@@ -16,7 +16,7 @@ import jakeDuffyPic from '../media/aboutPage/jakeDuffyPic.jpg';
 import lindaZengPic from '../media/aboutPage/lindaZengPic.jpg';
 
 const AboutPage = () => (
-  <div className="relative inline-block w-full min-h-full bg-offwhite bg-about bg-no-repeat bg-scroll bg-bottom bg-stretchBottom">
+  <div className="inline-block w-full min-h-full bg-offwhite bg-about bg-no-repeat bg-scroll bg-bottom bg-stretchBottom">
     <div>
       <h1 className="mt-24 text-6xl font-sans text-teal-a-eye font-bold italic">
         ABOUT US

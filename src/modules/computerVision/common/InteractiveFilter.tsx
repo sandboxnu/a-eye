@@ -65,13 +65,13 @@ const InteractiveFilter: React.FC<InteractiveFilterType> = ({
       <div>
         <img ref={imgRef} src={imgUrl} alt="input" className="hidden" />
         <canvas
-          className="inline m-2 crisp-pixels w-35vw"
+          className="inline m-2 crisp-pixels responsive-img-width "
           ref={inputCanvas}
           width={imgWidth}
           height={imgHeight}
         />
         <canvas
-          className="inline m-2 crisp-pixels w-35vw"
+          className="inline m-2 crisp-pixels responsive-img-width"
           ref={outputCanvas}
           width={imgRef.current?.width}
           height={imgRef.current?.height}
