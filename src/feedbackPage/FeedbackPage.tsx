@@ -1,5 +1,6 @@
 /* eslint-disable */
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
+import emailjs from 'emailjs-com';
 
 /**
  * Renders the feedback page.
@@ -8,12 +9,28 @@ const FeedbackPage = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [feedbackTitle, setFeedbackTitle] = useState('');
-  const [feedbackComments, setFeedbackMessage] = useState('');
+  const [feedbackComments, setFeedbackComments] = useState('');
+  const form = useRef<HTMLFormElement>(null);
 
   const isEmailValid = () => {
     const regExp = new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
     return regExp.test(email);
   }
+
+  const sendEmail = (e) => {
+    e.preventDefault();
+
+    if (form.current) {
+      emailjs.sendForm('aeye-feedback', 'template_66un7oa', form.current, 'user_KV7Tb59u3uQGGQENMz8sE')
+        .then((result) => {
+            console.log(result.text);
+        }, (error) => {
+            console.log(error.text);
+        });
+    }
+  };
+
+  const isFormFilled = () => name && isEmailValid() && feedbackTitle && feedbackComments;
 
   return (
     <div className="inline-block w-full min-h-full bg-offwhite bg-no-repeat bg-scroll bg-bottom bg-stretchBottom">
@@ -24,8 +41,8 @@ const FeedbackPage = () => {
         </div>
         <div className="container">
           <form
-            method="POST"
-            action="https://getform.io/f/b57ad85d-fb99-44e0-bcb4-83d1febe2565"
+            ref={form}
+            onSubmit={sendEmail}
           >
             <div className="row">
               <label htmlFor="feedbackname" className="feedback-textbox"></label>
@@ -35,7 +52,7 @@ const FeedbackPage = () => {
                 type="text"
                 placeholder="Your Name"
                 value={name}
-                name="Name"
+                name="user_name"
                 onChange={e => {
                   setName(e.target.value);
                 }}
@@ -49,7 +66,7 @@ const FeedbackPage = () => {
                 type="email"
                 placeholder="Your Email"
                 value={email}
-                name="Email"
+                name="user_email"
                 onChange={e => {
                   setEmail(e.target.value);
                 }}
@@ -63,22 +80,22 @@ const FeedbackPage = () => {
                   type="text"
                   placeholder="Feedback Title"
                   value={feedbackTitle}
-                  name="Feedback Title"
+                  name="feedback_title"
                   onChange={e => {
                     setFeedbackTitle(e.target.value);
                   }}
                 />
             </div>
             <div className="row">
-              <label htmlFor="feedbackMessage" className="feedback-textarea"></label>
+              <label htmlFor="feedbackComments" className="feedback-textarea"></label>
               <p>({feedbackComments ? '✓' : '✗'}) Feedback Message:</p>
               <textarea
                 className="feedback-textarea-input"
                 placeholder="Feedback Comments"
                 value={feedbackComments}
-                name="Feedback Comments"
+                name="feedback_comments"
                 onChange={e => {
-                  setFeedbackMessage(e.target.value);
+                  setFeedbackComments(e.target.value);
                 }}
               />
             </div>
@@ -86,8 +103,14 @@ const FeedbackPage = () => {
               <input
                 className="feedback-submit"
                 type="submit"
-                value="Submit"
-                disabled={!(name && isEmailValid() && feedbackTitle && feedbackComments)}
+                value="Send"
+                disabled={!isFormFilled()}
+                onSubmit={() => {
+                  setName('');
+                  setEmail('');
+                  setFeedbackTitle('');
+                  setFeedbackComments('');
+                }}
               />
             </div>
           </form>
