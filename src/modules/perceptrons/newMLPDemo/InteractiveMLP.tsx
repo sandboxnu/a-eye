@@ -3,15 +3,20 @@ import { activations, ActivationType, addInput, addLayer, addNode, calculateInte
 import React, { useState, useEffect } from "react";
 import Sketch from "react-p5";
 import p5Types from "p5";
-import { calculateMLPDOMPlacements, DrawConfig, drawMLP, MLPDOMPlacements, nodeAtPosn, NodeIndex } from "./drawUtils";
+import { calculateMLPDOMPlacements, DrawConfig, drawMLP, MLPDOMPlacements, nodeAtPosn, NodeIndex, weightLineColor} from "./drawUtils";
 import { AddCircle, RemoveCircle } from "@material-ui/icons";
 
 
 const WeightInput = ({ layer, inNodeIdx, outNodeIdx, mlpConfig, setMLPConfig }) => {
+    const borderColor = weightLineColor(inNodeIdx);
+
     return (
         <div>
             <input
-                className="number-input w-16  border-2 border-teal-700 hide-number-spinners"
+                className="number-input w-16 border-2 border-indigo-500 hide-number-spinners"
+                style={{
+                    borderColor: `rgb(${borderColor.r},${borderColor.g},${borderColor.b})`,
+                }}
                 type="number"
                 step="any"
                 value={mlpConfig.hiddenLayers?.[layer]?.weights?.[inNodeIdx]?.[outNodeIdx]}
@@ -28,10 +33,14 @@ const WeightInput = ({ layer, inNodeIdx, outNodeIdx, mlpConfig, setMLPConfig }) 
 }
 
 const BiasInput = ({ layerIdx, nodeIdx, mlpConfig, setMLPConfig }) => {
+    const borderColor = weightLineColor(nodeIdx);
     return (
         <div>
             <input
-                className="number-input w-16  border-2 border-teal-700"
+                className="number-input w-16  border-2"
+                style={{
+                    borderColor: `rgb(${borderColor.r},${borderColor.g},${borderColor.b})`,
+                }}
                 type="number"
                 value={mlpConfig.hiddenLayers?.[layerIdx]?.biases?.[nodeIdx]}
                 onChange={(e) => {
@@ -51,10 +60,15 @@ const BiasInput = ({ layerIdx, nodeIdx, mlpConfig, setMLPConfig }) => {
 
 
 const InputNode = ({ inputIdx, mlpConfig, setMLPConfig }) => {
+    const borderColor = weightLineColor(inputIdx);
+
     return (
         <div>
             <input
-                className="rounded-full w-12 h-12 px-2 border-2 border-teal-700"
+                className="rounded-full w-12 h-12 px-2 border-2"
+                style={{
+                    borderColor: `rgb(${borderColor.r},${borderColor.g},${borderColor.b})`,
+                }}
                 type="number"
                 value={mlpConfig.inputs?.[inputIdx]}
                 onChange={(e) => {
@@ -199,6 +213,7 @@ export const InteractiveMLP: React.FC<InterativeMLPType> = ({
     const draw = (p5: p5Types) => {
         p5.clear(); // clear what was previously in the canvas (i.e. make canvas transparent)
 
+        console.log(labelColor)
         const config = {
             p5: p5,
             mlpConfig: mlpConfig,
@@ -206,6 +221,7 @@ export const InteractiveMLP: React.FC<InterativeMLPType> = ({
             canvasWidth: width,
             intermediateValues: calculateIntermediateValues(mlpConfig),
             selectedNode: selectedNode,
+            darkmode: labelColor=="text-modulePaleBlue",
         };
 
         drawMLP(config); // draw into the p5 canvas
@@ -223,6 +239,7 @@ export const InteractiveMLP: React.FC<InterativeMLPType> = ({
             canvasWidth: width,
             intermediateValues: [], // optimization: TODO; keep intermediate values or config as state
             selectedNode: selectedNode,
+            darkmode: labelColor=="text-modulePaleBlue",
         }
 
         const clicked = nodeAtPosn(config, {

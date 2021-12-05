@@ -4,7 +4,7 @@
   "sections": [
     {
       "title": "Section 1",
-      "colorScheme": "light",
+      "colorScheme": "dark",
       "subsections": [
         {
           "title": "Subsection 1",

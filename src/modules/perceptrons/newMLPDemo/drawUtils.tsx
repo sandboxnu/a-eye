@@ -1,4 +1,5 @@
 /* eslint-disable */
+import { e } from "mathjs";
 import p5Types, { CENTER } from "p5";
 import ReactDOM from "react-dom";
 import { MLPConfig } from "./mlpConfig";
@@ -31,42 +32,7 @@ const nodeBorderColor = {
     b: 123,
 }
 
-const shouldDrawMulticolorLines = false; // draws outgoing lines as different colors
-
-const nodeIdxToColor = {
-    0: {
-        r: 0,
-        g: 0,
-        b: 0,
-    },
-    1: {
-        r: 255,
-        g: 0,
-        b: 0,
-    },
-    2: {
-        r: 128,
-        g: 255,
-        b: 255,
-    },
-    3: {
-        r: 0,
-        g: 0,
-        b: 255,
-    },
-    4: {
-        r: 123,
-        g: 123,
-        b: 123,
-    },
-    5: {
-        r: 35,
-        g: 25,
-        b: 88,
-    },
-}
-
-// ----------------------------------------
+const shouldDrawMulticolorLines = true; // draws outgoing lines as different colors
 
 const black = {
     r: 0,
@@ -75,16 +41,45 @@ const black = {
 }
 
 const white = {
-    r: 0,
-    g: 0,
-    b: 0
+    r: 255,
+    g: 255,
+    b: 255
 }
+
+const offwhite = hexToRgb("#D2D2D2");
+
+const nodeIdxToColor = {
+    0: hexToRgb("648FFF"),
+    1: hexToRgb("#DC267F"),
+    2: hexToRgb("#FE6100"),
+    3: hexToRgb("#FFB000"),
+    4: hexToRgb("#0072B2"),
+    5: hexToRgb("#D55E00"),
+    6: hexToRgb("#CC79A7"),
+
+}
+
+// ----------------------------------------
+
 
 type Color = {
     r: number,
     g: number,
     b: number,
 }
+
+function hexToRgb(hex: string): Color  {
+    let result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? {
+      r: parseInt(result[1], 16),
+      g: parseInt(result[2], 16),
+      b: parseInt(result[3], 16)
+    } : {
+        r: 0,
+        g: 0,
+        b: 0,
+    };
+  }
 
 type Position = {
     x: number,
@@ -103,6 +98,7 @@ export type DrawConfig = {
     canvasWidth: number,
     canvasHeight: number,
     selectedNode: undefined | NodeIndex,
+    darkmode: boolean,
 };
 
 // these classes specify where HTML should be rendered over the canvas.
@@ -354,7 +350,7 @@ const drawHiddenLayerNodeAtPosn = (config: DrawConfig, hiddenLayerIdx: number, n
     } else {
         setFillColor(config, unselectedNodeColor)
     }
-    setStrokeColor(config, nodeBorderColor)
+    setStrokeColor(config, weightLineColor(nodeIdx))
     config.p5.strokeWeight(nodeBorderPx)
     config.p5.circle(posn.x, posn.y, nodeSize)
 
@@ -399,7 +395,11 @@ const drawPlus = (config: DrawConfig, size: number, posn: Position, weight?: num
 
 
     const hSize = size / 2;
-    setStrokeColor(config, black);
+    if (config.darkmode) {
+        setStrokeColor(config, offwhite);
+    } else {
+        setStrokeColor(config, black);
+    }
     config.p5.strokeWeight(weight);
     config.p5.line(posn.x, posn.y - hSize, posn.x, posn.y + hSize);
     config.p5.strokeWeight(weight);
@@ -413,7 +413,13 @@ const drawMult = (config: DrawConfig, size: number, posn: Position, weight?: num
     }
 
 
-    setStrokeColor(config, black);
+    if (config.darkmode) {
+        setStrokeColor(config, offwhite);
+        setFillColor(config, offwhite);    
+    } else {
+        setStrokeColor(config, black);
+        setFillColor(config, black);    
+    }
     config.p5.textSize(size)
     config.p5.text("*", posn.x, posn.y)
     /*config.p5.strokeWeight(weight);
@@ -435,10 +441,16 @@ const drawWeightLine = (config: DrawConfig, layer: number, inNodeIdx: number, ou
     const lineEnd: Position = lineEnds.end;
 
     if (shouldDrawMulticolorLines) {
-        setStrokeColor(config, nodeIdxToColor[inNodeIdx])
+        setStrokeColor(config, weightLineColor(inNodeIdx))
     } else {
-        setStrokeColor(config, black);
+        if (config.darkmode) {
+            setStrokeColor(config, offwhite);
+        } else {
+            setStrokeColor(config, black);
+        }
     }
+
+    config.p5.strokeWeight(2);
     config.p5.line(
         lineStart.x,
         lineStart.y,
@@ -449,6 +461,10 @@ const drawWeightLine = (config: DrawConfig, layer: number, inNodeIdx: number, ou
     if (shouldDrawMult) {
         drawMult(config, 16, followDownLine(lineStart, lineEnd, multLocationOnLine));
     }
+}
+
+export const weightLineColor = (inNodeIdx: number) : Color => {
+    return nodeIdxToColor[inNodeIdx];
 }
 
 const calculateWeightInputPlacement = (config: DrawConfig, layer: number, inNodeIdx: number, outNodeIdx: number): WeightPlacement => {
