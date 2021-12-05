@@ -7,6 +7,9 @@ import { calculateMLPDOMPlacements, DrawConfig, drawMLP, MLPDOMPlacements, nodeA
 import { AddCircle, RemoveCircle } from "@material-ui/icons";
 
 
+const maxNumLayers = 4;
+const maxNumNodes  = 4;
+
 const WeightInput = ({ layer, inNodeIdx, outNodeIdx, mlpConfig, setMLPConfig }) => {
     const borderColor = weightLineColor(inNodeIdx);
 
@@ -97,7 +100,11 @@ const AddRemoveLayerButtons = ({ labelColor, mlpConfig, setMLPConfig }) => {
             <AddCircle
                 className="icon-button"
                 fontSize="large"
-                onClick={() => setMLPConfig(addLayer(mlpConfig))}
+                onClick={() => {
+                    if (mlpConfig.hiddenLayers.length >= maxNumLayers) return;
+
+                    setMLPConfig(addLayer(mlpConfig))
+                }}
             />
         </div>
 
@@ -116,7 +123,11 @@ const AddRemoveNodeButtons = ({ hiddenLayerIdx, mlpConfig, setMLPConfig }) => {
             <AddCircle
                 className="icon-button"
                 fontSize="large"
-                onClick={() => setMLPConfig(addNode(mlpConfig, hiddenLayerIdx))}
+                onClick={() => {
+                    if (mlpConfig.hiddenLayers[hiddenLayerIdx].biases.length >= maxNumNodes) return;
+
+                    setMLPConfig(addNode(mlpConfig, hiddenLayerIdx))}
+                }
             />
         </div>
 
@@ -134,7 +145,12 @@ const AddRemoveInputButtons = ({ mlpConfig, setMLPConfig }) => {
             <AddCircle
                 className="icon-button"
                 fontSize="large"
-                onClick={() => setMLPConfig(addInput(mlpConfig))}
+                onClick={() => {
+
+                    if (mlpConfig.inputs.length >= maxNumNodes) return;
+
+                    setMLPConfig(addInput(mlpConfig))
+                }}
             />
         </div>
 
