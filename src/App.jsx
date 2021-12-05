@@ -3,6 +3,7 @@ import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
+import brokenLink from './404_page/404_page';
 import Navbar from './Navbar';
 import Footer from './footer';
 
@@ -37,6 +38,7 @@ function App() {
               <Route path="/home" component={LandingPage} />
               <Route path="/modules/:module" component={ModulePage} />
               <Route path="/about" component={AboutPage} />
+              <Route path="/*" component={brokenLink} />
             </Switch>
           </main>
           <div>
