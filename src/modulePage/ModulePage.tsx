@@ -60,7 +60,7 @@ export default function ModulePage(
   const module = props.match.params.module;
   const curModule: Module | null = modules[module];
 
-  if (!curModule) {ee
+  if (!curModule) {
     return brokenLink();
   }
   return (
