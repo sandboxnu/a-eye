@@ -1,6 +1,5 @@
 /* eslint-disable */
 import React from 'react';
-import CSS from 'csstype';
 import background_img from '../media/landingPage/background.jpeg';
 import landing_background from '../media/landingPage/background_landing_page.svg';
 import descriptions from '../media/modules/module_descriptions.json';

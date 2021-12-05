@@ -19,21 +19,28 @@ export default function Navbar() {
 
       <div className="my-3 justify-between" id="links-container">
         <ul className="flex sm:mr-6 lg:mr-40" id="nav-list">
-          <li className="mr-2 md:mr-8 border-b-2 border-transparent hover:border-teal-a-eye duration-300 ease-in-out">
+          <li className="mr-0 md:mr-8 border-b-2 border-transparent hover:border-teal-a-eye duration-300 ease-in-out">
             <a className="" href="/">
               <p className="text-xs text-white uppercase font-opensans font-bold">
                 Home
               </p>
             </a>
           </li>
-          <li className="mx-8 mr-2 md:mr-8 -mt-1 border-b-2 border-transparent hover:border-teal-a-eye duration-300 ease-in-out">
+          <li className="mx-4 mr-0 md:mr-8 -mt-1 border-b-2 border-transparent hover:border-teal-a-eye duration-300 ease-in-out">
             {/* <a className="" href="/modules"><p className="text-xs text-white uppercase font-opensans font-bold">Modules</p></a> */}
             <ModuleDropdown />
           </li>
-          <li className="mx-8 border-b-2 border-transparent hover:border-teal-a-eye duration-300 ease-in-out">
+          <li className="mx-4 mr-0 md:mr-8 border-b-2 border-transparent hover:border-teal-a-eye duration-300 ease-in-out">
             <a className="" href="/about">
               <p className="text-xs text-white uppercase font-opensans font-bold">
                 About
+              </p>
+            </a>
+          </li>
+          <li className="mx-4 border-b-2 border-transparent hover:border-teal-a-eye duration-300 ease-in-out">
+            <a className="" href="/feedback">
+              <p className="text-xs text-white uppercase font-opensans font-bold">
+                Feedback
               </p>
             </a>
           </li>

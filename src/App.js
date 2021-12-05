@@ -10,6 +10,7 @@ import './index.css';
 import AboutPage from "./aboutPage/AboutPage"
 import LandingPage from "./landingPage/LandingPage";
 import ModulePage from "./modulePage/ModulePage";
+import FeedbackPage from 'feedbackPage/FeedbackPage';
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
                 <Route path="/home" component={LandingPage} />
                 <Route path="/modules/:module" component={ModulePage} />
                 <Route path="/about" component={AboutPage} />
+                <Route path="/feedback" component={FeedbackPage} />
               </Switch>
             </main>
             <div>
