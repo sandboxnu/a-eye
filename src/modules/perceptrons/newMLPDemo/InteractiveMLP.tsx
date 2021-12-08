@@ -197,9 +197,11 @@ export const InteractiveMLP: React.FC<InterativeMLPType> = ({
     labelColor,
     mlpConfig,
     setMLPConfig,
-    width = 1800,
-    height = 1000,
 }) => {
+
+    // magic sizes
+    const width = window.innerWidth;
+    const height = window.innerWidth / 1.8;
 
     // function which allows you to refresh the p5js canvas
     const [redraw, setRedraw] = useState(() => () => { });
