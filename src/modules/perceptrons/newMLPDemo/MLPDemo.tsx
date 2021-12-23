@@ -27,7 +27,7 @@ export const MLPDemo: React.FC<MLPDemoType> = ({
 
 
     return (
-        <div>
+        <div className="justify-center mx-auto">
             <InteractiveMLP
                 labelColor={labelColor}
                 mlpConfig={mlpConfig}
