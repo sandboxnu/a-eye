@@ -1,8 +1,8 @@
 /* eslint-disable */
-import { e } from "mathjs";
 import p5Types, { CENTER } from "p5";
 import ReactDOM from "react-dom";
 import { MLPConfig } from "./mlpConfig";
+import { NodeIndex } from "./utils";
 
 // ---------- MLP DRAW CONSTANTS ----------
 const nodeSize = 48; // corresponds exactly to w-12/h-12
@@ -86,15 +86,10 @@ type Position = {
     y: number
 }
 
-export type NodeIndex = {
-    layer: number,
-    nodeIdx: number,
-}
-
-export type DrawConfig = {
+export type DrawParams = {
     p5: p5Types,
     mlpConfig: MLPConfig,
-    intermediateValues: number[][],
+    forwardPropValues: number[][],
     canvasWidth: number,
     canvasHeight: number,
     selectedNode: undefined | NodeIndex,
@@ -142,14 +137,14 @@ export type MLPDOMPlacements = {
 }
 
 
-export const drawMLP = (config: DrawConfig) => {
+export const drawMLP = (config: DrawParams) => {
     drawWeightLines(config);
     drawHiddenLayerNodes(config);
     /*
     */
 }
 
-export const calculateMLPDOMPlacements = (config: DrawConfig): MLPDOMPlacements => {
+export const calculateMLPDOMPlacements = (config: DrawParams): MLPDOMPlacements => {
     return {
         weightInputs: calculateWeightInputPlacements(config),
         biasInputs: calculateBiasPlacements(config),
@@ -162,7 +157,7 @@ export const calculateMLPDOMPlacements = (config: DrawConfig): MLPDOMPlacements 
     }
 }
 
-const drawHiddenLayerNodes = (config: DrawConfig) => {
+const drawHiddenLayerNodes = (config: DrawParams) => {
     const numHiddenLayers = config.mlpConfig.hiddenLayers.length;
 
     for (let hiddenLayerIdx = 0; hiddenLayerIdx < numHiddenLayers; hiddenLayerIdx++) {
@@ -177,7 +172,7 @@ const drawHiddenLayerNodes = (config: DrawConfig) => {
 
 }
 
-const calculateBiasPlacements = (config: DrawConfig) => {
+const calculateBiasPlacements = (config: DrawParams) => {
     const numHiddenLayers = config.mlpConfig.hiddenLayers.length;
 
     const placements: BiasPlacement[] = []
@@ -194,8 +189,8 @@ const calculateBiasPlacements = (config: DrawConfig) => {
     return placements;
 }
 
-const calculateInputNodePlacements = (config: DrawConfig): InputNodePlacement[]=> {
-    const numInputs = config.mlpConfig.inputs.length;
+const calculateInputNodePlacements = (config: DrawParams): InputNodePlacement[]=> {
+    const numInputs = config.mlpConfig.numInputs;
 
     let placements: InputNodePlacement[] = []
     for (let inputIdx = 0; inputIdx < numInputs; inputIdx++) {
@@ -205,7 +200,7 @@ const calculateInputNodePlacements = (config: DrawConfig): InputNodePlacement[]=
     return placements;
 }
 
-const drawWeightLines = (config: DrawConfig): WeightPlacement[] => {
+const drawWeightLines = (config: DrawParams): WeightPlacement[] => {
     const numLayers = config.mlpConfig.hiddenLayers.length + 1;
 
     let placements: WeightPlacement[] = []
@@ -225,7 +220,7 @@ const drawWeightLines = (config: DrawConfig): WeightPlacement[] => {
 }
 
 
-const calculateWeightInputPlacements = (config: DrawConfig): WeightPlacement[] => {
+const calculateWeightInputPlacements = (config: DrawParams): WeightPlacement[] => {
     const numLayers = config.mlpConfig.hiddenLayers.length + 1;
 
     let placements: WeightPlacement[] = []
@@ -244,7 +239,7 @@ const calculateWeightInputPlacements = (config: DrawConfig): WeightPlacement[] =
     return placements
 }
 
-const calculateAddRemoveLayerPosn = (config: DrawConfig): Position => {
+const calculateAddRemoveLayerPosn = (config: DrawParams): Position => {
     const lastHiddenLayerIdx = config.mlpConfig.hiddenLayers.length - 1;
     const lastLayer = config.mlpConfig.hiddenLayers[lastHiddenLayerIdx];
 
@@ -259,7 +254,7 @@ const calculateAddRemoveLayerPosn = (config: DrawConfig): Position => {
     }
 }
 
-const calculateAddRemoveNodePlacements = (config: DrawConfig) => {
+const calculateAddRemoveNodePlacements = (config: DrawParams) => {
 
     const numLayers = config.mlpConfig.hiddenLayers.length;
 
@@ -271,7 +266,7 @@ const calculateAddRemoveNodePlacements = (config: DrawConfig) => {
     return placements;
 }
 
-const calculateAddRemoveNodePlacement = (config: DrawConfig, hiddenLayerIdx: number): AddRemoveNodePlacement => {
+const calculateAddRemoveNodePlacement = (config: DrawParams, hiddenLayerIdx: number): AddRemoveNodePlacement => {
     const hiddenLayer = config.mlpConfig.hiddenLayers[hiddenLayerIdx];
 
     const lastNodeIdx = hiddenLayer.biases.length - 1;
@@ -289,8 +284,8 @@ const calculateAddRemoveNodePlacement = (config: DrawConfig, hiddenLayerIdx: num
     };
 }
 
-const calculateAddRemoveInputPosn = (config: DrawConfig): Position => {
-    const lastNodeIdx = config.mlpConfig.inputs.length - 1;
+const calculateAddRemoveInputPosn = (config: DrawParams): Position => {
+    const lastNodeIdx = config.mlpConfig.numInputs - 1;
     const layer = 0;
 
     const bottomRightmostNodePosn = calcNodePosn(config, layer, lastNodeIdx);
@@ -301,7 +296,7 @@ const calculateAddRemoveInputPosn = (config: DrawConfig): Position => {
     }
 }
 
-const calculateActivationPlacements = (config: DrawConfig): ActivationPlacement[] => {
+const calculateActivationPlacements = (config: DrawParams): ActivationPlacement[] => {
 
     const numLayers = config.mlpConfig.hiddenLayers.length;
 
@@ -314,7 +309,7 @@ const calculateActivationPlacements = (config: DrawConfig): ActivationPlacement[
     return placements;
 }
 
-const calculateActivationPlacement = (config: DrawConfig, hiddenLayerIdx: number): ActivationPlacement => {
+const calculateActivationPlacement = (config: DrawParams, hiddenLayerIdx: number): ActivationPlacement => {
     const layer = hiddenLayerIdx + 1;
     const topNodePosn = calcNodePosn(config, layer, 0);
     return {
@@ -326,7 +321,7 @@ const calculateActivationPlacement = (config: DrawConfig, hiddenLayerIdx: number
     };
 
 }
-const calculateInputNodePlacement = (config: DrawConfig, inputIdx: number): InputNodePlacement => {
+const calculateInputNodePlacement = (config: DrawParams, inputIdx: number): InputNodePlacement => {
     const nodePosn = calcNodePosn(config, 0, inputIdx);
 
     return {
@@ -339,13 +334,13 @@ const calculateInputNodePlacement = (config: DrawConfig, inputIdx: number): Inpu
 
 }
 
-const drawHiddenLayerNode = (config: DrawConfig, hiddenLayerIdx: number, nodeIdx: number) => {
+const drawHiddenLayerNode = (config: DrawParams, hiddenLayerIdx: number, nodeIdx: number) => {
     return drawHiddenLayerNodeAtPosn(config, hiddenLayerIdx, nodeIdx, calcNodePosn(config, hiddenLayerIdx + 1, nodeIdx))
 }
 
-const drawHiddenLayerNodeAtPosn = (config: DrawConfig, hiddenLayerIdx: number, nodeIdx: number, posn: Position) => {
+const drawHiddenLayerNodeAtPosn = (config: DrawParams, hiddenLayerIdx: number, nodeIdx: number, posn: Position) => {
 
-    if (config.selectedNode && config.selectedNode.layer - 1 == hiddenLayerIdx && config.selectedNode.nodeIdx == nodeIdx) {
+    if (config.selectedNode && config.selectedNode.layer == hiddenLayerIdx+1 && config.selectedNode.nodeIdx == nodeIdx) {
         setFillColor(config, selectedNodeColor)
     } else {
         setFillColor(config, unselectedNodeColor)
@@ -355,9 +350,9 @@ const drawHiddenLayerNodeAtPosn = (config: DrawConfig, hiddenLayerIdx: number, n
     config.p5.circle(posn.x, posn.y, nodeSize)
 
 
-    if (config.intermediateValues.length < hiddenLayerIdx || config.intermediateValues[hiddenLayerIdx].length < nodeIdx) return
+    //if (config.forwardPropValues.length < hiddenLayerIdx || config.forwardPropValues[hiddenLayerIdx].length < nodeIdx) return
 
-    const val = config.intermediateValues[hiddenLayerIdx][nodeIdx]
+    const val = config.forwardPropValues[hiddenLayerIdx+1][nodeIdx]
     config.p5.textSize(16)
     setFillColor(config, black)
     config.p5.strokeWeight(0)
@@ -367,7 +362,7 @@ const drawHiddenLayerNodeAtPosn = (config: DrawConfig, hiddenLayerIdx: number, n
     
 }
 
-const calculateBiasPlacement = (config: DrawConfig, hiddenLayerIdx: number, nodeIdx: number) => {
+const calculateBiasPlacement = (config: DrawParams, hiddenLayerIdx: number, nodeIdx: number) => {
     const nodePosn = calcNodePosn(config, hiddenLayerIdx + 1, nodeIdx)
 
     return {
@@ -380,7 +375,7 @@ const calculateBiasPlacement = (config: DrawConfig, hiddenLayerIdx: number, node
     }
 }
 
-const drawBiasPlus = (config: DrawConfig, hiddenLayerIdx: number, nodeIdx: number, posn: Position) => {
+const drawBiasPlus = (config: DrawParams, hiddenLayerIdx: number, nodeIdx: number, posn: Position) => {
     const plusPosn = calcPlusPosnFromNodePosn(posn);
     drawPlus(config, plusSize, {
         x: plusPosn.x,
@@ -388,7 +383,7 @@ const drawBiasPlus = (config: DrawConfig, hiddenLayerIdx: number, nodeIdx: numbe
     });
 }
 
-const drawPlus = (config: DrawConfig, size: number, posn: Position, weight?: number) => {
+const drawPlus = (config: DrawParams, size: number, posn: Position, weight?: number) => {
     if (!weight) {
         weight = 1;
     }
@@ -407,7 +402,7 @@ const drawPlus = (config: DrawConfig, size: number, posn: Position, weight?: num
 
 }
 
-const drawMult = (config: DrawConfig, size: number, posn: Position, weight?: number) => {
+const drawMult = (config: DrawParams, size: number, posn: Position, weight?: number) => {
     if (!weight) {
         weight = 1;
     }
@@ -430,7 +425,7 @@ const drawMult = (config: DrawConfig, size: number, posn: Position, weight?: num
 }
 
 
-const drawWeightLine = (config: DrawConfig, layer: number, inNodeIdx: number, outNodeIdx: number) => {
+const drawWeightLine = (config: DrawParams, layer: number, inNodeIdx: number, outNodeIdx: number) => {
     const inNodePosn = calcNodePosn(config, layer, inNodeIdx);
     const outNodePlusPosn = calcPlusPosn(config, (layer + 1), outNodeIdx);
 
@@ -467,7 +462,7 @@ export const weightLineColor = (inNodeIdx: number) : Color => {
     return nodeIdxToColor[inNodeIdx];
 }
 
-const calculateWeightInputPlacement = (config: DrawConfig, layer: number, inNodeIdx: number, outNodeIdx: number): WeightPlacement => {
+const calculateWeightInputPlacement = (config: DrawParams, layer: number, inNodeIdx: number, outNodeIdx: number): WeightPlacement => {
     const inNodePosn = calcNodePosn(config, layer, inNodeIdx);
     const outNodePlusPosn = calcPlusPosn(config, (layer + 1), outNodeIdx);
 
@@ -487,7 +482,7 @@ const calculateWeightInputPlacement = (config: DrawConfig, layer: number, inNode
     }
 }
 
-const weightLineEndPositions = (config: DrawConfig, inNodePosn: Position, outNodePlusPosn: Position): { start: Position, end: Position } => {
+const weightLineEndPositions = (config: DrawParams, inNodePosn: Position, outNodePlusPosn: Position): { start: Position, end: Position } => {
 
     return {
         start: {
@@ -501,15 +496,15 @@ const weightLineEndPositions = (config: DrawConfig, inNodePosn: Position, outNod
     }
 }
 
-const calcLayerWidth = (config: DrawConfig): number => {
+const calcLayerWidth = (config: DrawParams): number => {
     const numLayers = config.mlpConfig.hiddenLayers.length + 1; // extra layer for inputs
     const layerWidth = config.canvasWidth / numLayers;
     return layerWidth
 }
 
-const calcNumNodesInLayer = (config: DrawConfig, layer: number): number => {
+const calcNumNodesInLayer = (config: DrawParams, layer: number): number => {
     if (layer == 0) {
-        return config.mlpConfig.inputs.length;
+        return config.mlpConfig.numInputs;
     }
     return config.mlpConfig.hiddenLayers[layer - 1].biases.length;
 }
@@ -517,7 +512,7 @@ const calcNumNodesInLayer = (config: DrawConfig, layer: number): number => {
 // get the position of the center of the given node
 // note: in the layers array of the config, an index of 0 corresponds
 // to layer 1 here, since layer 0 is the input layer
-const calcNodePosn = (config: DrawConfig, layer: number, nodeIdx: number): Position => {
+const calcNodePosn = (config: DrawParams, layer: number, nodeIdx: number): Position => {
 
     const numNodesInLayer = calcNumNodesInLayer(config, layer);
     const layerWidth = calcLayerWidth(config);
@@ -534,7 +529,7 @@ const calcNodePosn = (config: DrawConfig, layer: number, nodeIdx: number): Posit
 }
 
 // get the position of the center of the node's 'plus' symbol
-const calcPlusPosn = (config: DrawConfig, layer: number, nodeIdx: number): Position => {
+const calcPlusPosn = (config: DrawParams, layer: number, nodeIdx: number): Position => {
     const posn = calcNodePosn(config, layer, nodeIdx)
 
     return calcPlusPosnFromNodePosn(posn)
@@ -558,7 +553,7 @@ const followDownLine = (start: Position, end: Position, pcnt: number): Position 
     }
 }
 
-export const nodeAtPosn = (config: DrawConfig, posn: Position): (NodeIndex | undefined) => {
+export const nodeAtPosn = (config: DrawParams, posn: Position): (NodeIndex | undefined) => {
 
     const numHiddenLayers = config.mlpConfig.hiddenLayers.length;
 
@@ -580,12 +575,12 @@ export const nodeAtPosn = (config: DrawConfig, posn: Position): (NodeIndex | und
     return undefined;
 }
 
-const setFillColor = (config: DrawConfig, fillColor: Color) => {
+const setFillColor = (config: DrawParams, fillColor: Color) => {
     let c = config.p5.color(fillColor.r, fillColor.g, fillColor.b);
     config.p5.fill(c);
 }
 
-const setStrokeColor = (config: DrawConfig, strokeColor: Color) => {
+const setStrokeColor = (config: DrawParams, strokeColor: Color) => {
     let c = config.p5.color(strokeColor.r, strokeColor.g, strokeColor.b);
     config.p5.stroke(c);
 }

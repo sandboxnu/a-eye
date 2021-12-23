@@ -1,14 +1,15 @@
 /* eslint-disable */
-import { activations, ActivationType, addInput, addLayer, addNode, calculateIntermediateValues, changeActivation, changeBias, changeInput, changeWeight, isActivation, MLPConfig, removeInput, removeLayer, removeNode } from "./mlpConfig";
+import { activations, ActivationType, addInput, addLayer, addNode, forwardPropagation, changeActivation, changeBias, changeWeight, isActivation, MLPConfig, removeInput, removeLayer, removeNode } from "./mlpConfig";
 import React, { useState, useEffect } from "react";
 import Sketch from "react-p5";
 import p5Types from "p5";
-import { calculateMLPDOMPlacements, DrawConfig, drawMLP, MLPDOMPlacements, nodeAtPosn, NodeIndex, weightLineColor} from "./drawUtils";
+import { calculateMLPDOMPlacements, drawMLP, DrawParams, MLPDOMPlacements, nodeAtPosn, weightLineColor } from "./drawUtils";
 import { AddCircle, RemoveCircle } from "@material-ui/icons";
+import { NodeIndex, NodeComputationSummary, generateNodeComputationSummary } from "./utils"
 
 
 const maxNumLayers = 4;
-const maxNumNodes  = 4;
+const maxNumNodes = 4;
 
 const WeightInput = ({ layer, inNodeIdx, outNodeIdx, mlpConfig, setMLPConfig }) => {
     const borderColor = weightLineColor(inNodeIdx);
@@ -62,7 +63,7 @@ const BiasInput = ({ layerIdx, nodeIdx, mlpConfig, setMLPConfig }) => {
 }
 
 
-const InputNode = ({ inputIdx, mlpConfig, setMLPConfig }) => {
+const InputNode = ({ inputIdx, inputs, setInputs }) => {
     const borderColor = weightLineColor(inputIdx);
 
     return (
@@ -73,13 +74,15 @@ const InputNode = ({ inputIdx, mlpConfig, setMLPConfig }) => {
                     borderColor: `rgb(${borderColor.r},${borderColor.g},${borderColor.b})`,
                 }}
                 type="number"
-                value={mlpConfig.inputs?.[inputIdx]}
+                value={inputs?.[inputIdx]}
                 onChange={(e) => {
-                    const val = parseFloat(e.target.value);
+                    const newVal = parseFloat(e.target.value);
 
-                    if (!val) return
+                    if (!newVal) return
 
-                    setMLPConfig(changeInput(mlpConfig, val, inputIdx))
+
+
+                    setInputs(inputs.map((val, idx) => (idx == inputIdx?newVal:val)))
                 }}
             />
         </div>
@@ -126,7 +129,8 @@ const AddRemoveNodeButtons = ({ hiddenLayerIdx, mlpConfig, setMLPConfig }) => {
                 onClick={() => {
                     if (mlpConfig.hiddenLayers[hiddenLayerIdx].biases.length >= maxNumNodes) return;
 
-                    setMLPConfig(addNode(mlpConfig, hiddenLayerIdx))}
+                    setMLPConfig(addNode(mlpConfig, hiddenLayerIdx))
+                }
                 }
             />
         </div>
@@ -134,13 +138,20 @@ const AddRemoveNodeButtons = ({ hiddenLayerIdx, mlpConfig, setMLPConfig }) => {
     )
 }
 
-const AddRemoveInputButtons = ({ mlpConfig, setMLPConfig }) => {
+const AddRemoveInputButtons = ({ mlpConfig, setMLPConfig, inputs, setInputs }) => {
     return (
         <div className="flex flex-row items-center">
             <RemoveCircle
                 className="icon-button"
                 fontSize="large"
-                onClick={() => setMLPConfig(removeInput(mlpConfig))}
+                onClick={() => {
+                    
+                    if (inputs.length <= 1) return;
+
+                    setInputs(inputs.slice(0, -1));
+                    setMLPConfig(removeInput(mlpConfig))}
+                    
+                }
             />
             <AddCircle
                 className="icon-button"
@@ -149,6 +160,7 @@ const AddRemoveInputButtons = ({ mlpConfig, setMLPConfig }) => {
 
                     if (mlpConfig.inputs.length >= maxNumNodes) return;
 
+                    setInputs(inputs.concat([0.0]))
                     setMLPConfig(addInput(mlpConfig))
                 }}
             />
@@ -189,6 +201,8 @@ type InterativeMLPType = {
     labelColor: string,
     mlpConfig: MLPConfig,
     setMLPConfig: (m: MLPConfig) => void,
+    inputs: number[],
+    setInputs: (inputs: number[]) => void,
     width?: number,
     height?: number
 };
@@ -197,6 +211,8 @@ export const InteractiveMLP: React.FC<InterativeMLPType> = ({
     labelColor,
     mlpConfig,
     setMLPConfig,
+    inputs,
+    setInputs,
     width = 1800,
     height = 1000,
 }) => {
@@ -210,6 +226,17 @@ export const InteractiveMLP: React.FC<InterativeMLPType> = ({
     // contains info about where to place inputs over the canvas; e.g., the
     // positions of all of the weight inputs.
     const [mlpDOMPlacements, setMLPDOMPlacements] = useState<MLPDOMPlacements>();
+
+    const makeDrawParams = (p5: p5Types) => {
+    return{
+        p5: p5,
+        mlpConfig: mlpConfig,
+        canvasHeight: height,
+        canvasWidth: width,
+        forwardPropValues: forwardPropagation(mlpConfig, inputs), // optimization: TODO; keep intermediate values or config as state
+        selectedNode: selectedNode,
+        darkmode: labelColor == "text-modulePaleBlue",
+    }}
 
     // p5js setup: initializes canvas
     const setup = (p5: p5Types, canvasParentRef: Element) => {
@@ -227,38 +254,21 @@ export const InteractiveMLP: React.FC<InterativeMLPType> = ({
 
     // p5js draw: renders the canvas & updates the mlpDOMPlacements
     const draw = (p5: p5Types) => {
+
         p5.clear(); // clear what was previously in the canvas (i.e. make canvas transparent)
 
-        console.log(labelColor)
-        const config = {
-            p5: p5,
-            mlpConfig: mlpConfig,
-            canvasHeight: height,
-            canvasWidth: width,
-            intermediateValues: calculateIntermediateValues(mlpConfig),
-            selectedNode: selectedNode,
-            darkmode: labelColor=="text-modulePaleBlue",
-        };
-
-        drawMLP(config); // draw into the p5 canvas
-        setMLPDOMPlacements(calculateMLPDOMPlacements(config)); // update where inputs/buttons are placed over the canvas
+        const drawParams = makeDrawParams(p5);
+        drawMLP(drawParams); // draw into the p5 canvas
+        setMLPDOMPlacements(calculateMLPDOMPlacements(drawParams)); // update where inputs/buttons are placed over the canvas
 
         p5.noLoop(); // only execute once instead of looping
     };
 
     // p5js mouseClicked: called when the user clicks on the canvas; updates selected node
     const mouseClicked = (p5: p5Types) => {
-        const config = {
-            p5: p5,
-            mlpConfig: mlpConfig,
-            canvasHeight: height,
-            canvasWidth: width,
-            intermediateValues: [], // optimization: TODO; keep intermediate values or config as state
-            selectedNode: selectedNode,
-            darkmode: labelColor=="text-modulePaleBlue",
-        }
 
-        const clicked = nodeAtPosn(config, {
+        const drawParams = makeDrawParams(p5)
+        const clicked = nodeAtPosn(drawParams, {
             x: p5.mouseX,
             y: p5.mouseY,
         }) // clicked: undefined if the user did not click on a node, otherwise returns the selected node.
@@ -266,14 +276,24 @@ export const InteractiveMLP: React.FC<InterativeMLPType> = ({
         // only update if clicked caused an update
         if (clicked || (!clicked && selectedNode)) {
             setSelectedNode(clicked);
+            if (clicked && clicked.layer != 0) {
+                setSelectedNodeComputationSummary(generateNodeComputationSummary(mlpConfig, drawParams.forwardPropValues, clicked))
+            } else {
+                setSelectedNodeComputationSummary(undefined)
+            }
         }
 
     };
-
+    
     // if anything changes, force p5js to draw the canvas again.
     useEffect(() => {
         redraw();
-    }, [mlpConfig, width, height, selectedNode])
+    }, [mlpConfig, inputs, width, height, selectedNode])
+
+    // if the user has selected a node, we should compute the computation summary and display it
+    const [selectedNodeComputationSummary, setSelectedNodeComputationSummary] = useState<NodeComputationSummary>();
+
+
 
     return (
         <div>
@@ -314,8 +334,8 @@ export const InteractiveMLP: React.FC<InterativeMLPType> = ({
                             >
                                 <InputNode
                                     inputIdx={placement.inputIdx}
-                                    mlpConfig={mlpConfig}
-                                    setMLPConfig={setMLPConfig}
+                                    inputs={inputs}
+                                    setInputs={setInputs}
                                 />
                             </div>)
                     })}
@@ -386,6 +406,8 @@ export const InteractiveMLP: React.FC<InterativeMLPType> = ({
                         <AddRemoveInputButtons
                             mlpConfig={mlpConfig}
                             setMLPConfig={setMLPConfig}
+                            inputs={inputs}
+                            setInputs={setInputs}
                         />
                     </div>
 
@@ -408,6 +430,19 @@ export const InteractiveMLP: React.FC<InterativeMLPType> = ({
 
             {/* p5.js canvas */}
             <Sketch setup={setup} draw={draw} mouseClicked={mouseClicked} />
+
+            {
+                selectedNode && selectedNodeComputationSummary && (
+                    <div>
+                        <p className={`${labelColor} text-xl`}>How was this node computed?</p>
+                        <p className={`${labelColor}`}>
+                            {selectedNodeComputationSummary.calculations.map((calc, i) => `${calc.inputVal.toFixed(2)}*${calc.weight.toFixed(1)}`).reduce((state, newVal) => state + (state == "" ? "" : " + ") + newVal, "")} + {selectedNodeComputationSummary.bias.toFixed(1)} = {selectedNodeComputationSummary.preActivationOutput.toFixed(1)}
+                        </p>
+                        <p className={`${labelColor}`}>
+                            {selectedNodeComputationSummary.activation}({selectedNodeComputationSummary.preActivationOutput.toFixed(1)}) = {selectedNodeComputationSummary.postActivationOutput.toFixed(1)}
+                        </p>
+                    </div>)
+            }
         </div >
     );
 }
