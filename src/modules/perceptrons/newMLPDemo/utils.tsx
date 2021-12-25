@@ -22,16 +22,16 @@ export type NodeIndex = {
 }
 
 export const generateNodeComputationSummary = (mlpConfig: MLPConfig, forwardProp: number[][], selectedNode: NodeIndex): NodeComputationSummary => {
-    const numInputs = mlpConfig.hiddenLayers[selectedNode.layer-1].weights.length;
+    const numInputs = mlpConfig.hiddenLayers[selectedNode.layer-1].neurons[selectedNode.nodeIdx].weights.length;
 
     let calculations: WeightCalculation[] = [];
-    const bias = mlpConfig.hiddenLayers[selectedNode.layer-1].biases[selectedNode.nodeIdx];
+    const bias = mlpConfig.hiddenLayers[selectedNode.layer-1].neurons[selectedNode.nodeIdx].bias;
     let preActivation = bias;
 
     for (let inputIdx = 0; inputIdx < numInputs; inputIdx++) {
         const inputVal = forwardProp[selectedNode.layer-1][inputIdx];
 
-        const weight = mlpConfig.hiddenLayers[selectedNode.layer-1].weights[inputIdx][selectedNode.nodeIdx]
+        const weight = mlpConfig.hiddenLayers[selectedNode.layer-1].neurons[selectedNode.nodeIdx].weights[inputIdx]
 
         calculations.push({
             inputVal: inputVal | 0.0,

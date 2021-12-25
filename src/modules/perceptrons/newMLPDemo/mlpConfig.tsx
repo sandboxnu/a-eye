@@ -17,33 +17,41 @@ export let applyActivation = (val: number, activation: ActivationType): number =
     }
 }
 
-export type HiddenLayerType = {
-    weights: number[][], // weights mapping [input,ouput] => num inputs x num outputs
-    biases: number[], // bias mapping [output] => num outputs 
+export type Neuron = {
+    weights: number[],
+    bias: number,
+}
+
+export type HiddenLayer = {
+    neurons: Neuron[],
     activation: ActivationType,
 };
 
 
 export type MLPConfig = {
     numInputs: number, // inputs to the MLP
-    hiddenLayers: HiddenLayerType[], // each hidden layer contains the weights going forward
+    hiddenLayers: HiddenLayer[], // each hidden layer contains the weights going forward
 };
 
-export const changeWeight = (mlpConfig: MLPConfig, newWeight: number, layerIdx: number, inputWeightIdx: number, outputWeightIdx: number): MLPConfig => {
-    const transformLayerWeight = (layer: HiddenLayerType): HiddenLayerType => {
+export const changeWeight = (mlpConfig: MLPConfig, newWeight: number, layerIdx: number, nodeIdx: number, inputNodeIdx: number): MLPConfig => {
+    const transformLayerWeight = (layer: HiddenLayer): HiddenLayer => {
         return {
-            weights: layer.weights.map(
-                (value: number[], mapIdx) => (mapIdx == inputWeightIdx ?
-                    (value.map((oldWeight: number, weightIdx: number) =>
-                        (weightIdx == outputWeightIdx) ? newWeight : oldWeight)) : value)),
-            biases: layer.biases,
+            neurons: layer.neurons.map((neuron, neuronIdx) => {
+                if (nodeIdx == neuronIdx) {
+                    return {
+                        weights: neuron.weights.map((oldVal, i) => (i == inputNodeIdx ? newWeight : oldVal)),
+                        bias: neuron.bias
+                    };
+                }
+                return neuron;
+            }),
             activation: layer.activation,
         }
     }
 
     return {
         numInputs: mlpConfig.numInputs,
-        hiddenLayers: mlpConfig.hiddenLayers.map((oldLayer: HiddenLayerType, mapIdx) => (mapIdx == layerIdx ?
+        hiddenLayers: mlpConfig.hiddenLayers.map((oldLayer: HiddenLayer, mapIdx) => (mapIdx == layerIdx ?
             transformLayerWeight(oldLayer)
             : oldLayer)
         )
@@ -51,17 +59,23 @@ export const changeWeight = (mlpConfig: MLPConfig, newWeight: number, layerIdx: 
 }
 
 export const changeBias = (mlpConfig: MLPConfig, newBias: number, layerIdx: number, biasIdx: number): MLPConfig => {
-    const transformLayerBias = (layer: HiddenLayerType): HiddenLayerType => {
+    const transformLayerBias = (layer: HiddenLayer): HiddenLayer => {
         return {
-            biases: layer.biases.map((oldBias: number, mapIdx: number) => (mapIdx == biasIdx) ? newBias : oldBias),
-            weights: layer.weights,
+            neurons: layer.neurons.map((neuron, neuronIdx) => {
+                const bias = (neuronIdx == biasIdx ? newBias : neuron.bias);
+
+                return {
+                    weights: neuron.weights,
+                    bias: bias,
+                };
+            }),
             activation: layer.activation,
         }
     }
 
     return {
         numInputs: mlpConfig.numInputs,
-        hiddenLayers: mlpConfig.hiddenLayers.map((oldLayer: HiddenLayerType, mapIdx) => (mapIdx == layerIdx ?
+        hiddenLayers: mlpConfig.hiddenLayers.map((oldLayer: HiddenLayer, mapIdx) => (mapIdx == layerIdx ?
             transformLayerBias(oldLayer)
             : oldLayer)
         )
@@ -71,10 +85,9 @@ export const changeBias = (mlpConfig: MLPConfig, newBias: number, layerIdx: numb
 export const changeActivation = (mlpConfig: MLPConfig, newActivation: ActivationType, layerIdx: number): MLPConfig => {
     return {
         numInputs: mlpConfig.numInputs,
-        hiddenLayers: mlpConfig.hiddenLayers.map((layer: HiddenLayerType, mapIdx) => (mapIdx == layerIdx ?
+        hiddenLayers: mlpConfig.hiddenLayers.map((layer: HiddenLayer, mapIdx) => (mapIdx == layerIdx ?
             {
-                weights: layer.weights,
-                biases: layer.biases,
+                neurons: layer.neurons,
                 activation: newActivation
             }
             : layer)
@@ -87,35 +100,41 @@ export const addLayer = (mlpConfig: MLPConfig): MLPConfig => {
     // complete the previous layer.
 
 
-    const oldFinalLayer = mlpConfig.hiddenLayers[mlpConfig.hiddenLayers.length - 1]
+    const oldPenultimatelayer = mlpConfig.hiddenLayers[mlpConfig.hiddenLayers.length - 2]
     // we want a new layer with the same number of nodes as the last layer
-    const numNodesNewLayer = oldFinalLayer.weights.length
+    const numNodesNewPenultimate = oldPenultimatelayer.neurons.length
+    const numNodesOldPenultimate = oldPenultimatelayer.neurons.length
 
 
 
     // since there's only one output in the final layer, we need to extend the old last layer's
     // weights to be long enough to accomodate the new layer's size
-    const penultimateLayerWeights = oldFinalLayer.weights.map((oldWeights, weightsIdx) =>
-        Array.from({ length: numNodesNewLayer }, (v, weightIdx) => (weightIdx == 0 ? oldWeights[0] : 0.0))
-    )
-    const penultimateLayerBiases = Array.from({ length: numNodesNewLayer }, (v, biasIdx) => (biasIdx == 0 ? oldFinalLayer.biases[0] : 0.0))
 
-    const penultimateLayer: HiddenLayerType = {
-        weights: penultimateLayerWeights,
-        biases: penultimateLayerBiases,
-        activation: oldFinalLayer.activation,
+    const newPenultimateLayer: HiddenLayer = {
+        neurons: oldPenultimatelayer.neurons.map((neuron) => {
+            
+            let weights: number[] = []
+            // make sure it has the correct number of inputs
+            for (let i = 0; i < numNodesOldPenultimate; i++) {
+                // if there weren't enough weights before, add zeros.
+                const weightVal = (neuron.weights.length > i?neuron.weights[i]:0.0);
+
+                weights.push(weightVal)
+            }
+
+            return {
+                weights: weights,
+                bias: neuron.bias,
+            }
+
+        }),
+        activation: oldPenultimatelayer.activation,
     }
 
-
-    const newFinalLayer: HiddenLayerType = {
-        weights: oldFinalLayer.weights,
-        biases: oldFinalLayer.biases,
-        activation: oldFinalLayer.activation,
-    }
 
     return {
         numInputs: mlpConfig.numInputs,
-        hiddenLayers: mlpConfig.hiddenLayers.slice(0, -1).concat([penultimateLayer, newFinalLayer]),
+        hiddenLayers: mlpConfig.hiddenLayers.slice(0, -1).concat([newPenultimateLayer, mlpConfig.hiddenLayers[mlpConfig.hiddenLayers.length - 1]]),
     }
 
 }
@@ -125,9 +144,8 @@ export const removeLayer = (mlpConfig: MLPConfig): MLPConfig => {
 
     const oldPenultimatelayer = mlpConfig.hiddenLayers[mlpConfig.hiddenLayers.length - 2]
 
-    const newFinalLayer: HiddenLayerType = {
-        weights: oldPenultimatelayer.weights.map((weights, weightsIdx) => [weights[0]]),
-        biases: [oldPenultimatelayer.biases[0]],
+    const newFinalLayer: HiddenLayer = {
+        neurons: [oldPenultimatelayer.neurons[0]],
         activation: oldPenultimatelayer.activation,
     }
 
@@ -141,31 +159,33 @@ export const addNode = (mlpConfig: MLPConfig, layerIdx: number): MLPConfig => {
     if (layerIdx >= mlpConfig.hiddenLayers.length - 1 || layerIdx < 0) return mlpConfig // last layer MUST have only one node.
 
     // adds the weights to create this node from input layer
-    const transformNodeLayer = (layer: HiddenLayerType): HiddenLayerType => {
-        const addNewOutput = (outputs: number[]): number[] => {
-            return outputs.concat([0.0])
+    const transformNodeLayer = (layer: HiddenLayer): HiddenLayer => {
+ 
+        let newNeuronWeights: number[] = []
+        for (let i = 0; i < layer.neurons[0].weights.length; i++) {
+            newNeuronWeights.push(0.0);
         }
 
         return {
-            weights: layer.weights.map(addNewOutput),
-            biases: layer.biases.concat([0.0]),
+            neurons: layer.neurons.concat({
+                weights: newNeuronWeights,
+                bias: 0.0,
+            }),
             activation: layer.activation,
         }
     }
 
 
     // adds the weights to apply this node to the next layer
-    const transformNextLayer = (layer: HiddenLayerType): HiddenLayerType => {
-        const numOutputs = layer.weights[0].length
-        const newInputWeights: number[] = []
-
-        for (let i = 0; i < numOutputs; i++) {
-            newInputWeights.push(0.0)
-        }
+    const transformNextLayer = (layer: HiddenLayer): HiddenLayer => {
 
         return {
-            weights: layer.weights.concat([newInputWeights]),
-            biases: layer.biases,
+            neurons: layer.neurons.map((neuron) => {
+                return {
+                    weights: neuron.weights.concat([0.0]),
+                    bias: neuron.bias,
+                }
+            }),
             activation: layer.activation,
         }
     }
@@ -188,28 +208,26 @@ export const addNode = (mlpConfig: MLPConfig, layerIdx: number): MLPConfig => {
 
 export const removeNode = (mlpConfig: MLPConfig, layerIdx: number): MLPConfig => {
     if (layerIdx >= mlpConfig.hiddenLayers.length - 1 || layerIdx < 0) return mlpConfig // last layer MUST have only one node.
-    if (mlpConfig.hiddenLayers[layerIdx].biases.length == 1) return mlpConfig// cannot remove last output in layer
+    if (mlpConfig.hiddenLayers[layerIdx].neurons.length == 1) return mlpConfig// cannot remove last output in layer
 
-    // adds the weights to create this node from input layer
-    const transformNodeLayer = (layer: HiddenLayerType): HiddenLayerType => {
-        const removeOutput = (outputs: number[]): number[] => {
-            return outputs.slice(0, -1) // cut off last value of node mapping for each input.
-        }
-
+    const transformNodeLayer = (layer: HiddenLayer): HiddenLayer => {
         return {
-            weights: layer.weights.map(removeOutput),
-            biases: layer.biases.slice(0, -1),
+            neurons: layer.neurons.slice(0,-1),
             activation: layer.activation,
         }
     }
 
 
     // adds the weights to apply this node to the next layer
-    const transformNextLayer = (layer: HiddenLayerType): HiddenLayerType => {
+    const transformNextLayer = (layer: HiddenLayer): HiddenLayer => {
 
         return {
-            weights: layer.weights.slice(0, -1), // cut off last input->node mapping
-            biases: layer.biases,
+            neurons: layer.neurons.map((neuron) => {
+                return {
+                    weights: neuron.weights.slice(0,-1),
+                    bias: neuron.bias,
+                }
+            }),
             activation: layer.activation,
         }
     }
@@ -238,17 +256,14 @@ export const forwardPropagation = (mlpConfig: MLPConfig, inputs: number[]): numb
 
     mlpConfig.hiddenLayers.forEach((layer, i) => {
         let prevLayer: number[] = intermediateValues[i ]
-
-        let numOutputs = layer.biases.length
-        let numInputs = layer.weights.length
-
         let layerOutputs: number[] = []
 
-        for (let outputIdx = 0; outputIdx < numOutputs; outputIdx++) {
-            let output = layer.biases[outputIdx]
+        for (let neuronIdx = 0; neuronIdx < layer.neurons.length; neuronIdx++) {
+            const neuron = layer.neurons[neuronIdx];
+            let output = neuron.bias;
 
-            for (let inputIdx = 0; inputIdx < numInputs; inputIdx++) {
-                output += layer.weights[inputIdx][outputIdx] * prevLayer[inputIdx]
+            for (let inputIdx = 0; inputIdx < neuron.weights.length; inputIdx++) {
+                output += neuron.weights[inputIdx] * prevLayer[inputIdx]
             }
 
             output = applyActivation(output, layer.activation)
@@ -267,17 +282,15 @@ export const addInput = (mlpConfig: MLPConfig): MLPConfig => {
 
 
     // adds the weights to apply this node to the next layer
-    const transformFirstLayer = (layer: HiddenLayerType): HiddenLayerType => {
-        const numOutputs = layer.weights[0].length
-        const newInputWeights: number[] = []
-
-        for (let i = 0; i < numOutputs; i++) {
-            newInputWeights.push(0.0)
-        }
+    const transformFirstLayer = (layer: HiddenLayer): HiddenLayer => {
 
         return {
-            weights: layer.weights.concat([newInputWeights]),
-            biases: layer.biases,
+            neurons: layer.neurons.map((neuron) => {
+                return {
+                    weights: neuron.weights.concat([0.0]),
+                    bias: neuron.bias,
+                }
+            }),
             activation: layer.activation,
         }
     }
@@ -301,11 +314,15 @@ export const removeInput = (mlpConfig: MLPConfig): MLPConfig => {
     if (mlpConfig.numInputs == 1) return mlpConfig;
 
     // adds the weights to apply this node to the next layer
-    const transformFirstLayer = (layer: HiddenLayerType): HiddenLayerType => {
+    const transformFirstLayer = (layer: HiddenLayer): HiddenLayer => {
 
         return {
-            weights: layer.weights.slice(0, -1), // cut off last input->node mapping
-            biases: layer.biases,
+            neurons: layer.neurons.map((neuron) => {
+                return {
+                    weights: neuron.weights.slice(0,-1),
+                    bias: neuron.bias,
+                }
+            }),
             activation: layer.activation,
         }
     }
@@ -327,25 +344,26 @@ export const defaultMLPConfig: MLPConfig = {
     numInputs: 2,
     hiddenLayers: [
         {
-            weights: [
-                [1.0, 1.0, 1.0],
-                [1.0, 1.0, 1.0],
-            ],
-            biases: [
-                1.0, 1.0, 1.0,
+            neurons: [
+                {
+                    weights: [0.2, -0.13],
+                    bias: 0.2,
+                },
+                {
+                    weights: [-0.3, 0.03],
+                    bias: 0.1,
+                }
             ],
             activation: 'relu',
         },
         {
-            weights: [
-                [1.0],
-                [1.0],
-                [1.0],
+            neurons: [
+                {
+                    weights: [-0.05, 0.1],
+                    bias: 0.2,
+                }
             ],
-            biases: [
-                1.0
-            ],
-            activation: 'relu',
+            activation: 'sigmoid',
         },
     ],
 }

@@ -23,13 +23,13 @@ const WeightInput = ({ layer, inNodeIdx, outNodeIdx, mlpConfig, setMLPConfig }) 
                 }}
                 type="number"
                 step="any"
-                value={mlpConfig.hiddenLayers?.[layer]?.weights?.[inNodeIdx]?.[outNodeIdx]}
+                value={mlpConfig.hiddenLayers?.[layer]?.neurons?.[outNodeIdx]?.weights?.[inNodeIdx]}
                 onChange={(e) => {
                     const val = parseFloat(e.target.value);
 
                     if (!val) return
 
-                    setMLPConfig(changeWeight(mlpConfig, val, layer, inNodeIdx, outNodeIdx))
+                    setMLPConfig(changeWeight(mlpConfig, val, layer, outNodeIdx, inNodeIdx))
                 }}
             />
         </div>
@@ -46,7 +46,7 @@ const BiasInput = ({ layerIdx, nodeIdx, mlpConfig, setMLPConfig }) => {
                     borderColor: `rgb(${borderColor.r},${borderColor.g},${borderColor.b})`,
                 }}
                 type="number"
-                value={mlpConfig.hiddenLayers?.[layerIdx]?.biases?.[nodeIdx]}
+                value={mlpConfig.hiddenLayers?.[layerIdx]?.neurons?.[nodeIdx]?.bias}
                 onChange={(e) => {
                     let val = parseFloat(e.target.value);
 
@@ -127,7 +127,7 @@ const AddRemoveNodeButtons = ({ hiddenLayerIdx, mlpConfig, setMLPConfig }) => {
                 className="icon-button"
                 fontSize="large"
                 onClick={() => {
-                    if (mlpConfig.hiddenLayers[hiddenLayerIdx].biases.length >= maxNumNodes) return;
+                    if (mlpConfig?.hiddenLayers?.[hiddenLayerIdx]?.neurons?.length >= maxNumNodes) return;
 
                     setMLPConfig(addNode(mlpConfig, hiddenLayerIdx))
                 }
@@ -158,7 +158,7 @@ const AddRemoveInputButtons = ({ mlpConfig, setMLPConfig, inputs, setInputs }) =
                 fontSize="large"
                 onClick={() => {
 
-                    if (mlpConfig.inputs.length >= maxNumNodes) return;
+                    if (mlpConfig.numInputs >= maxNumNodes) return;
 
                     setInputs(inputs.concat([0.0]))
                     setMLPConfig(addInput(mlpConfig))

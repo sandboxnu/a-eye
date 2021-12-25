@@ -162,7 +162,7 @@ const drawHiddenLayerNodes = (config: DrawParams) => {
 
     for (let hiddenLayerIdx = 0; hiddenLayerIdx < numHiddenLayers; hiddenLayerIdx++) {
         const layer = config.mlpConfig.hiddenLayers[hiddenLayerIdx];
-        const numNodes = layer.biases.length;
+        const numNodes = layer.neurons.length;
 
         for (let nodeIdx = 0; nodeIdx < numNodes; nodeIdx++) {
             drawHiddenLayerNode(config, hiddenLayerIdx, nodeIdx);
@@ -178,7 +178,7 @@ const calculateBiasPlacements = (config: DrawParams) => {
     const placements: BiasPlacement[] = []
     for (let hiddenLayerIdx = 0; hiddenLayerIdx < numHiddenLayers; hiddenLayerIdx++) {
         const layer = config.mlpConfig.hiddenLayers[hiddenLayerIdx];
-        const numNodes = layer.biases.length;
+        const numNodes = layer.neurons.length;
 
         for (let nodeIdx = 0; nodeIdx < numNodes; nodeIdx++) {
             placements.push(calculateBiasPlacement(config, hiddenLayerIdx, nodeIdx))
@@ -243,7 +243,7 @@ const calculateAddRemoveLayerPosn = (config: DrawParams): Position => {
     const lastHiddenLayerIdx = config.mlpConfig.hiddenLayers.length - 1;
     const lastLayer = config.mlpConfig.hiddenLayers[lastHiddenLayerIdx];
 
-    const lastNodeIdx = lastLayer.biases.length - 1;
+    const lastNodeIdx = lastLayer.neurons.length - 1;
     const layer = lastHiddenLayerIdx + 1;
 
     const bottomRightmostNodePosn = calcNodePosn(config, layer, lastNodeIdx);
@@ -269,7 +269,7 @@ const calculateAddRemoveNodePlacements = (config: DrawParams) => {
 const calculateAddRemoveNodePlacement = (config: DrawParams, hiddenLayerIdx: number): AddRemoveNodePlacement => {
     const hiddenLayer = config.mlpConfig.hiddenLayers[hiddenLayerIdx];
 
-    const lastNodeIdx = hiddenLayer.biases.length - 1;
+    const lastNodeIdx = hiddenLayer.neurons.length - 1;
     const layer = hiddenLayerIdx + 1;
 
     const bottommostNodePosn = calcNodePosn(config, layer, lastNodeIdx);
@@ -506,7 +506,7 @@ const calcNumNodesInLayer = (config: DrawParams, layer: number): number => {
     if (layer == 0) {
         return config.mlpConfig.numInputs;
     }
-    return config.mlpConfig.hiddenLayers[layer - 1].biases.length;
+    return config.mlpConfig.hiddenLayers[layer - 1].neurons.length;
 }
 
 // get the position of the center of the given node
