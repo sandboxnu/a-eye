@@ -34,19 +34,19 @@ export const generateNodeComputationSummary = (mlpConfig: MLPConfig, forwardProp
         const weight = mlpConfig.hiddenLayers[selectedNode.layer-1].neurons[selectedNode.nodeIdx].weights[inputIdx]
 
         calculations.push({
-            inputVal: inputVal | 0.0,
-            weight: weight | 0.0,
+            inputVal: inputVal,
+            weight: weight,
         })
 
         preActivation += inputVal * weight;
     }
 
     return {
-        numInputs: numInputs | 0,
+        numInputs: numInputs ,
         calculations: calculations,
-        bias: bias | 0.0,
-        preActivationOutput: preActivation | 0.0,
-        postActivationOutput: forwardProp[selectedNode.layer][selectedNode.nodeIdx] | 0.0,
+        bias: bias,
+        preActivationOutput: preActivation ,
+        postActivationOutput: forwardProp[selectedNode.layer][selectedNode.nodeIdx],
         activation: mlpConfig.hiddenLayers[selectedNode.layer - 1].activation
     }
 
