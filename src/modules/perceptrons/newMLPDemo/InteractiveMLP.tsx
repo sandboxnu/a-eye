@@ -6,6 +6,7 @@ import p5Types from "p5";
 import { calculateMLPDOMPlacements, drawMLP, DrawParams, MLPDOMPlacements, nodeAtPosn, weightLineColor } from "./drawUtils";
 import { AddCircle, RemoveCircle } from "@material-ui/icons";
 import { NodeIndex, NodeComputationSummary, generateNodeComputationSummary } from "./utils"
+import { sgd } from "./learning";
 
 
 const maxNumLayers = 4;
@@ -82,7 +83,7 @@ const InputNode = ({ inputIdx, inputs, setInputs }) => {
 
 
 
-                    setInputs(inputs.map((val, idx) => (idx == inputIdx?newVal:val)))
+                    setInputs(inputs.map((val, idx) => (idx == inputIdx ? newVal : val)))
                 }}
             />
         </div>
@@ -145,12 +146,13 @@ const AddRemoveInputButtons = ({ mlpConfig, setMLPConfig, inputs, setInputs }) =
                 className="icon-button"
                 fontSize="large"
                 onClick={() => {
-                    
+
                     if (inputs.length <= 1) return;
 
                     setInputs(inputs.slice(0, -1));
-                    setMLPConfig(removeInput(mlpConfig))}
-                    
+                    setMLPConfig(removeInput(mlpConfig))
+                }
+
                 }
             />
             <AddCircle
@@ -192,6 +194,59 @@ const ActivationFunctionSelector = ({ layerIdx, mlpConfig, setMLPConfig }) => {
 }
 
 
+const SGDDebug = ({ mlpConfig, setMLPConfig }) => {
+    const [output, setOutput] = useState<number>(0.0);
+
+    let initialInputs: number[] = []
+    for (let i = 0; i < mlpConfig.numInputs; i++) {
+        initialInputs.push(0.0);
+    }
+
+    const [inputs, setInputs] = useState<number[]>(initialInputs);
+
+    const runSGD = () => {
+        setMLPConfig(sgd(mlpConfig, inputs, [output], 0.001))
+    }
+
+    return (
+        <div>
+            <p>Inputs:</p>
+            {inputs.map((_, inputIdx) => {
+                return (
+                    <input
+                        className="rounded-full w-12 h-12 px-2 border-2"
+                        key={`sgd-debug-input-${inputIdx}`}
+                        type="number"
+                        value={inputs?.[inputIdx]}
+                        onChange={(e) => {
+                            const newVal = parseFloat(e.target.value);
+
+                            if (!newVal) return
+
+                            setInputs(inputs.map((val, idx) => (idx == inputIdx ? newVal : val)))
+                        }}
+                    />)
+            })}
+            <p>Output:</p>
+            <input
+                className="rounded-full w-12 h-12 px-2 border-2"
+                type="number"
+                value={output}
+                onChange={(e) => {
+                    const newVal = parseFloat(e.target.value);
+
+                    if (!newVal) return;
+
+                    setOutput(newVal);
+                }}
+            />
+
+
+            <button onClick={runSGD}>Run SGD</button>
+        </div>
+    )
+}
+
 /*
     This interactive demo has two rendering pipelines. First, a p5.js canvas is created. Here, all of the static drawings are created - the lines,
     the hidden nodes, etc. Next, we calculate where all of the HTML on top of this p5js canvas needs to be rendered - things like the
@@ -230,15 +285,16 @@ export const InteractiveMLP: React.FC<InterativeMLPType> = ({
     const [mlpDOMPlacements, setMLPDOMPlacements] = useState<MLPDOMPlacements>();
 
     const makeDrawParams = (p5: p5Types) => {
-    return{
-        p5: p5,
-        mlpConfig: mlpConfig,
-        canvasHeight: height,
-        canvasWidth: width,
-        forwardPropValues: forwardPropagation(mlpConfig, inputs), // optimization: TODO; keep intermediate values or config as state
-        selectedNode: selectedNode,
-        darkmode: labelColor == "text-modulePaleBlue",
-    }}
+        return {
+            p5: p5,
+            mlpConfig: mlpConfig,
+            canvasHeight: height,
+            canvasWidth: width,
+            forwardPropValues: forwardPropagation(mlpConfig, inputs), // optimization: TODO; keep intermediate values or config as state
+            selectedNode: selectedNode,
+            darkmode: labelColor == "text-modulePaleBlue",
+        }
+    }
 
     // p5js setup: initializes canvas
     const setup = (p5: p5Types, canvasParentRef: Element) => {
@@ -286,7 +342,7 @@ export const InteractiveMLP: React.FC<InterativeMLPType> = ({
         }
 
     };
-    
+
     // if anything changes, force p5js to draw the canvas again.
     useEffect(() => {
         redraw();
@@ -445,6 +501,11 @@ export const InteractiveMLP: React.FC<InterativeMLPType> = ({
                         </p>
                     </div>)
             }
+
+            <div>
+                <SGDDebug mlpConfig={mlpConfig} setMLPConfig={setMLPConfig} />
+
+            </div>
         </div >
     );
 }

@@ -17,6 +17,17 @@ export let applyActivation = (val: number, activation: ActivationType): number =
     }
 }
 
+export let applyActivationDerivative = (val: number, activation: ActivationType): number => {
+    switch (activation) {
+        case 'relu':
+            return (val > 0.0 ? 1.0 : 0.0);
+        case 'sigmoid':
+            return val * (1 - val);
+        case 'none':
+            return 1.0;
+    }
+}
+
 export type Neuron = {
     weights: number[],
     bias: number,
@@ -100,9 +111,11 @@ export const addLayer = (mlpConfig: MLPConfig): MLPConfig => {
     // complete the previous layer.
 
 
-    const oldPenultimatelayer = mlpConfig.hiddenLayers[mlpConfig.hiddenLayers.length - 2]
+    const oldPenultimatelayer = (mlpConfig.hiddenLayers.length > 1 ?
+        mlpConfig.hiddenLayers[mlpConfig.hiddenLayers.length - 2] :
+        mlpConfig.hiddenLayers[mlpConfig.hiddenLayers.length - 1])
+
     // we want a new layer with the same number of nodes as the last layer
-    const numNodesNewPenultimate = oldPenultimatelayer.neurons.length
     const numNodesOldPenultimate = oldPenultimatelayer.neurons.length
 
 
@@ -112,12 +125,12 @@ export const addLayer = (mlpConfig: MLPConfig): MLPConfig => {
 
     const newPenultimateLayer: HiddenLayer = {
         neurons: oldPenultimatelayer.neurons.map((neuron) => {
-            
+
             let weights: number[] = []
             // make sure it has the correct number of inputs
             for (let i = 0; i < numNodesOldPenultimate; i++) {
                 // if there weren't enough weights before, add zeros.
-                const weightVal = (neuron.weights.length > i?neuron.weights[i]:0.0);
+                const weightVal = (neuron.weights.length > i ? neuron.weights[i] : 0.0);
 
                 weights.push(weightVal)
             }
@@ -160,7 +173,7 @@ export const addNode = (mlpConfig: MLPConfig, layerIdx: number): MLPConfig => {
 
     // adds the weights to create this node from input layer
     const transformNodeLayer = (layer: HiddenLayer): HiddenLayer => {
- 
+
         let newNeuronWeights: number[] = []
         for (let i = 0; i < layer.neurons[0].weights.length; i++) {
             newNeuronWeights.push(0.0);
@@ -212,7 +225,7 @@ export const removeNode = (mlpConfig: MLPConfig, layerIdx: number): MLPConfig =>
 
     const transformNodeLayer = (layer: HiddenLayer): HiddenLayer => {
         return {
-            neurons: layer.neurons.slice(0,-1),
+            neurons: layer.neurons.slice(0, -1),
             activation: layer.activation,
         }
     }
@@ -224,7 +237,7 @@ export const removeNode = (mlpConfig: MLPConfig, layerIdx: number): MLPConfig =>
         return {
             neurons: layer.neurons.map((neuron) => {
                 return {
-                    weights: neuron.weights.slice(0,-1),
+                    weights: neuron.weights.slice(0, -1),
                     bias: neuron.bias,
                 }
             }),
@@ -255,7 +268,7 @@ export const forwardPropagation = (mlpConfig: MLPConfig, inputs: number[]): numb
     let intermediateValues: number[][] = [inputs]
 
     mlpConfig.hiddenLayers.forEach((layer, i) => {
-        let prevLayer: number[] = intermediateValues[i ]
+        let prevLayer: number[] = intermediateValues[i]
         let layerOutputs: number[] = []
 
         for (let neuronIdx = 0; neuronIdx < layer.neurons.length; neuronIdx++) {
@@ -297,7 +310,7 @@ export const addInput = (mlpConfig: MLPConfig): MLPConfig => {
 
 
     return {
-        numInputs: mlpConfig.numInputs +1,
+        numInputs: mlpConfig.numInputs + 1,
         hiddenLayers: mlpConfig.hiddenLayers.map((layer, i) => {
             if (i == 0) {
                 return transformFirstLayer(layer)
@@ -319,7 +332,7 @@ export const removeInput = (mlpConfig: MLPConfig): MLPConfig => {
         return {
             neurons: layer.neurons.map((neuron) => {
                 return {
-                    weights: neuron.weights.slice(0,-1),
+                    weights: neuron.weights.slice(0, -1),
                     bias: neuron.bias,
                 }
             }),
@@ -329,7 +342,7 @@ export const removeInput = (mlpConfig: MLPConfig): MLPConfig => {
 
 
     return {
-        numInputs: mlpConfig.numInputs-1,
+        numInputs: mlpConfig.numInputs - 1,
         hiddenLayers: mlpConfig.hiddenLayers.map((layer, i) => {
             if (i == 0) {
                 return transformFirstLayer(layer)
