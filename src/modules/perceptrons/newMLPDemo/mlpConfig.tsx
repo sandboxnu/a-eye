@@ -265,19 +265,11 @@ export const removeNode = (mlpConfig: MLPConfig, layerIdx: number): MLPConfig =>
 // calculates the values at each layer given the mlpConfig's inputs: input layer at idx 0,
 // first hidden layer at idx 1, and so on.
 export const forwardPropagation = (mlpConfig: MLPConfig, inputs: number[]): number[][] => {
-    const [vals, _] = forwardPropagationWithPreactivation(mlpConfig, inputs);
-    return vals;
-}
-
-// first hidden layer at idx 1, and so on.
-export const forwardPropagationWithPreactivation = (mlpConfig: MLPConfig, inputs: number[]): [number[][], number[][]] => {
     let layerNeuronValues: number[][] = [inputs]
-    let preActivation: number[][] = []
 
     mlpConfig.hiddenLayers.forEach((layer, i) => {
         let prevLayer: number[] = layerNeuronValues[i]
 
-        let preactivationOutputs: number[] = []
         let layerOutputs: number[] = []
 
         for (let neuronIdx = 0; neuronIdx < layer.neurons.length; neuronIdx++) {
@@ -288,18 +280,16 @@ export const forwardPropagationWithPreactivation = (mlpConfig: MLPConfig, inputs
                 output += neuron.weights[inputIdx] * prevLayer[inputIdx];
             }
 
-            preactivationOutputs.push(output);
 
             const postActivation = applyActivation(output, layer.activation);
 
             layerOutputs.push(postActivation);
         }
 
-        preActivation.push(layerOutputs)
         layerNeuronValues.push(layerOutputs)
     })
 
-    return [layerNeuronValues, preActivation];
+    return layerNeuronValues;
 }
 
 export const addInput = (mlpConfig: MLPConfig): MLPConfig => {

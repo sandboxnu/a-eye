@@ -1,6 +1,6 @@
 /* eslint-disable */
 
-import { ActivationType, applyActivationDerivative, forwardPropagation, forwardPropagationWithPreactivation, HiddenLayer, MLPConfig, Neuron } from "./mlpConfig";
+import { ActivationType, applyActivationDerivative, forwardPropagation, HiddenLayer, MLPConfig, Neuron } from "./mlpConfig";
 
 
 export type NeuronGradient = {
@@ -29,7 +29,7 @@ const activationGradient = (outputs: number[], deltas: number[], activation: Act
 // calculate the gradient table for the model
 export const backProp = (mlpConfig: MLPConfig, inputs: number[], expectedOutputs: number[]): GradientTable => {
 
-    const [layerNeuronValues, hiddenLayerPreactivation] = forwardPropagationWithPreactivation(mlpConfig, inputs)
+    const layerNeuronValues = forwardPropagation(mlpConfig, inputs)
     const actualOutputs: number[] = layerNeuronValues[layerNeuronValues.length - 1];
 
     let lastLayerOutputGradients: number[] = mseGradient(expectedOutputs, actualOutputs)
@@ -88,7 +88,6 @@ export const backProp = (mlpConfig: MLPConfig, inputs: number[], expectedOutputs
 export const sgd = (mlpConfig: MLPConfig, inputs: number[], outputs: number[], lr: number): MLPConfig => {
     // compute the gradients
     const gradTable = backProp(mlpConfig, inputs, outputs);
-    console.log(gradTable)
 
     // simply move all weights/biases according to gradient naively
     return {
