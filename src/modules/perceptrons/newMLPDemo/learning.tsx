@@ -1,6 +1,6 @@
 /* eslint-disable */
 
-import { ActivationType, applyActivationDerivative, forwardPropagation, HiddenLayer, MLPConfig, Neuron } from "./mlpConfig";
+import { ActivationType, applyActivationDerivative, forwardPropagation, forwardPropagationWithPreactivation, HiddenLayer, MLPConfig, Neuron } from "./mlpConfig";
 
 
 export type NeuronGradient = {
@@ -22,15 +22,15 @@ const mseGradient = (expectedOutputs: number[], computedOutputs: number[]): numb
     });
 }
 
-const activationGradient = (outputs: number[], activation: ActivationType): number[] => {
-        return outputs.map((val, i) => val * applyActivationDerivative(val, activation));
+const activationGradient = (outputs: number[], deltas: number[], activation: ActivationType): number[] => {
+        return outputs.map((val, i) => deltas[i] * applyActivationDerivative(val, activation));
 }
 
 // calculate the gradient table for the model
 export const backProp = (mlpConfig: MLPConfig, inputs: number[], expectedOutputs: number[]): GradientTable => {
 
-    const forwardProp: number[][] = forwardPropagation(mlpConfig, inputs)
-    const actualOutputs: number[] = forwardProp[forwardProp.length - 1];
+    const [layerNeuronValues, hiddenLayerPreactivation] = forwardPropagationWithPreactivation(mlpConfig, inputs)
+    const actualOutputs: number[] = layerNeuronValues[layerNeuronValues.length - 1];
 
     let lastLayerOutputGradients: number[] = mseGradient(expectedOutputs, actualOutputs)
 
@@ -38,11 +38,11 @@ export const backProp = (mlpConfig: MLPConfig, inputs: number[], expectedOutputs
 
     for (let i = mlpConfig.hiddenLayers.length-1; i >= 0; i--) {
         let layer: HiddenLayer = mlpConfig.hiddenLayers[i];
-        let layerForwardProp: number[] = forwardProp[i];
 
-        let preActivationGrads: number[] = activationGradient(lastLayerOutputGradients, layer.activation);
+        const layerForwardProp: number[] = layerNeuronValues[i+1];
+        let preActivationGrads: number[] = activationGradient(layerForwardProp, lastLayerOutputGradients, layer.activation);
 
-        const nextLayerForwardProp: number[] = forwardProp[i]; // forward prop starts with inputs, so we just need to get ith to get prev layer
+        const nextLayerForwardProp: number[] = layerNeuronValues[i]; // forward prop starts with inputs, so we just need to get ith to get prev layer
 
         const neuronGrads: NeuronGradient[] = layer.neurons.map((neuron, k) => {
             let neuronOverallGrad = preActivationGrads[k];

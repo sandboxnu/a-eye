@@ -194,27 +194,27 @@ const ActivationFunctionSelector = ({ layerIdx, mlpConfig, setMLPConfig }) => {
 }
 
 
-const SGDDebug = ({ mlpConfig, setMLPConfig }) => {
-    const [output, setOutput] = useState<number>(0.0);
+const SGDDebug = ({ mlpConfig, setMLPConfig, labelColor }) => {
+    const [output, setOutput] = useState<number>(0.7);
 
     let initialInputs: number[] = []
     for (let i = 0; i < mlpConfig.numInputs; i++) {
-        initialInputs.push(0.0);
+        initialInputs.push(1.0);
     }
 
     const [inputs, setInputs] = useState<number[]>(initialInputs);
 
     const runSGD = () => {
-        setMLPConfig(sgd(mlpConfig, inputs, [output], 0.001))
+        setMLPConfig(sgd(mlpConfig, inputs, [output], 1.00))
     }
 
     return (
         <div>
-            <p>Inputs:</p>
+            <p className={labelColor}>Inputs:</p>
             {inputs.map((_, inputIdx) => {
                 return (
                     <input
-                        className="rounded-full w-12 h-12 px-2 border-2"
+                        className="rounded-full w-36 h-12 px-2 border-2"
                         key={`sgd-debug-input-${inputIdx}`}
                         type="number"
                         value={inputs?.[inputIdx]}
@@ -227,9 +227,9 @@ const SGDDebug = ({ mlpConfig, setMLPConfig }) => {
                         }}
                     />)
             })}
-            <p>Output:</p>
+            <p className={labelColor}>Output:</p>
             <input
-                className="rounded-full w-12 h-12 px-2 border-2"
+                className="rounded-full w-36 h-12 px-2 border-2"
                 type="number"
                 value={output}
                 onChange={(e) => {
@@ -242,7 +242,7 @@ const SGDDebug = ({ mlpConfig, setMLPConfig }) => {
             />
 
 
-            <button onClick={runSGD}>Run SGD</button>
+            <button onClick={runSGD} className={labelColor}>Run SGD</button>
         </div>
     )
 }
@@ -503,7 +503,7 @@ export const InteractiveMLP: React.FC<InterativeMLPType> = ({
             }
 
             <div>
-                <SGDDebug mlpConfig={mlpConfig} setMLPConfig={setMLPConfig} />
+                <SGDDebug mlpConfig={mlpConfig} setMLPConfig={setMLPConfig} labelColor={labelColor } />
 
             </div>
         </div >
