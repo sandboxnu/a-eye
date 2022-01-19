@@ -18,20 +18,23 @@ const WeightInput = ({ layer, inNodeIdx, outNodeIdx, mlpConfig, setMLPConfig }) 
     return (
         <div>
             <input
-                className="number-input w-16 border-2 border-indigo-500 hide-number-spinners"
+                className="number-input w-20 border-2 border-indigo-500 hide-number-spinners"
                 style={{
                     borderColor: `rgb(${borderColor.r},${borderColor.g},${borderColor.b})`,
                 }}
                 type="number"
-                step="any"
+                step='0.01'
                 value={mlpConfig.hiddenLayers?.[layer]?.neurons?.[outNodeIdx]?.weights?.[inNodeIdx]}
                 onChange={(e) => {
-                    const val = parseFloat(e.target.value);
+                    let val = parseFloat(e.target.value );
 
-                    if (!val) return
+                    if (!val || isNaN(val)) {
+                        val = 0.0;
+                    }
 
                     setMLPConfig(changeWeight(mlpConfig, val, layer, outNodeIdx, inNodeIdx))
                 }}
+
             />
         </div>
     )
@@ -42,19 +45,20 @@ const BiasInput = ({ layerIdx, nodeIdx, mlpConfig, setMLPConfig }) => {
     return (
         <div>
             <input
-                className="number-input w-16  border-2"
+                className="number-input w-20  border-2"
                 style={{
                     borderColor: `rgb(${borderColor.r},${borderColor.g},${borderColor.b})`,
                 }}
                 type="number"
+                step='0.01'
                 value={mlpConfig.hiddenLayers?.[layerIdx]?.neurons?.[nodeIdx]?.bias}
                 onChange={(e) => {
                     let val = parseFloat(e.target.value);
 
-                    if (e.target.value === "") {
-                        val = 0.0
+
+                    if (!val || isNaN(val)) {
+                        val = 0.0;
                     }
-                    if (!val) return
 
                     setMLPConfig(changeBias(mlpConfig, val, layerIdx, nodeIdx))
                 }}
@@ -70,11 +74,12 @@ const InputNode = ({ inputIdx, inputs, setInputs }) => {
     return (
         <div>
             <input
-                className="rounded-full w-12 h-12 px-2 border-2"
+                className="rounded-full w-20 h-12 px-2 border-2"
                 style={{
                     borderColor: `rgb(${borderColor.r},${borderColor.g},${borderColor.b})`,
                 }}
                 type="number"
+                step='.01'
                 value={inputs?.[inputIdx]}
                 onChange={(e) => {
                     const newVal = parseFloat(e.target.value);
@@ -214,7 +219,7 @@ const SGDDebug = ({ mlpConfig, setMLPConfig, labelColor }) => {
             {inputs.map((_, inputIdx) => {
                 return (
                     <input
-                        className="rounded-full w-36 h-12 px-2 border-2"
+                        className="rounded-full w-24 h-12 px-2 border-2 mx-2"
                         key={`sgd-debug-input-${inputIdx}`}
                         type="number"
                         value={inputs?.[inputIdx]}
@@ -229,7 +234,7 @@ const SGDDebug = ({ mlpConfig, setMLPConfig, labelColor }) => {
             })}
             <p className={labelColor}>Output:</p>
             <input
-                className="rounded-full w-36 h-12 px-2 border-2"
+                className="rounded-full w-24 h-12 px-2 border-2"
                 type="number"
                 value={output}
                 onChange={(e) => {
@@ -241,6 +246,7 @@ const SGDDebug = ({ mlpConfig, setMLPConfig, labelColor }) => {
                 }}
             />
 
+            <br />
 
             <button onClick={runSGD} className={labelColor}>Run SGD</button>
         </div>

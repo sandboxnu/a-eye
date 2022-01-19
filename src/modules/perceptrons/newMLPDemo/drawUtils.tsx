@@ -5,7 +5,7 @@ import { MLPConfig } from "./mlpConfig";
 import { NodeIndex } from "./utils";
 
 // ---------- MLP DRAW CONSTANTS ----------
-const nodeSize = 48; // corresponds exactly to w-12/h-12
+const nodeSize = 50; // corresponds exactly to w-12/h-12
 const plusSize = 16;
 const weightInputLocationOnLine = 0.8;
 
@@ -314,7 +314,7 @@ const calculateActivationPlacement = (config: DrawParams, hiddenLayerIdx: number
     const topNodePosn = calcNodePosn(config, layer, 0);
     return {
         posn: {
-            x: topNodePosn.x - 83,
+            x: topNodePosn.x - 95,
             y: topNodePosn.y - 60,
         },
         hiddenLayerIdx: hiddenLayerIdx,
@@ -369,14 +369,14 @@ const calculateBiasPlacement = (config: DrawParams, hiddenLayerIdx: number, node
         hiddenLayerIdx: hiddenLayerIdx,
         nodeIdx: nodeIdx,
         posn: {
-            x: nodePosn.x - 92,
+            x: nodePosn.x - 110,
             y: nodePosn.y - 16
         }
     }
 }
 
 const drawBiasPlus = (config: DrawParams, hiddenLayerIdx: number, nodeIdx: number, posn: Position) => {
-    const plusPosn = calcPlusPosnFromNodePosn(posn);
+    const plusPosn = calcPlusPosnFromNodePosn(config, posn);
     drawPlus(config, plusSize, {
         x: plusPosn.x,
         y: plusPosn.y
@@ -473,7 +473,7 @@ const calculateWeightInputPlacement = (config: DrawParams, layer: number, inNode
 
     return {
         posn: {
-            x: inputPosnCenter.x - 20,
+            x: inputPosnCenter.x - 20 - weightOffset(config.mlpConfig.hiddenLayers.length),
             y: inputPosnCenter.y - 16
         },
         layer: layer,
@@ -532,15 +532,35 @@ const calcNodePosn = (config: DrawParams, layer: number, nodeIdx: number): Posit
 const calcPlusPosn = (config: DrawParams, layer: number, nodeIdx: number): Position => {
     const posn = calcNodePosn(config, layer, nodeIdx)
 
-    return calcPlusPosnFromNodePosn(posn)
+    return calcPlusPosnFromNodePosn(config, posn)
 }
 
 // get the position of the center of the node's 'plus' symbol
-const calcPlusPosnFromNodePosn = (posn: Position): Position => {
+const calcPlusPosnFromNodePosn = (config: DrawParams, posn: Position): Position => {
     return {
-        x: posn.x - 105,
+        x: posn.x - 122,
         y: posn.y
     }
+}
+
+const weightOffset = (numLayers: number): number => {
+    if (numLayers == 1) {
+        return 0;
+    }
+
+    if (numLayers == 2) {
+        return 0;
+    }
+
+    if (numLayers == 3) {
+        return 20;
+    }
+
+    if (numLayers == 4) {
+        return 20;
+    }
+
+    return 0;
 }
 
 const followDownLine = (start: Position, end: Position, pcnt: number): Position => {
