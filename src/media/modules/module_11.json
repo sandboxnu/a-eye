@@ -6,6 +6,26 @@
       "title": "MLP Demo",
       "colorScheme": "dark",
       "subsections": [
+        {
+          "title": "Subsection 1",
+          "body": "The perceptron offered a really powerful concept - with just a few parameters and some examples, the perceptron was able to effectively learn how to identify different flowers. But, the model itself wasn't very powerful. As you saw on the final demo in the perceptrons model, a single perceptron is only able to classify along a line. Many things in nature exist in complex, nonlinear relationships, and there's no way for a single perceptron to capture that.",
+          "imgSrc": "blank"
+        },
+        {
+          "title": "Subsection 2",
+          "body": "So, how do we fix this? We need two things. One, we need a way to introduce complex, non-linear relationships into our model. Second, we need to be able to make the model as complex as we need it.",
+          "imgSrc": "blank"
+        },
+        {
+          "title": "Subsection 3",
+          "body": "The multi-layer perception - or, the neural network - solves both of these issues. It allows for more complex models by stacking perceptrons into layers, where the previous layer acts as input to the next layer. You can make the model more or less complex by making the layers bigger, or by adding more layers. In addition, it allows complex non-linear relations by using activation functions, or non-linear functions which are applied after each perceptron (or 'neuron'). Don't worry if that all went over your head! Neural networks can be tough conceptually, and the only way to learn how they work is to use them.",
+          "imgSrc": "blank"
+        },
+        {
+          "title": "Subsection 1",
+          "body": "Below is a model neural network you can adjust. Each neuron acts just like a perceptron. It has weights which are multiplied with the outputs of the previous layer and a bias. In addition, above each layer is the activation function - this is the non-linear function applied to each of the perceptrons before being passed onto the next layer. The model won't do anything particularly interesting yet, but don't fret! We'll get to how to train neural networks with data to make a powerful classifier. You can click on any of the neurons to see exactly how it was computed, and every parameter of the network is adjustable!",
+          "imgSrc": "blank"
+        }
       ],
       "demoComp": "MLPDemo"
     }
